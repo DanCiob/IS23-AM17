@@ -14,5 +14,7 @@ class PlayerTest {
         Player player = new Player("TestPlayer", 0, false);
         int correctScore = player.updateScore(4);
         assertEquals(4, correctScore);
+        correctScore = player.updateScore(2);
+        assertEquals(6, correctScore);
     }
 }
