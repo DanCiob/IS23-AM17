@@ -16,12 +16,12 @@ public class  EightEquals extends CommonCards{
             for(j=0;j<5;j++){
                 if(shelfie.getGrid()[i][j] != null){
                     switch (shelfie.getGrid()[i][j].getColor()) {
-                        case Tile.TileColor.BLUE-> numTilesForColors[0]++;
-                        case Tile.TileColor.WHITE -> numTilesForColors[1]++;
-                        case Tile.TileColor.GREEN -> numTilesForColors[2]++;
-                        case Tile.TileColor.YELLOW -> numTilesForColors[3]++;
-                        case Tile.TileColor.PURPLE -> numTilesForColors[4]++;
-                        case Tile.TileColor.CYAN -> numTilesForColors[5]++;
+                        case BLUE-> numTilesForColors[0]++;
+                        case WHITE -> numTilesForColors[1]++;
+                        case GREEN -> numTilesForColors[2]++;
+                        case YELLOW -> numTilesForColors[3]++;
+                        case PURPLE -> numTilesForColors[4]++;
+                        case CYAN -> numTilesForColors[5]++;
                     }
                 }
             }

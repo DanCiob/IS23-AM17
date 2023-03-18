@@ -74,6 +74,10 @@ public class Shelfie {
         return tilesToBeInserted.size() + i <= 6;
     }
 
+    public Tile[][] getGrid() {
+        return grid;
+    }
+
     public String shelfieChangeNotifier(){
 
     }
