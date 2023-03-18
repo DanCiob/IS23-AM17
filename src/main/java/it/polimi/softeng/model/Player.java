@@ -23,8 +23,9 @@ public class Player {
     /**
      * Update Player score
      */
-    public void updateScore(int pointsToAdd) {
+    public int updateScore(int pointsToAdd) {
         this.CurrentScore += pointsToAdd;
+        return getCurrentScore();
     }
 
     /**

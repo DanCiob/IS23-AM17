@@ -140,7 +140,7 @@ public class Board {
 
     public Board resetBoard(int numberOfPlayers){
         /**
-         *it inizialize every tiles of the board with null
+         *it inizializes every tile of the board with null
          */
 
         setNotAvailable(numberOfPlayers);
@@ -149,19 +149,20 @@ public class Board {
                 board[i][j] = null;
             }
         }
+
+        return this;
     }
-}
 
     public void updateBoard(ArrayList<Cell> positionsToBeRemoved){
         /**
-         * after every moves, it removes the tiles
+         * after every move, it removes the tiles
          */
 
-        if(checkLegalChoice(positionsToBeRemoved) == 1){
+        if(checkLegalChoice(positionsToBeRemoved) == true){
             /**
              * it removes the tiles
              */
-            for(Cell cell : ArrayList<Cell>){
+            for(Cell cell : positionsToBeRemoved){
                 board[cell.getX()][cell.getY()] = null;
             }
         }
@@ -174,11 +175,11 @@ public class Board {
          * All the tiles you take must have at least one side free (not touching directly other tiles) at the beginning of your turn
          */
 
-        for(Cell cell : ArrayList<Cell>){
+        for(Cell cell : positionsToBeRemoved){
             i = cell.getX();
             j = cell.getY();
             if((board[i+1][j] != null) && (board[i][j+1] != null) && (board[i-1][j] != null) && (board[i][j-1] != null))
-                return 0; /**the tiles don't have at least one side free**/
+                return false; /**the tiles don't have at least one side free**/
             mat[k][0] = i;
             mat[k][1] = j;
             k++;
@@ -194,15 +195,16 @@ public class Board {
                 /**
                  * the chosen tiles aren't adjacent because they don't have one coordination in common
                  */
-                return 0;
+                return false;
             }
         }
-        return 1;
+        return true;
     }
 
+    /*
     public String boardChangeNotifier(){
-
     }
+    */
 
 
 }
