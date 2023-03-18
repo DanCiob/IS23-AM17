@@ -1,4 +1,4 @@
-package it.polimi.softeng.model.CommonCards;
+package it.polimi.softeng.model.commonCards;
 
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;

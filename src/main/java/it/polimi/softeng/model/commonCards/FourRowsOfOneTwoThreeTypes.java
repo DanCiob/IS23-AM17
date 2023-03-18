@@ -1,4 +1,4 @@
-package it.polimi.softeng.model.CommonCards;
+package it.polimi.softeng.model.commonCards;
 
 public class FourRowsOfOneTwoThreeTypes extends CommonCards{
 }
