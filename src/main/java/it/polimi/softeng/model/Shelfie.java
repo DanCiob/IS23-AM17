@@ -1,4 +1,6 @@
 package it.polimi.softeng.model;
+import it.polimi.softeng.customExceptions.illegalInsertException;
+
 import java.util.ArrayList;
 
 public class Shelfie {
@@ -79,6 +81,6 @@ public class Shelfie {
     }
 
     public String shelfieChangeNotifier(){
-
+        return null;
     }
 }
