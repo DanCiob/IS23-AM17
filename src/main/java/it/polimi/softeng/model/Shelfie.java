@@ -20,9 +20,9 @@ public class Shelfie {
      * inserTile takes an arrayList of tiles and, if legal, inserts them into the shelfie
      * @param tilesToBeInserted  arraylist of tiles ; the one in position 0 in the arrayList goes first, so on for the following
      * @param column  int that indicates the selected shelfie column; the numbering goes from sx to dx (ie 0-->the furthest left)
-     * @throws illegalInsertException exception thrown as you try to insert too many tiles in a column
+     * @throws IllegalInsertException exception thrown as you try to insert too many tiles in a column
      */
-    public void inserTile(ArrayList<Tile> tilesToBeInserted, int column) throws illegalInsertException {
+    public void insertTile(ArrayList<Tile> tilesToBeInserted, int column) throws IllegalInsertException {
         if(checkLegalInsert(tilesToBeInserted, column)){
             int i = 0;
             // i find the first null cell in the shelfie
@@ -30,17 +30,26 @@ public class Shelfie {
                 i++;
             }
             // loop for tiles insertion
-            for(int j = i; i < tilesToBeInserted.size(); j++) {
+            for(int j = i; j < i + tilesToBeInserted.size(); j++) {
                 grid[j][column] = tilesToBeInserted.get(j);
             }
         }else{
-            throw new illegalInsertException();
+            throw new IllegalInsertException();
         }
 
         //notify changes
         shelfieChangeNotifier();
     }
 
+    /**
+     * getter method for the shelfie
+     * @param row row numbering : goes from bottom to top (ie 0 --> the lowest)
+     * @param column column numbering : goes from sx to dx (ie 0-->the furthest left)
+     * @return Tile from the desired position
+     */
+    public Tile getTile(int row, int column){
+        return grid[row][column];
+    }
     /**
      *  checks whether the shelfie is full or not by controlling the last row
      * @return a boolean value
@@ -73,6 +82,7 @@ public class Shelfie {
 
         return tilesToBeInserted.size() + i <= 6;
     }
+
 
     public String shelfieChangeNotifier(){
 
