@@ -20,7 +20,7 @@ public class Shelfie {
     }
 
     /**
-     * inserTile takes an arrayList of tiles and, if legal, inserts them into the shelfie
+     * insertTile takes an arrayList of tiles and, if legal, inserts them into the shelfie
      * @param tilesToBeInserted  arraylist of tiles ; the one in position 0 in the arrayList goes first, so on for the following
      * @param column  int that indicates the selected shelfie column; the numbering goes from sx to dx (ie 0-->the furthest left)
      * @throws IllegalInsertException exception thrown as you try to insert too many tiles in a column
@@ -52,6 +52,9 @@ public class Shelfie {
      */
     public Tile getTile(int row, int column){
         return grid[row][column];
+    }
+    public Tile[][] getGrid(){
+        return grid;
     }
     /**
      *  checks whether the shelfie is full or not by controlling the last row
