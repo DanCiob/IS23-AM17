@@ -36,7 +36,7 @@ public class Stairs extends CommonCards{
     }
 
     /**
-     * this method is the base of verifyShape; it has two internal ways to verify for a stair based on the required direction, including an
+     * this method is the base of verifyShape; it has two internal algorithms to verify for a stair based on the required direction, including an
      * offset modifier
      * @param shelfie the shelfie on which you check the common goal
      * @param direction the direction of the stair searched as explained in the Direction doc
