@@ -1,6 +1,10 @@
 package it.polimi.softeng.model;
 import java.util.ArrayList;
 
+/**
+ * this enum defines all 12 personal objective cards with their own objectiveCell objects that get created as you use the enum constructor defined below.
+ * internally the PERSONAL_CARD numbering follows the asset cards numbering; the new objectiveCells are written looking at asset cards from sx to dx, from bottom to top
+ */
 public enum PersonalCards {
     PERSONAL_CARD_1(
             new ObjectiveCell(0,5, Tile.TileColor.PURPLE),
@@ -98,9 +102,20 @@ public enum PersonalCards {
             new ObjectiveCell(3,2, Tile.TileColor.CYAN),
             new ObjectiveCell(4,1, Tile.TileColor.YELLOW)
     );
-
+    /**
+     * internal data structure used to store the objectiveCells representing the personal objectives
+     */
     private ArrayList<ObjectiveCell> objective;
 
+    /**
+     * constructor method that links the objectiveCells to the objective arrayList of the enum type
+     * @param c1 objectiveCell parameter taken from the definition of the enum class
+     * @param c2 objectiveCell parameter taken from the definition of the enum class
+     * @param c3 objectiveCell parameter taken from the definition of the enum class
+     * @param c4 objectiveCell parameter taken from the definition of the enum class
+     * @param c5 objectiveCell parameter taken from the definition of the enum class
+     * @param c6 objectiveCell parameter taken from the definition of the enum class
+     */
     PersonalCards(ObjectiveCell c1, ObjectiveCell c2,ObjectiveCell c3, ObjectiveCell c4,ObjectiveCell c5, ObjectiveCell c6){
         objective.add(c1);
         objective.add(c2);
@@ -110,20 +125,38 @@ public enum PersonalCards {
         objective.add(c6);
     }
 
+    /**
+     * class used to implement the singular personal objective tile; it extends the cell class adding a specif color for the cell
+     */
     public static class ObjectiveCell extends Cell {
         private Tile.TileColor color;
 
+        /**
+         * constructor method for objectiveCell
+         * @param x x position of the cell in shelfie
+         * @param y y position of the cell in shelfie
+         * @param color color of the cell in shelfie
+         */
         public ObjectiveCell(int x, int y, Tile.TileColor color){
             setX(x);
             setY(y);
             this.color = color;
         }
 
+        /**
+         * getter method added to objectiveCell for the attribute "color" (ObjectiveCell inherits getX and getY methods)
+         * @return Tile.tileColor color value (ie one of the six possible tile colors)
+         */
         public Tile.TileColor getColor() {
             return color;
         }
     }
 
+    /**
+     * calculates the score based on the chosen personal objective card on a given shelfie
+     * @param shelfie the shelfie on which you check the personal goal
+     * @return int representing the score from the personal objective
+     */
     public int getCurrentScore(Shelfie shelfie){
         int count = 0;
         int x,y;
