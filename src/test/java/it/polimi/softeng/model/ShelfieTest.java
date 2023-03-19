@@ -16,12 +16,11 @@ class ShelfieTest {
     @Test
     public void testInsertTile(){
         ArrayList<Tile> tiles = new ArrayList<>();
-        ArrayList<Tile> controlTiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
+
         Tile tile1 = new Tile(1, Tile.TileColor.BLUE);
         Tile tile2 = new Tile(2, Tile.TileColor.WHITE);
         Tile tile3 = new Tile(3, Tile.TileColor.GREEN);
-
         tiles.add(tile1);
         tiles.add(tile2);
         tiles.add(tile3);
@@ -40,7 +39,6 @@ class ShelfieTest {
         tile1 = new Tile(4, Tile.TileColor.BLUE);
         tile2 = new Tile(5, Tile.TileColor.WHITE);
         tile3 = new Tile(6, Tile.TileColor.GREEN);
-
         tiles.add(tile1);
         tiles.add(tile2);
         tiles.add(tile3);
@@ -56,5 +54,129 @@ class ShelfieTest {
         assertEquals(6,shelfie.getTile(5,0).id);
 
 
+    }
+
+    /**
+     * testing an illegal insertion searching for IllegalInsertException
+     */
+    @Test
+    public void testIllegalInsertion(){
+        ArrayList<Tile> tiles = new ArrayList<>();
+        Shelfie shelfie = new Shelfie();
+        int result = 0;
+
+        Tile tile1 = new Tile(1, Tile.TileColor.BLUE);
+        Tile tile2 = new Tile(2, Tile.TileColor.WHITE);
+        Tile tile3 = new Tile(3, Tile.TileColor.GREEN);
+        tiles.add(tile1);
+        tiles.add(tile2);
+        tiles.add(tile3);
+
+        try {
+            shelfie.insertTile(tiles,0);
+        }catch(IllegalInsertException e){
+            System.out.println("illegal insert !");
+        }
+
+        tile1 = new Tile(4, Tile.TileColor.BLUE);
+        tile2 = new Tile(5, Tile.TileColor.WHITE);
+        tile3 = new Tile(6, Tile.TileColor.GREEN);
+        tiles.clear();
+        tiles.add(tile1);
+        tiles.add(tile2);
+        tiles.add(tile3);
+
+        try {
+            shelfie.insertTile(tiles,0);
+        }catch(IllegalInsertException e){
+            System.out.println("illegal insert !");
+        }
+
+        tile1 = new Tile(7, Tile.TileColor.BLUE);
+        try {
+            shelfie.insertTile(tiles,0);
+        }catch(IllegalInsertException e){
+            result = 1;
+        }
+        assertEquals(1, result);
+    }
+
+    /**
+     * testing with an empty array expecting IllegalInsertException
+     */
+    @Test
+    public void noEmptyArrayTest(){
+        ArrayList<Tile> tiles = new ArrayList<>();
+        Shelfie shelfie = new Shelfie();
+        int result = 0;
+
+        try {
+            shelfie.insertTile(tiles,0);
+        }catch(IllegalInsertException e){
+            result = 1;
+        }
+        assertEquals(1, result);
+    }
+
+    /**
+     * testing with an array of 4 elements expecting IllegalInsertException
+     */
+    @Test
+    public void noMoreThanThreeTilesTest(){
+        ArrayList<Tile> tiles = new ArrayList<>();
+        Shelfie shelfie = new Shelfie();
+        int result = 0;
+
+        Tile tile1 = new Tile(1, Tile.TileColor.BLUE);
+        Tile tile2 = new Tile(2, Tile.TileColor.WHITE);
+        Tile tile3 = new Tile(3, Tile.TileColor.GREEN);
+        Tile tile4 = new Tile(4, Tile.TileColor.PURPLE);
+        tiles.add(tile1);
+        tiles.add(tile2);
+        tiles.add(tile3);
+        tiles.add(tile4);
+
+        try {
+            shelfie.insertTile(tiles,0);
+        }catch(IllegalInsertException e){
+            result = 1;
+        }
+        assertEquals(1, result);
+    }
+
+    /**
+     * testing the method checkFull by gradually filling the shelfie checking that checkFull is true only at the end
+     */
+    @Test
+    public void checkFullTest(){
+        ArrayList<Tile> tiles = new ArrayList<>();
+        Shelfie shelfie = new Shelfie();
+        Tile tile1;
+        Tile tile2;
+        Tile tile3;
+        int j = 0;
+
+        for(int i = 0;i < 30 ; i = i+3){
+            tile1 = new Tile(i, Tile.TileColor.BLUE);
+            tile2 = new Tile(i+1, Tile.TileColor.WHITE);
+            tile3 = new Tile(i+2, Tile.TileColor.GREEN);
+
+            if(i != 0) tiles.clear();
+            tiles.add(tile1);
+            tiles.add(tile2);
+            tiles.add(tile3);
+
+            try {
+                shelfie.insertTile(tiles,j);
+            } catch (IllegalInsertException e) {
+                System.out.println("error !");
+            }
+            if(i % 2 != 0) j++;
+
+            if(i < 27){
+                assertFalse(shelfie.checkFull());
+            }
+        }
+        assertTrue(shelfie.checkFull());
     }
 }

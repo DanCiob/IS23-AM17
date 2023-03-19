@@ -72,7 +72,7 @@ public class Shelfie {
 
         //i check for the last row cells counting the number of occupied places
         for(int i = 0; i < 5; i++){
-            if(grid[6][i] != null) count++;
+            if(grid[5][i] != null) count++;
         }
 
         //count == 5 <==> shelfie is full
@@ -86,6 +86,9 @@ public class Shelfie {
      * @return boolean value
      */
     public boolean checkLegalInsert(ArrayList<Tile> tilesToBeInserted, int column){
+        //controls of correctness of the given array (just to be safe)
+        if(tilesToBeInserted.size() > 3) return false;
+        if(tilesToBeInserted.isEmpty()) return false;
 
         //I find the row number of the first free cell from the selected column
         int i = 0;
