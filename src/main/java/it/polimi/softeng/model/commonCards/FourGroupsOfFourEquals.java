@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static it.polimi.softeng.model.graphForScoreCount.graphNode.mapShelfieToGraph;
-import static it.polimi.softeng.model.graphForScoreCount.graphNode.mapTileToGraphNode;
 
 public class FourGroupsOfFourEquals extends CommonCards {
 
@@ -22,16 +21,25 @@ public class FourGroupsOfFourEquals extends CommonCards {
     public boolean verifyShape(Shelfie s) {
         int tileCounted = 0;
         int groupCounter = 0;
+        int counter = 0;
         ArrayList<graphNode> Nodes = new ArrayList<>();
-        Map<Integer, graphNode> Tile_GraphNode = mapTileToGraphNode(s);
-
         Nodes = mapShelfieToGraph(s);
         //Iterate in nodes to visit all nodes of the graph
         for (graphNode n: Nodes)
         {
-            tileCounted = 0;
-            if (!n.isVisited())
-                tileCounted = n.visitGraphWithUpperBound(n, tileCounted, 4);
+            counter = 0;
+
+            if (!n.isVisited()) {
+                try
+                {
+                    tileCounted = n.visitGraphWithUpperBound(n, counter, 2);
+                }
+                catch (Exception UpperBoundReached)
+                {
+                    tileCounted = 2;
+                }
+            }
+
             if (tileCounted == 4)
                 groupCounter++;
         }
