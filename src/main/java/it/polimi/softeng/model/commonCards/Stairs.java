@@ -15,7 +15,7 @@ public class Stairs extends CommonCards{
     /**
      * indicates whether I'm checking for a stair starting from row 0 (offset = 0) or row 1 (offset = 1)
      */
-    int offset = 0;
+    int offset;
 
     /**
      * method used to verify whether the common goal (in this case "stairs") is achieved; it cycles through the various possible pattern
@@ -24,7 +24,7 @@ public class Stairs extends CommonCards{
      * @return boolean value; true means the common goal is achieved on the shelfie s
      */
     public boolean verifyShape(Shelfie s){
-
+        offset = 0;
         while(offset < 2){
             Direction direction = Direction.LEFT;
             if (singleCheck(s, direction, offset)) return true;
