@@ -39,7 +39,19 @@ public class Shelfie {
                 k++;
             }
         }else{
-            throw new IllegalInsertException();
+            if(tilesToBeInserted.isEmpty()){
+                throw new IllegalInsertException("illegal insert caused by empty array");
+            }
+            else if(tilesToBeInserted.size() > 3){
+                throw new IllegalInsertException("illegal insert caused by oversized array");
+            }
+            else{
+                int i = 0;
+                while (i < 6 && grid[i][column] != null) {
+                    i++;
+                }
+                throw new IllegalInsertException("illegal insert caused by overflow of column " + column + " because array size is " + tilesToBeInserted.size() + " but first free cell is in position "+ i);
+            }
         }
 
         //notify changes
