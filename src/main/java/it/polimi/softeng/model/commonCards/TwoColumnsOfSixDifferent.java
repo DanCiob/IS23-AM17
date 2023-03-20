@@ -26,7 +26,6 @@ public class  TwoColumnsOfSixDifferent extends CommonCards{
                     verifiedColumns++;
                 j++;
             }
-
             i++;
         }
         return verifiedColumns >= 2;
