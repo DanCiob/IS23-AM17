@@ -25,7 +25,7 @@ public class  EightEquals extends CommonCards{
                 }
             }
         }
-        for(i=0;i<8;i++){
+        for(i=0;i<6;i++){
             if(numTilesForColors[i]>=8)
                 return true;
         }
