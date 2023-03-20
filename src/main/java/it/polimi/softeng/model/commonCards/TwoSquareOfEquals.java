@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class TwoSquareOfEquals extends CommonCards {
     /**
-     * count used to see how many squares i've found while searching
+     * count used to see how many squares I've found while searching
      */
     private int countOfSquares = 0;
     /**
@@ -27,13 +27,13 @@ public class TwoSquareOfEquals extends CommonCards {
         for(int i = 0; i < 4; i++){         //cycles the columns
             for(int j = 0; j < 5; j++){    //cycles groups of two tiles on the same column
 
-                //i see where i have two tiles of the same colour in one column that i haven't used for squares
+                //I see where I have two tiles of the same colour in one column that I haven't used for squares
                 if(s.getTile(j,i).getColor() == s.getTile(j+1,i).getColor() && !usedTiles.contains(s.getTile(j,i)) && !usedTiles.contains(s.getTile(j+1,i))){
 
-                    //i see where i have two tiles of the same colour in right next column that i haven't used for squares
+                    //I see where I have two tiles of the same colour in right next column that I haven't used for squares
                     if(s.getTile(j,i+1).getColor() == s.getTile(j+1,i+1).getColor() && !usedTiles.contains(s.getTile(j,i+1)) && !usedTiles.contains(s.getTile(j+1,i+1))){
 
-                        //i check if the tiles i've found are the same colour
+                        //I check if the tiles I've found are the same colour
                         if(s.getTile(j,i+1).getColor() == s.getTile(j,i).getColor()){
                             countOfSquares++;
                             usedTiles.add(s.getTile(j,i));
