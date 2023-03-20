@@ -14,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class StairsTest {
     /**
-     *
+     * testing with a dx stair offset zero waiting for negative response till the last insert which creates the stair; at that point we look
+     * for a positive response from the method verifyShape
      */
     @Test
     public void stairTrueTestDxOffsetZero(){
@@ -111,6 +112,11 @@ class StairsTest {
 
         assertTrue(card.verifyShape(shelfie));
     }
+
+    /**
+     * testing with a dx stair offset one waiting for negative response till the last insert which creates the stair; at that point we look
+     * for a positive response from the method verifyShape
+     */
     @Test
     public void stairTrueTestDxOffsetOne(){
         CommonCards card = new Stairs();
@@ -223,6 +229,11 @@ class StairsTest {
 
         assertTrue(card.verifyShape(shelfie));
     }
+
+    /**
+     * testing with a sx stair offset zero waiting for negative response till the last insert which creates the stair; at that point we look
+     * for a positive response from the method verifyShape
+     */
     @Test
     public void stairTrueTestSxOffsetZero(){
         CommonCards card = new Stairs();
@@ -320,6 +331,11 @@ class StairsTest {
         }
         assertTrue(card.verifyShape(shelfie));
     }
+
+    /**
+     * testing with a sx stair offset one waiting for negative response till the last insert which creates the stair; at that point we look
+     * for a positive response from the method verifyShape
+     */
     @Test
     public void stairTrueTestSxOffsetOne(){
         CommonCards card = new Stairs();
@@ -434,6 +450,9 @@ class StairsTest {
         assertTrue(card.verifyShape(shelfie));
     }
 
+    /**
+     * we fail to create a stair by inserting a tile too many in the last column expecting a negative response from verifyShape
+     */
     @Test
     public void notStairTest(){
         CommonCards card = new Stairs();
