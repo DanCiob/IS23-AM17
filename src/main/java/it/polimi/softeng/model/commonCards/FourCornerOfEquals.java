@@ -3,7 +3,7 @@ package it.polimi.softeng.model.commonCards;
 import it.polimi.softeng.model.Shelfie;
 
 /**
- * This class verifies if the four tiles of the corners of the shelfie are of the same color(type)
+ * This class verifies if the four tiles of the corners of the shelfie have the same color(type)
  */
 
 public class FourCornerOfEquals extends CommonCards {
@@ -11,6 +11,8 @@ public class FourCornerOfEquals extends CommonCards {
      *
      * @param s is the shelfie we have to verify if it does complete the achievement
      * @return true if it does, else false
+     * We assume the shelfie is 'correct': it is not possible to have empty positions, under positions with tiles
+     *  (rows with smaller index).
      */
     @Override
     public boolean verifyShape(Shelfie s) {
@@ -21,13 +23,13 @@ public class FourCornerOfEquals extends CommonCards {
           We assume that in each column, if one row is not empty, all the others under this row cannot be empty */
         if ((s.getTile(maxR - 1, 0)!= null) && ((s.getTile(maxR - 1, maxC - 1)!= null))){
 
-            //check if top corners are the same color
+            //check if top corners have the same color
             if (s.getTile(maxR - 1, 0).getColor() == s.getTile(maxR - 1, maxC - 1).getColor()){
 
-                //check if right corners are the same color
+                //check if right corners have the same color
                 if (s.getTile(maxR - 1, maxC - 1).getColor() == s.getTile(0, maxC - 1).getColor()){
 
-                    //check if bottom corners are the same color
+                    //check if bottom corners have the same color
                     if (s.getTile(0, maxC - 1).getColor() == s.getTile(0, maxC - 1).getColor()){
                         return true;
                     }
