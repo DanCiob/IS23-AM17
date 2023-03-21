@@ -1,5 +1,6 @@
 package it.polimi.softeng.model;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Board {
     private final Tile[][] board = new Tile[9][9];
@@ -161,6 +162,22 @@ public class Board {
              */
             for(Cell cell : positionsToBeRemoved){
                 board[cell.getX()][cell.getY()] = null;
+            }
+        }
+    }
+
+    public void positionTiles(ArrayList<Tile> bag){
+        Random random = new Random();
+        Cell cell = new Cell();
+        int pos;
+        for(int i=0;i<9;i++){
+            for(int j=0;j<9;j++){
+                cell.setX(i);
+                cell.setY(j);
+                if(!notAvailable.contains(cell)){
+                    pos = random.nextInt(bag.size());
+                    board[i][j] = bag.get(pos);
+                }
             }
         }
     }
