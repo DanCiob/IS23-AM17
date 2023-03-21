@@ -28,7 +28,7 @@ class ShelfieTest {
         try {
             shelfie.insertTile(tiles,0);
         }catch(IllegalInsertException e){
-            System.out.println("illegal insert !");
+            System.out.println(e.getMessage());
         }
 
         assertEquals(1,shelfie.getTile(0,0).id);
@@ -46,7 +46,7 @@ class ShelfieTest {
         try {
             shelfie.insertTile(tiles,0);
         }catch(IllegalInsertException e){
-            System.out.println("illegal insert !");
+            System.out.println(e.getMessage());
         }
 
         assertEquals(4,shelfie.getTile(3,0).id);
@@ -75,7 +75,7 @@ class ShelfieTest {
         try {
             shelfie.insertTile(tiles,0);
         }catch(IllegalInsertException e){
-            System.out.println("illegal insert !");
+            System.out.println(e.getMessage());
         }
 
         tile1 = new Tile(4, Tile.TileColor.BLUE);
@@ -89,13 +89,14 @@ class ShelfieTest {
         try {
             shelfie.insertTile(tiles,0);
         }catch(IllegalInsertException e){
-            System.out.println("illegal insert !");
+            System.out.println(e.getMessage());
         }
 
         tile1 = new Tile(7, Tile.TileColor.BLUE);
         try {
             shelfie.insertTile(tiles,0);
         }catch(IllegalInsertException e){
+            System.out.println(e.getMessage());
             result = 1;
         }
         assertEquals(1, result);
@@ -113,6 +114,7 @@ class ShelfieTest {
         try {
             shelfie.insertTile(tiles,0);
         }catch(IllegalInsertException e){
+            System.out.println(e.getMessage());
             result = 1;
         }
         assertEquals(1, result);
@@ -139,6 +141,7 @@ class ShelfieTest {
         try {
             shelfie.insertTile(tiles,0);
         }catch(IllegalInsertException e){
+            System.out.println(e.getMessage());
             result = 1;
         }
         assertEquals(1, result);
@@ -169,7 +172,7 @@ class ShelfieTest {
             try {
                 shelfie.insertTile(tiles,j);
             } catch (IllegalInsertException e) {
-                System.out.println("error !");
+                System.out.println(e.getMessage());
             }
             if(i % 2 != 0) j++;
 

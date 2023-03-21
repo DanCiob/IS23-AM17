@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TwoColumnsOfSixDifferentTest {
+class TwoColumnsOfSixDifferentTest {
 
     @Test
     public void verifyShapeTest() {

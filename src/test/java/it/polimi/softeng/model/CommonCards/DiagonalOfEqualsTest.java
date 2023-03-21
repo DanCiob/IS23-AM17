@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DiagonalOfEqualsTest {
+    /**
+     * testing with a dx diagonal with offset zero waiting for a positive response
+     */
     @Test
     public void equalsTrueTestDxOffsetZero(){
         CommonCards card = new DiagonalOfEquals();
@@ -110,6 +113,10 @@ class DiagonalOfEqualsTest {
 
         assertTrue(card.verifyShape(shelfie));
     }
+
+    /**
+     * testing with a dx diagonal with offset one waiting for a positive response
+     */
     @Test
     public void equalsTrueTestDxOffsetOne(){
         CommonCards card = new DiagonalOfEquals();
@@ -224,6 +231,10 @@ class DiagonalOfEqualsTest {
 
         assertTrue(card.verifyShape(shelfie));
     }
+
+    /**
+     * testing with a sx diagonal with offset zero waiting for a positive response
+     */
     @Test
     public void equalsTrueTestSxOffsetZero(){
         CommonCards card = new DiagonalOfEquals();
@@ -325,6 +336,10 @@ class DiagonalOfEqualsTest {
         }
         assertTrue(card.verifyShape(shelfie));
     }
+
+    /**
+     * testing with a sx diagonal with offset one waiting for a positive response
+     */
     @Test
     public void equalsTrueTestSxOffsetOne(){
         CommonCards card = new DiagonalOfEquals();
@@ -441,6 +456,9 @@ class DiagonalOfEqualsTest {
         assertTrue(card.verifyShape(shelfie));
     }
 
+    /**
+     * testing with a diverse color tile on a diagonal waiting for a negative response
+     */
     @Test
     public void notEqualsTest(){
         CommonCards card = new DiagonalOfEquals();

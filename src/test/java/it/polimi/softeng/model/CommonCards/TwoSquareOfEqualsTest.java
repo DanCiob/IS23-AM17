@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TwoSquareOfEqualsTest {
+    /**
+     * testing with a grid of W,B,G,W,B,G rows (no squares) looking for a false response
+     */
     @Test
     public void noSquaresTest(){
         ArrayList<Tile> tiles = new ArrayList<>();
@@ -42,6 +45,9 @@ class TwoSquareOfEqualsTest {
         assertFalse(card.verifyShape(shelfie));
     }
 
+    /**
+     * testing with a square in the test grid looking for a false response
+     */
     @Test
     public void oneSquareTest(){
         ArrayList<Tile> tiles = new ArrayList<>();
@@ -75,6 +81,10 @@ class TwoSquareOfEqualsTest {
         }
         assertFalse(card.verifyShape(shelfie));
     }
+
+    /**
+     * testing with a grid containing two squares looking for a positive response
+     */
     @Test
     public void twoSquaresTest(){
         ArrayList<Tile> tiles = new ArrayList<>();
