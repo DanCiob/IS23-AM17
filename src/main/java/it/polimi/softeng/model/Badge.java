@@ -1,17 +1,10 @@
 package it.polimi.softeng.model;
 
-public abstract class Badge {
-    private int score;
-    
-    public Badge(int score) {
-        this.score = score;
-    }
+/**
+ * The interface Badge is used to collect BadgeEndGame (Singleton) and BadgeScore(enum)
+ */
 
-    public int getScore() {
-        return score;
-    }
+public interface Badge {
+    public abstract int getScore();
 
-    public void setScore(int score) {
-        this.score = score;
-    }
 }
