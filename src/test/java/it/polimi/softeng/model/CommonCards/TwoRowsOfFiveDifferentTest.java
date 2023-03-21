@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TwoRowsOfFiveDifferentTest {
+class TwoRowsOfFiveDifferentTest {
 
     @Test
     public void verifyShapeTest() {
