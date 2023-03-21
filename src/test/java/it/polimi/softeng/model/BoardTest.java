@@ -56,4 +56,13 @@ class BoardTest {
         board.updateBoard(positionsToBeRemoved);
         assertNull(board.getBoard()[1][4]);
     }
+
+    @Test
+    public void checkLegalChoiceTest(){
+        Board board = new Board();
+        ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
+        //Tile tile = new Tile();
+       // board.getBoard()[5][5]=
+
+    }
 }
