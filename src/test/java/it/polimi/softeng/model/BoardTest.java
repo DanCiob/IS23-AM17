@@ -2,9 +2,6 @@ package it.polimi.softeng.model;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
-
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
@@ -41,7 +38,6 @@ class BoardTest {
     @Test
     public void setNotAvailableTest(){
         Board board = new Board();
-        Cell cell = new Cell();
         board.setNotAvailable(2);
         boolean test = false;
 
@@ -100,10 +96,12 @@ class BoardTest {
         positionsToBeRemoved.add(cell);
         assertFalse(board.checkLegalChoice(positionsToBeRemoved));
 
+        positionsToBeRemoved = new ArrayList<>();
         cell = new Cell();
         cell.setX(5);
         cell.setY(0);
         positionsToBeRemoved.add(cell);
+        System.out.println(positionsToBeRemoved.get(0).getX() + " " + positionsToBeRemoved.get(0).getY());
         assertTrue(board.checkLegalChoice(positionsToBeRemoved));
 
 
