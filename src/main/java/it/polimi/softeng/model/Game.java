@@ -24,6 +24,7 @@ public class Game {
     public void initializeTile(){
         for(int i = 0; i < 132; i++){
             switch(i % 6){
+                //commento
                 case 0->tileBag.add(new Tile(i, Tile.TileColor.WHITE));
                 case 1->tileBag.add(new Tile(i, Tile.TileColor.BLUE));
                 case 2->tileBag.add(new Tile(i, Tile.TileColor.YELLOW));
