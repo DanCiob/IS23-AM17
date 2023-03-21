@@ -10,10 +10,33 @@ public class  TwoRowsOfFiveDifferent extends CommonCards{
      */
     public boolean verifyShape(Shelfie shelfie){
         boolean notVerified;
-        int i, verifiedRows = 0, j, z;
+        int i=0, verifiedRows = 0, j, z=0;
 
-        int[] numTilesForColors = {0, 0, 0, 0, 0 , 0}; /*numTilesForColors has the number of tiles for every color(position 0:BLUE, 1:WHITE, 2:GREEN, 3:YELLOW, 4:PURPLE, 5:CYAN)**/
-          for(i=0;i<6;i++){
+        while(i<6 && verifiedRows<2){ //it ends the loop when there are no more rows to check, or it has  already found two rows with five different colors
+            j=0;
+            notVerified = false;
+            while(j<4 && shelfie.getGrid()[i][j] != null){ //column
+                z=j+1;
+                //notVerified = false;
+                while((z<5) && (shelfie.getGrid()[i][z] != null) && (!notVerified)){
+                    if(shelfie.getGrid()[i][j].getColor() == shelfie.getGrid()[i][z].getColor())
+                        notVerified = true;
+                    z++;
+                }
+                //if(!notVerified && z == 5)
+                //  verifiedRows++;
+                j++;
+            }
+            if((!notVerified)&&(z==5)&&(shelfie.getGrid()[i][z-1] != null))
+                verifiedRows++;
+
+            i++;
+        }
+
+        return verifiedRows == 2;
+
+        //int[] numTilesForColors = {0, 0, 0, 0, 0 , 0}; /*numTilesForColors has the number of tiles for every color(position 0:BLUE, 1:WHITE, 2:GREEN, 3:YELLOW, 4:PURPLE, 5:CYAN)**/
+         /* for(i=0;i<6;i++){
             notVerified = false;
             for(j=0;j<5;j++){
                 if(shelfie.getGrid()[i][j] != null){
@@ -38,7 +61,7 @@ public class  TwoRowsOfFiveDifferent extends CommonCards{
             }
 
         }
-        return verifiedRows>=2;
+        return verifiedRows>=2;*/
     }
 
 }
