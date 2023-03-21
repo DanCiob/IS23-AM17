@@ -16,7 +16,7 @@ public class DiagonalOfEquals extends CommonCards {
     /**
      * indicates whether I'm checking for a diagonal starting from row 0 (offset = 0) or row 1 (offset = 1)
      */
-    private int offset = 0;
+    private int offset;
 
     /**
      * method used to verify whether the common goal (in this case "diagonal of five equals") is achieved; it cycles through the various possible pattern
@@ -25,7 +25,7 @@ public class DiagonalOfEquals extends CommonCards {
      * @return boolean value; true means the common goal is achieved on the shelfie s
      */
     public boolean verifyShape(Shelfie s){
-
+        offset = 0;
         while(offset < 2){
             Direction direction = Direction.LEFT;
             if (singleCheck(s, direction, offset)) return true;
@@ -50,6 +50,7 @@ public class DiagonalOfEquals extends CommonCards {
         switch (direction) {
             case LEFT -> {
                 t = shelfie.getTile(4+offset, 0);
+                if (t == null) return false;
 
                 // i for columns; the cycle checks for every column whether there is a tile in the position needed for a diagonal
                 for (int i = 0; i < 5; i++) {
@@ -62,7 +63,8 @@ public class DiagonalOfEquals extends CommonCards {
                 return count == 5;
             }
             case RIGHT -> {
-                t = shelfie.getTile(4+offset, 0);
+                t = shelfie.getTile(offset, 0);
+                if (t == null) return false;
 
                 // i for columns; the cycle checks for every column whether there is a tile in the position needed for a diagonal
                 for (int i = 0; i < 5; i++) {

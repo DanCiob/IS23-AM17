@@ -9,16 +9,16 @@ public class  TwoColumnsOfSixDifferent extends CommonCards{
      * @return boolean which is true if the shape is present in the shelfie or 0 if it's not
      */
     public boolean verifyShape(Shelfie shelfie){
-        boolean notVerified = false;
+        boolean notVerified;
         int i=0, j, verifiedColumns=0, z;
 
         while((i<5) && (verifiedColumns<2)){//it ends the loop when there are no more columns to check, or it has  already found two columns with five different colors
             j=0;
-            while(j<5 && shelfie.getGrid()[i][j] != null){
+            while(j<5 && shelfie.getGrid()[j][i] != null){
                 z=j+1;
                 notVerified = false;
-                while((z<6) && (shelfie.getGrid()[i][z] != null) && (!notVerified)){
-                    if(shelfie.getGrid()[i][j].getColor() == shelfie.getGrid()[i][z].getColor())
+                while((z<6) && (shelfie.getGrid()[z][i] != null) && (!notVerified)){
+                    if(shelfie.getGrid()[j][i].getColor() == shelfie.getGrid()[z][i].getColor())
                         notVerified = true;
                     z++;
                 }
@@ -26,10 +26,9 @@ public class  TwoColumnsOfSixDifferent extends CommonCards{
                     verifiedColumns++;
                 j++;
             }
-
             i++;
         }
-        return !notVerified;
+        return verifiedColumns >= 2;
 
     }
 
