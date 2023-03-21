@@ -30,7 +30,7 @@ public class FourCornerOfEquals extends CommonCards {
                 if (s.getTile(maxR - 1, maxC - 1).getColor() == s.getTile(0, maxC - 1).getColor()){
 
                     //check if bottom corners have the same color
-                    if (s.getTile(0, maxC - 1).getColor() == s.getTile(0, maxC - 1).getColor()){
+                    if (s.getTile(0, maxC - 1).getColor() == s.getTile(0, 0).getColor()){
                         return true;
                     }
                 }

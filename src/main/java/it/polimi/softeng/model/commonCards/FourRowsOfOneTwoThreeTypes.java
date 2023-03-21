@@ -31,8 +31,8 @@ public class FourRowsOfOneTwoThreeTypes extends CommonCards {
         row:
         for (int r = 0; r < maxR; r++) {
             column:
-            for (int c = 0; c < maxR; c++) {
-                //if a position is empty stop verifying becuase the shelfie cannot have more rows with different colors
+            for (int c = 0; c < maxC; c++) {
+                //if a position is empty stop verifying because the shelfie cannot have more rows with different colors
                 if (s.getTile(r, c) == null) {
                     break row;
                 }
