@@ -22,18 +22,19 @@ public class Score {
 
 
         for (int j = 0; j < 5; j++) {
-            for (int i = 0; i < 6 && grid[i][j] != null; i++)
-            {
+            for (int i = 0; i < 6 && grid[i][j] != null; i++) {
                 TileCounted = 0;
 
                 if (!visited.contains(grid[i][j]))
                     TileCounted = DFS(grid, i, j);
 
-                if (TileCounted > size)
+                if (TileCounted > size) {
                     NumberOfGroups++;
+                    System.out.println("Added group of " + grid[i][j].getColor());
                 }
             }
-        System.out.println(NumberOfGroups);
+        }
+        System.out.println("Counted groups: " + NumberOfGroups);
         //true if the max number of groups found is bigger than required number
         return NumberOfGroups >= required;
     }
@@ -85,8 +86,6 @@ public class Score {
             TileWithCoordinates currentTile = stack.pop();
             if (!visited.contains(currentTile.tile) && currentTile.tile.getColor().equals(currentColor))
             {
-                System.out.println("Reading cell" + currentTile.getR() + currentTile.getC() + " Of color: " + currentTile.tile.getColor());
-
                 TileCounted++;
                 visited.add(currentTile.tile);
 
