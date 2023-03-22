@@ -1,4 +1,4 @@
-package it.polimi.softeng.model.graphForScoreCount;
+package it.polimi.softeng.model.ScoreCount;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import it.polimi.softeng.customExceptions.UpperBoundReached;
@@ -51,8 +51,8 @@ public class graphNode
 
     /**
      *
-     * @param n -> graph node
-     * @param count -> counter of visited nodes
+     * @param n  graph node
+     * @param count  counter of visited nodes
      * @return number of tile of same color visited yet
      */
     public int visitGraph (graphNode n, int count)
@@ -74,9 +74,9 @@ public class graphNode
 
     /**
      *
-     * @param n -> graph node
-     * @param count -> counter of visited nodes
-     * @param limit -> stop the traversal if limit is reached
+     * @param n  graph node
+     * @param count  counter of visited nodes
+     * @param limit  stop the traversal if limit is reached
      * @return number of tile of same color visited yet
      */
     public int visitGraphWithUpperBound (graphNode n, int count, int limit) throws UpperBoundReached

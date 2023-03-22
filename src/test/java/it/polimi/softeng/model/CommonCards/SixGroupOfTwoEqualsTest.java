@@ -1,27 +1,23 @@
 package it.polimi.softeng.model.CommonCards;
 
 import it.polimi.softeng.customExceptions.IllegalInsertException;
-import it.polimi.softeng.customExceptions.UpperBoundReached;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
-import it.polimi.softeng.model.graphForScoreCount.graphNode;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
 
-import static it.polimi.softeng.model.graphForScoreCount.graphNode.mapShelfieToGraph;
+import static it.polimi.softeng.model.ScoreCount.Score.GroupsOfEqualTiles;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SixGroupOfTwoEqualsTest {
     /*
     *   *   *   *   P
     *   *   *   *   P
-    *   *   *   P   P
-    B   G   *   P   P
+    *   *   *   C   G
+    B   G   *   C   G
     P   W   *   P   W
-    P   P   P   P   G
+    P   W   P   P   W
     This is the shelfie analyzed, six group of two P should be found
     */
     ArrayList<Tile> tiles = new ArrayList<>();
@@ -32,7 +28,7 @@ class SixGroupOfTwoEqualsTest {
     Tile tile_1_0 = new Tile(2, Tile.TileColor.PURPLE);
     Tile tile_2_0 = new Tile(3, Tile.TileColor.BLUE);
 
-    Tile tile_0_1 = new Tile(4, Tile.TileColor.PURPLE);
+    Tile tile_0_1 = new Tile(4, Tile.TileColor.WHITE);
     Tile tile_1_1 = new Tile(5, Tile.TileColor.WHITE);
     Tile tile_2_1 = new Tile(6, Tile.TileColor.GREEN);
 
@@ -40,13 +36,13 @@ class SixGroupOfTwoEqualsTest {
 
     Tile tile_0_3 = new Tile(8, Tile.TileColor.PURPLE);
     Tile tile_1_3 = new Tile(9, Tile.TileColor.PURPLE);
-    Tile tile_2_3 = new Tile(10, Tile.TileColor.PURPLE);
-    Tile tile_3_3 = new Tile(11, Tile.TileColor.PURPLE);
+    Tile tile_2_3 = new Tile(10, Tile.TileColor.CYAN);
+    Tile tile_3_3 = new Tile(11, Tile.TileColor.CYAN);
 
-    Tile tile_0_4 = new Tile(12, Tile.TileColor.GREEN);
+    Tile tile_0_4 = new Tile(12, Tile.TileColor.WHITE);
     Tile tile_1_4 = new Tile(13, Tile.TileColor.WHITE);
-    Tile tile_2_4 = new Tile(14, Tile.TileColor.PURPLE);
-    Tile tile_3_4 = new Tile(15, Tile.TileColor.PURPLE);
+    Tile tile_2_4 = new Tile(14, Tile.TileColor.GREEN);
+    Tile tile_3_4 = new Tile(15, Tile.TileColor.GREEN);
     Tile tile_4_4 = new Tile(16, Tile.TileColor.PURPLE);
     Tile tile_5_4 = new Tile(17, Tile.TileColor.PURPLE);
 
@@ -108,33 +104,7 @@ class SixGroupOfTwoEqualsTest {
                                         .forEach(System.out::println);
         */
 
-        int tileCounted = 0;
-        int counter = 0;
-        int groupCounter = 0;
-        ArrayList<graphNode> Nodes = new ArrayList<>();
-        Nodes = mapShelfieToGraph(shelfie);
-
-        for (graphNode n: Nodes)
-        {
-            counter = 0;
-            tileCounted = 0;
-
-            if (!n.isVisited()) {
-                try
-                {
-                    tileCounted = n.visitGraphWithUpperBound(n, counter, 2);
-                }
-                catch (Exception UpperBoundReached)
-                {
-                    tileCounted = 2;
-                }
-            }
-
-            if (tileCounted == 2)
-                groupCounter++;
-        }
-
-        assertEquals(6, groupCounter);
+        assertTrue(GroupsOfEqualTiles(shelfie, 6, 2));
 
     }
 }
