@@ -1,3 +1,3 @@
-#Ignored folder
-/target/
-/.idea/
+#Ignored folders
+target/
+.idea/
