@@ -20,6 +20,7 @@ public class Score {
         int TileCounted;
         int NumberOfGroups = 0;
 
+        visited.clear();
 
         for (int j = 0; j < 5; j++) {
             for (int i = 0; i < 6 && grid[i][j] != null; i++) {
@@ -116,4 +117,45 @@ public class Score {
         }
         return TileCounted;
     }
+
+    /**
+     *
+     * @param s is the shelfie
+     * @return number of points earned by counting groups
+     */
+    public static int ScoreForGroups (Shelfie s)
+    {
+        Tile[][] grid = s.getGrid();
+        int TileCounted;
+        int NumberOfGroups = 0;
+        int[] GroupDimension = {0, 0, 0, 0};
+
+        visited.clear();
+
+        for (int j = 0; j < 5; j++) {
+            for (int i = 0; i < 6 && grid[i][j] != null; i++) {
+                TileCounted = 0;
+
+                if (!visited.contains(grid[i][j]))
+                    TileCounted = DFS(grid, i, j);
+
+                if (TileCounted == 3)
+                    GroupDimension[0]++;
+                else if (TileCounted == 4)
+                    GroupDimension[1]++;
+                else if (TileCounted == 5)
+                    GroupDimension[2]++;
+                else if (TileCounted >= 6)
+                    GroupDimension[3]++;
+            }
+        }
+        System.out.println("Counted: " + GroupDimension[0] + "groups of 3, " + GroupDimension[2] + "groups of 4, " + GroupDimension[2] + "groups of 5, " + GroupDimension[3] + "groups of 6 or more");
+
+        //Return achieved Score
+        return 2 * GroupDimension[0] + 3 * GroupDimension[1] + 5 * GroupDimension[2] + 6 * GroupDimension[3];
+
+
+    }
 }
+
+
