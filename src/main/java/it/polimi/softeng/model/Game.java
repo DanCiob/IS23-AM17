@@ -160,42 +160,51 @@ public class Game {
     }
 
     /**
-     *
+     * it handles the last turns after that one player has a full shelfie
      */
     public void lastTurn(){
         //verifica chi è l'ultimo giocatore
         // ecc
-        //! questo metodo viene chiamato dopo checkendgame o devo controllare se la shelfie è piena?????
+        //! questo metodo viene chiamato dopo checkendgame o devo controllare se la shelfie è piena??
         while(!(currentPlayer.isFirst())){ //aggiungere metodo e !current player è quello che ha riempito la shelfie o il successivo?
             currentPlayer = getNextPlayer();
             //routine di turno
+
         }
+
+        calculateScore();
+        selectWinner();
     }
 
     /**
-     * calcola lo score di ogni player per le carte comuni
+     * it calculates the score of personal card and set of equals tiles for every player, at the end of the game
      */
     public void calculateScore(){
-        //usa player.updateScore
-        //aggiunge punti carte personali e blocchi e badgeEndGame e altro?
         int pointsToAdd;
         for(Player p : players){
             pointsToAdd = p.getPersonalCard().getCurrentScore(p.getShelfie());
             //pointsToAdd = pointsToAdd + devo usare score per i blocchi???
-            //badge end game
             p.updateScore(pointsToAdd);
         }
     }
+
+    /**
+     * it sets the
+     */
     public void selectWinner(){
         int maxScore = 0;
         for(Player p : players){
-            if(p.getCurrentScore() > maxScore) { //è giusto usare getCurrentScore???
+            if(p.getCurrentScore() > maxScore) {
                 maxScore = p.getCurrentScore();
-                winner = p; //va bene?
+                winner = p;
+            }else if(p.getCurrentScore() == maxScore){
+
+                //winner = players.get();
             }
         }
-
     }
+
+
     public void createNewPlayer() /*implements PlayerManager*/ {
 
     }
