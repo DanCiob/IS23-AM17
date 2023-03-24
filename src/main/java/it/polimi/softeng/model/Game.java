@@ -165,15 +165,35 @@ public class Game {
     public void lastTurn(){
         //verifica chi è l'ultimo giocatore
         // ecc
+        //! questo metodo viene chiamato dopo checkendgame o devo controllare se la shelfie è piena?????
+        while(!(currentPlayer.isFirst())){ //aggiungere metodo e !current player è quello che ha riempito la shelfie o il successivo?
+            currentPlayer = getNextPlayer();
+            //routine di turno
+        }
     }
 
     /**
-     * calcola lo score di ogni player per le carte comnuni
+     * calcola lo score di ogni player per le carte comuni
      */
     public void calculateScore(){
-
+        //usa player.updateScore
+        //aggiunge punti carte personali e blocchi e badgeEndGame e altro?
+        int pointsToAdd;
+        for(Player p : players){
+            pointsToAdd = p.getPersonalCard().getCurrentScore(p.getShelfie());
+            //pointsToAdd = pointsToAdd + devo usare score per i blocchi???
+            //badge end game
+            p.updateScore(pointsToAdd);
+        }
     }
     public void selectWinner(){
+        int maxScore = 0;
+        for(Player p : players){
+            if(p.getCurrentScore() > maxScore) { //è giusto usare getCurrentScore???
+                maxScore = p.getCurrentScore();
+                winner = p; //va bene?
+            }
+        }
 
     }
     public void createNewPlayer() /*implements PlayerManager*/ {
@@ -214,6 +234,6 @@ public class Game {
         else return players.get(0);
     }
     public String gameChangeNotifier(){
-
+        return null;
     }
 }

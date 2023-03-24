@@ -7,7 +7,6 @@ public class Player {
     private PersonalCards personalCard;
     private Shelfie shelfie;
 
-
     public Player(String nickname, int currentScore, boolean isFirst) {
         Nickname = nickname;
         CurrentScore = currentScore;
@@ -29,6 +28,19 @@ public class Player {
         this.CurrentScore += pointsToAdd;
         return getCurrentScore();
     }
+
+    public boolean isFirst() {
+        return isFirst;
+    }
+
+    public PersonalCards getPersonalCard() {
+        return personalCard;
+    }
+
+    public Shelfie getShelfie() {
+        return shelfie;
+    }
+
     public void setPersonalCard(PersonalCards personalCard){
         this.personalCard = personalCard;
     }
