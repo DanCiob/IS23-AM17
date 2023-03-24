@@ -1,5 +1,6 @@
 package it.polimi.softeng.model;
 
+import it.polimi.softeng.model.ScoreCount.Score;
 import it.polimi.softeng.model.commonCards.*;
 
 import java.util.ArrayList;
@@ -161,45 +162,39 @@ public class Game {
 
     /**
      * it handles the last turns after that one player has a full shelfie
+     * this method is called after checkEndGame
      */
     public void lastTurn(){
-        //verifica chi è l'ultimo giocatore
-        // ecc
-        //! questo metodo viene chiamato dopo checkendgame o devo controllare se la shelfie è piena??
-        while(!(currentPlayer.isFirst())){ //aggiungere metodo e !current player è quello che ha riempito la shelfie o il successivo?
+        while(!(currentPlayer.isFirst())){ //current player is the one that has a full shelfie
             currentPlayer = getNextPlayer();
-            //routine di turno
-
+            //TO DO: game turn routine
         }
-
         calculateScore();
         selectWinner();
     }
 
     /**
-     * it calculates the score of personal card and set of equals tiles for every player, at the end of the game
+     * it calculates and updates the score of personal card and set of equals tiles for every player, at the end of the game
      */
     public void calculateScore(){
         int pointsToAdd;
         for(Player p : players){
             pointsToAdd = p.getPersonalCard().getCurrentScore(p.getShelfie());
-            //pointsToAdd = pointsToAdd + devo usare score per i blocchi???
+            pointsToAdd = pointsToAdd + Score.ScoreForGroups(p.getShelfie());
             p.updateScore(pointsToAdd);
         }
     }
 
     /**
-     * it sets the
+     * it checks the score of every player and select the winner
+     * if two players have the same score, the winner is the last one of the two
      */
     public void selectWinner(){
         int maxScore = 0;
         for(Player p : players){
-            if(p.getCurrentScore() > maxScore) {
+            if(p.getCurrentScore() >= maxScore) {
                 maxScore = p.getCurrentScore();
                 winner = p;
-            }else if(p.getCurrentScore() == maxScore){
-
-                //winner = players.get();
             }
         }
     }
