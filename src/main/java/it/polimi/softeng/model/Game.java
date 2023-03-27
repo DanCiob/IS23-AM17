@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.random.*;
 
-public class Game {
+public class Game implements PlayerManager{
     //board section
     private Board gameBoard = new Board();
-    public ArrayList<Tile> tileBag = new ArrayList<>();     //temporarily public, should be private
+    public ArrayList<Tile> tileBag = new ArrayList<>();     //temporarily public for testing purpose, should be private
     private BadgeEndGame endGameBadge;
     //player section
     /**
@@ -24,6 +24,7 @@ public class Game {
     private Player firstPlayer;
     private ArrayList<Integer> personalCardsAlreadyUsedNum = new ArrayList<>();
 
+    //to be finished
     public void beginGame(){
         //vedi cosa serve
         initializeTile();
@@ -33,10 +34,16 @@ public class Game {
         initializeBadgeEndGame();
     }
 
+    /**
+     * method used to place the tiles on the board
+     */
     public void initializeBoard(){
         gameBoard.positionTiles(tileBag);
     }
 
+    /**
+     * this method creates all the tiles and places them in the tileBag
+     */
     public void initializeTile(){
         for(int i = 0; i < 132; i++){
             switch(i % 6){
@@ -51,10 +58,16 @@ public class Game {
         }
     }
 
+    /**
+     * this method gets the reference to the singleton object BadgeEndGame
+     */
     public void initializeBadgeEndGame(){
         endGameBadge = BadgeEndGame.getInstance();
     }
 
+    /**
+     * this method creates all the score badges and places them inside the commonCards objects
+     */
     public void initializebadgeScore(){
         switch(players.size()){
             case 2 -> {
@@ -84,6 +97,9 @@ public class Game {
         }
     }
 
+    /**
+     * method that randomly chooses 2 common objective cards
+     */
     public void chooseCommonCards(){
         Random random = new Random();
         ArrayList<Integer> commonCardsNum = new ArrayList<>();
@@ -116,6 +132,11 @@ public class Game {
         }
 
     }
+
+    /**
+     * this method select a personalCard for a player
+     * @param player player receiving the personal card
+     */
     public void choosePersonalCards(Player player){
         Random random = new Random();
         //generation of a random int between 0 and 11
@@ -158,6 +179,7 @@ public class Game {
             case 3 -> firstPlayer = players.get(3);
         }
         setCurrentPlayer(firstPlayer);
+        firstPlayer.setIsFirst();
     }
 
     /**
@@ -199,12 +221,25 @@ public class Game {
         }
     }
 
-
-    public void createNewPlayer() /*implements PlayerManager*/ {
-
+    /**
+     * method used to create a new player object for a game; such object is then placed in the players list in last place
+     * @param nickName nickname of the player to be created
+     */
+    public void createNewPlayer(String nickName){
+        players.add(new Player(nickName, 0));
     }
+
+    //should we keep a reference to removed players as long as a Game object exists ?
+    /**
+     * method used to remove a player from the player list Players;
+     * @param player reference to the player to be removed
+     */
     public void removePlayer(Player player){
-        
+        int i = 0;
+        while(i < players.size() && players.get(i) != player){
+            i++;
+        }
+        players.remove(i);
     }
 
     /**
@@ -237,6 +272,15 @@ public class Game {
         }
         else return players.get(0);
     }
+    //this should be remodeled maybe ?
+    /**
+     * method used to update the value of the attribute currentPlayer
+     */
+    @Override
+    public void setNextPlayer() {
+        setCurrentPlayer(getNextPlayer());
+    }
+
     public String gameChangeNotifier(){
         return null;
     }
