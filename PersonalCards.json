@@ -1,0 +1,36 @@
+[
+  {
+    "PERSONAL_CARD_1": {
+      "ObjectiveCell0": {
+        "x" : "0",
+        "y" : "5",
+        "color" : "Tile.TileColor.PURPLE"
+      },
+      "ObjectiveCell1": {
+        "x" : "1",
+        "y" : "2",
+        "color" : "Tile.TileColor.YELLOW"
+      },
+      "ObjectiveCell2": {
+        "x" : "2",
+        "y" : "0",
+        "color" : "Tile.TileColor.CYAN"
+      },
+      "ObjectiveCell3": {
+        "x" : "2",
+        "y" : "5",
+        "color" : "Tile.TileColor.BLUE"
+      },
+      "ObjectiveCell4": {
+        "x" : "3",
+        "y" : "3",
+        "color" : "Tile.TileColor.WHITE"
+      },
+      "ObjectiveCell5": {
+        "x" : "4",
+        "y" : "4",
+        "color" : "Tile.TileColor.GREEN"
+      }
+    }
+  }
+]
