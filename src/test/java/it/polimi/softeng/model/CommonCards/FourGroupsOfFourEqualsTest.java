@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static it.polimi.softeng.model.ScoreCount.Score.GroupsOfEqualTiles;
+import static it.polimi.softeng.model.scoreCount.Score.GroupsOfEqualTiles;
 import static org.junit.jupiter.api.Assertions.*;
 
 

@@ -1,4 +1,4 @@
-package it.polimi.softeng.model.ScoreCount;
+package it.polimi.softeng.model.scoreCount;
 
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
