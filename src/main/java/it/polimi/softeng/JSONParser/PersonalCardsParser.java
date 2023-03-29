@@ -1,15 +1,12 @@
-package it.polimi.softeng.JSONparser;
+package it.polimi.softeng.JSONParser;
 
 import it.polimi.softeng.model.PersonalCard;
-import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.Tile;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.awt.*;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -30,9 +27,8 @@ public class PersonalCardsParser {
     public static ArrayList<PersonalCard> InitializePersonalCards() {
 
         ArrayList<PersonalCard> tbr = new ArrayList<>();
-        PersonalCard pcTemp = new PersonalCard();
-        int xTemp = 0;
-        int yTemp = 0;
+        int rowTemp = 0;
+        int columnTemp = 0;
         String color;
         Tile.TileColor colorTemp = null;
         int currentCard = 0;
@@ -40,7 +36,7 @@ public class PersonalCardsParser {
 
         JSONParser parser = new JSONParser();
 
-        try (Reader reader = new FileReader("src/main/java/it/polimi/softeng/PersonalCards.json")) {
+        try (Reader reader = new FileReader("src/main/java/it/polimi/softeng/JSONConfigFiles/PersonalCards.json")) {
 
             JSONObject jsonObject = (JSONObject) parser.parse(reader);
 
@@ -53,6 +49,7 @@ public class PersonalCardsParser {
 
                 currentCard++;
                 JSONObject current = (JSONObject) iterator.next();
+                PersonalCard pcTemp = new PersonalCard();
 
                 String currentPC = "PERSONAL_CARD_" + currentCard;
                 JSONArray CurrentCardRead = (JSONArray) current.get(currentPC);
@@ -62,8 +59,8 @@ public class PersonalCardsParser {
                 for (int i = 0; iterator1.hasNext(); i++)
                 {
                     JSONObject currentCell = (JSONObject) iterator1.next();
-                    xTemp = (int)(long) currentCell.get("X");
-                    yTemp = (int)(long) currentCell.get("Y");
+                    rowTemp = (int)(long) currentCell.get("row");
+                    columnTemp = (int)(long) currentCell.get("column");
                     colorTemp = StringToColor((String) currentCell.get("color"));
 
                     /*
@@ -71,9 +68,9 @@ public class PersonalCardsParser {
                     System.out.println(yTemp);
                     System.out.println(colorTemp);
                      */
-                    pcTemp.setObjective(i, xTemp, yTemp, colorTemp);
+                    pcTemp.setObjective(i, rowTemp, columnTemp, colorTemp);
                 }
-                tbr.add(pcTemp);
+                tbr.add(currentCard-1, pcTemp);
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();

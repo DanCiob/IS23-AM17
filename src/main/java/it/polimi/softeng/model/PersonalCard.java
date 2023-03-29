@@ -1,34 +1,36 @@
 package it.polimi.softeng.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+
+import static it.polimi.softeng.JSONParser.PersonalCardsParser.InitializePersonalCards;
+import static it.polimi.softeng.model.scoreCount.Score.PersonalCardsScore;
 
 public class PersonalCard {
     ObjectiveCell objective[] = new ObjectiveCell[6];
 
     public class ObjectiveCell {
-        int x;
-        int y;
+        int row;
+        int column;
         Tile.TileColor color;
 
-        public int getX() {
-            return x;
+        public int getRow() {
+            return row;
         }
 
-        public int getY() {
-            return y;
+        public int getColumn() {
+            return column;
         }
 
         public Tile.TileColor getColor() {
             return color;
         }
 
-        public void setX(int x) {
-            this.x = x;
+        public void setRow(int x) {
+            this.row = x;
         }
 
-        public void setY(int y) {
-            this.y = y;
+        public void setColumn(int y) {
+            this.column = y;
         }
 
         public void setColor(Tile.TileColor color) {
@@ -40,9 +42,9 @@ public class PersonalCard {
         return objective;
     }
 
-    public void setObjective(int cell, int x, int y, Tile.TileColor color) {
-        this.objective[cell].setX(x);
-        this.objective[cell].setY(y);
+    public void setObjective(int cell, int row, int column, Tile.TileColor color) {
+        this.objective[cell].setRow(row);
+        this.objective[cell].setColumn(column);
         this.objective[cell].setColor(color);
     }
 
@@ -55,15 +57,35 @@ public class PersonalCard {
         this.objective[5] = new ObjectiveCell();
     }
 
+    //For testing purposes
     public static void PersonalCardToString(PersonalCard p) {
         System.out.println("PersonalCard: ");
         for (int i = 0; i < 6; i++)
         {
             System.out.println("Cell -> "+i);
-            System.out.println("X: " + p.getObjective()[i].getX());
-            System.out.println("Y: " + p.getObjective()[i].getY());
+            System.out.println("Row: " + p.getObjective()[i].getRow());
+            System.out.println("Column: " + p.getObjective()[i].getColumn());
             System.out.println("Color: " + p.getObjective()[i].getColor());
         }
     }
 
+    /**
+     *
+     * @return list of all PersonalCards
+     */
+    public static ArrayList<PersonalCard> FillPersonalCardsBag ()
+    {
+        return InitializePersonalCards();
+    }
+
+    /**
+     *
+     * @param s is player's shelfie
+     * @param p is player's personal card
+     * @return score
+     */
+    public static int ActualScore (Shelfie s, PersonalCard p)
+    {
+        return PersonalCardsScore(p, s);
+    }
 }

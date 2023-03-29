@@ -167,10 +167,11 @@ public class Score {
     public static int PersonalCardsScore (PersonalCard p, Shelfie s) {
         int numObjectiveReached = 0;
         PersonalCard.ObjectiveCell obj[] = new PersonalCard.ObjectiveCell[6];
+        obj = p.getObjective();
         //6 is the dimension of PersonalCard ScoreTable
         for (int i = 0; i < 6; i++) {
             //If color in PC matches color in shelfie
-            if (s.getTile(obj[i].getX(), obj[i].getX()).getColor().equals(obj[i].getColor()))
+            if (s.getTile(obj[i].getRow(), obj[i].getColumn()) != null && s.getTile(obj[i].getRow(), obj[i].getColumn()).getColor().equals(obj[i].getColor()))
                 numObjectiveReached++;
         }
 
