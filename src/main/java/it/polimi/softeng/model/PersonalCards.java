@@ -105,7 +105,7 @@ public enum PersonalCards {
     /**
      * internal data structure used to store the objectiveCells representing the personal objectives
      */
-    private ArrayList<ObjectiveCell> objective;
+    private ArrayList<ObjectiveCell> objective = new ArrayList<>();
 
     /**
      * constructor method that links the objectiveCells to the objective arrayList of the enum type

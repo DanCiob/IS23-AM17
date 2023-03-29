@@ -164,19 +164,16 @@ public class Board {
         return notAvailable;
     }
 
-    public Board resetBoard(int numberOfPlayers){
+    public void resetBoard(int numberOfPlayers){
         /*
          it initializes every tile of the board with null
          */
-
         setNotAvailable(numberOfPlayers);
         for(int i = 0; i<9;i++){
             for(int j = 0; j<9;j++){
                 board[i][j] = null;
             }
         }
-
-        return this;
     }
 
     public void updateBoard(ArrayList<Cell> positionsToBeRemoved){
