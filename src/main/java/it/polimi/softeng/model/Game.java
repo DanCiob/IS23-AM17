@@ -2,8 +2,6 @@ package it.polimi.softeng.model;
 
 import it.polimi.softeng.model.scoreCount.Score;
 import it.polimi.softeng.model.commonCards.*;
-import it.polimi.softeng.model.Tile;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -24,14 +22,21 @@ public class Game implements PlayerManager{
     private Player firstPlayer;
     private ArrayList<Integer> personalCardsAlreadyUsedNum = new ArrayList<>();
 
-    //to be finished
+    //maybe finished
+    //dovremmo controllare che non parta con meno del numero di giocatori scelto
     public void beginGame(){
         //vedi cosa serve
         initializeTile();
         initializeBoard();
         //inizializzare le carte prima dei badge
+        chooseCommonCards();
+        for(Player player : players){
+            choosePersonalCards(player);
+            giveShelfie(player);
+        }
         initializebadgeScore();
         initializeBadgeEndGame();
+        chooseFirstPlayer();
     }
 
     /**
@@ -132,6 +137,14 @@ public class Game implements PlayerManager{
         }
 
     }
+    //cant find a way to make this useful other than testing
+    /**
+     * getter method for CommonCards array
+     * @return list of commonCards choosen for the match
+     */
+    public ArrayList<CommonCards> getCommonCards(){
+        return commonCards;
+    }
 
     /**
      * this method select a personalCard for a player
@@ -227,6 +240,7 @@ public class Game implements PlayerManager{
      */
     public void createNewPlayer(String nickName){
         players.add(new Player(nickName, 0));
+
     }
 
     //should we keep a reference to removed players as long as a Game object exists ?
@@ -272,7 +286,7 @@ public class Game implements PlayerManager{
         }
         else return players.get(0);
     }
-    //this should be remodeled maybe ?
+
     /**
      * method used to update the value of the attribute currentPlayer
      */

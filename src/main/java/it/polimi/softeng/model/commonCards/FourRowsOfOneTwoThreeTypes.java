@@ -2,6 +2,7 @@ package it.polimi.softeng.model.commonCards;
 
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
+
 import java.util.Vector;
 /**
  * This class verifies if the shelfie has four rows each formed by 5 tiles of maximum three different colors (types)

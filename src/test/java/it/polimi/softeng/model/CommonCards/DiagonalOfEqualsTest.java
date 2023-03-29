@@ -5,7 +5,6 @@ import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import it.polimi.softeng.model.commonCards.CommonCards;
 import it.polimi.softeng.model.commonCards.DiagonalOfEquals;
-import it.polimi.softeng.model.commonCards.Stairs;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

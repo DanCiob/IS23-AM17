@@ -1,7 +1,8 @@
 package it.polimi.softeng.model.commonCards;
 
 import it.polimi.softeng.model.Shelfie;
-import it.polimi.softeng.model.Tile.TileColor;
+import it.polimi.softeng.model.Tile;
+
 import java.util.Vector;
 
 /**
@@ -23,7 +24,7 @@ public class ThreeColumnsOfOneTwoThreeTypes extends CommonCards {
         final int maxC = 5; //number of columns of the shelfie
         final int maxR = 6; //number of rows of the shelfie
         boolean completed = false;
-        Vector<TileColor> v = new Vector<>();
+        Vector<Tile.TileColor> v = new Vector<>();
 
         column:
         for(int c = 0; c < maxC; c++){

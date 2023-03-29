@@ -2,8 +2,8 @@ package it.polimi.softeng.model.CommonCards;
 
 import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Shelfie;
-import it.polimi.softeng.model.Tile;
 
+import it.polimi.softeng.model.Tile;
 import it.polimi.softeng.model.commonCards.CommonCards;
 import it.polimi.softeng.model.commonCards.Stairs;
 import org.junit.jupiter.api.Test;

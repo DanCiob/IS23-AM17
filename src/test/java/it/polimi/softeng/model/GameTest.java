@@ -38,4 +38,41 @@ class GameTest {
         assertEquals(22, cyanCount);
         assertEquals(22, greenCount);
     }
+
+    /**
+     * testing whether the commonCards are initialized and aren't the same
+     */
+    @Test
+    public void chooseCommonCardsTest(){
+        Game game = new Game();
+
+        game.createNewPlayer("player1");
+        game.createNewPlayer("player2");
+        game.beginGame();
+        assertEquals(2, game.getCommonCards().size());
+        assertNotSame(game.getCommonCards().get(0), game.getCommonCards().get(1));
+    }
+    @Test
+    public void chooseCommonCardsPointsTest(){
+        Game game = new Game();
+
+        game.createNewPlayer("player1");
+        game.createNewPlayer("player2");
+        game.beginGame();
+        game.getCommonCards().get(1).g
+    }
+
+    /**
+     * to be finished
+     */
+    @Test
+    public void ChoosePersonalCards(){
+        Game game = new Game();
+
+        game.createNewPlayer("player1");
+        game.createNewPlayer("player2");
+        game.beginGame();
+        assertEquals(2, game.getCommonCards().size());
+        game.
+    }
 }
