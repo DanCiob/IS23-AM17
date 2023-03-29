@@ -59,7 +59,6 @@ class GameTest {
         game.createNewPlayer("player1");
         game.createNewPlayer("player2");
         game.beginGame();
-        game.getCommonCards().get(1).g
     }
 
     /**
@@ -73,6 +72,5 @@ class GameTest {
         game.createNewPlayer("player2");
         game.beginGame();
         assertEquals(2, game.getCommonCards().size());
-        game.
     }
 }
