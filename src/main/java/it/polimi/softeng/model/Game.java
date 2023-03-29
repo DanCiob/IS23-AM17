@@ -1,11 +1,11 @@
 package it.polimi.softeng.model;
 
-import it.polimi.softeng.model.ScoreCount.Score;
+import it.polimi.softeng.model.scoreCount.Score;
 import it.polimi.softeng.model.commonCards.*;
+import it.polimi.softeng.model.Tile;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.random.*;
 
 public class Game {
     //board section

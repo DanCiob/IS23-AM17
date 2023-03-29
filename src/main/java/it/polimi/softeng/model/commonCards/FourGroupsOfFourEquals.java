@@ -2,7 +2,7 @@ package it.polimi.softeng.model.commonCards;
 
 import it.polimi.softeng.model.Shelfie;
 
-import static it.polimi.softeng.model.ScoreCount.Score.GroupsOfEqualTiles;
+import static it.polimi.softeng.model.scoreCount.Score.GroupsOfEqualTiles;
 
 public class FourGroupsOfFourEquals extends CommonCards {
 
