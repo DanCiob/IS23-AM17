@@ -11,7 +11,7 @@ class PlayerTest {
      */
     @Test
     void updateScore() {
-        Player player = new Player("TestPlayer", 0, false);
+        Player player = new Player("TestPlayer", 0);
         int correctScore = player.updateScore(4);
         assertEquals(4, correctScore);
         correctScore = player.updateScore(2);

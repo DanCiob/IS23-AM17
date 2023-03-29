@@ -1,5 +1,7 @@
 package it.polimi.softeng.model;
 
+import javax.swing.text.TableView;
+
 public class Player {
     private String Nickname;
     private int CurrentScore;
@@ -7,11 +9,11 @@ public class Player {
     private PersonalCards personalCard;
     private Shelfie shelfie;
 
-    public Player(String nickname, int currentScore, boolean isFirst) {
+    public Player(String nickname, int currentScore) {
         Nickname = nickname;
         CurrentScore = currentScore;
-        this.isFirst = isFirst;
     }
+
 
     public String getNickname() {
         return Nickname;
@@ -28,7 +30,9 @@ public class Player {
         this.CurrentScore += pointsToAdd;
         return getCurrentScore();
     }
-
+    public void setIsFirst(){
+        isFirst = true;
+    }
     public boolean isFirst() {
         return isFirst;
     }

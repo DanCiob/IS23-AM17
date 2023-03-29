@@ -4,7 +4,6 @@ import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import it.polimi.softeng.model.commonCards.CommonCards;
-import it.polimi.softeng.model.commonCards.FourCornerOfEquals;
 import it.polimi.softeng.model.commonCards.ThreeColumnsOfOneTwoThreeTypes;
 import org.junit.jupiter.api.Test;
 
