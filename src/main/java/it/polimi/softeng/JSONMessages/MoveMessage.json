@@ -1,0 +1,17 @@
+{
+  "tileList": [
+    {
+      "id": "1",
+      "color": "PURPLE"
+    },
+    {
+      "id": "2",
+      "color": "GREEN"
+    },
+    {
+      "id": "3",
+      "color": "CYAN"
+    }
+  ],
+  "column" : "2"
+}

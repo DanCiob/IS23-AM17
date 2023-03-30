@@ -1,0 +1,34 @@
+{
+  "shelfieGrid" : [
+    {
+      "row": "0",
+      "column": "0",
+      "id": "1",
+      "color":"PURPLE"
+    },
+    {
+      "row": "0",
+      "column": "1",
+      "id": "2",
+      "color":"PURPLE"
+    },
+    {
+      "row": "0",
+      "column": "2",
+      "id": "3",
+      "color":"PURPLE"
+    },
+    {
+      "row": "0",
+      "column": "3",
+      "id": "4",
+      "color":"PURPLE"
+    },
+    {
+      "row": "0",
+      "column": "4",
+      "id": "5",
+      "color":"PURPLE"
+    }
+  ]
+}

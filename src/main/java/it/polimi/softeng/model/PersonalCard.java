@@ -84,7 +84,7 @@ public class PersonalCard {
      * @param p is player's personal card
      * @return score
      */
-    public static int ActualScore (Shelfie s, PersonalCard p)
+    public static int getCurrentScore (Shelfie s, PersonalCard p)
     {
         return PersonalCardsScore(p, s);
     }

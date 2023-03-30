@@ -134,7 +134,7 @@ class PersonalCardTest {
 
         PersonalCard.PersonalCardToString(p);
 
-        int score = PersonalCard.ActualScore(shelfie, p);
+        int score = PersonalCard.getCurrentScore(shelfie, p);
 
         assertEquals(12, score);
     }
@@ -260,7 +260,7 @@ class PersonalCardTest {
 
         PersonalCard.PersonalCardToString(p);
 
-        int score = PersonalCard.ActualScore(shelfie, p);
+        int score = PersonalCard.getCurrentScore(shelfie, p);
 
         assertEquals(4, score);
     }
@@ -386,7 +386,7 @@ class PersonalCardTest {
 
         PersonalCard.PersonalCardToString(p);
 
-        int score = PersonalCard.ActualScore(shelfie, p);
+        int score = PersonalCard.getCurrentScore(shelfie, p);
 
         assertEquals(0, score);
     }

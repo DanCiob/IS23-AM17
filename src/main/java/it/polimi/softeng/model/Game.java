@@ -32,10 +32,7 @@ public class Game implements PlayerManager{
         initializeBoard();
         //inizializzare le carte prima dei badge
         chooseCommonCards();
-        for(Player player : players){
-            choosePersonalCards(player);
-            giveShelfie(player);
-        }
+        choosePersonalCards();
         initializebadgeScore();
         initializeBadgeEndGame();
         chooseFirstPlayer();
@@ -152,7 +149,7 @@ public class Game implements PlayerManager{
      * this method select a personalCard for a player
      * @param player player receiving the personal card
      */
-    public void choosePersonalCards(Player player){
+    /*public void choosePersonalCards(Player player){
         Random random = new Random();
         //generation of a random int between 0 and 11
         int i = random.nextInt(12);
@@ -175,12 +172,12 @@ public class Game implements PlayerManager{
             case 11 -> player.setPersonalCard(PersonalCards.PERSONAL_CARD_12);
         }
         personalCardsAlreadyUsedNum.add(i);
-    }
+    }*/
 
     /**
      * Set a different personal card for each player
      */
-    public void choosePersonalCardss(){
+    public void choosePersonalCards(){
 
         ArrayList<PersonalCard> personalCardsBag = new ArrayList<>();
         personalCardsBag = FillPersonalCardsBag();
@@ -236,7 +233,7 @@ public class Game implements PlayerManager{
     public void calculateScore(){
         int pointsToAdd;
         for(Player p : players){
-            pointsToAdd = p.getPersonalCard().getCurrentScore(p.getShelfie());
+            pointsToAdd = p.getPersonalCard().getCurrentScore(p.getShelfie(), p.getPersonalCard());
             pointsToAdd = pointsToAdd + Score.ScoreForGroups(p.getShelfie());
             p.updateScore(pointsToAdd);
         }
