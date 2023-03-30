@@ -6,7 +6,7 @@ public class Player {
     private String Nickname;
     private int CurrentScore;
     private boolean isFirst;
-    private PersonalCards personalCard;
+    private PersonalCard personalCard;
     private Shelfie shelfie;
 
     public Player(String nickname, int currentScore) {
@@ -37,7 +37,7 @@ public class Player {
         return isFirst;
     }
 
-    public PersonalCards getPersonalCard() {
+    public PersonalCard getPersonalCard() {
         return personalCard;
     }
 
@@ -45,7 +45,7 @@ public class Player {
         return shelfie;
     }
 
-    public void setPersonalCard(PersonalCards personalCard){
+    public void setPersonalCard(PersonalCard personalCard){
         this.personalCard = personalCard;
     }
     public void setShelfie(Shelfie shelfie){

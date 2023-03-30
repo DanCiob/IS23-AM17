@@ -1,34 +1,39 @@
 package it.polimi.softeng.model;
 
-import it.polimi.softeng.model.scoreCount.Score;
 import it.polimi.softeng.model.commonCards.*;
+import it.polimi.softeng.model.scoreCount.Score;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 import static it.polimi.softeng.model.PersonalCard.FillPersonalCardsBag;
 
-public class Game implements PlayerManager{
+public class GameForTest{
     //board section
-    private Board gameBoard = new Board();
-    private ArrayList<Tile> tileBag = new ArrayList<>();
-    private BadgeEndGame endGameBadge;
+    public Board gameBoard = new Board();
+    public ArrayList<Tile> tileBag = new ArrayList<>();
+    public BadgeEndGame endGameBadge;
     //player section
     /**
      * this arrayList contains the references to the players; the order of the elements in the array refers to the order of
      * entry in the game lobby (ie player 0 is who created the game). the game turns go from player in position 0 to position player.size()
      */
-    private ArrayList<Player> players = new ArrayList<>();
-    private Player currentPlayer;
-    private ArrayList<CommonCards> commonCards = new ArrayList<>();
-    private Player winner;
-    private Player firstPlayer;
+    public ArrayList<Player> players = new ArrayList<>();
+    public Player currentPlayer;
+    public ArrayList<CommonCards> commonCards = new ArrayList<>();
+    public Player winner;
+    public Player firstPlayer;
 
     //maybe finished
+    //si deve ancora dare la shelfie ai player;
     //dovremmo controllare che non parta con meno del numero di giocatori scelto
     public void beginGame(){
         //vedi cosa serve
         initializeTile();
         initializeBoard();
+        for(Player player : players){
+            giveShelfie(player);
+        }
         //inizializzare le carte prima dei badge
         chooseCommonCards();
         choosePersonalCards();
@@ -164,6 +169,7 @@ public class Game implements PlayerManager{
     public void giveShelfie(Player player){
         player.setShelfie(new Shelfie());
     }
+
     public void chooseFirstPlayer(){
         Random random = new Random();
         int i = random.nextInt(players.size());
@@ -272,7 +278,7 @@ public class Game implements PlayerManager{
     /**
      * method used to update the value of the attribute currentPlayer
      */
-    @Override
+
     public void setNextPlayer() {
         setCurrentPlayer(getNextPlayer());
     }
@@ -280,4 +286,8 @@ public class Game implements PlayerManager{
     public String gameChangeNotifier(){
         return null;
     }
+
+
+
+
 }

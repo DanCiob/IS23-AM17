@@ -57,7 +57,7 @@ class BoardTest {
         ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
         //ArrayList<Cell> bag = new ArrayList<>();
         Cell cell = new Cell();
-        Game game = new Game();
+        GameForTest game = new GameForTest();
 
 
 
@@ -85,7 +85,7 @@ class BoardTest {
         Board board = new Board();
         ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
         Cell cell = new Cell();
-        Game game = new Game();
+        GameForTest game = new GameForTest();
         board.setNotAvailable(4);
         board.resetBoard(4);
         game.initializeTile();
