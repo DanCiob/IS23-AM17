@@ -1,5 +1,6 @@
 package it.polimi.softeng.model.scoreCount;
 
+import it.polimi.softeng.model.PersonalCard;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 
@@ -155,6 +156,47 @@ public class Score {
         return 2 * GroupDimension[0] + 3 * GroupDimension[1] + 5 * GroupDimension[2] + 6 * GroupDimension[3];
 
 
+    }
+
+    /**
+     *
+     * @param p is the PersonalCard
+     * @param s is the shelfie
+     * @return score achieved in PersonalCard
+     */
+    public static int PersonalCardsScore (PersonalCard p, Shelfie s) {
+        int numObjectiveReached = 0;
+        PersonalCard.ObjectiveCell obj[] = new PersonalCard.ObjectiveCell[6];
+        obj = p.getObjective();
+        //6 is the dimension of PersonalCard ScoreTable
+        for (int i = 0; i < 6; i++) {
+            //If color in PC matches color in shelfie
+            if (s.getTile(obj[i].getRow(), obj[i].getColumn()) != null && s.getTile(obj[i].getRow(), obj[i].getColumn()).getColor().equals(obj[i].getColor()))
+                numObjectiveReached++;
+        }
+
+        switch (numObjectiveReached)
+        {
+            case 1 -> {
+                return 1;
+            }
+            case 2 -> {
+                return 2;
+            }
+            case 3 -> {
+                return 4;
+            }
+            case 4 -> {
+                return 6;
+            }
+            case 5 -> {
+                return 9;
+            }
+            case 6 -> {
+                return 12;
+            }
+        }
+        return 0;
     }
 }
 
