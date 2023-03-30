@@ -159,6 +159,53 @@ public class Score {
 
     }
 
+
+
+     //This method is used to check if the shelfie has two columns of six different or two rows of five different
+
+    /**
+     *
+     * @param s It's the shelfie to check
+     * @param columns It's true if the method is called from TwoColumnsOfSixDifferent, false if it's called from TwoRowsOfFiveDifferent
+     * @return 0 if the shelfie doesn't respect the card or 1 if it does
+     */
+    public static boolean twoOfDifferent(Shelfie s, boolean columns){
+        boolean notVerified = false;
+        int i=0, countVerified = 0, j, z=0, iMax, jMax;
+        if(!columns){
+            iMax = 6;
+            jMax = 5;
+        }else{
+            iMax = 5;
+            jMax = 6;
+        }
+
+        while(i < iMax && countVerified<2) {
+            j = 0;
+            if(!columns)
+                notVerified = false;
+            while(((!columns && j<4) || (columns && j<5) )&& s.getGrid()[i][j] != null){
+                z=j+1;
+                if(columns)
+                    notVerified = false;
+                while((z<jMax) && ((!columns && s.getGrid()[i][z] != null) || (columns && s.getGrid()[z][i] != null)) &&(!notVerified)){
+                    if((!columns)&&(s.getGrid()[i][j].getColor() == s.getGrid()[i][z].getColor()))
+                        notVerified = true;
+                    if((columns)&&(s.getGrid()[j][i].getColor() == s.getGrid()[z][i].getColor()))
+                        notVerified = true;
+                    z++;
+                }
+                if(columns && !notVerified && z==6)
+                    countVerified++;
+                j++;
+            }
+            if((!columns)&&(!notVerified)&&(z==5)&&(s.getGrid()[i][z-1] != null))
+                countVerified++;
+            i++;
+        }
+        return countVerified >= 2;
+    }
+
     /**
      *
      * @param p is the PersonalCard

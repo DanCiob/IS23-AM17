@@ -39,9 +39,6 @@ class TwoColumnsOfSixDifferentTest {
         }
         tiles.clear();
 
-        //assertFalse(card.verifyShape(shelfie));
-
-
         tile1 = new Tile(1, Tile.TileColor.BLUE);
         tiles.add(tile1);
         tile2 = new Tile(2, Tile.TileColor.WHITE);
@@ -61,8 +58,5 @@ class TwoColumnsOfSixDifferentTest {
         }
         tiles.clear();
         assertTrue(card.verifyShape(shelfie));
-
-
-
     }
 }
