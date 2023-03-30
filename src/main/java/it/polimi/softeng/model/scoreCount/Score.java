@@ -6,6 +6,7 @@ import it.polimi.softeng.model.Tile;
 
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.Vector;
 
 public class Score {
     static ArrayList<Tile> visited = new ArrayList<>();
@@ -197,6 +198,85 @@ public class Score {
             }
         }
         return 0;
+    }
+
+    /**
+     * This method verifies FourRowsOfOneTwoThreeTypes and ThreeColumnsOfOneTwoThreeTypes CommonCards with the same algorithm
+     * To distinguish them we use Mode.ROW for FourRowsOfOneTwoThreeTypes and Mode.COLUMN for ThreeColumnsOfOneTwoThreeTypes
+     * @param s is the shelfie
+     * @param maxDifferentColor indicates how many different color can a row / column contain
+     * @param target indicates how many rows or column do you need to complete the CommonCard
+     * @param maxOuter indicates the upper limit of outer cycle,
+     *                 maxOuter = maxR for ROW, maxOuter = maxC for COLUMN
+     * @param maxInner indicates the upper limit of inner cycle,
+     *                 maxInner = maxC for ROW, maxInner = maxR for COLUMN
+     * @param mode indicates which mode (ROW-COLUMN) the method have to verify
+     * @return true if the shelfie completes the CommonCard
+     */
+
+    public static boolean verifyMaxDifferentColor (Shelfie s, int maxDifferentColor, int target, int maxOuter, int maxInner, Mode mode) {
+        int count = 0; //number of rows with different colors found in the shelfie
+        boolean completed = false;
+        Vector<Tile.TileColor> v = new Vector<>();
+
+        outer:
+        for(int o = 0; o < maxOuter; o++) {
+            inner:
+            for (int i = 0; i < maxInner; i++) {
+                //if empty, go to next row or column
+                if(Score.getTileMode(mode, o, i, s) == null){
+                    break inner;
+                }
+                //add color to vector if it doesn't already exist
+                if(!v.contains(Score.getTileMode(mode, o, i, s).getColor())){
+                    v.add(Score.getTileMode(mode, o, i, s).getColor());
+                    //if too many different colors in this row, go to the next one
+                    if (v.size() > maxDifferentColor) {
+                        break inner;
+                    }
+                }
+                //if we analyze the entire row or column without exceeding maxDifferentColor, we count + 1
+                if (i == maxInner - 1) {
+                    count++;
+                }
+                //if we find a number of rows or column with different colors which is the target, we complete the achievement
+                if (count >= target) {
+                    completed = true;
+                    break outer;
+                }
+            }
+            //reset to count different colors of next row or column
+            v.clear();
+        }
+        return completed;
+
+    }
+
+    /**
+     * enum to distinguish two different modes: ROW and COLUMN
+     * It is used for verifyMaxDifferentColor() method
+     */
+    public enum Mode {
+        ROW, COLUMN
+    }
+
+    /**
+     * This method is used to get the tile in verifyMaxDifferentColor() method.
+     * It gives the right TILE using o(uter) and i(nner) indexes as rows or columns
+     * @param mode indicates which mode (ROW-COLUMN) the method have to verify
+     * @param o outer iterator
+     * @param i inner iterator
+     * @param s shlefie
+     * @return the Tile of the shelfie in a specific position
+     */
+    private static Tile getTileMode(Mode mode, int o, int i, Shelfie s) {
+        //ROW -> outer iterator refers to rows, inner iterator refers to columns
+        //COLUMN -> inner iterator refers to rows, outer iterator refers to columns
+        if (mode == Mode.ROW) {
+            return s.getTile(o, i);
+        } else{ //mode == Mode.COLUMN
+            return s.getTile(i, o);
+        }
     }
 }
 
