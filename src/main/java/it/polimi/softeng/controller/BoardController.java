@@ -17,11 +17,10 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class BoardController {
-    private ArrayList<Tile> positionsToBeRemoved = new ArrayList<>();
+    private ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
 
     public void boardParser(String s){
         int row, column, id;
-        String colorString;
         Tile.TileColor color;
         Cell temp;
         JSONParser parser = new JSONParser();
@@ -30,16 +29,15 @@ public class BoardController {
             JSONObject jsonObject = (JSONObject) parser.parse(s);
             JSONArray boardTilesList = (JSONArray) jsonObject.get("board");
             Iterator iterator = boardTilesList.iterator();
-
             while(iterator.hasNext()){
                 temp = new Cell();
-
-                id = (int) jsonObject.get("id");
-                colorString = (String) jsonObject.get("color");
-                color = PersonalCardsParser.StringToColor(colorString);
                 temp.setX((int) jsonObject.get("row"));
                 temp.setY((int) jsonObject.get("column"));
-                temp.
+
+                id = (int) jsonObject.get("id");
+                color = PersonalCardsParser.StringToColor((String) jsonObject.get("color"));
+                //!!!
+
                 positionsToBeRemoved.add(temp);
             }
 
