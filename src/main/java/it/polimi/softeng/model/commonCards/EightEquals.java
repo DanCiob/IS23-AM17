@@ -3,6 +3,9 @@ package it.polimi.softeng.model.commonCards;
 import it.polimi.softeng.model.Shelfie;
 
 public class  EightEquals extends CommonCards{
+    private final int numRows = 6;
+    private final int numColumns = 5;
+
     /**
      * it verifies if there are eight tiles of the same type
      * @param shelfie  to check
@@ -11,8 +14,8 @@ public class  EightEquals extends CommonCards{
     public boolean verifyShape(Shelfie shelfie){
         int i, j;
         int[] numTilesForColors = {0, 0, 0, 0, 0 , 0}; /*numTilesForColors has the number of tiles for every color(position 0:BLUE, 1:WHITE, 2:GREEN, 3:YELLOW, 4:PURPLE, 5:CYAN)**/
-        for(i=0;i<6;i++){
-            for(j=0;j<5;j++){
+        for(i=0;i<numRows;i++){
+            for(j=0;j<numColumns;j++){
                 if(shelfie.getGrid()[i][j] != null){
                     switch (shelfie.getGrid()[i][j].getColor()) {
                         case BLUE-> numTilesForColors[0]++;
@@ -25,7 +28,7 @@ public class  EightEquals extends CommonCards{
                 }
             }
         }
-        for(i=0;i<6;i++){
+        for(i=0;i<6;i++){ // 6 is the number of colors
             if(numTilesForColors[i]>=8)
                 return true;
         }

@@ -5,7 +5,8 @@ import java.util.Random;
 public class Board {
     private final Tile[][] board = new Tile[9][9];
     private ArrayList<Cell> notAvailable = new ArrayList<>(); /**arrayList with the cell that can't be used**/
-
+    private final int numRows = 9;
+    private final int numColumns = 9;
 
     public Tile[][] getBoard() {
         return board;
@@ -169,8 +170,8 @@ public class Board {
          it initializes every tile of the board with null
          */
         setNotAvailable(numberOfPlayers);
-        for(int i = 0; i<9;i++){
-            for(int j = 0; j<9;j++){
+        for(int i = 0; i<numRows;i++){
+            for(int j = 0; j<numColumns;j++){
                 board[i][j] = null;
             }
         }
@@ -193,11 +194,10 @@ public class Board {
 
     public void positionTiles(ArrayList<Tile> bag){
         Random random = new Random();
-        Cell cell = new Cell();
         boolean posNotUsed;
         int pos;
-        for(int i=0;i<9;i++){
-            for(int j=0;j<9;j++){
+        for(int i=0;i<numRows;i++){
+            for(int j=0;j<numColumns;j++){
                 posNotUsed = false;
                 for(Cell cell1 : notAvailable){
                     if(cell1.getX() == i && cell1.getY() == j)
