@@ -1,5 +1,7 @@
 package it.polimi.softeng.JSONParser;
 
+import it.polimi.softeng.model.PersonalCard;
+import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.Tile;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
@@ -8,12 +10,21 @@ import org.json.simple.parser.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * the class implements the parser for the commands regarding the shelfie
+ */
 public class ShelfieParser{
     private ArrayList<Tile> tilesToBeInserted = new ArrayList<>();
     private int column;
 
-
+    /**
+     * this is the main method of the class; when it's called it clears the list of the tiles to be inserted from the previous use and converts the JSON message containing the
+     * infos into tiles and an int column
+     * @param moveMessage string containing the JSON message; such message must follow the syntax that can be found in the file {@link it/polimi/softeng/JSONMessages/MoveMessage.json}
+     *                    with a maximum of 3 tiles
+     */
     public void shelfieParser(String moveMessage){
+        tilesToBeInserted.clear();
         JSONParser parser = new JSONParser();
 
         JSONObject jsonObject;
@@ -28,19 +39,32 @@ public class ShelfieParser{
         int i = 0;
         while(iterator.hasNext()){
             JSONObject tileJson = (JSONObject) tiles.get(i);
-            Tile tile = new Tile((int)tileJson.get("id"), (Tile.TileColor) tileJson.get("color"));
+            Long id = ((long) tileJson.get("id"));      //necessary workaround as JSON outputs a long value for some reason
+            int idInt = id.intValue();
+
+            Tile tile = new Tile(idInt , PersonalCardsParser.StringToColor((String)tileJson.get("color")));
+            tilesToBeInserted.add(tile);
             iterator.next();
             i++;
         }
-
-        column = (int) jsonObject.get("column");
+        long jsonColumn = (long) jsonObject.get("column");
+        column = (int) jsonColumn;
     }
 
+    /**
+     * getter method for the tiles to be inserted from the JSON message
+     * @return Arraylist of tiles; the order of the tiles in the vector resembles the order of insertion in the shelfie (ie tile in position 0 goes in first)
+     */
     public ArrayList<Tile> getTilesToBeInserted() {
         return tilesToBeInserted;
     }
 
+    /**
+     * getter method for the selected column of the insert, from the JSON message
+     * @return int that indicates the selected column, numbered from 0 to 4 (sx to dx) (as per chosen convention)
+     */
     public int getColumn() {
         return column;
     }
+
 }
