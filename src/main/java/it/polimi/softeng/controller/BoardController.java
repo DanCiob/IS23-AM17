@@ -36,7 +36,7 @@ public class BoardController {
 
                 id = (int) jsonObject.get("id");
                 color = PersonalCardsParser.StringToColor((String) jsonObject.get("color"));
-                //!!!
+                //!!!aggiungere id e color
 
                 positionsToBeRemoved.add(temp);
             }
