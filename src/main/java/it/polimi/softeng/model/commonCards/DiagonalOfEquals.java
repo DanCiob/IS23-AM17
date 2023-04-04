@@ -48,7 +48,7 @@ public class DiagonalOfEquals extends CommonCards {
         int count = 0;
         Tile t;
         switch (direction) {
-            case LEFT -> {
+            case LEFT -> {      // sposta in funzione
                 t = shelfie.getTile(4+offset, 0);
                 if (t == null) return false;
 

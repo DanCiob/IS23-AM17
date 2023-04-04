@@ -30,7 +30,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,0);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            System.out.println("errore !"); //fare assert false
         }
 
         //filling column 1

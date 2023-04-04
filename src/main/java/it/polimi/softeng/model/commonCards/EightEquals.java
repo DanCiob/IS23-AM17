@@ -16,6 +16,8 @@ public class  EightEquals extends CommonCards{
         int[] numTilesForColors = {0, 0, 0, 0, 0 , 0}; /*numTilesForColors has the number of tiles for every color(position 0:BLUE, 1:WHITE, 2:GREEN, 3:YELLOW, 4:PURPLE, 5:CYAN)**/
         for(i=0;i<numRows;i++){
             for(j=0;j<numColumns;j++){
+
+
                 if(shelfie.getGrid()[i][j] != null){
                     switch (shelfie.getGrid()[i][j].getColor()) {
                         case BLUE-> numTilesForColors[0]++;

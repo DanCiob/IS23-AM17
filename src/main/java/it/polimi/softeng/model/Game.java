@@ -12,6 +12,7 @@ public class Game implements PlayerManager{
     private Board gameBoard = new Board();
     private ArrayList<Tile> tileBag = new ArrayList<>();
     private BadgeEndGame endGameBadge;
+    private boolean simpleRules = false;
     //player section
     /**
      * this arrayList contains the references to the players; the order of the elements in the array refers to the order of
@@ -21,7 +22,7 @@ public class Game implements PlayerManager{
     private Player currentPlayer;
     private ArrayList<CommonCards> commonCards = new ArrayList<>();
     private Player winner;
-    private Player firstPlayer;
+    private Player firstPlayer;     //should it be final?
 
     //maybe finished
     //dovremmo controllare che non parta con meno del numero di giocatori scelto
@@ -106,18 +107,10 @@ public class Game implements PlayerManager{
     public void chooseCommonCards(){
         Random random = new Random();
         ArrayList<Integer> commonCardsNum = new ArrayList<>();
-        //generation of two random ints between 0 and 11
-        int i = random.nextInt(12);
-        int j = random.nextInt(12);
-        while(j == i){
-            j = random.nextInt(12);
-        }
-        commonCardsNum.add(i);
-        commonCardsNum.add(j);
+        if(simpleRules){
+            int k = random.nextInt(12);
 
-        i = 0;
-        while(i < 2){
-            switch(commonCardsNum.get(i)){
+            switch(k){
                 case 0 -> commonCards.add(new DiagonalOfEquals());
                 case 1 -> commonCards.add(new EightEquals());
                 case 2 -> commonCards.add(new FourCornerOfEquals());
@@ -131,8 +124,36 @@ public class Game implements PlayerManager{
                 case 10 -> commonCards.add(new TwoSquareOfEquals());
                 case 11 -> commonCards.add(new XOfEquals());
             }
-            i++;
+        }else{
+            //generation of two random ints between 0 and 11
+            int i = random.nextInt(12);
+            int j = random.nextInt(12);
+            while(j == i){
+                j = random.nextInt(12);
+            }
+            commonCardsNum.add(i);
+            commonCardsNum.add(j);
+
+            i = 0;
+            while(i < 2){
+                switch(commonCardsNum.get(i)){
+                    case 0 -> commonCards.add(new DiagonalOfEquals());
+                    case 1 -> commonCards.add(new EightEquals());
+                    case 2 -> commonCards.add(new FourCornerOfEquals());
+                    case 3 -> commonCards.add(new FourGroupsOfFourEquals());
+                    case 4 -> commonCards.add(new FourRowsOfOneTwoThreeTypes());
+                    case 5 -> commonCards.add(new SixGroupOfTwoEquals());
+                    case 6 -> commonCards.add(new Stairs());
+                    case 7 -> commonCards.add(new ThreeColumnsOfOneTwoThreeTypes());
+                    case 8 -> commonCards.add(new TwoColumnsOfSixDifferent());
+                    case 9 -> commonCards.add(new TwoRowsOfFiveDifferent());
+                    case 10 -> commonCards.add(new TwoSquareOfEquals());
+                    case 11 -> commonCards.add(new XOfEquals());
+                }
+                i++;
+            }
         }
+
 
     }
 
@@ -157,13 +178,6 @@ public class Game implements PlayerManager{
         }
     }
 
-    /**
-     * gives a new shelfie to a player
-     * @param player the player to whom is given the new shelfie
-     */
-    public void giveShelfie(Player player){
-        player.setShelfie(new Shelfie());
-    }
     public void chooseFirstPlayer(){
         Random random = new Random();
         int i = random.nextInt(players.size());
@@ -280,4 +294,35 @@ public class Game implements PlayerManager{
     public String gameChangeNotifier(){
         return null;
     }
+
+    //methods for testing purpose
+
+    public Board getGameBoard() {
+        return gameBoard;
+    }
+
+    public ArrayList<Tile> getTileBag() {
+        return tileBag;
+    }
+
+    public BadgeEndGame getEndGameBadge() {
+        return endGameBadge;
+    }
+
+    public boolean isSimpleRules() {
+        return simpleRules;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public ArrayList<CommonCards> getCommonCards() {
+        return commonCards;
+    }
+
+    public Player getFirstPlayer() {
+        return firstPlayer;
+    }
 }
+

@@ -57,14 +57,14 @@ class BoardTest {
         ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
         //ArrayList<Cell> bag = new ArrayList<>();
         Cell cell = new Cell();
-        GameForTest game = new GameForTest();
+        Game game = new Game();
 
 
 
         //set the  tiles of the board at a value to check if it removes it correctly, using the method from the game to initialize the bag
         board.setNotAvailable(2);
         game.initializeTile();
-        board.positionTiles(game.tileBag);
+        board.positionTiles(game.getTileBag());
         assertNull(board.getBoard()[4][0]);
         assertNull(board.getBoard()[5][0]);
 
@@ -85,11 +85,11 @@ class BoardTest {
         Board board = new Board();
         ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
         Cell cell = new Cell();
-        GameForTest game = new GameForTest();
+        Game game = new Game();
         board.setNotAvailable(4);
         board.resetBoard(4);
         game.initializeTile();
-        board.positionTiles(game.tileBag);
+        board.positionTiles(game.getTileBag());
 
         cell.setX(0);
         cell.setY(0);

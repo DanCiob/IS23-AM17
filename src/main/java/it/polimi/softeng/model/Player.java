@@ -12,6 +12,7 @@ public class Player {
     public Player(String nickname, int currentScore) {
         Nickname = nickname;
         CurrentScore = currentScore;
+        shelfie = new Shelfie();
     }
 
 
