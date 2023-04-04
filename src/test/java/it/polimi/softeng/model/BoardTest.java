@@ -103,8 +103,5 @@ class BoardTest {
         positionsToBeRemoved.add(cell);
         System.out.println(positionsToBeRemoved.get(0).getX() + " " + positionsToBeRemoved.get(0).getY());
         assertTrue(board.checkLegalChoice(positionsToBeRemoved));
-
-
-
     }
 }

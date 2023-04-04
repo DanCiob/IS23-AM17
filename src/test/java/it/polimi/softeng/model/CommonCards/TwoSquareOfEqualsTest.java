@@ -38,7 +38,7 @@ class TwoSquareOfEqualsTest {
             try {
                 shelfie.insertTile(tiles,j);
             } catch (IllegalInsertException e) {
-                System.out.println("error !");
+                assertFalse(true);
             }
             if(i % 2 != 0) j++;
         }
@@ -75,7 +75,7 @@ class TwoSquareOfEqualsTest {
             try {
                 shelfie.insertTile(tiles,j);
             } catch (IllegalInsertException e) {
-                System.out.println("error !");
+                assertFalse(true);
             }
             if(i % 2 != 0) j++;
         }
@@ -112,7 +112,7 @@ class TwoSquareOfEqualsTest {
             try {
                 shelfie.insertTile(tiles,j);
             } catch (IllegalInsertException e) {
-                System.out.println("error !");
+                assertFalse(true);
             }
             if(i % 2 != 0) j++;
         }
