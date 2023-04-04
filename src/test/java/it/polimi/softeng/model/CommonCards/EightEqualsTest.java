@@ -30,7 +30,7 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 1");
+            assertFalse(true);
         }
         tiles.clear();
 
@@ -43,7 +43,7 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 2");
+            assertFalse(true);
         }
         tiles.clear();
 
@@ -56,7 +56,7 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 3);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 3");
+            assertFalse(true);
         }
         tiles.clear();
         assertFalse(card.verifyShape(shelfie));
@@ -70,7 +70,7 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 4");
+            assertFalse(true);
         }
 
         tiles.clear();
@@ -93,7 +93,7 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 1");
+            assertFalse(true);
         }
         tiles.clear();
 
@@ -106,7 +106,7 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 2");
+            assertFalse(true);
         }
         tiles.clear();
 
@@ -119,7 +119,7 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 3);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 3");
+            assertFalse(true);
         }
         tiles.clear();
 
@@ -128,7 +128,7 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 4");
+            assertFalse(true);
         }
 
         tiles.clear();

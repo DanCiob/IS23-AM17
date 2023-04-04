@@ -35,7 +35,7 @@ class TwoColumnsOfSixDifferentTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 1");
+            assertFalse(true);
         }
         tiles.clear();
 
@@ -54,7 +54,7 @@ class TwoColumnsOfSixDifferentTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 2");
+            assertFalse(true);
         }
         tiles.clear();
         assertTrue(card.verifyShape(shelfie));
