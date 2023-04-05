@@ -1,12 +1,10 @@
 package it.polimi.softeng.model;
 
-import javax.swing.text.TableView;
-
 public class Player {
     private String Nickname;
     private int CurrentScore;
     private boolean isFirst;
-    private PersonalCard personalCard;
+    private PersonalCards personalCards;
     private Shelfie shelfie;
 
     public Player(String nickname, int currentScore) {
@@ -38,16 +36,16 @@ public class Player {
         return isFirst;
     }
 
-    public PersonalCard getPersonalCard() {
-        return personalCard;
+    public PersonalCards getPersonalCard() {
+        return personalCards;
     }
 
     public Shelfie getShelfie() {
         return shelfie;
     }
 
-    public void setPersonalCard(PersonalCard personalCard){
-        this.personalCard = personalCard;
+    public void setPersonalCard(PersonalCards personalCards){
+        this.personalCards = personalCards;
     }
     public void setShelfie(Shelfie shelfie){
         this.shelfie = shelfie;

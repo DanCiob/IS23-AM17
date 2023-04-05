@@ -138,9 +138,11 @@ class FourGroupsOfFourEqualsTest {
         tiles.remove(tile_5_4);
 
 
-        System.out.println("Begin of Test1\n--------------------------------------");
+        //Check random position of the shelfie
+        assertTrue(shelfie.getTile(1,2).getColor().equals(Tile.TileColor.GREEN));
+        assertTrue(shelfie.getTile(2,2).getColor().equals(Tile.TileColor.GREEN));
+        assertTrue(shelfie.getTile(4,0).getColor().equals(Tile.TileColor.WHITE));
         assertTrue(GroupsOfEqualTiles(shelfie, 4, 4));
-        System.out.println("--------------------------------------\nEnd of Test1");
     }
 
     /**
@@ -247,9 +249,11 @@ class FourGroupsOfFourEqualsTest {
         tiles.remove(tile_5_4);
 
 
-        System.out.println("Begin of Test2\n--------------------------------------");
+        //Check random position of the shelfie
+        assertTrue(shelfie.getTile(5,0).getColor().equals(Tile.TileColor.WHITE));
+        assertTrue(shelfie.getTile(4,1).getColor().equals(Tile.TileColor.GREEN));
+        assertTrue(shelfie.getTile(0,2).getColor().equals(Tile.TileColor.BLUE));
         assertTrue(GroupsOfEqualTiles(shelfie, 4, 4));
-        System.out.println("--------------------------------------\nEnd of Test2\n");
     }
 
     /**
@@ -343,9 +347,11 @@ class FourGroupsOfFourEqualsTest {
         tiles.remove(tile_5_4);
 
 
-        System.out.println("Begin of Test3\n--------------------------------------");
+        //Check random position of the shelfie
+        assertTrue(shelfie.getTile(0,0).getColor().equals(Tile.TileColor.WHITE));
+        assertTrue(shelfie.getTile(5,4).getColor().equals(Tile.TileColor.PURPLE));
+        assertTrue(shelfie.getTile(2,3).getColor().equals(Tile.TileColor.CYAN));
         assertFalse(GroupsOfEqualTiles(shelfie, 4, 4));
-        System.out.println("--------------------------------------\nEnd of Test3\n");
     }
 
     /**
@@ -357,9 +363,7 @@ class FourGroupsOfFourEqualsTest {
     /*
     An empty shelfie is tested, exactly four groups should be found
     */
-        System.out.println("Begin of Test4\n--------------------------------------");
         assertFalse(GroupsOfEqualTiles(shelfie, 4, 4));
-        System.out.println("--------------------------------------\nEnd of Test4\n");
     }
 
 }
