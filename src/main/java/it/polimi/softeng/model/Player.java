@@ -1,7 +1,7 @@
 package it.polimi.softeng.model;
 
 public class Player {
-    private String Nickname;
+    private final String Nickname;
     private int CurrentScore;
     private boolean isFirst;
     private PersonalCards personalCards;
@@ -50,8 +50,6 @@ public class Player {
     public void setShelfie(Shelfie shelfie){
         this.shelfie = shelfie;
     }
-    /**
-     *
-     */
+
     //public String playerChangeNotifier(){}
 }

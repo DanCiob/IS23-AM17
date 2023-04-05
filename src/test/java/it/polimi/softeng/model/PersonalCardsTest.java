@@ -15,7 +15,6 @@ class PersonalCardsTest {
 
     /**
      * Test if a successful personal objective obtains 12 points -> PersonalCard2
-     * @throws IllegalInsertException
      */
     @Test
     void TestScore12pts () throws IllegalInsertException {
@@ -128,7 +127,7 @@ class PersonalCardsTest {
         tiles.remove(tile_4_4);
         tiles.remove(tile_5_4);
 
-        ArrayList<PersonalCards> personalCardsBag = new ArrayList<>();
+        ArrayList<PersonalCards> personalCardsBag;
         personalCardsBag = FillPersonalCardsBag();
         PersonalCards p = personalCardsBag.get(1);
 
@@ -139,7 +138,6 @@ class PersonalCardsTest {
 
     /**
      * Test if a partially successful personal objective obtains 4 points -> PersonalCard4
-     * @throws IllegalInsertException
      */
     @Test
     void TestScore4pts () throws IllegalInsertException {
@@ -252,7 +250,7 @@ class PersonalCardsTest {
         tiles.remove(tile_4_4);
         tiles.remove(tile_5_4);
 
-        ArrayList<PersonalCards> personalCardsBag = new ArrayList<>();
+        ArrayList<PersonalCards> personalCardsBag;
         personalCardsBag = FillPersonalCardsBag();
         PersonalCards p = personalCardsBag.get(3);
 
@@ -263,7 +261,6 @@ class PersonalCardsTest {
 
     /**
      * Test if a unsuccessful personal objective obtains 4 points -> PersonalCard11
-     * @throws IllegalInsertException
      */
     @Test
     void TestScore0pts () throws IllegalInsertException {
@@ -376,7 +373,7 @@ class PersonalCardsTest {
         tiles.remove(tile_4_4);
         tiles.remove(tile_5_4);
 
-        ArrayList<PersonalCards> personalCardsBag = new ArrayList<>();
+        ArrayList<PersonalCards> personalCardsBag;
         personalCardsBag = FillPersonalCardsBag();
         PersonalCards p = personalCardsBag.get(10);
 

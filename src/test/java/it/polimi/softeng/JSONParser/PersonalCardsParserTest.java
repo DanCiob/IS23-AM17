@@ -14,7 +14,7 @@ class PersonalCardsParserTest {
     //Check if all PersonalCards are stored
     @Test
     void initializePersonalCardsTest() {
-        ArrayList<PersonalCards> pc = new ArrayList<>();
+        ArrayList<PersonalCards> pc;
 
         pc = InitializePersonalCards("src/main/resources/PersonalCards.json");
 
@@ -35,7 +35,7 @@ class PersonalCardsParserTest {
     //Check PersonalCard1 and some of its cells
     @Test
     void PersonalCards1Test() {
-        ArrayList<PersonalCards> pc = new ArrayList<>();
+        ArrayList<PersonalCards> pc;
         pc = InitializePersonalCards("src/main/resources/PersonalCards.json");
         PersonalCards currentPC = pc.get(0);
 
@@ -56,7 +56,7 @@ class PersonalCardsParserTest {
     //Check PersonalCard6 and some of its cells
     @Test
     void PersonalCards6Test() {
-        ArrayList<PersonalCards> pc = new ArrayList<>();
+        ArrayList<PersonalCards> pc;
         pc = InitializePersonalCards("src/main/resources/PersonalCards.json");
         PersonalCards currentPC = pc.get(5);
 
@@ -77,7 +77,7 @@ class PersonalCardsParserTest {
     //Check PersonalCard9 and some of its cells
     @Test
     void PersonalCards9Test() {
-        ArrayList<PersonalCards> pc = new ArrayList<>();
+        ArrayList<PersonalCards> pc;
         pc = InitializePersonalCards("src/main/resources/PersonalCards.json");
         PersonalCards currentPC = pc.get(8);
 

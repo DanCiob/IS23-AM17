@@ -24,7 +24,6 @@ class FourGroupsOfFourEqualsTest {
 
     /**
      * Receive a shelfie with more than four groups of equal tiles
-     * @throws IllegalInsertException
      */
     @Test
     void verifyShapeTest1_atLeastFourGroups() throws IllegalInsertException {
@@ -139,15 +138,14 @@ class FourGroupsOfFourEqualsTest {
 
 
         //Check random position of the shelfie
-        assertTrue(shelfie.getTile(1,2).getColor().equals(Tile.TileColor.GREEN));
-        assertTrue(shelfie.getTile(2,2).getColor().equals(Tile.TileColor.GREEN));
-        assertTrue(shelfie.getTile(4,0).getColor().equals(Tile.TileColor.WHITE));
+        assertEquals(shelfie.getTile(1, 2).getColor(), Tile.TileColor.GREEN);
+        assertEquals(shelfie.getTile(2, 2).getColor(), Tile.TileColor.GREEN);
+        assertEquals(shelfie.getTile(4, 0).getColor(), Tile.TileColor.WHITE);
         assertTrue(GroupsOfEqualTiles(shelfie, 4, 4));
     }
 
     /**
      * Receive a shelfie with exactly four groups of equal tiles
-     * @throws IllegalInsertException
      */
     @Test
     void verifyShapeTest2_exactlyFourGroups() throws IllegalInsertException {
@@ -250,15 +248,14 @@ class FourGroupsOfFourEqualsTest {
 
 
         //Check random position of the shelfie
-        assertTrue(shelfie.getTile(5,0).getColor().equals(Tile.TileColor.WHITE));
-        assertTrue(shelfie.getTile(4,1).getColor().equals(Tile.TileColor.GREEN));
-        assertTrue(shelfie.getTile(0,2).getColor().equals(Tile.TileColor.BLUE));
+        assertEquals(shelfie.getTile(5, 0).getColor(), Tile.TileColor.WHITE);
+        assertEquals(shelfie.getTile(4, 1).getColor(), Tile.TileColor.GREEN);
+        assertEquals(shelfie.getTile(0, 2).getColor(), Tile.TileColor.BLUE);
         assertTrue(GroupsOfEqualTiles(shelfie, 4, 4));
     }
 
     /**
      * Receive a shelfie with less than four groups of equal tiles
-     * @throws IllegalInsertException
      */
     @Test
     void verifyShapeTest3_lessThanFourGroups() throws IllegalInsertException {
@@ -348,18 +345,17 @@ class FourGroupsOfFourEqualsTest {
 
 
         //Check random position of the shelfie
-        assertTrue(shelfie.getTile(0,0).getColor().equals(Tile.TileColor.WHITE));
-        assertTrue(shelfie.getTile(5,4).getColor().equals(Tile.TileColor.PURPLE));
-        assertTrue(shelfie.getTile(2,3).getColor().equals(Tile.TileColor.CYAN));
+        assertEquals(shelfie.getTile(0, 0).getColor(), Tile.TileColor.WHITE);
+        assertEquals(shelfie.getTile(5, 4).getColor(), Tile.TileColor.PURPLE);
+        assertEquals(shelfie.getTile(2, 3).getColor(), Tile.TileColor.CYAN);
         assertFalse(GroupsOfEqualTiles(shelfie, 4, 4));
     }
 
     /**
      * Receive an empty
-     * @throws IllegalInsertException
      */
     @Test
-    void verifyShapeTest4_emptyShelfie() throws IllegalInsertException {
+    void verifyShapeTest4_emptyShelfie() {
     /*
     An empty shelfie is tested, exactly four groups should be found
     */
