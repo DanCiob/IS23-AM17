@@ -44,39 +44,64 @@ public class DiagonalOfEquals extends CommonCards {
      * @return boolean value representing whether the searched pattern is present or not
      */
     private boolean singleCheck(Shelfie shelfie, Direction direction, int offset){
-        int currentRow;
-        int count = 0;
-        Tile t;
+
         switch (direction) {
-            case LEFT -> {      // sposta in funzione
-                t = shelfie.getTile(4+offset, 0);
-                if (t == null) return false;
-
-                // i for columns; the cycle checks for every column whether there is a tile in the position needed for a diagonal
-                for (int i = 0; i < 5; i++) {
-                    currentRow = 4 - i + offset;
-
-                    if (shelfie.getTile(currentRow, i) != null && shelfie.getTile(currentRow,i).getColor() == t.getColor() ) {
-                        count++;
-                    }
-                }
-                return count == 5;
+            case LEFT -> {
+                if(leftCheck(shelfie, offset)) return true;
             }
             case RIGHT -> {
-                t = shelfie.getTile(offset, 0);
-                if (t == null) return false;
-
-                // i for columns; the cycle checks for every column whether there is a tile in the position needed for a diagonal
-                for (int i = 0; i < 5; i++) {
-                    currentRow = i + offset;
-
-                    if (shelfie.getTile(currentRow, i) != null && shelfie.getTile(currentRow,i).getColor() == t.getColor() ) {
-                        count++;
-                    }
-                }
-                return count == 5;
+                if(rightCheck(shelfie,offset)) return true;
             }
         }
         return false;
+    }
+
+    /**
+     * private method that controls for left direction diagonals
+     * @param shelfie the shelfie on which you check the common goal
+     * @param offset vertical offset as explained above
+     * @return boolean value representing whether the searched pattern is present or not
+     */
+    private boolean leftCheck(Shelfie shelfie, int offset){
+        int currentRow;
+        int count = 0;
+        Tile t;
+
+        t = shelfie.getTile(4+offset, 0);
+        if (t == null) return false;
+
+        // i for columns; the cycle checks for every column whether there is a tile in the position needed for a diagonal
+        for (int i = 0; i < 5; i++) {
+            currentRow = 4 - i + offset;
+
+            if (shelfie.getTile(currentRow, i) != null && shelfie.getTile(currentRow,i).getColor() == t.getColor() ) {
+                count++;
+            }
+        }
+        return count == 5;
+    }
+    /**
+     * private method that controls for right direction diagonals
+     * @param shelfie the shelfie on which you check the common goal
+     * @param offset vertical offset as explained above
+     * @return boolean value representing whether the searched pattern is present or not
+     */
+    private boolean rightCheck(Shelfie shelfie, int offset){
+        int currentRow;
+        int count = 0;
+        Tile t;
+
+        t = shelfie.getTile(offset, 0);
+        if (t == null) return false;
+
+        // i for columns; the cycle checks for every column whether there is a tile in the position needed for a diagonal
+        for (int i = 0; i < 5; i++) {
+            currentRow = i + offset;
+
+            if (shelfie.getTile(currentRow, i) != null && shelfie.getTile(currentRow,i).getColor() == t.getColor() ) {
+                count++;
+            }
+        }
+        return count == 5;
     }
 }
