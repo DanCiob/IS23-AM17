@@ -5,11 +5,11 @@ public class Tile {
     TileColor color;
     public enum TileColor {
         BLUE(0), WHITE(1), GREEN(2), YELLOW(3), PURPLE(4), CYAN(5);
-        private int pos;
+        private final int pos;
         TileColor(int pos){
             this.pos = pos;
         }
-        private int pos(){
+        public int pos(){
             return pos;
         }
     }

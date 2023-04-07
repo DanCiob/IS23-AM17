@@ -30,7 +30,7 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
 
@@ -43,7 +43,7 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
 
@@ -56,7 +56,7 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 3);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
         assertFalse(card.verifyShape(shelfie));
@@ -70,7 +70,7 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
 
         tiles.clear();
@@ -93,7 +93,7 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
 
@@ -106,7 +106,7 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
 
@@ -119,7 +119,7 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 3);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
 
@@ -128,10 +128,18 @@ class EightEqualsTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
 
         tiles.clear();
         assertTrue(card.verifyShape(shelfie));
     }
+
+    @Test
+    public void verifyShapeTest3(){
+        CommonCards card = new EightEquals();
+        Shelfie shelfie = new Shelfie();
+        assertFalse(card.verifyShape(shelfie));
+    }
+
 }
