@@ -5,7 +5,7 @@ import it.polimi.softeng.model.commonCards.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static it.polimi.softeng.model.PersonalCard.FillPersonalCardsBag;
+import static it.polimi.softeng.model.PersonalCards.FillPersonalCardsBag;
 
 public class Game implements PlayerManager{
     //board section
@@ -162,11 +162,11 @@ public class Game implements PlayerManager{
      */
     public void choosePersonalCards(){
 
-        ArrayList<PersonalCard> personalCardsBag = new ArrayList<>();
+        ArrayList<PersonalCards> personalCardsBag = new ArrayList<>();
         personalCardsBag = FillPersonalCardsBag();
         Random Random = new Random();
         int i = 0;
-        PersonalCard toBeAssigned;
+        PersonalCards toBeAssigned;
         int j = 12;
         for (Player p: players)
         {

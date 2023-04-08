@@ -23,7 +23,6 @@ class SixGroupOfTwoEqualsTest {
 
     /**
      * Receives a shelfie with more than six group of two equals
-     * @throws IllegalInsertException
      */
     @Test
     void verifyShapeTest1_moreThanSixGroup() throws IllegalInsertException {
@@ -105,15 +104,15 @@ class SixGroupOfTwoEqualsTest {
         tiles.remove(tile_4_4);
         tiles.remove(tile_5_4);
 
-        System.out.println("Begin of Test1\n--------------------------------------");
+        //Check some random positions in shelfie
+        assertEquals(shelfie.getTile(2, 0).getColor(), Tile.TileColor.BLUE);
+        assertEquals(shelfie.getTile(0, 2).getColor(), Tile.TileColor.PURPLE);
+        assertEquals(shelfie.getTile(5, 4).getColor(), Tile.TileColor.PURPLE);
         assertTrue(GroupsOfEqualTiles(shelfie, 6, 2));
-        System.out.println("--------------------------------------\nEnd of Test1");
-
     }
 
     /**
      * Receives a shelfie with exactly six group of two equals
-     * @throws IllegalInsertException
      */
     @Test
     void verifyShapeTest2_exactlySixGroup() throws IllegalInsertException{
@@ -202,15 +201,15 @@ class SixGroupOfTwoEqualsTest {
         tiles.remove(tile_3_4);
         tiles.remove(tile_4_4);
 
-        System.out.println("Begin of Test2\n--------------------------------------");
+        //Check some random positions in shelfie
+        assertEquals(shelfie.getTile(4, 1).getColor(), Tile.TileColor.CYAN);
+        assertEquals(shelfie.getTile(0, 3).getColor(), Tile.TileColor.YELLOW);
+        assertEquals(shelfie.getTile(1, 3).getColor(), Tile.TileColor.YELLOW);
         assertTrue(GroupsOfEqualTiles(shelfie, 6, 2));
-        System.out.println("--------------------------------------\nEnd of Test2");
-
     }
 
     /**
      * Receives a shelfie with less than six group of two equals
-     * @throws IllegalInsertException
      */
     @Test
     void verifyShapeTest3_lessThanSixGroup() throws IllegalInsertException{
@@ -286,24 +285,23 @@ class SixGroupOfTwoEqualsTest {
         tiles.remove(tile_3_4);
         tiles.remove(tile_4_4);
 
-        System.out.println("Begin of Test3\n--------------------------------------");
-        assertFalse(GroupsOfEqualTiles(shelfie, 6, 2));
-        System.out.println("--------------------------------------\nEnd of Test3");
 
+        //Check some random positions in shelfie
+        assertEquals(shelfie.getTile(0, 1).getColor(), Tile.TileColor.WHITE);
+        assertEquals(shelfie.getTile(0, 2).getColor(), Tile.TileColor.PURPLE);
+        assertEquals(shelfie.getTile(0, 3).getColor(), Tile.TileColor.YELLOW);
+        assertFalse(GroupsOfEqualTiles(shelfie, 6, 2));
     }
 
     /**
      * Receives an empty shelfie
-     * @throws IllegalInsertException
      */
     @Test
-    void verifyShapeTest4_emptyShelfie() throws IllegalInsertException{
+    void verifyShapeTest4_emptyShelfie() {
         /*
             Receive an empty shelfie
         */
-        System.out.println("Begin of Test4\n--------------------------------------");
         assertFalse(GroupsOfEqualTiles(shelfie, 6, 2));
-        System.out.println("--------------------------------------\nEnd of Test4");
 
     }
 }

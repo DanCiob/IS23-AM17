@@ -1,6 +1,6 @@
 package it.polimi.softeng.model.scoreCount;
 
-import it.polimi.softeng.model.PersonalCard;
+import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 
@@ -33,11 +33,9 @@ public class Score {
 
                 if (TileCounted > size) {
                     NumberOfGroups++;
-                    System.out.println("Added group of " + grid[i][j].getColor());
                 }
             }
         }
-        System.out.println("Counted groups: " + NumberOfGroups);
         //true if the max number of groups found is bigger than required number
         return NumberOfGroups >= required;
     }
@@ -151,8 +149,6 @@ public class Score {
                     GroupDimension[3]++;
             }
         }
-        System.out.println("Counted: " + GroupDimension[0] + "groups of 3, " + GroupDimension[2] + "groups of 4, " + GroupDimension[2] + "groups of 5, " + GroupDimension[3] + "groups of 6 or more");
-
         //Return achieved Score
         return 2 * GroupDimension[0] + 3 * GroupDimension[1] + 5 * GroupDimension[2] + 6 * GroupDimension[3];
 
@@ -212,9 +208,9 @@ public class Score {
      * @param s is the shelfie
      * @return score achieved in PersonalCard
      */
-    public static int PersonalCardsScore (PersonalCard p, Shelfie s) {
+    public static int PersonalCardsScore (PersonalCards p, Shelfie s) {
         int numObjectiveReached = 0;
-        PersonalCard.ObjectiveCell obj[] = new PersonalCard.ObjectiveCell[6];
+        PersonalCards.ObjectiveCell obj[] = new PersonalCards.ObjectiveCell[6];
         obj = p.getObjective();
         //6 is the dimension of PersonalCard ScoreTable
         for (int i = 0; i < 6; i++) {

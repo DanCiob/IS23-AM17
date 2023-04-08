@@ -1,8 +1,5 @@
 package it.polimi.softeng.JSONParser;
 
-import it.polimi.softeng.model.PersonalCard;
-import it.polimi.softeng.model.PersonalCards;
-import it.polimi.softeng.model.ShelfieSetter;
 import it.polimi.softeng.model.Tile;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
