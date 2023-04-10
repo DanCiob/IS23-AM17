@@ -38,7 +38,7 @@ class FourCornerOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -52,7 +52,7 @@ class FourCornerOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -66,7 +66,7 @@ class FourCornerOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -80,7 +80,7 @@ class FourCornerOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertTrue(card.verifyShape(shelfie));
     }
@@ -107,7 +107,7 @@ class FourCornerOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -121,7 +121,7 @@ class FourCornerOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -135,7 +135,7 @@ class FourCornerOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -149,7 +149,7 @@ class FourCornerOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
     }

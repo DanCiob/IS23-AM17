@@ -57,7 +57,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -71,7 +71,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -87,7 +87,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 2);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -101,7 +101,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 2);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -117,7 +117,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 3);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -131,7 +131,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 3);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -147,7 +147,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -161,7 +161,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertTrue(card.verifyShape(shelfie));
 
@@ -205,7 +205,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -219,7 +219,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -235,7 +235,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -249,7 +249,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -265,7 +265,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 2);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -279,7 +279,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 2);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -295,7 +295,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 3);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -309,7 +309,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 3);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -324,7 +324,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -338,7 +338,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -382,7 +382,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -396,7 +396,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -412,7 +412,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -426,7 +426,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -442,7 +442,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 2);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -456,7 +456,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 2);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertTrue(card.verifyShape(shelfie));
 
@@ -472,7 +472,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 3);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertTrue(card.verifyShape(shelfie));
 
@@ -486,7 +486,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 3);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertTrue(card.verifyShape(shelfie));
 
@@ -501,7 +501,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertTrue(card.verifyShape(shelfie));
 
@@ -515,7 +515,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            System.out.println("Error");
+            fail();
         }
         assertTrue(card.verifyShape(shelfie));
 
