@@ -1,7 +1,5 @@
 package it.polimi.softeng.JSONParser;
 
-import it.polimi.softeng.model.PersonalCard;
-import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.Tile;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
@@ -49,8 +47,10 @@ public class ShelfieParser{
         }
         long jsonColumn = (long) jsonObject.get("column");
         column = (int) jsonColumn;
+
     }
 
+    // these methods may be useless when i make shelfieParser call the methods of interface to modify the model
     /**
      * getter method for the tiles to be inserted from the JSON message
      * @return Arraylist of tiles; the order of the tiles in the vector resembles the order of insertion in the shelfie (ie tile in position 0 goes in first)

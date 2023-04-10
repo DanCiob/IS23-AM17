@@ -44,40 +44,50 @@ public class Stairs extends CommonCards{
      * @return boolean value representing whether the searched pattern is present or not
      */
     private boolean singleCheck(Shelfie shelfie, Direction direction,int offset){
-        int currentRow;
-        int count = 0;
         switch (direction) {
             case LEFT -> {
-                // i for columns; the cycle checks for every column whether there is a tile in the position needed for a stair
-                for (int i = 0; i < 5; i++) {
-                    currentRow = 4 - i + offset;
-
-                    if (shelfie.getTile(currentRow, i) != null) {
-                        if (offset == 1 && i == 0) {                                        //controlling if I'm checking the last cell of a column to avoid outofboundEX
-                            count++;
-                        } else if (shelfie.getTile(currentRow + 1, i) == null) {        //checking there isn't a cell above the one needed for the stair
-                            count++;
-                        }
-                    }
-                }
-                return count == 5;
+                if(leftCheck(shelfie,offset)) return true;
             }
             case RIGHT -> {
-                // i for columns; the cycle checks for every column whether there is a tile in the position needed for a stair
-                for (int i = 0; i < 5; i++) {
-                    currentRow = i + offset;
-
-                    if (shelfie.getTile(currentRow, i) != null) {                        //controlling if I'm checking the last cell of a column to avoid outofboundEX
-                        if (offset == 1 && i == 4) {
-                            count++;
-                        } else if (shelfie.getTile(currentRow + 1, i) == null) {    //checking there isn't a cell above the one needed for the stair
-                            count++;
-                        }
-                    }
-                }
-                return count == 5;
+                if(rightCheck(shelfie,offset))return true;
             }
         }
         return false;
+    }
+
+    private boolean leftCheck(Shelfie shelfie, int offset){
+        int currentRow;
+        int count = 0;
+        // i for columns; the cycle checks for every column whether there is a tile in the position needed for a stair
+        for (int i = 0; i < 5; i++) {
+            currentRow = 4 - i + offset;
+
+            if (shelfie.getTile(currentRow, i) != null) {
+                if (offset == 1 && i == 0) {                                        //controlling if I'm checking the last cell of a column to avoid outofboundEX
+                    count++;
+                } else if (shelfie.getTile(currentRow + 1, i) == null) {        //checking there isn't a cell above the one needed for the stair
+                    count++;
+                }
+            }
+        }
+        return count == 5;
+    }
+
+    private boolean rightCheck(Shelfie shelfie, int offset){
+        int currentRow;
+        int count = 0;
+        // i for columns; the cycle checks for every column whether there is a tile in the position needed for a stair
+        for (int i = 0; i < 5; i++) {
+            currentRow = i + offset;
+
+            if (shelfie.getTile(currentRow, i) != null) {                        //controlling if I'm checking the last cell of a column to avoid outofboundEX
+                if (offset == 1 && i == 4) {
+                    count++;
+                } else if (shelfie.getTile(currentRow + 1, i) == null) {    //checking there isn't a cell above the one needed for the stair
+                    count++;
+                }
+            }
+        }
+        return count == 5;
     }
 }

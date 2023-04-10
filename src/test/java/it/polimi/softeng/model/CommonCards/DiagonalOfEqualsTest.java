@@ -30,7 +30,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,0);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
 
         //filling column 1
@@ -42,7 +42,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,1);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -57,7 +57,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,2);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -72,7 +72,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,3);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         tiles.clear();
         tile1 = new Tile(10, Tile.TileColor.WHITE);
@@ -80,7 +80,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,3);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -95,7 +95,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,4);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         tiles.clear();
         tile1 = new Tile(14, Tile.TileColor.WHITE);
@@ -133,7 +133,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,0);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
 
         //filling column 1
@@ -147,7 +147,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,1);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -162,7 +162,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,2);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         tiles.clear();
         tile1 = new Tile(7, Tile.TileColor.WHITE);
@@ -170,7 +170,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,2);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
 
         assertFalse(card.verifyShape(shelfie));
@@ -186,7 +186,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,3);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         tiles.clear();
         tile1 = new Tile(11, Tile.TileColor.WHITE);
@@ -198,7 +198,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,3);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -213,7 +213,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,4);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         tiles.clear();
         tile1 = new Tile(16, Tile.TileColor.WHITE);
@@ -225,7 +225,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,4);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
 
         assertTrue(card.verifyShape(shelfie));
@@ -243,7 +243,7 @@ class DiagonalOfEqualsTest {
         Tile tile2;
         Tile tile3;
 
-        //going for an sx stair of offset 0
+        //going for a sx stair of offset 0
         //filling column 0
         tile1 = new Tile(1, Tile.TileColor.WHITE);
         tile2 = new Tile(2, Tile.TileColor.WHITE);
@@ -254,7 +254,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,0);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         tiles.clear();
         tile1 = new Tile(4, Tile.TileColor.WHITE);
@@ -266,7 +266,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,0);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -282,7 +282,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,1);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         tiles.clear();
         tile1 = new Tile(9, Tile.TileColor.WHITE);
@@ -290,7 +290,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,1);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -305,7 +305,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,2);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -318,7 +318,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,3);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -331,7 +331,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,4);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertTrue(card.verifyShape(shelfie));
     }
@@ -359,7 +359,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,0);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         tiles.clear();
         tile1 = new Tile(4, Tile.TileColor.WHITE);
@@ -371,7 +371,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,0);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -387,7 +387,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,1);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         tiles.clear();
         tile1 = new Tile(10, Tile.TileColor.WHITE);
@@ -397,7 +397,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,1);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -412,7 +412,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,2);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         tiles.clear();
         tile1 = new Tile(15, Tile.TileColor.WHITE);
@@ -420,7 +420,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,2);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -435,7 +435,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,3);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -450,7 +450,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,4);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertTrue(card.verifyShape(shelfie));
     }
@@ -473,7 +473,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,0);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
 
         //filling column 1
@@ -485,7 +485,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,1);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -500,7 +500,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,2);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -515,7 +515,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,3);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         tiles.clear();
         tile1 = new Tile(10, Tile.TileColor.WHITE);
@@ -523,7 +523,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,3);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         assertFalse(card.verifyShape(shelfie));
 
@@ -538,7 +538,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,4);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
         tiles.clear();
         tile1 = new Tile(14, Tile.TileColor.WHITE);
@@ -550,7 +550,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,4);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
 
         assertFalse(card.verifyShape(shelfie));

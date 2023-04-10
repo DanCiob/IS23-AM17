@@ -1,6 +1,6 @@
 package it.polimi.softeng.JSONParser;
 
-import it.polimi.softeng.model.PersonalCard;
+import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.Tile;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -24,9 +24,9 @@ public class PersonalCardsParser {
      *
      * @return an ArrayList of PersonalCards read from JSON file
      */
-    public static ArrayList<PersonalCard> InitializePersonalCards() {
+    public static ArrayList<PersonalCards> InitializePersonalCards(String path) {
 
-        ArrayList<PersonalCard> tbr = new ArrayList<>();
+        ArrayList<PersonalCards> tbr = new ArrayList<>();
         int rowTemp = 0;
         int columnTemp = 0;
         String color;
@@ -36,7 +36,7 @@ public class PersonalCardsParser {
 
         JSONParser parser = new JSONParser();
 
-        try (Reader reader = new FileReader("src/main/java/it/polimi/softeng/JSONConfigFiles/PersonalCards.json")) {
+        try (Reader reader = new FileReader(path)) {
 
             JSONObject jsonObject = (JSONObject) parser.parse(reader);
 
@@ -49,7 +49,7 @@ public class PersonalCardsParser {
 
                 currentCard++;
                 JSONObject current = (JSONObject) iterator.next();
-                PersonalCard pcTemp = new PersonalCard();
+                PersonalCards pcTemp = new PersonalCards();
 
                 String currentPC = "PERSONAL_CARD_" + currentCard;
                 JSONArray CurrentCardRead = (JSONArray) current.get(currentPC);

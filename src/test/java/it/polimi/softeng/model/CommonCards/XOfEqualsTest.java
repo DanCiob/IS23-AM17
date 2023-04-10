@@ -29,7 +29,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 1");
+            assertFalse(true);
         }
         tiles.clear();
 
@@ -43,7 +43,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 2");
+            assertFalse(true);
         }
         tiles.clear();
 
@@ -56,7 +56,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 2);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 3");
+            assertFalse(true);
         }
         tiles.clear();
 
@@ -80,7 +80,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 1");
+            assertFalse(true);
         }
         tiles.clear();
 
@@ -94,7 +94,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 2");
+            assertFalse(true);
         }
         tiles.clear();
 
@@ -107,7 +107,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 2);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 3");
+            assertFalse(true);
         }
         tiles.clear();
 
@@ -131,7 +131,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 1");
+            assertFalse(true);
         }
         tiles.clear();
 
@@ -145,7 +145,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 2");
+            assertFalse(true);
         }
         tiles.clear();
 
@@ -158,7 +158,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 2);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 3");
+            assertFalse(true);
         }
         tiles.clear();
 

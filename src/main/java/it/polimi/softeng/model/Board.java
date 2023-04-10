@@ -2,7 +2,7 @@ package it.polimi.softeng.model;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Board {
+public class Board implements BoardSetter{
     private final Tile[][] board = new Tile[9][9];
     private ArrayList<Cell> notAvailable = new ArrayList<>(); /**arrayList with the cell that can't be used**/
     private final int numRows = 9;
