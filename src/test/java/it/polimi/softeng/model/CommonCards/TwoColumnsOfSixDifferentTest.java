@@ -1,6 +1,5 @@
 package it.polimi.softeng.model.CommonCards;
 
-import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import it.polimi.softeng.model.commonCards.CommonCards;
@@ -32,11 +31,7 @@ class TwoColumnsOfSixDifferentTest {
         tiles.add(tile5);
         tile6 = new Tile(3, Tile.TileColor.GREEN);
         tiles.add(tile6);
-        try {
-            shelfie.insertTile(tiles, 0);
-        } catch (IllegalInsertException e) {
-            assertFalse(true);
-        }
+        shelfie.insertTileForTesting(tiles, 0);
         tiles.clear();
 
         tile1 = new Tile(1, Tile.TileColor.BLUE);
@@ -51,11 +46,7 @@ class TwoColumnsOfSixDifferentTest {
         tiles.add(tile5);
         tile6 = new Tile(6, Tile.TileColor.GREEN);
         tiles.add(tile6);
-        try {
-            shelfie.insertTile(tiles, 1);
-        } catch (IllegalInsertException e) {
-            assertFalse(true);
-        }
+        shelfie.insertTileForTesting(tiles, 1);
         tiles.clear();
         assertTrue(card.verifyShape(shelfie));
     }

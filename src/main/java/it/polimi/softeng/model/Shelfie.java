@@ -111,6 +111,22 @@ public class Shelfie {
         return tilesToBeInserted.size() + i <= 6;
     }
 
+    public void insertTileForTesting(ArrayList<Tile> tilesToBeInserted, int column){
+            int i = 0;
+            int k = 0;
+            // I find the first null cell in the shelfie
+            while (i < 6 && grid[i][column] != null) {
+                i++;
+            }
+            // loop for tiles insertion
+            for(int j = i; j < i + tilesToBeInserted.size(); j++) {
+                grid[j][column] = tilesToBeInserted.get(k);
+                k++;
+            }
+    }
+
+
+
 
     public String shelfieChangeNotifier(){
         return null;

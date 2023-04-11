@@ -30,7 +30,7 @@ class TwoRowsOfFiveDifferentTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 1");
+            fail();
         }
         tiles.clear();
 
@@ -43,7 +43,7 @@ class TwoRowsOfFiveDifferentTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 2");
+            fail();
         }
         tiles.clear();
 
@@ -56,7 +56,7 @@ class TwoRowsOfFiveDifferentTest {
         try {
             shelfie.insertTile(tiles, 2);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 3");
+            fail();
         }
         tiles.clear();
 
@@ -69,7 +69,7 @@ class TwoRowsOfFiveDifferentTest {
         try {
             shelfie.insertTile(tiles, 3);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 4");
+            fail();
         }
         tiles.clear();
 
@@ -82,7 +82,7 @@ class TwoRowsOfFiveDifferentTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 5");
+            fail();
         }
         tiles.clear();
 
@@ -106,7 +106,7 @@ class TwoRowsOfFiveDifferentTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 1");
+            fail();
         }
         tiles.clear();
 
@@ -119,7 +119,7 @@ class TwoRowsOfFiveDifferentTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 2");
+            fail();
         }
         tiles.clear();
 
@@ -132,7 +132,7 @@ class TwoRowsOfFiveDifferentTest {
         try {
             shelfie.insertTile(tiles, 2);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 3");
+            fail();
         }
         tiles.clear();
 
@@ -145,7 +145,7 @@ class TwoRowsOfFiveDifferentTest {
         try {
             shelfie.insertTile(tiles, 3);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 4");
+            fail();
         }
         tiles.clear();
 
@@ -158,20 +158,9 @@ class TwoRowsOfFiveDifferentTest {
         try {
             shelfie.insertTile(tiles, 4);
         } catch (IllegalInsertException e) {
-            System.out.println("Errore 5");
+            fail();
         }
         tiles.clear();
-
-        for(int i=0;i<6;i++){
-            for(int j=0;j<5;j++){
-                if(shelfie.getGrid()[i][j] == null)
-                    System.out.print(" null ");
-                else
-                    System.out.print(shelfie.getGrid()[i][j].getColor());
-            }
-            System.out.println();
-        }
-
         assertFalse(card.verifyShape(shelfie));
 
     }
