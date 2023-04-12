@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Covered cases: more than four groups of four, exactly four groups of four, less than four groups of four, empty shelfie
- * (more than four tiles in a groups counts like a group of four
+ * (more than four tiles in a groups counts like a group of four)
  */
 
 

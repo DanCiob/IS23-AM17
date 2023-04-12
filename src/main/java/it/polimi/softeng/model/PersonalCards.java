@@ -5,11 +5,15 @@ import java.util.ArrayList;
 import static it.polimi.softeng.JSONParser.PersonalCardsParser.InitializePersonalCards;
 import static it.polimi.softeng.model.scoreCount.Score.PersonalCardsScore;
 
+
+/**
+ * Class that represents Personal Objective
+ */
 public class PersonalCards {
-    ObjectiveCell objective[] = new ObjectiveCell[6];
+    ObjectiveCell[] objective = new ObjectiveCell[6];
 
 
-    public class ObjectiveCell {
+    public static class ObjectiveCell {
         int row;
         int column;
         Tile.TileColor color;
