@@ -52,5 +52,7 @@ public class ServerSide {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        while (true);
     }
 }

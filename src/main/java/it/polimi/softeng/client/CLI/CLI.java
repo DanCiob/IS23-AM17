@@ -60,7 +60,7 @@ public class CLI implements Runnable, UserInterface{
             System.out.print("> ");
             currentNickname = input.nextLine();
             //Check uniqueness
-        } while(false/*unique*/);
+        } while(false/*uniqueness of nickname*/);
         System.out.println("Welcome: " + currentNickname + "!");
 
         }
@@ -89,7 +89,7 @@ public class CLI implements Runnable, UserInterface{
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        //Switch than case : "EventHandled"
+        //Switch EventReceived : "EventHandled"
         switch (evt.getPropertyName()) {
 
             }

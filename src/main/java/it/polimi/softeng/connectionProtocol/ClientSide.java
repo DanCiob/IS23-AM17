@@ -1,4 +1,6 @@
 package it.polimi.softeng.connectionProtocol;
+import it.polimi.softeng.client.CLI.CLI;
+
 import java.io.*;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,8 +10,9 @@ import java.net.UnknownHostException;
 import java.util.*;
 
 public class ClientSide {
-    public static void main(String[] args){
+    CLI cli = new CLI();
 
+    public static void main(String[] args){
         //Connection block
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         String hostName;
