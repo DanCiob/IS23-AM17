@@ -1,7 +1,7 @@
 package it.polimi.softeng.model;
 
 /**
- * The Enum defines 4 different types of BadgeScore with 4 different scores (2, 4, 6, 8)
+ * BadgeScore enumeration defines four different types of BadgeScore with their corresponding scores (2, 4, 6, 8)
  */
 
 public enum BadgeScore implements Badge{

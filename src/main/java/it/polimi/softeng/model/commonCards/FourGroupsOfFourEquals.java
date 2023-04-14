@@ -13,6 +13,9 @@ public class FourGroupsOfFourEquals extends CommonCards {
      */
     @Override
     public boolean verifyShape(Shelfie s) {
-        return GroupsOfEqualTiles(s, 4, 4);
+        int numOfGroups = 4;
+        int sizeOfGroups = 4;
+
+        return GroupsOfEqualTiles(s, numOfGroups, sizeOfGroups);
     }
 }

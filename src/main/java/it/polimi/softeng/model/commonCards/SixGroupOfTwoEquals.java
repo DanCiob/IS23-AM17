@@ -10,8 +10,10 @@ public class SixGroupOfTwoEquals extends CommonCards {
      * @return true if the shape is satisfied, false if not
      */
     @Override
-    public boolean verifyShape(Shelfie s)
-    {
-        return GroupsOfEqualTiles(s, 6, 2);
+    public boolean verifyShape(Shelfie s) {
+        int numOfGroups = 6;
+        int sizeOfGroups = 2;
+
+        return GroupsOfEqualTiles(s, numOfGroups, sizeOfGroups);
     }
 }

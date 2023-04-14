@@ -112,13 +112,13 @@ public class Game implements PlayerManager{
 
             switch(k){
                 case 0 -> commonCards.add(new DiagonalOfEquals());
-                case 1 -> commonCards.add(new EightEquals());
-                case 2 -> commonCards.add(new FourCornerOfEquals());
+                case 1 -> commonCards.add(new NEqualTiles());
+                case 2 -> commonCards.add(new CornersOfEqualTiles());
                 case 3 -> commonCards.add(new FourGroupsOfFourEquals());
-                case 4 -> commonCards.add(new FourRowsOfOneTwoThreeTypes());
+                case 4 -> commonCards.add(new RowsOfDifferentTypes());
                 case 5 -> commonCards.add(new SixGroupOfTwoEquals());
                 case 6 -> commonCards.add(new Stairs());
-                case 7 -> commonCards.add(new ThreeColumnsOfOneTwoThreeTypes());
+                case 7 -> commonCards.add(new ColumnsOfDifferentTypes());
                 case 8 -> commonCards.add(new TwoColumnsOfSixDifferent());
                 case 9 -> commonCards.add(new TwoRowsOfFiveDifferent());
                 case 10 -> commonCards.add(new TwoSquareOfEquals());
@@ -138,13 +138,13 @@ public class Game implements PlayerManager{
             while(i < 2){
                 switch(commonCardsNum.get(i)){
                     case 0 -> commonCards.add(new DiagonalOfEquals());
-                    case 1 -> commonCards.add(new EightEquals());
-                    case 2 -> commonCards.add(new FourCornerOfEquals());
+                    case 1 -> commonCards.add(new NEqualTiles());
+                    case 2 -> commonCards.add(new CornersOfEqualTiles());
                     case 3 -> commonCards.add(new FourGroupsOfFourEquals());
-                    case 4 -> commonCards.add(new FourRowsOfOneTwoThreeTypes());
+                    case 4 -> commonCards.add(new RowsOfDifferentTypes());
                     case 5 -> commonCards.add(new SixGroupOfTwoEquals());
                     case 6 -> commonCards.add(new Stairs());
-                    case 7 -> commonCards.add(new ThreeColumnsOfOneTwoThreeTypes());
+                    case 7 -> commonCards.add(new ColumnsOfDifferentTypes());
                     case 8 -> commonCards.add(new TwoColumnsOfSixDifferent());
                     case 9 -> commonCards.add(new TwoRowsOfFiveDifferent());
                     case 10 -> commonCards.add(new TwoSquareOfEquals());

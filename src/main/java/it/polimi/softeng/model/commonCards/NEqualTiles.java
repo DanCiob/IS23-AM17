@@ -3,16 +3,19 @@ package it.polimi.softeng.model.commonCards;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 
-public class  EightEquals extends CommonCards{
+public class NEqualTiles extends CommonCards{
 
     /**
-     * it verifies if there are eight tiles of the same type
+     * It verifies if there are n tiles of the same color, we also specify the total number of colors of the tiles in
+     * the game (numOfColors)
      * @param shelfie  to check
      * @return boolean which is true if the shape is present in the shelfie or 0 if it's not
      */
     public boolean verifyShape(Shelfie shelfie){
+        int n = 8; //indicates the number of tiles of the same color needed to complete the achievement
+        int numOfColors = 6; //indicates the total number of colors of the tiles in the game
         int i;
-        int[] numTilesForColors = {0, 0, 0, 0, 0 , 0}; //numTilesForColors has the number of tiles for every color
+        int[] numTilesForColors = new int[numOfColors];
         Tile[][] grid = shelfie.getGrid();
         Tile.TileColor tileColor;
         for(Tile[] tileVector : grid){
@@ -23,8 +26,8 @@ public class  EightEquals extends CommonCards{
                 }
             }
         }
-        for(i=0;i<6;i++){ // 6 is the number of colors
-            if(numTilesForColors[i]>=8)
+        for(i=0;i<numOfColors;i++){
+            if(numTilesForColors[i]>=n)
                 return true;
         }
         return false;

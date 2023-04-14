@@ -6,7 +6,7 @@ import it.polimi.softeng.model.Shelfie;
  * This class verifies if the four tiles of the corners of the shelfie have the same color(type)
  */
 
-public class FourCornerOfEquals extends CommonCards {
+public class CornersOfEqualTiles extends CommonCards {
     /**
      *
      * @param s is the shelfie we have to verify if it does complete the achievement

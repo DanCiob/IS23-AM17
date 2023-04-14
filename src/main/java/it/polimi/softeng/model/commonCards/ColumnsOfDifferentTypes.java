@@ -8,7 +8,7 @@ import static it.polimi.softeng.model.scoreCount.Score.verifyMaxDifferentColor;
 /**
  * This class verifies if the shelfie has three columns each formed by 6 tiles of maximum three different types
  */
-public class ThreeColumnsOfOneTwoThreeTypes extends CommonCards {
+public class ColumnsOfDifferentTypes extends CommonCards {
     public boolean verifyShape(Shelfie shelfie) {
         final int maxDifferentColor = 3; //maximum number of different colors for each row
         final int target = 3; //number of rows with different colors to complete the achievement
