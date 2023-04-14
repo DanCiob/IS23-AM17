@@ -57,48 +57,6 @@ public class ClientSide {
         }catch(NullPointerException e ){
 
         }
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        //TUI setup
-        Scanner input = new Scanner(System.in);
-
-        System.out.println("-- MyShelfie --");
-        System.out.println("Please, insert nickname: ");
-        String currentNickname = input.nextLine();  // Read user input
-
-        //Check uniqueness
-
-        System.out.println("Welcome "+ currentNickname + "!");
-
-        //TUI
-        while(true)
-        {
-        //Player is active
-            System.out.println("State of gameboard:");
-            //stateBoard();
-            System.out.println("State of your shelfie:");
-            //stateShelfie();
-
-            /*System.out.println("-- Available actions --");
-            System.out.println("1: Game move");
-            System.out.println("2: Send chat message");
-            int currentAction = Integer.parseInt(input.nextLine());*/
-
-        //Player is not active
-            System.out.println("-- Available actions --");
-            System.out.println("1: Send chat message");
-            System.out.println("Digit number of desired action:");
-            int currentAction = Integer.parseInt(input.nextLine());
-
-            switch (currentAction)
-            {
-                case 1:
-                    System.out.println("Type 'all' to send to global chat, or receiver name to send personal message");
-                    String receiver = input.nextLine();
-
-                    //Check existence of receiver
-                    //Send message
-            }
-        }
     }
 }

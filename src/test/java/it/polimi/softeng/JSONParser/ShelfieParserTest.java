@@ -5,6 +5,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
@@ -50,7 +51,6 @@ class ShelfieParserTest {
         msg.put("tileList",list);
         msg.put("column", column);
 
-        System.out.println(msg);
         return msg;
     }
     @Test
@@ -69,10 +69,6 @@ class ShelfieParserTest {
         ShelfieParser parser = new ShelfieParser();
 
         parser.shelfieParser(jsonMsg.toString());
-        for(Tile tile : parser.getTilesToBeInserted()){
-            System.out.println("tile : "+ tile.getId() + " " + colorToString(tile.getColor()));
-        }
-        System.out.println(parser.getColumn());
 
         assertEquals(1, parser.getTilesToBeInserted().get(0).getId());
         assertEquals(2, parser.getTilesToBeInserted().get(1).getId());

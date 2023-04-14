@@ -4,9 +4,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServerSide {
     static int portNumber;
+    int playerNumber;
+    Map<String, Socket> playerToSocket = new HashMap<>();
 
     public static void main(String[] args){
         System.out.println("Server started !");
@@ -31,26 +37,17 @@ public class ServerSide {
 
         //accepting the client connection
         Socket clientSocket = null;
-        boolean connection = false;
-        while(!connection){
-            System.out.println("waiting...");
+        ExecutorService executor = Executors.newCachedThreadPool();
+        while(true){
+            System.out.print("waiting...");
             try{
                 clientSocket = serverSocket.accept();
+                executor.submit(new ClientHandler(clientSocket));
                 System.out.println("client accepted !");
-                connection = true;
             }catch(IOException e){
                 e.printStackTrace();
                 System.out.println("client accept failed !");
             }
-        }
-
-        //routine that gets the output stream for the server
-        PrintWriter out = null; // allocate to write answer to client.
-        try {
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
-            out.println("helo");
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
