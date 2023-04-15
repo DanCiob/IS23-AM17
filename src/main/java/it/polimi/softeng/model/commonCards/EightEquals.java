@@ -19,7 +19,7 @@ public class  EightEquals extends CommonCards{
             for(Tile tile: tileVector){
                 if(tile!=null){
                     tileColor = tile.getColor();
-                    numTilesForColors[tileColor.pos()]++;
+                    numTilesForColors[tileColor.colorPos()]++;
                 }
             }
         }

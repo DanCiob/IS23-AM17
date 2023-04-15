@@ -4,13 +4,18 @@ public class Tile {
     int id;
     TileColor color;
     public enum TileColor {
-        BLUE(0), WHITE(1), GREEN(2), YELLOW(3), PURPLE(4), CYAN(5);
-        private final int pos;
-        TileColor(int pos){
-            this.pos = pos;
+        BLUE(0, 'B'), WHITE(1, 'W'), GREEN(2, 'G'), YELLOW(3, 'Y'), PURPLE(4, 'P'), CYAN(5, 'C');
+        private final int colorPos;
+        private final char colorLetter;
+        TileColor(int colorPos, char colorLetter){
+            this.colorPos = colorPos;
+            this.colorLetter = colorLetter;
         }
-        public int pos(){
-            return pos;
+        public int colorPos(){
+            return colorPos;
+        }
+        public char colorLetter(){
+            return colorLetter;
         }
     }
 

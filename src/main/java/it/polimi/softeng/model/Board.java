@@ -3,6 +3,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Board implements BoardSetter{
+    /**
+     * matrix that represent the board;
+     * column numbering : goes from sx to dx
+     * row numbering : goes from top to bottom
+     */
     private final Tile[][] board = new Tile[9][9];
     private ArrayList<Cell> notAvailable = new ArrayList<>(); /**arrayList with the cell that can't be used**/
     private final int numRows = 9;
