@@ -217,12 +217,12 @@ public class Board implements BoardSetter{
     }
 
     public boolean checkLegalChoice(ArrayList<Cell> positionsToBeRemoved){
-        int i, j, k=0;
+        int i, j;
         boolean posNotUsed;
-        int[][] matPositionToBeRemoved = new int[positionsToBeRemoved.size()][2]; /*it contains the positions of the tile to be removed, to check if they are adjacent**/
+        Cell cell2, cell3, cell4;
         /*The tiles you take must be adjacent to each other and form a straight line
           All the tiles you take must have at least one side free (not touching directly other tiles) at the beginning of your turn
-         */
+        */
 
         for(Cell cell : positionsToBeRemoved){
             i = cell.getX();
@@ -232,29 +232,32 @@ public class Board implements BoardSetter{
                 if(cell1.getX() == i && cell1.getY() == j)
                     posNotUsed = true;
             }
-            if(posNotUsed)
-                return false;
-            if((i!=0 && i!=8 && j!=0 && j!=8)&&(board[i+1][j] != null) && (board[i][j+1] != null) && (board[i-1][j] != null) && (board[i][j-1] != null))
-                return false; /*the tiles don't have at least one side free**/
-            matPositionToBeRemoved[k][0] = i;
-            matPositionToBeRemoved[k][1] = j;
-            k++;
-        }
-
-        for(i=0;i<positionsToBeRemoved.size()-1;i++){ /*it verifies the coordinates of the rows**/
-            if(matPositionToBeRemoved[i][0] != matPositionToBeRemoved[i+1][0])
-                break;
-        }
-
-        for(i=0;i<positionsToBeRemoved.size()-1;i++){/*it verifies the coordinates of the columns**/
-            if(matPositionToBeRemoved[i][1] != matPositionToBeRemoved[i+1][1]) {
-                /*
-                  the chosen tiles aren't adjacent because they don't have one coordination in common
-                 */
+            if(posNotUsed){
                 return false;
             }
+            if((i!=0 && i!=8 && j!=0 && j!=8)&&(board[i+1][j] != null) && (board[i][j+1] != null) && (board[i-1][j] != null) && (board[i][j-1] != null)) {
+                return false; /*the tiles don't have at least one side free**/
+            }
         }
-        return true;
+
+        if(positionsToBeRemoved.size() == 1){
+            return true; //we don't have to check that the tiles are adjacent
+        }
+        if(positionsToBeRemoved.size() == 2){
+            cell2 = positionsToBeRemoved.get(0);
+            cell3 = positionsToBeRemoved.get(1);
+            if((cell2.getX() == cell3.getX()) || (cell2.getY() == cell3.getY()))
+                return true;
+        }
+        if(positionsToBeRemoved.size() == 3){
+            cell2 = positionsToBeRemoved.get(0);
+            cell3 = positionsToBeRemoved.get(1);
+            cell4 = positionsToBeRemoved.get(2);
+            if((cell2.getX() == cell3.getX() && cell2.getX() == cell4.getX()) || (cell2.getY() == cell3.getY() && cell2.getY() == cell4.getY()))
+                return true;
+        }
+
+        return false;
     }
 
     /*

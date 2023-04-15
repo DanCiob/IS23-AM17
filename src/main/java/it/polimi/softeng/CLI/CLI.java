@@ -77,9 +77,9 @@ public class CLI implements Runnable{
         Tile.TileColor tileColor;
         String gray = "\u001B[37m";
         if(shelfie != null){
-            System.out.println(gray + " ----------------");
+            System.out.println(gray + "    ----------------");
             for(int i=5;i>=0;i--){
-                System.out.print(gray + "| ");
+                System.out.print(gray + i + "  | ");
                 for(int j=0;j<5;j++){
                     if(shelfie[i][j] !=null){
                         tileColor = shelfie[i][j].getColor();
@@ -90,7 +90,8 @@ public class CLI implements Runnable{
                 }
                 System.out.println(gray + "|");
             }
-            System.out.println(gray + " ----------------" + Tile.TileColor.WHITE.coloredText());
+            System.out.println(gray + "    ----------------");
+            System.out.println(gray + "     0  1  2  3  4" + Tile.TileColor.WHITE.coloredText());
         }
     }
 
