@@ -178,25 +178,25 @@ public class Score {
 
         while(i < iMax && countVerified<2) {
             j = 0;
-            if(!columns)
-                notVerified = false;
-            while(((!columns && j<4) || (columns && j<5) )&& s.getGrid()[i][j] != null){
+            notVerified = false;
+            while(((!columns && j<4) || (columns && j<5)) && ((!columns && s.getGrid()[i][j] != null) || (columns && s.getGrid()[j][i] != null))){
                 z=j+1;
-                if(columns)
-                    notVerified = false;
-                while((z<jMax) && ((!columns && s.getGrid()[i][z] != null) || (columns && s.getGrid()[z][i] != null)) &&(!notVerified)){
-                    if((!columns)&&(s.getGrid()[i][j].getColor() == s.getGrid()[i][z].getColor()))
+
+                while((z<jMax) && ((!columns ) || (columns && s.getGrid()[z][i] != null)) &&(!notVerified)){
+                    if((!columns && s.getGrid()[i][z] != null)&&(s.getGrid()[i][j].getColor() == s.getGrid()[i][z].getColor()))
                         notVerified = true;
                     if((columns)&&(s.getGrid()[j][i].getColor() == s.getGrid()[z][i].getColor()))
                         notVerified = true;
                     z++;
                 }
-                if(columns && !notVerified && z==6)
-                    countVerified++;
                 j++;
             }
-            if((!columns)&&(!notVerified)&&(z==5)&&(s.getGrid()[i][z-1] != null))
+            if(!columns && !notVerified && z==5 && s.getGrid()[i][z-1] != null) {
                 countVerified++;
+            }
+            if(columns && !notVerified && z==6 && s.getGrid()[z-1][i] != null){
+                countVerified++;
+            }
             i++;
         }
         return countVerified >= 2;

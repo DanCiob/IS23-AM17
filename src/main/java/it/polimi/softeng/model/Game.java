@@ -198,10 +198,31 @@ public class Game implements PlayerManager{
     public void lastTurn(){
         while(!(currentPlayer.isFirst())){ //current player is the one that has a full shelfie
             currentPlayer = getNextPlayer();
-            //TO DO: game turn routine
+            turn();
         }
         calculateScore();
         selectWinner();
+    }
+
+    /**
+     * this method is the turn routine
+     */
+    public void turn(){
+        //receive the action of current player -> to do
+        //updates the board and the shelfie (checking if it's possible to do that) -> to do
+
+        //if there are only islands on the board
+        if(gameBoard.checkIslands()){
+            gameBoard.positionTiles(tileBag);
+        }
+
+        //verify common cards
+        for(CommonCards card : commonCards){
+            if(card.verifyShape(currentPlayer.getShelfie())){
+                //current player has completed a common card, so he receives the badge. The badge is removed from the arrayList
+                currentPlayer.updateScore(card.getBadge().getScore());
+            }
+        }
     }
 
     /**
@@ -210,7 +231,7 @@ public class Game implements PlayerManager{
     public void calculateScore(){
         int pointsToAdd;
         for(Player p : players){
-            pointsToAdd = p.getPersonalCard().getCurrentScore(p.getShelfie(), p.getPersonalCard());
+            pointsToAdd = PersonalCards.getCurrentScore(p.getShelfie(), p.getPersonalCard());
             pointsToAdd = pointsToAdd + Score.ScoreForGroups(p.getShelfie());
             p.updateScore(pointsToAdd);
         }
