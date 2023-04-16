@@ -260,6 +260,18 @@ public class Board implements BoardSetter{
         return false;
     }
 
+
+    public boolean checkIslands(){
+        for(int i=1; i<numRows-2; i++){
+            for(int j=1; j<numColumns-2; j++){
+                if(board[i][j]!=null && (board[i-1][j]!=null || board[i][j-1]!=null || board[i+1][j]!=null || board[i][j+1]!=null)){
+                    return false;
+                }
+            }
+        }
+        return true; //there are only islands
+    }
+
     /*
     public String boardChangeNotifier(){
     }
