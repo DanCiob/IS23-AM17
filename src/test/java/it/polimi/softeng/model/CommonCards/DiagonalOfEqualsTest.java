@@ -107,7 +107,7 @@ class DiagonalOfEqualsTest {
         try {
             shelfie.insertTile(tiles,4);
         } catch (IllegalInsertException e) {
-            System.out.println("errore !");
+            fail();
         }
 
         assertTrue(card.verifyShape(shelfie));

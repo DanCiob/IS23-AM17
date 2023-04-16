@@ -1,4 +1,4 @@
 {
-  "receiver" : "everybody",
+  "receiver" : "user1",
   "message": "message_body"
 }
