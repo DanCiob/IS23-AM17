@@ -5,6 +5,9 @@ import it.polimi.softeng.customExceptions.IllegalInsertException;
 import java.util.ArrayList;
 
 public class Shelfie {
+    private static final int maxR = 6; //number of rows of the shelfie
+    private static final int maxC = 5; //number of columns of the shelfie
+    private static final int maxTiles = 3; //maximum number of Tiles for each "Move"
     /**
      * matrix that represent the shelfie;
      * column numbering : goes from sx to dx (ie 0-->the furthest left)
@@ -21,16 +24,16 @@ public class Shelfie {
 
     /**
      * insertTile takes an arrayList of tiles and, if legal, inserts them into the shelfie
-     * @param tilesToBeInserted  arraylist of tiles ; the one in position 0 in the arrayList goes first, so on for the following
+     * @param tilesToBeInserted  arraylist of tiles ; the tile in position 0 in the arrayList goes first, so on for the following
      * @param column  int that indicates the selected shelfie column; the numbering goes from sx to dx (ie 0-->the furthest left)
-     * @throws IllegalInsertException exception thrown as you try to insert too many tiles in a column
+     * @throws IllegalInsertException exception thrown when there is not enough space in the selected column of the shelfie
      */
     public void insertTile(ArrayList<Tile> tilesToBeInserted, int column) throws IllegalInsertException {
         if(checkLegalInsert(tilesToBeInserted, column)){
             int i = 0;
             int k = 0;
             // I find the first null cell in the shelfie
-            while (i < 6 && grid[i][column] != null) {
+            while (i < maxR && grid[i][column] != null) {
                 i++;
             }
             // loop for tiles insertion
@@ -42,12 +45,12 @@ public class Shelfie {
             if(tilesToBeInserted.isEmpty()){
                 throw new IllegalInsertException("illegal insert caused by empty array");
             }
-            else if(tilesToBeInserted.size() > 3){
+            else if(tilesToBeInserted.size() > maxTiles){
                 throw new IllegalInsertException("illegal insert caused by oversized array");
             }
             else{
                 int i = 0;
-                while (i < 6 && grid[i][column] != null) {
+                while (i < maxR && grid[i][column] != null) {
                     i++;
                 }
                 throw new IllegalInsertException("illegal insert caused by overflow of column " + column + " because array size is " + tilesToBeInserted.size() + " but first free cell is in position "+ i);
@@ -75,20 +78,21 @@ public class Shelfie {
     public Tile[][] getGrid(){
         return grid;
     }
+
     /**
-     *  checks whether the shelfie is full or not by controlling the last row
+     * checks whether the shelfie is full or not by controlling the last row
      * @return a boolean value
      */
     public boolean checkFull(){
         int count = 0;
 
         //i check for the last row cells counting the number of occupied places
-        for(int i = 0; i < 5; i++){
-            if(grid[5][i] != null) count++;
+        for(int i = 0; i < maxC; i++){
+            if(grid[maxR - 1][i] != null) count++;
         }
 
-        //count == 5 <==> shelfie is full
-        return count == 5;
+        //count == maxC <==> shelfie is full
+        return count == maxC;
     }
 
     /**
@@ -99,23 +103,23 @@ public class Shelfie {
      */
     public boolean checkLegalInsert(ArrayList<Tile> tilesToBeInserted, int column){
         //controls of correctness of the given array (just to be safe)
-        if(tilesToBeInserted.size() > 3) return false;
+        if(tilesToBeInserted.size() > maxTiles) return false;
         if(tilesToBeInserted.isEmpty()) return false;
 
         //I find the row number of the first free cell from the selected column
         int i = 0;
-        while (i < 6 && grid[i][column] != null) {
+        while (i < maxR && grid[i][column] != null) {
             i++;
         }
 
-        return tilesToBeInserted.size() + i <= 6;
+        return tilesToBeInserted.size() + i <= maxR;
     }
 
     public void insertTileForTesting(ArrayList<Tile> tilesToBeInserted, int column){
             int i = 0;
             int k = 0;
             // I find the first null cell in the shelfie
-            while (i < 6 && grid[i][column] != null) {
+            while (i < maxR && grid[i][column] != null) {
                 i++;
             }
             // loop for tiles insertion

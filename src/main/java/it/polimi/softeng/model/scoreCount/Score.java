@@ -9,6 +9,8 @@ import java.util.Stack;
 import java.util.Vector;
 
 public class Score {
+    private static final int maxC = 5;
+    private static final int maxR = 6;
     static ArrayList<Tile> visited = new ArrayList<>();
     /**
      * @param s         is the shelfie
@@ -19,13 +21,13 @@ public class Score {
      */
     public static boolean GroupsOfEqualTiles(Shelfie s, int required, int size) {
         Tile[][] grid = s.getGrid();
-        int TileCounted;
-        int NumberOfGroups = 0;
+        int TileCounted; //tiles counted for the current group
+        int NumberOfGroups = 0; //number of groups found
 
         visited.clear();
 
-        for (int j = 0; j < 5; j++) {
-            for (int i = 0; i < 6 && grid[i][j] != null; i++) {
+        for (int j = 0; j < maxC; j++) {
+            for (int i = 0; i < maxR && grid[i][j] != null; i++) {
                 TileCounted = 0;
 
                 if (!visited.contains(grid[i][j]))
@@ -93,7 +95,7 @@ public class Score {
                 r = currentTile.r;
                 c = currentTile.c;
 
-                if (r != 5)
+                if (r != maxR - 1)
                 {
                     if (grid[r+1][c] != null)
                         stack.push(new TileWithCoordinates(grid[r+1][c], r+1, c));
@@ -103,7 +105,7 @@ public class Score {
                     if (grid[r-1][c] != null)
                         stack.push(new TileWithCoordinates(grid[r-1][c], r-1, c));
                 }
-                if (c != 4)
+                if (c != maxC - 1)
                 {
                     if (grid[r][c+1] != null)
                         stack.push(new TileWithCoordinates(grid[r][c+1], r, c+1));
@@ -132,8 +134,8 @@ public class Score {
 
         visited.clear();
 
-        for (int j = 0; j < 5; j++) {
-            for (int i = 0; i < 6 && grid[i][j] != null; i++) {
+        for (int j = 0; j < maxC; j++) {
+            for (int i = 0; i < maxR && grid[i][j] != null; i++) {
                 TileCounted = 0;
 
                 if (!visited.contains(grid[i][j]))
@@ -169,17 +171,17 @@ public class Score {
         boolean notVerified = false;
         int i=0, countVerified = 0, j, z=0, iMax, jMax;
         if(!columns){
-            iMax = 6;
-            jMax = 5;
+            iMax = maxR;
+            jMax = maxC;
         }else{
-            iMax = 5;
-            jMax = 6;
+            iMax = maxC;
+            jMax = maxR;
         }
 
         while(i < iMax && countVerified<2) {
             j = 0;
             notVerified = false;
-            while(((!columns && j<4) || (columns && j<5)) && ((!columns && s.getGrid()[i][j] != null) || (columns && s.getGrid()[j][i] != null))){
+            while(((!columns && j<maxC-1) || (columns && j<maxR-1)) && ((!columns && s.getGrid()[i][j] != null) || (columns && s.getGrid()[j][i] != null))){
                 z=j+1;
 
                 while((z<jMax) && ((!columns ) || (columns && s.getGrid()[z][i] != null)) &&(!notVerified)){
@@ -209,11 +211,12 @@ public class Score {
      * @return score achieved in PersonalCard
      */
     public static int PersonalCardsScore (PersonalCards p, Shelfie s) {
+        final int maxPersonalCardTarget = 6; // dimension of PersonalCard ScoreTable
         int numObjectiveReached = 0;
         PersonalCards.ObjectiveCell obj[] = new PersonalCards.ObjectiveCell[6];
         obj = p.getObjective();
-        //6 is the dimension of PersonalCard ScoreTable
-        for (int i = 0; i < 6; i++) {
+
+        for (int i = 0; i < maxPersonalCardTarget; i++) {
             //If color in PC matches color in shelfie
             if (s.getTile(obj[i].getRow(), obj[i].getColumn()) != null && s.getTile(obj[i].getRow(), obj[i].getColumn()).getColor().equals(obj[i].getColor()))
                 numObjectiveReached++;
