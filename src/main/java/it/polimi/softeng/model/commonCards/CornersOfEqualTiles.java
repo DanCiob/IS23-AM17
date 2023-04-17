@@ -1,5 +1,6 @@
 package it.polimi.softeng.model.commonCards;
 
+import static it.polimi.softeng.model.Constants.*;
 import it.polimi.softeng.model.Shelfie;
 
 /**
@@ -16,21 +17,18 @@ public class CornersOfEqualTiles extends CommonCards {
      */
     @Override
     public boolean verifyShape(Shelfie s) {
-        final int maxC = 5; //set the number of columns
-        final int maxR = 6; //set the number of rows
-
         /*Check if top corners are empty or not
           We assume that in each column, if one row is not empty, all the others under this row cannot be empty */
-        if ((s.getTile(maxR - 1, 0)!= null) && ((s.getTile(maxR - 1, maxC - 1)!= null))){
+        if ((s.getTile(shelfieRows - 1, 0)!= null) && ((s.getTile(shelfieRows - 1, shelfieColumns - 1)!= null))){
 
             //check if top corners have the same color
-            if (s.getTile(maxR - 1, 0).getColor() == s.getTile(maxR - 1, maxC - 1).getColor()){
+            if (s.getTile(shelfieRows - 1, 0).getColor() == s.getTile(shelfieRows - 1, shelfieColumns - 1).getColor()){
 
                 //check if right corners have the same color
-                if (s.getTile(maxR - 1, maxC - 1).getColor() == s.getTile(0, maxC - 1).getColor()){
+                if (s.getTile(shelfieRows - 1, shelfieColumns - 1).getColor() == s.getTile(0, shelfieColumns - 1).getColor()){
 
                     //check if bottom corners have the same color
-                    if (s.getTile(0, maxC - 1).getColor() == s.getTile(0, 0).getColor()){
+                    if (s.getTile(0, shelfieColumns - 1).getColor() == s.getTile(0, 0).getColor()){
                         return true;
                     }
                 }

@@ -2,6 +2,8 @@ package it.polimi.softeng.model.commonCards;
 
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
+import static it.polimi.softeng.model.Constants.*;
+
 
 public class DiagonalOfEquals extends CommonCards {
 
@@ -71,7 +73,7 @@ public class DiagonalOfEquals extends CommonCards {
         if (t == null) return false;
 
         // i for columns; the cycle checks for every column whether there is a tile in the position needed for a diagonal
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < shelfieColumns; i++) {
             currentRow = 4 - i + offset;
 
             if (shelfie.getTile(currentRow, i) != null && shelfie.getTile(currentRow,i).getColor() == t.getColor() ) {
@@ -95,13 +97,13 @@ public class DiagonalOfEquals extends CommonCards {
         if (t == null) return false;
 
         // i for columns; the cycle checks for every column whether there is a tile in the position needed for a diagonal
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < shelfieColumns; i++) {
             currentRow = i + offset;
 
             if (shelfie.getTile(currentRow, i) != null && shelfie.getTile(currentRow,i).getColor() == t.getColor() ) {
                 count++;
             }
         }
-        return count == 5;
+        return count == shelfieColumns;
     }
 }

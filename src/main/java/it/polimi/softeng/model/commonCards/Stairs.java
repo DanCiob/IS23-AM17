@@ -2,6 +2,8 @@ package it.polimi.softeng.model.commonCards;
 
 import it.polimi.softeng.model.Shelfie;
 
+import static it.polimi.softeng.model.Constants.shelfieColumns;
+
 public class Stairs extends CommonCards{
 
     /**
@@ -59,7 +61,7 @@ public class Stairs extends CommonCards{
         int currentRow;
         int count = 0;
         // i for columns; the cycle checks for every column whether there is a tile in the position needed for a stair
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < shelfieColumns; i++) {
             currentRow = 4 - i + offset;
 
             if (shelfie.getTile(currentRow, i) != null) {
@@ -70,14 +72,14 @@ public class Stairs extends CommonCards{
                 }
             }
         }
-        return count == 5;
+        return count == shelfieColumns;
     }
 
     private boolean rightCheck(Shelfie shelfie, int offset){
         int currentRow;
         int count = 0;
         // i for columns; the cycle checks for every column whether there is a tile in the position needed for a stair
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < shelfieColumns; i++) {
             currentRow = i + offset;
 
             if (shelfie.getTile(currentRow, i) != null) {                        //controlling if I'm checking the last cell of a column to avoid outofboundEX
@@ -88,6 +90,6 @@ public class Stairs extends CommonCards{
                 }
             }
         }
-        return count == 5;
+        return count == shelfieColumns;
     }
 }

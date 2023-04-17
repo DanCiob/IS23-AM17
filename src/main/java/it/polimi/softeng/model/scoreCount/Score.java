@@ -7,10 +7,10 @@ import it.polimi.softeng.model.Tile;
 import java.util.ArrayList;
 import java.util.Stack;
 import java.util.Vector;
+import static it.polimi.softeng.model.Constants.*;
+
 
 public class Score {
-    private static final int maxC = 5;
-    private static final int maxR = 6;
     static ArrayList<Tile> visited = new ArrayList<>();
     /**
      * @param s         is the shelfie
@@ -26,8 +26,8 @@ public class Score {
 
         visited.clear();
 
-        for (int j = 0; j < maxC; j++) {
-            for (int i = 0; i < maxR && grid[i][j] != null; i++) {
+        for (int j = 0; j < shelfieColumns; j++) {
+            for (int i = 0; i < shelfieRows && grid[i][j] != null; i++) {
                 TileCounted = 0;
 
                 if (!visited.contains(grid[i][j]))
@@ -95,7 +95,7 @@ public class Score {
                 r = currentTile.r;
                 c = currentTile.c;
 
-                if (r != maxR - 1)
+                if (r != shelfieRows - 1)
                 {
                     if (grid[r+1][c] != null)
                         stack.push(new TileWithCoordinates(grid[r+1][c], r+1, c));
@@ -105,7 +105,7 @@ public class Score {
                     if (grid[r-1][c] != null)
                         stack.push(new TileWithCoordinates(grid[r-1][c], r-1, c));
                 }
-                if (c != maxC - 1)
+                if (c != shelfieColumns - 1)
                 {
                     if (grid[r][c+1] != null)
                         stack.push(new TileWithCoordinates(grid[r][c+1], r, c+1));
@@ -134,8 +134,8 @@ public class Score {
 
         visited.clear();
 
-        for (int j = 0; j < maxC; j++) {
-            for (int i = 0; i < maxR && grid[i][j] != null; i++) {
+        for (int j = 0; j < shelfieColumns; j++) {
+            for (int i = 0; i < shelfieRows && grid[i][j] != null; i++) {
                 TileCounted = 0;
 
                 if (!visited.contains(grid[i][j]))
@@ -171,17 +171,17 @@ public class Score {
         boolean notVerified = false;
         int i=0, countVerified = 0, j, z=0, iMax, jMax;
         if(!columns){
-            iMax = maxR;
-            jMax = maxC;
+            iMax = shelfieRows;
+            jMax = shelfieColumns;
         }else{
-            iMax = maxC;
-            jMax = maxR;
+            iMax = shelfieColumns;
+            jMax = shelfieRows;
         }
 
         while(i < iMax && countVerified<2) {
             j = 0;
             notVerified = false;
-            while(((!columns && j<maxC-1) || (columns && j<maxR-1)) && ((!columns && s.getGrid()[i][j] != null) || (columns && s.getGrid()[j][i] != null))){
+            while(((!columns && j<shelfieColumns-1) || (columns && j<shelfieRows-1)) && ((!columns && s.getGrid()[i][j] != null) || (columns && s.getGrid()[j][i] != null))){
                 z=j+1;
 
                 while((z<jMax) && ((!columns ) || (columns && s.getGrid()[z][i] != null)) &&(!notVerified)){
@@ -211,12 +211,11 @@ public class Score {
      * @return score achieved in PersonalCard
      */
     public static int PersonalCardsScore (PersonalCards p, Shelfie s) {
-        final int maxPersonalCardTarget = 6; // dimension of PersonalCard ScoreTable
         int numObjectiveReached = 0;
         PersonalCards.ObjectiveCell obj[] = new PersonalCards.ObjectiveCell[6];
         obj = p.getObjective();
 
-        for (int i = 0; i < maxPersonalCardTarget; i++) {
+        for (int i = 0; i < colorsOfPersonalCards; i++) {
             //If color in PC matches color in shelfie
             if (s.getTile(obj[i].getRow(), obj[i].getColumn()) != null && s.getTile(obj[i].getRow(), obj[i].getColumn()).getColor().equals(obj[i].getColor()))
                 numObjectiveReached++;
@@ -253,9 +252,9 @@ public class Score {
      * @param maxDifferentColor indicates how many different color can a row / column contain
      * @param target indicates how many rows or column do you need to complete the CommonCard
      * @param maxOuter indicates the upper limit of outer cycle,
-     *                 maxOuter = maxR for ROW, maxOuter = maxC for COLUMN
+     *                 maxOuter = shelfieRows for ROW, maxOuter = shelfieColumns for COLUMN
      * @param maxInner indicates the upper limit of inner cycle,
-     *                 maxInner = maxC for ROW, maxInner = maxR for COLUMN
+     *                 maxInner = shelfieColumns for ROW, maxInner = shelfieRows for COLUMN
      * @param mode indicates which mode (ROW-COLUMN) the method have to verify
      * @return true if the shelfie completes the CommonCard
      */

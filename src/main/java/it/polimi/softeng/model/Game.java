@@ -4,6 +4,8 @@ import it.polimi.softeng.model.scoreCount.Score;
 import it.polimi.softeng.model.commonCards.*;
 import java.util.ArrayList;
 import java.util.Random;
+import static it.polimi.softeng.model.Constants.*;
+
 
 import static it.polimi.softeng.model.PersonalCards.FillPersonalCardsBag;
 
@@ -49,8 +51,8 @@ public class Game implements PlayerManager{
      * this method creates all the tiles and places them in the tileBag
      */
     public void initializeTile(){
-        for(int i = 0; i < 132; i++){
-            switch(i % 6){
+        for(int i = 0; i < totalTiles; i++){
+            switch(i % typesOfTiles){
                 case 0->tileBag.add(new Tile(i, Tile.TileColor.WHITE));
                 case 1->tileBag.add(new Tile(i, Tile.TileColor.BLUE));
                 case 2->tileBag.add(new Tile(i, Tile.TileColor.YELLOW));
@@ -108,7 +110,7 @@ public class Game implements PlayerManager{
         Random random = new Random();
         ArrayList<Integer> commonCardsNum = new ArrayList<>();
         if(simpleRules){
-            int k = random.nextInt(12);
+            int k = random.nextInt(totalCommonCards);
 
             switch(k){
                 case 0 -> commonCards.add(new DiagonalOfEquals());
@@ -126,10 +128,10 @@ public class Game implements PlayerManager{
             }
         }else{
             //generation of two random ints between 0 and 11
-            int i = random.nextInt(12);
-            int j = random.nextInt(12);
+            int i = random.nextInt(totalCommonCards);
+            int j = random.nextInt(totalCommonCards);
             while(j == i){
-                j = random.nextInt(12);
+                j = random.nextInt(totalCommonCards);
             }
             commonCardsNum.add(i);
             commonCardsNum.add(j);
@@ -167,7 +169,7 @@ public class Game implements PlayerManager{
         Random Random = new Random();
         int i = 0;
         PersonalCards toBeAssigned;
-        int j = 12;
+        int j = totalPersonalCards;
         for (Player p: players)
         {
             i = Random.nextInt(j);

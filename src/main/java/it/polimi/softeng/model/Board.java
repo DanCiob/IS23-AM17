@@ -1,6 +1,8 @@
 package it.polimi.softeng.model;
 import java.util.ArrayList;
 import java.util.Random;
+import static it.polimi.softeng.model.Constants.*;
+
 
 public class Board implements BoardSetter{
     /**
@@ -8,10 +10,8 @@ public class Board implements BoardSetter{
      * column numbering : goes from left to right
      * row numbering : goes from top to bottom
      */
-    private final Tile[][] board = new Tile[9][9];
+    private final Tile[][] board = new Tile[boardRows][boardColumns];
     private ArrayList<Cell> notAvailable = new ArrayList<>(); /**arrayList with the cells that can't be used**/
-    private final int numRows = 9;
-    private final int numColumns = 9;
 
     public Tile[][] getBoard() {
         return board;
@@ -26,19 +26,18 @@ public class Board implements BoardSetter{
         /*
           top left and bottom right (symmetrical)
          */
-        for(int i =0;i<4;i++){
-            for(int j = 3-i; j>=0 ; j--){
-                if((i!=0)||(j!=3)){
+
+        for(int j = 0; j < 3; j++){ //columns
+            for(int i = 3 - j; i >= 0 ; i--){ //rows
                     temp = new Cell();
                     temp.setX(i);
                     temp.setY(j);
                     notAvailable.add(temp);
 
                     temp = new Cell();
-                    temp.setX(8-i);
-                    temp.setY(8-j);
+                    temp.setX(boardColumns-1-i);
+                    temp.setY(boardRows-1-j);
                     notAvailable.add(temp);
-                }
             }
         }
 
@@ -46,15 +45,15 @@ public class Board implements BoardSetter{
           top right and bottom left (symmetrical)
          */
         for(int i =0;i<3;i++){
-            for(int j = i+5; j<9 ; j++){
+            for(int j = i+5; j<boardColumns ; j++){
                 temp = new Cell();
                 temp.setX(i);
                 temp.setY(j);
                 notAvailable.add(temp);
 
                 temp = new Cell();
-                temp.setX(8-i);
-                temp.setY(8-j);
+                temp.setX(boardColumns-1-i);
+                temp.setY(boardRows-1-j);
                 notAvailable.add(temp);
 
             }
@@ -163,8 +162,8 @@ public class Board implements BoardSetter{
          it initializes every tile of the board with null
          */
         setNotAvailable(numberOfPlayers);
-        for(int i = 0; i<numRows;i++){
-            for(int j = 0; j<numColumns;j++){
+        for(int i = 0; i<boardRows;i++){
+            for(int j = 0; j<boardColumns;j++){
                 board[i][j] = null;
             }
         }
@@ -189,8 +188,8 @@ public class Board implements BoardSetter{
         Random random = new Random();
         boolean posNotUsed; //position in which we cannot position Tiles
         int pos;
-        for(int i=0;i<numRows;i++){
-            for(int j=0;j<numColumns;j++){
+        for(int i=0;i<boardRows;i++){
+            for(int j=0;j<boardColumns;j++){
                 posNotUsed = false;
                 for(Cell cell1 : notAvailable){
                     if(cell1.getX() == j && cell1.getY() == i)
@@ -254,8 +253,8 @@ public class Board implements BoardSetter{
      */
 
     public boolean checkIslands(){
-        for(int i=1; i<numRows-2; i++){
-            for(int j=1; j<numColumns-2; j++){
+        for(int i=1; i<boardRows-2; i++){
+            for(int j=1; j<boardColumns-2; j++){
                 if(board[i][j]!=null && (board[i-1][j]!=null || board[i][j-1]!=null || board[i+1][j]!=null || board[i][j+1]!=null)){
                     return false;
                 }

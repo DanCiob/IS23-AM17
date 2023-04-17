@@ -4,6 +4,7 @@ import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 
 import java.util.ArrayList;
+import static it.polimi.softeng.model.Constants.*;
 
 
 public class TwoSquareOfEquals extends CommonCards {
@@ -24,8 +25,8 @@ public class TwoSquareOfEquals extends CommonCards {
      */
     @Override
     public boolean verifyShape(Shelfie s) {
-        for(int i = 0; i < 4; i++){         //cycles the columns
-            for(int j = 0; j < 5; j++){    //cycles groups of two tiles on the same column
+        for(int i = 0; i < shelfieColumns - 1; i++){         //cycles the columns
+            for(int j = 0; j < shelfieRows - 1; j++){    //cycles groups of two tiles on the same column
 
                 //I see where I have two tiles of the same colour in one column that I haven't used for squares
                 if(s.getTile(j,i).getColor() == s.getTile(j+1,i).getColor() && !usedTiles.contains(s.getTile(j,i)) && !usedTiles.contains(s.getTile(j+1,i))){

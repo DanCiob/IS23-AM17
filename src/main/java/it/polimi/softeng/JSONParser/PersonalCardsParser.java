@@ -6,6 +6,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import static it.polimi.softeng.model.Constants.*;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,9 +17,12 @@ import java.util.Iterator;
 public class PersonalCardsParser {
 
     //Number of PersonalCards available in the game
-    final static int NumberOfPC = 12;
+    //final static int NumberOfPC = 12;
+    //USARE LA COSTANTE 'totalPersonalCards'
+
     //Number of Cell inside PersonalCard
-    final static int NumberOfObjectiveCell = 6;
+    //final static int NumberOfObjectiveCell = 6;
+    //USARE LA COSTANTE 'colorsOfPersonalCards'
 
     /**
      *
