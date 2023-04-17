@@ -2,12 +2,14 @@ package it.polimi.softeng.model.commonCards;
 
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
+import static it.polimi.softeng.model.Constants.*;
+
 
 public class DiagonalOfEquals extends CommonCards {
 
     /**
-     * the direction of the controlled diagonal is stored in this variable and is considered as from the lowest point of the diagonal to the highest (ie left
-     * means I'm checking for a diagonal starting from cell[0+offset][5] to cell[4+offset][0], so on for RIGHT)
+     * The enum Direction indicates from which bottom angle (+offset) we start to analyze the shelfie
+     * (bottom LEFT or bottom RIGHT)
      */
     private enum Direction{
         LEFT,
@@ -19,8 +21,8 @@ public class DiagonalOfEquals extends CommonCards {
     private int offset;
 
     /**
-     * method used to verify whether the common goal (in this case "diagonal of five equals") is achieved; it cycles through the various possible pattern
-     * of diagonal to find one
+     * method used to verify whether the common goal (in this case "diagonal of five equals") is achieved; it cycles
+     * through the various possible pattern of diagonal to find one
      * @param s the shelfie on which you check the common goal
      * @return boolean value; true means the common goal is achieved on the shelfie s
      */
@@ -36,10 +38,10 @@ public class DiagonalOfEquals extends CommonCards {
         return false;
     }
     /**
-     * this method is the base of verifyShape; it has two internal ways to verify for a diagonal based on the required direction, including an
-     * offset modifier
+     * this method is the base of verifyShape; it has two internal ways to verify for a diagonal based on the required
+     * direction, including an offset modifier
      * @param shelfie the shelfie on which you check the common goal
-     * @param direction the direction of the stair searched as explained in the Direction doc
+     * @param direction the direction we start to analyze the diagonal
      * @param offset vertical offset as explained above
      * @return boolean value representing whether the searched pattern is present or not
      */
@@ -71,7 +73,7 @@ public class DiagonalOfEquals extends CommonCards {
         if (t == null) return false;
 
         // i for columns; the cycle checks for every column whether there is a tile in the position needed for a diagonal
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < shelfieColumns; i++) {
             currentRow = 4 - i + offset;
 
             if (shelfie.getTile(currentRow, i) != null && shelfie.getTile(currentRow,i).getColor() == t.getColor() ) {
@@ -95,13 +97,13 @@ public class DiagonalOfEquals extends CommonCards {
         if (t == null) return false;
 
         // i for columns; the cycle checks for every column whether there is a tile in the position needed for a diagonal
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < shelfieColumns; i++) {
             currentRow = i + offset;
 
             if (shelfie.getTile(currentRow, i) != null && shelfie.getTile(currentRow,i).getColor() == t.getColor() ) {
                 count++;
             }
         }
-        return count == 5;
+        return count == shelfieColumns;
     }
 }

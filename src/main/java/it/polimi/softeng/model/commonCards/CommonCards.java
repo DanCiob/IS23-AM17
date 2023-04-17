@@ -10,7 +10,7 @@ public abstract class CommonCards {
     }
 
     /**
-     * arrayList containing the score badges. the badges are in descending order
+     * arrayList contains the score badges. the badges are in descending order
      * (ie badges(0) contains the highest score remaining badge)
      */
     private ArrayList<BadgeScore> badges = new ArrayList<>();

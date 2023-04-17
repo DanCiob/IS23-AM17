@@ -3,8 +3,8 @@ package it.polimi.softeng.model.CommonCards;
 import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
+import it.polimi.softeng.model.commonCards.ColumnsOfDifferentTypes;
 import it.polimi.softeng.model.commonCards.CommonCards;
-import it.polimi.softeng.model.commonCards.ThreeColumnsOfOneTwoThreeTypes;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * The test verifies if ThreeColumnsOfOneTwoThreeTypes is correct, considering both empty columns and
+ * The test verifies if ColumnsOfDifferentTypes is correct, considering both empty columns and
  *  columns with 1, 2, 3, 4, 5, 6 different types of Tiles.
  */
 
-class ThreeColumnsOfOneTwoThreeTypesTest {
+class ColumnsOfDifferentTypesTest {
     /**
      * The following test considers a shelfie with:
      * - empty column;
@@ -38,7 +38,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
                                      \   B   W   W   W
                                              ^   ^   ^
         */
-        CommonCards card = new ThreeColumnsOfOneTwoThreeTypes();
+        CommonCards card = new ColumnsOfDifferentTypes();
         ArrayList<Tile> tiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
         Tile t1, t2, t3;
@@ -188,7 +188,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
                                      Y   W   W   W   W
                                      ^   ^
         */
-        CommonCards card = new ThreeColumnsOfOneTwoThreeTypes();
+        CommonCards card = new ColumnsOfDifferentTypes();
         ArrayList<Tile> tiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
         Tile t1, t2, t3;
@@ -365,7 +365,7 @@ class ThreeColumnsOfOneTwoThreeTypesTest {
                                      Y   W   W   W   W
                                      ^   ^   ^       ^
         */
-        CommonCards card = new ThreeColumnsOfOneTwoThreeTypes();
+        CommonCards card = new ColumnsOfDifferentTypes();
         ArrayList<Tile> tiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
         Tile t1, t2, t3;

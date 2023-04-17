@@ -4,17 +4,17 @@ import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import it.polimi.softeng.model.commonCards.CommonCards;
-import it.polimi.softeng.model.commonCards.EightEquals;
+import it.polimi.softeng.model.commonCards.NEqualTiles;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class EightEqualsTest {
+class NEqualTilesTest {
 
     @Test
     public void verifyShapeTest1(){
-        CommonCards card = new EightEquals();
+        CommonCards card = new NEqualTiles();
         ArrayList<Tile> tiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
         Tile tile1, tile2, tile3;
@@ -77,7 +77,7 @@ class EightEqualsTest {
 
     @Test
     public void verifyShapeTest2(){
-        CommonCards card = new EightEquals();
+        CommonCards card = new NEqualTiles();
         ArrayList<Tile> tiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
         Tile tile1, tile2, tile3;
@@ -135,7 +135,7 @@ class EightEqualsTest {
 
     @Test
     public void verifyShapeTest3(){
-        CommonCards card = new EightEquals();
+        CommonCards card = new NEqualTiles();
         Shelfie shelfie = new Shelfie();
         assertFalse(card.verifyShape(shelfie));
     }

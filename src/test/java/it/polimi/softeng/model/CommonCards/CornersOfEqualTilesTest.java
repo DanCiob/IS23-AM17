@@ -4,7 +4,7 @@ import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import it.polimi.softeng.model.commonCards.CommonCards;
-import it.polimi.softeng.model.commonCards.FourCornerOfEquals;
+import it.polimi.softeng.model.commonCards.CornersOfEqualTiles;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,17 +12,17 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * The test verifies FourCornerOfEquals, considering empty and different types corners
+ * The test verifies CornersOfEqualTiles, considering empty and different types corners
  */
 
-class FourCornerOfEqualsTest {
+class CornersOfEqualTilesTest {
     /**
-     * The test verifies if FourCornerOfEquals is correct, progressively fulfilling the shelfie till
+     * The test verifies if CornersOfEqualTiles is correct, progressively fulfilling the shelfie till
      *  the four corners are equals -> true
      */
     @Test
     void FourCornerOfEqualsTestTrue() {
-        CommonCards card = new FourCornerOfEquals();
+        CommonCards card = new CornersOfEqualTiles();
         ArrayList<Tile> tiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
         Tile t1, t2, t3;
@@ -86,12 +86,12 @@ class FourCornerOfEqualsTest {
     }
 
     /**
-     * The test verifies if FourCornerOfEquals is correct, progressively fulfilling the shelfie,
+     * The test verifies if CornersOfEqualTiles is correct, progressively fulfilling the shelfie,
      *  but with two different types of Tiles -> false
      */
     @Test
     void FourCornerOfEqualsTestFalse() {
-        CommonCards card = new FourCornerOfEquals();
+        CommonCards card = new CornersOfEqualTiles();
         ArrayList<Tile> tiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
         Tile t1, t2, t3;
