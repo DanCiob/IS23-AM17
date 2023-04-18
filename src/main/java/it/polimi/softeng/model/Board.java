@@ -21,44 +21,33 @@ public class Board implements BoardSetter{
         Cell temp;
         /*
           the following loops define the notAvailable cells that are in the matrix but not in the board
-         */
-
-        /*
-          top left and bottom right (symmetrical)
+          we use the symmetries of the board to declare not available cells
          */
 
         for(int j = 0; j < 3; j++){ //columns
             for(int i = 3 - j; i >= 0 ; i--){ //rows
-                    temp = new Cell();
+                    temp = new Cell();//top left corner
                     temp.setRow(i);
                     temp.setColumn(j);
                     notAvailable.add(temp);
 
-                    temp = new Cell();
-                    temp.setRow(boardColumns-1-i);
-                    temp.setColumn(boardRows-1-j);
+                    temp = new Cell(); //bottom right corner
+                    temp.setRow(boardRows-1-i);
+                    temp.setColumn(boardColumns-1-j);
                     notAvailable.add(temp);
-            }
-        }
 
-        /*
-          top right and bottom left (symmetrical)
-         */
-        for(int i =0;i<3;i++){
-            for(int j = i+5; j<boardColumns ; j++){
-                temp = new Cell();
-                temp.setRow(i);
-                temp.setColumn(j);
-                notAvailable.add(temp);
+                    temp = new Cell();//top right corner
+                    temp.setRow(j);
+                    temp.setColumn(boardColumns-1-i);
+                    notAvailable.add(temp);
 
-                temp = new Cell();
-                temp.setRow(boardColumns-1-i);
-                temp.setColumn(boardRows-1-j);
-                notAvailable.add(temp);
+                    temp = new Cell(); //bottom left corner
+                    temp.setRow(boardRows-1-j);
+                    temp.setColumn(i);
+                    notAvailable.add(temp);
 
             }
         }
-
 
         if(numberOfPlayers < 4){
             /*
