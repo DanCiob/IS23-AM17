@@ -86,7 +86,7 @@ class BoardTest {
     public void setNotAvailable4Players(){
         int count = 0;
         Board board = new Board();
-        board.setNotAvailable(2);
+        board.setNotAvailable(4);
         for(Cell cell1 : board.getNotAvailable()){
             if(cell1.getY() == 0 && cell1.getX() == 0)
                 count++;
@@ -124,10 +124,20 @@ class BoardTest {
                 count++;
             if(cell1.getX() == 8 && cell1.getY() == 6)
                 count++;
+            if(cell1.getX() == 0 && cell1.getY() == 3)
+                fail();
+            if(cell1.getX() == 0 && cell1.getY() == 5)
+                count++;
+            if(cell1.getX() == 0 && cell1.getY() == 4)
+                fail();
+
+
         }
 
-        assertTrue(count == 18);
+        assertTrue(count == 19);
     }
+
+
 
 
     @Test
@@ -305,7 +315,7 @@ class BoardTest {
         game.initializeTile();
         board.resetBoard(4);
         board.positionTiles(game.getTileBag());
-        for(int i=0;i<9;i++) {
+        for(int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 posNotUsed = false;
                 for(Cell cell1 : notAvailable){
@@ -317,5 +327,12 @@ class BoardTest {
                 }
             }
         }
+    }
+
+
+    @Test
+    public void checkIslandsTest(){
+        Board board = new Board();
+
     }
 }

@@ -192,10 +192,10 @@ public class Board implements BoardSetter{
             for(int j=0;j<boardColumns;j++){
                 posNotUsed = false;
                 for(Cell cell1 : notAvailable){
-                    if(cell1.getX() == j && cell1.getY() == i)
+                    if(cell1.getX() == i && cell1.getY() == j)
                         posNotUsed = true;
                 }
-                if(!posNotUsed){
+                if(board[i][j] == null && !posNotUsed){
                     pos = random.nextInt(bag.size());
                     board[i][j] = bag.get(pos);
                 }
@@ -253,9 +253,9 @@ public class Board implements BoardSetter{
      */
 
     public boolean checkIslands(){
-        for(int i=1; i<boardRows-2; i++){
-            for(int j=1; j<boardColumns-2; j++){
-                if(board[i][j]!=null && (board[i-1][j]!=null || board[i][j-1]!=null || board[i+1][j]!=null || board[i][j+1]!=null)){
+        for(int i=0; i<boardRows-1; i++){
+            for(int j=0; j<boardColumns-1; j++){
+                if(board[i][j]!=null && ((i>0 && board[i-1][j]!=null) || (j>0 && board[i][j-1]!=null) || (i<boardRows-1 && board[i+1][j]!=null) || (j<boardRows-1 &&board[i][j+1]!=null))){
                     return false;
                 }
             }
