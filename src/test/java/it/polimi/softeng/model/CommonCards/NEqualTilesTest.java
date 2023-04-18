@@ -142,7 +142,7 @@ class NEqualTilesTest {
 
     @Test
     public void verifyShapeTest4(){
-        CommonCards card = new EightEquals();
+        CommonCards card = new NEqualTiles();
         ArrayList<Tile> tiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
         Tile tile1, tile2, tile3, tile4, tile5, tile6;

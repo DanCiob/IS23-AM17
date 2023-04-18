@@ -3,7 +3,6 @@ package it.polimi.softeng.model.CommonCards;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import it.polimi.softeng.model.commonCards.CommonCards;
-import it.polimi.softeng.model.commonCards.EightEquals;
 import it.polimi.softeng.model.commonCards.TwoColumnsOfSixDifferent;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ class TwoColumnsOfSixDifferentTest {
 
     @Test
     public void verifyShapeVoid(){
-        CommonCards card = new EightEquals();
+        CommonCards card = new TwoColumnsOfSixDifferent();
         Shelfie shelfie = new Shelfie();
         assertFalse(card.verifyShape(shelfie));
     }

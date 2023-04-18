@@ -4,7 +4,6 @@ import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import it.polimi.softeng.model.commonCards.CommonCards;
-import it.polimi.softeng.model.commonCards.EightEquals;
 import it.polimi.softeng.model.commonCards.TwoRowsOfFiveDifferent;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ class TwoRowsOfFiveDifferentTest {
 
     @Test
     public void verifyShapeVoid(){
-        CommonCards card = new EightEquals();
+        CommonCards card = new TwoRowsOfFiveDifferent();
         Shelfie shelfie = new Shelfie();
         assertFalse(card.verifyShape(shelfie));
     }
