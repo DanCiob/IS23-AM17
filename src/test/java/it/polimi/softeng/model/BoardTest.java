@@ -9,8 +9,8 @@ class BoardTest {
     @Test
     public void resetBoardTest(){
         Board board = new Board();
-        board.resetBoard(2);
 
+        board.resetBoard(2);
         for(int i=0;i<9;i++){
             for(int j=0;j<9;j++){
                 assertNull(board.getBoard()[i][j]);
@@ -18,7 +18,6 @@ class BoardTest {
         }
 
         board.resetBoard(3);
-
         for(int i=0;i<9;i++){
             for(int j=0;j<9;j++){
                 assertNull(board.getBoard()[i][j]);
@@ -26,7 +25,6 @@ class BoardTest {
         }
 
         board.resetBoard(4);
-
         for(int i=0;i<9;i++){
             for(int j=0;j<9;j++){
                 assertNull(board.getBoard()[i][j]);
@@ -51,7 +49,7 @@ class BoardTest {
             if(cell1.getRow() == 4 && cell1.getColumn() == 8)
                 count++;
         }
-        assertTrue(count == 3);
+        assertEquals(3, count);
     }
 
     @Test
@@ -79,7 +77,7 @@ class BoardTest {
                 count=0;
         }
 
-        assertTrue(count == 6);
+        assertEquals(6, count);
     }
 
     @Test
@@ -134,7 +132,301 @@ class BoardTest {
 
         }
 
-        assertTrue(count == 19);
+        assertEquals(19, count);
+    }
+
+    @Test
+    public void setNotAvailable2PlayersB(){
+        int count = 0;
+        Board board = new Board();
+
+        board.setNotAvailable(2);
+        for(Cell cell1 : board.getNotAvailable()){
+            if(cell1.getRow() == 0 && cell1.getColumn() == 0)//top left (all not available cells)
+                count++;
+            if(cell1.getRow() == 0 && cell1.getColumn() == 1)
+                count++;
+            if(cell1.getRow() == 0 && cell1.getColumn() == 2)
+                count++;
+            if(cell1.getRow() == 1 && cell1.getColumn() == 0)
+                count++;
+            if(cell1.getRow() == 1 && cell1.getColumn() == 1)
+                count++;
+            if(cell1.getRow() == 1 && cell1.getColumn() == 2)
+                count++;
+            if(cell1.getRow() == 2 && cell1.getColumn() == 0)
+                count++;
+            if(cell1.getRow() == 2 && cell1.getColumn() == 1)
+                count++;
+            if(cell1.getRow() == 3 && cell1.getColumn() == 0)
+                count++;
+
+            if(cell1.getRow() == 6 && cell1.getColumn() == 0)//bottom left (border cells)
+                count++;
+            if(cell1.getRow() == 6 && cell1.getColumn() == 1)
+                count++;
+            if(cell1.getRow() == 7 && cell1.getColumn() == 2)
+                count++;
+            if(cell1.getRow() == 8 && cell1.getColumn() == 3)
+                count++;
+
+            if(cell1.getRow() == 0 && cell1.getColumn() == 5)//top right
+                count++;
+            if(cell1.getRow() == 1 && cell1.getColumn() == 6)
+                count++;
+            if(cell1.getRow() == 2 && cell1.getColumn() == 7)
+                count++;
+            if(cell1.getRow() == 2 && cell1.getColumn() == 8)
+                count++;
+
+            if(cell1.getRow() == 5 && cell1.getColumn() == 8)//bottom right
+                count++;
+            if(cell1.getRow() == 6 && cell1.getColumn() == 7)
+                count++;
+            if(cell1.getRow() == 7 && cell1.getColumn() == 6)
+                count++;
+            if(cell1.getRow() == 8 && cell1.getColumn() == 6)
+                count++;
+
+            if(cell1.getRow() == 0 && cell1.getColumn() == 3)//cell available for 3+ players
+                count++;
+            if(cell1.getRow() == 2 && cell1.getColumn() == 2)
+                count++;
+            if(cell1.getRow() == 2 && cell1.getColumn() == 6)
+                count++;
+            if(cell1.getRow() == 3 && cell1.getColumn() == 8)
+                count++;
+            if(cell1.getRow() == 5 && cell1.getColumn() == 0)
+                count++;
+            if(cell1.getRow() == 6 && cell1.getColumn() == 2)
+                count++;
+            if(cell1.getRow() == 6 && cell1.getColumn() == 6)
+                count++;
+            if(cell1.getRow() == 8 && cell1.getColumn() == 5)
+                count++;
+
+            if(cell1.getRow() == 0 && cell1.getColumn() == 4)//cells available for 4 players
+                count++;
+            if(cell1.getRow() == 1 && cell1.getColumn() == 5)
+                count++;
+            if(cell1.getRow() == 3 && cell1.getColumn() == 1)
+                count++;
+            if(cell1.getRow() == 4 && cell1.getColumn() == 0)
+                count++;
+            if(cell1.getRow() == 4 && cell1.getColumn() == 8)
+                count++;
+            if(cell1.getRow() == 5 && cell1.getColumn() == 7)
+                count++;
+            if(cell1.getRow() == 7 && cell1.getColumn() == 3)
+                count++;
+            if(cell1.getRow() == 8 && cell1.getColumn() == 4)
+                count++;
+
+            if(cell1.getRow() == 3 && cell1.getColumn() == 4)//random cells in the centre of the board
+                fail();
+            if(cell1.getRow() == 7 && cell1.getColumn() == 4)
+                fail();
+            if(cell1.getRow() == 4 && cell1.getColumn() == 2)
+                fail();
+        }
+
+        assertEquals(37, count);
+    }
+
+    @Test
+    public void setNotAvailable3PlayersB(){
+        int count = 0;
+        Board board = new Board();
+        board.setNotAvailable(3);
+
+        for(Cell cell1 : board.getNotAvailable()){
+            if(cell1.getRow() == 0 && cell1.getColumn() == 0)//top left (all not available cells)
+                count++;
+            if(cell1.getRow() == 0 && cell1.getColumn() == 1)
+                count++;
+            if(cell1.getRow() == 0 && cell1.getColumn() == 2)
+                count++;
+            if(cell1.getRow() == 1 && cell1.getColumn() == 0)
+                count++;
+            if(cell1.getRow() == 1 && cell1.getColumn() == 1)
+                count++;
+            if(cell1.getRow() == 1 && cell1.getColumn() == 2)
+                count++;
+            if(cell1.getRow() == 2 && cell1.getColumn() == 0)
+                count++;
+            if(cell1.getRow() == 2 && cell1.getColumn() == 1)
+                count++;
+            if(cell1.getRow() == 3 && cell1.getColumn() == 0)
+                count++;
+
+            if(cell1.getRow() == 6 && cell1.getColumn() == 0)//bottom left (border cells)
+                count++;
+            if(cell1.getRow() == 6 && cell1.getColumn() == 1)
+                count++;
+            if(cell1.getRow() == 7 && cell1.getColumn() == 2)
+                count++;
+            if(cell1.getRow() == 8 && cell1.getColumn() == 3)
+                count++;
+
+            if(cell1.getRow() == 0 && cell1.getColumn() == 5)//top right
+                count++;
+            if(cell1.getRow() == 1 && cell1.getColumn() == 6)
+                count++;
+            if(cell1.getRow() == 2 && cell1.getColumn() == 7)
+                count++;
+            if(cell1.getRow() == 2 && cell1.getColumn() == 8)
+                count++;
+
+            if(cell1.getRow() == 5 && cell1.getColumn() == 8)//bottom right
+                count++;
+            if(cell1.getRow() == 6 && cell1.getColumn() == 7)
+                count++;
+            if(cell1.getRow() == 7 && cell1.getColumn() == 6)
+                count++;
+            if(cell1.getRow() == 8 && cell1.getColumn() == 6)
+                count++;
+
+            if(cell1.getRow() == 0 && cell1.getColumn() == 3)//cell available for 3+ players
+                fail();
+            if(cell1.getRow() == 2 && cell1.getColumn() == 2)
+                fail();
+            if(cell1.getRow() == 2 && cell1.getColumn() == 6)
+                fail();
+            if(cell1.getRow() == 3 && cell1.getColumn() == 8)
+                fail();
+            if(cell1.getRow() == 5 && cell1.getColumn() == 0)
+                fail();
+            if(cell1.getRow() == 6 && cell1.getColumn() == 2)
+                fail();
+            if(cell1.getRow() == 6 && cell1.getColumn() == 6)
+                fail();
+            if(cell1.getRow() == 8 && cell1.getColumn() == 5)
+                fail();
+
+            if(cell1.getRow() == 0 && cell1.getColumn() == 4)//cells available for 4 players
+                count++;
+            if(cell1.getRow() == 1 && cell1.getColumn() == 5)
+                count++;
+            if(cell1.getRow() == 3 && cell1.getColumn() == 1)
+                count++;
+            if(cell1.getRow() == 4 && cell1.getColumn() == 0)
+                count++;
+            if(cell1.getRow() == 4 && cell1.getColumn() == 8)
+                count++;
+            if(cell1.getRow() == 5 && cell1.getColumn() == 7)
+                count++;
+            if(cell1.getRow() == 7 && cell1.getColumn() == 3)
+                count++;
+            if(cell1.getRow() == 8 && cell1.getColumn() == 4)
+                count++;
+
+            if(cell1.getRow() == 3 && cell1.getColumn() == 5)//random cells in the centre of the board
+                fail();
+            if(cell1.getRow() == 6 && cell1.getColumn() == 4)
+                fail();
+            if(cell1.getRow() == 4 && cell1.getColumn() == 7)
+                fail();
+        }
+
+        assertEquals(29, count);
+    }
+
+    @Test
+    public void setNotAvailable4PlayersB(){
+        int count = 0;
+        Board board = new Board();
+
+        board.setNotAvailable(4);
+        for(Cell cell1 : board.getNotAvailable()){
+            if(cell1.getRow() == 0 && cell1.getColumn() == 0)//top left (all not available cells)
+                count++;
+            if(cell1.getRow() == 0 && cell1.getColumn() == 1)
+                count++;
+            if(cell1.getRow() == 0 && cell1.getColumn() == 2)
+                count++;
+            if(cell1.getRow() == 1 && cell1.getColumn() == 0)
+                count++;
+            if(cell1.getRow() == 1 && cell1.getColumn() == 1)
+                count++;
+            if(cell1.getRow() == 1 && cell1.getColumn() == 2)
+                count++;
+            if(cell1.getRow() == 2 && cell1.getColumn() == 0)
+                count++;
+            if(cell1.getRow() == 2 && cell1.getColumn() == 1)
+                count++;
+            if(cell1.getRow() == 3 && cell1.getColumn() == 0)
+                count++;
+
+            if(cell1.getRow() == 6 && cell1.getColumn() == 0)//bottom left (border cells)
+                count++;
+            if(cell1.getRow() == 6 && cell1.getColumn() == 1)
+                count++;
+            if(cell1.getRow() == 7 && cell1.getColumn() == 2)
+                count++;
+            if(cell1.getRow() == 8 && cell1.getColumn() == 3)
+                count++;
+
+            if(cell1.getRow() == 0 && cell1.getColumn() == 5)//top right
+                count++;
+            if(cell1.getRow() == 1 && cell1.getColumn() == 6)
+                count++;
+            if(cell1.getRow() == 2 && cell1.getColumn() == 7)
+                count++;
+            if(cell1.getRow() == 2 && cell1.getColumn() == 8)
+                count++;
+
+            if(cell1.getRow() == 5 && cell1.getColumn() == 8)//bottom right
+                count++;
+            if(cell1.getRow() == 6 && cell1.getColumn() == 7)
+                count++;
+            if(cell1.getRow() == 7 && cell1.getColumn() == 6)
+                count++;
+            if(cell1.getRow() == 8 && cell1.getColumn() == 6)
+                count++;
+
+            if(cell1.getRow() == 0 && cell1.getColumn() == 3)//cell available for 3+ players
+                fail();
+            if(cell1.getRow() == 2 && cell1.getColumn() == 2)
+                fail();
+            if(cell1.getRow() == 2 && cell1.getColumn() == 6)
+                fail();
+            if(cell1.getRow() == 3 && cell1.getColumn() == 8)
+                fail();
+            if(cell1.getRow() == 5 && cell1.getColumn() == 0)
+                fail();
+            if(cell1.getRow() == 6 && cell1.getColumn() == 2)
+                fail();
+            if(cell1.getRow() == 6 && cell1.getColumn() == 6)
+                fail();
+            if(cell1.getRow() == 8 && cell1.getColumn() == 5)
+                fail();
+
+            if(cell1.getRow() == 0 && cell1.getColumn() == 4)//cells available for 4 players
+                fail();
+            if(cell1.getRow() == 1 && cell1.getColumn() == 5)
+                fail();
+            if(cell1.getRow() == 3 && cell1.getColumn() == 1)
+                fail();
+            if(cell1.getRow() == 4 && cell1.getColumn() == 0)
+                fail();
+            if(cell1.getRow() == 4 && cell1.getColumn() == 8)
+                fail();
+            if(cell1.getRow() == 5 && cell1.getColumn() == 7)
+                fail();
+            if(cell1.getRow() == 7 && cell1.getColumn() == 3)
+                fail();
+            if(cell1.getRow() == 8 && cell1.getColumn() == 4)
+                fail();
+
+            if(cell1.getRow() == 3 && cell1.getColumn() == 2)//random cells in the centre of the board
+                fail();
+            if(cell1.getRow() == 3 && cell1.getColumn() == 7)
+                fail();
+            if(cell1.getRow() == 4 && cell1.getColumn() == 6)
+                fail();
+        }
+
+        assertEquals(21, count);
     }
 
 
