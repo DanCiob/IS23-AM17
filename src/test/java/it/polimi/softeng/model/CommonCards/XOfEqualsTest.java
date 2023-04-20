@@ -4,6 +4,7 @@ import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import it.polimi.softeng.model.commonCards.CommonCards;
+import it.polimi.softeng.model.commonCards.NEqualTiles;
 import it.polimi.softeng.model.commonCards.XOfEquals;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ class XOfEqualsTest {
 
     @Test
     public void verifyShapeVoid(){
-        CommonCards card = new XOfEquals();
+        CommonCards card = new NEqualTiles();
         Shelfie shelfie = new Shelfie();
         assertFalse(card.verifyShape(shelfie));
     }

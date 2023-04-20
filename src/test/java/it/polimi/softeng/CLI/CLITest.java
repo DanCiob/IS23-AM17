@@ -1,5 +1,6 @@
 package it.polimi.softeng.CLI;
 
+import it.polimi.softeng.client.view.*;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import org.junit.jupiter.api.Test;
