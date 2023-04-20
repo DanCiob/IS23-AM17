@@ -18,8 +18,8 @@ class BoardParserTest {
         BoardParser boardParser = new BoardParser();
 
         boardParser.boardParser(msg.toString(), board);
-        assertEquals(0, boardParser.getPositionsToBeRemoved().get(0).getX());
-        assertEquals(5, boardParser.getPositionsToBeRemoved().get(0).getY());
+        assertEquals(0, boardParser.getPositionsToBeRemoved().get(0).getRow());
+        assertEquals(5, boardParser.getPositionsToBeRemoved().get(0).getColumn());
     }
 
     @Test
@@ -34,10 +34,10 @@ class BoardParserTest {
         BoardParser boardParser = new BoardParser();
 
         boardParser.boardParser(msg.toString(), board);
-        assertEquals(5, boardParser.getPositionsToBeRemoved().get(0).getX());
-        assertEquals(3, boardParser.getPositionsToBeRemoved().get(0).getY());
-        assertEquals(6, boardParser.getPositionsToBeRemoved().get(1).getX());
-        assertEquals(3, boardParser.getPositionsToBeRemoved().get(1).getY());
+        assertEquals(5, boardParser.getPositionsToBeRemoved().get(0).getRow());
+        assertEquals(3, boardParser.getPositionsToBeRemoved().get(0).getColumn());
+        assertEquals(6, boardParser.getPositionsToBeRemoved().get(1).getRow());
+        assertEquals(3, boardParser.getPositionsToBeRemoved().get(1).getColumn());
     }
 
     @Test
@@ -54,20 +54,20 @@ class BoardParserTest {
         BoardParser boardParser = new BoardParser();
 
         boardParser.boardParser(msg.toString(), board);
-        assertEquals(3, boardParser.getPositionsToBeRemoved().get(0).getX());
-        assertEquals(0, boardParser.getPositionsToBeRemoved().get(0).getY());
-        assertEquals(4, boardParser.getPositionsToBeRemoved().get(1).getX());
-        assertEquals(7, boardParser.getPositionsToBeRemoved().get(1).getY());
-        assertEquals(4, boardParser.getPositionsToBeRemoved().get(2).getX());
-        assertEquals(6, boardParser.getPositionsToBeRemoved().get(2).getY());
+        assertEquals(3, boardParser.getPositionsToBeRemoved().get(0).getRow());
+        assertEquals(0, boardParser.getPositionsToBeRemoved().get(0).getColumn());
+        assertEquals(4, boardParser.getPositionsToBeRemoved().get(1).getRow());
+        assertEquals(7, boardParser.getPositionsToBeRemoved().get(1).getColumn());
+        assertEquals(4, boardParser.getPositionsToBeRemoved().get(2).getRow());
+        assertEquals(6, boardParser.getPositionsToBeRemoved().get(2).getColumn());
 
         int[][] updatedPositions1 = new int[1][2];
         updatedPositions1[0][0] = 4;
         updatedPositions1[0][1] = 4;
         JSONObject msg1 = writeMsg(updatedPositions1);
         boardParser.boardParser(msg1.toString(), board);
-        assertEquals(4, boardParser.getPositionsToBeRemoved().get(0).getX());
-        assertEquals(4, boardParser.getPositionsToBeRemoved().get(0).getY());
+        assertEquals(4, boardParser.getPositionsToBeRemoved().get(0).getRow());
+        assertEquals(4, boardParser.getPositionsToBeRemoved().get(0).getColumn());
     }
 
 

@@ -21,87 +21,76 @@ public class Board implements BoardSetter{
         Cell temp;
         /*
           the following loops define the notAvailable cells that are in the matrix but not in the board
-         */
-
-        /*
-          top left and bottom right (symmetrical)
+          we use the symmetries of the board to declare not available cells
          */
 
         for(int j = 0; j < 3; j++){ //columns
             for(int i = 3 - j; i >= 0 ; i--){ //rows
-                    temp = new Cell();
-                    temp.setX(i);
-                    temp.setY(j);
+                    temp = new Cell();//top left corner
+                    temp.setRow(i);
+                    temp.setColumn(j);
                     notAvailable.add(temp);
 
-                    temp = new Cell();
-                    temp.setX(boardColumns-1-i);
-                    temp.setY(boardRows-1-j);
+                    temp = new Cell(); //bottom right corner
+                    temp.setRow(boardRows-1-i);
+                    temp.setColumn(boardColumns-1-j);
                     notAvailable.add(temp);
-            }
-        }
 
-        /*
-          top right and bottom left (symmetrical)
-         */
-        for(int i =0;i<3;i++){
-            for(int j = i+5; j<boardColumns ; j++){
-                temp = new Cell();
-                temp.setX(i);
-                temp.setY(j);
-                notAvailable.add(temp);
+                    temp = new Cell();//top right corner
+                    temp.setRow(j);
+                    temp.setColumn(boardColumns-1-i);
+                    notAvailable.add(temp);
 
-                temp = new Cell();
-                temp.setX(boardColumns-1-i);
-                temp.setY(boardRows-1-j);
-                notAvailable.add(temp);
+                    temp = new Cell(); //bottom left corner
+                    temp.setRow(boardRows-1-j);
+                    temp.setColumn(i);
+                    notAvailable.add(temp);
 
             }
         }
-
 
         if(numberOfPlayers < 4){
             /*
               the following cells are used only if there are 4 players
              */
             temp = new Cell();
-            temp.setX(0);
-            temp.setY(4);
+            temp.setRow(0);
+            temp.setColumn(4);
             notAvailable.add(temp);
 
             temp = new Cell();
-            temp.setX(1);
-            temp.setY(5);
+            temp.setRow(1);
+            temp.setColumn(5);
             notAvailable.add(temp);
 
             temp = new Cell();
-            temp.setX(3);
-            temp.setY(1);
+            temp.setRow(3);
+            temp.setColumn(1);
             notAvailable.add(temp);
 
             temp = new Cell();
-            temp.setX(4);
-            temp.setY(0);
+            temp.setRow(4);
+            temp.setColumn(0);
             notAvailable.add(temp);
 
             temp = new Cell();
-            temp.setX(4);
-            temp.setY(8);
+            temp.setRow(4);
+            temp.setColumn(8);
             notAvailable.add(temp);
 
             temp = new Cell();
-            temp.setX(5);
-            temp.setY(7);
+            temp.setRow(5);
+            temp.setColumn(7);
             notAvailable.add(temp);
 
             temp = new Cell();
-            temp.setX(7);
-            temp.setY(3);
+            temp.setRow(7);
+            temp.setColumn(3);
             notAvailable.add(temp);
 
             temp = new Cell();
-            temp.setX(8);
-            temp.setY(4);
+            temp.setRow(8);
+            temp.setColumn(4);
             notAvailable.add(temp);
         }
 
@@ -110,44 +99,44 @@ public class Board implements BoardSetter{
               the following cells are used only if there are 3 players
              */
             temp = new Cell();
-            temp.setX(0);
-            temp.setY(3);
+            temp.setRow(0);
+            temp.setColumn(3);
             notAvailable.add(temp);
 
             temp = new Cell();
-            temp.setX(2);
-            temp.setY(2);
+            temp.setRow(2);
+            temp.setColumn(2);
             notAvailable.add(temp);
 
             temp = new Cell();
-            temp.setX(2);
-            temp.setY(6);
+            temp.setRow(2);
+            temp.setColumn(6);
             notAvailable.add(temp);
 
             temp = new Cell();
-            temp.setX(3);
-            temp.setY(8);
+            temp.setRow(3);
+            temp.setColumn(8);
             notAvailable.add(temp);
 
             temp = new Cell();
-            temp.setX(5);
-            temp.setY(0);
+            temp.setRow(5);
+            temp.setColumn(0);
             notAvailable.add(temp);
 
             temp = new Cell();
-            temp.setX(6);
-            temp.setY(2);
+            temp.setRow(6);
+            temp.setColumn(2);
             notAvailable.add(temp);
 
             temp = new Cell();
-            temp.setX(6);
-            temp.setY(6);
+            temp.setRow(6);
+            temp.setColumn(6);
             notAvailable.add(temp);
 
 
             temp = new Cell();
-            temp.setX(8);
-            temp.setY(5);
+            temp.setRow(8);
+            temp.setColumn(5);
             notAvailable.add(temp);
         }
 
@@ -179,23 +168,23 @@ public class Board implements BoardSetter{
               it removes the tiles
              */
             for(Cell cell : positionsToBeRemoved){
-                board[cell.getX()][cell.getY()] = null;
+                board[cell.getRow()][cell.getColumn()] = null;
             }
         }
     }
 
     public void positionTiles(ArrayList<Tile> bag){
         Random random = new Random();
-        boolean posNotUsed; //position in which we cannot position Tiles
+        boolean posNotUsable; //position in which we cannot position Tiles
         int pos;
         for(int i=0;i<boardRows;i++){
             for(int j=0;j<boardColumns;j++){
-                posNotUsed = false;
+                posNotUsable = false;
                 for(Cell cell1 : notAvailable){
-                    if(cell1.getX() == j && cell1.getY() == i)
-                        posNotUsed = true;
+                    if(cell1.getRow() == i && cell1.getColumn() == j)
+                        posNotUsable = true;
                 }
-                if(!posNotUsed){
+                if(board[i][j] == null && !posNotUsable){
                     pos = random.nextInt(bag.size());
                     board[i][j] = bag.get(pos);
                 }
@@ -205,21 +194,21 @@ public class Board implements BoardSetter{
 
     public boolean checkLegalChoice(ArrayList<Cell> positionsToBeRemoved){
         int i, j;
-        boolean posNotUsed;
+        boolean posNotUsable;
         Cell cell2, cell3, cell4;
         /*The tiles you take must be adjacent to each other and form a straight line
           All the tiles you take must have at least one side free (not touching directly other tiles) at the beginning of your turn
         */
 
         for(Cell cell : positionsToBeRemoved){
-            i = cell.getX();
-            j = cell.getY();
-            posNotUsed = false;
+            i = cell.getRow();
+            j = cell.getColumn();
+            posNotUsable = false;
             for(Cell cell1 : notAvailable){
-                if(cell1.getX() == i && cell1.getY() == j)
-                    posNotUsed = true;
+                if(cell1.getRow() == i && cell1.getColumn() == j)
+                    posNotUsable = true;
             }
-            if(posNotUsed){
+            if(posNotUsable){
                 return false;
             }
             if((i!=0 && i!=8 && j!=0 && j!=8) && (board[i+1][j] != null) && (board[i][j+1] != null) && (board[i-1][j] != null) && (board[i][j-1] != null)) {
@@ -233,14 +222,14 @@ public class Board implements BoardSetter{
         if(positionsToBeRemoved.size() == 2){
             cell2 = positionsToBeRemoved.get(0);
             cell3 = positionsToBeRemoved.get(1);
-            if((cell2.getX() == cell3.getX()) || (cell2.getY() == cell3.getY()))
+            if((cell2.getRow() == cell3.getRow()) || (cell2.getColumn() == cell3.getColumn()))
                 return true;
         }
         if(positionsToBeRemoved.size() == 3){
             cell2 = positionsToBeRemoved.get(0);
             cell3 = positionsToBeRemoved.get(1);
             cell4 = positionsToBeRemoved.get(2);
-            if((cell2.getX() == cell3.getX() && cell2.getX() == cell4.getX()) || (cell2.getY() == cell3.getY() && cell2.getY() == cell4.getY()))
+            if((cell2.getRow() == cell3.getRow() && cell2.getRow() == cell4.getRow()) || (cell2.getColumn() == cell3.getColumn() && cell2.getColumn() == cell4.getColumn()))
                 return true;
         }
 
@@ -253,9 +242,9 @@ public class Board implements BoardSetter{
      */
 
     public boolean checkIslands(){
-        for(int i=1; i<boardRows-2; i++){
-            for(int j=1; j<boardColumns-2; j++){
-                if(board[i][j]!=null && (board[i-1][j]!=null || board[i][j-1]!=null || board[i+1][j]!=null || board[i][j+1]!=null)){
+        for(int i=0; i<boardRows-1; i++){
+            for(int j=0; j<boardColumns-1; j++){
+                if(board[i][j]!=null && ((i>0 && board[i-1][j]!=null) || (j>0 && board[i][j-1]!=null) || (i<boardRows-1 && board[i+1][j]!=null) || (j<boardRows-1 &&board[i][j+1]!=null))){
                     return false;
                 }
             }

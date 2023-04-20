@@ -26,9 +26,9 @@ public class BoardParser {
                 JSONObject cell = (JSONObject) boardPosList.get(i);
                 tempX = (long) cell.get("row");
                 temp = new Cell();
-                temp.setX(tempX.intValue());
+                temp.setRow(tempX.intValue());
                 tempY = (long) cell.get("column");
-                temp.setY(tempY.intValue());
+                temp.setColumn(tempY.intValue());
                 positionsToBeRemoved.add(temp);
                 i++;
             }
