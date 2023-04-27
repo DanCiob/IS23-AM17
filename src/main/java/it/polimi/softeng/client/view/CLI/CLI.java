@@ -218,6 +218,21 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
      * Game routine that wait for commands
      */
     public void game() {
+        String command = input.nextLine();
+
+        if (command.charAt(5) != ' ')
+        {
+            System.out.println("Please write a command in @CMND text format!");
+            return;
+        }
+
+
+        //Command is in @CMND format (every command is 4 letters), uppercase avoid case sensitivity
+        String op = command.substring(0, 4).toUpperCase();
+        String action = command.substring(6);
+
+        actionToJSON(op ,action);
+
         System.out.println("Test");
     }
 }
