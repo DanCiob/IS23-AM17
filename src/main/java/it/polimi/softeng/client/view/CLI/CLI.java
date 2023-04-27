@@ -1,6 +1,7 @@
 package it.polimi.softeng.client.view.CLI;
 
 import it.polimi.softeng.model.Board;
+import it.polimi.softeng.model.Cell;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import it.polimi.softeng.client.view.CommonOperationsFramework;
@@ -8,6 +9,7 @@ import it.polimi.softeng.client.view.UI;
 import it.polimi.softeng.Constants.*;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static it.polimi.softeng.Constants.*;
@@ -141,8 +143,42 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
 
 
     @Override
-    public void boardVisualizer() {
+    /**
+     *
+     * @param board
+     * @param notAvailable
+     */
+    public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable){
+        Tile.TileColor tileColor;
+        String gray = "\u001B[37m";
+        boolean notAv = false;
 
+        System.out.println(gray + "     0  1  2  3  4  5  6  7  8"); //print column index
+        System.out.println(gray + "    ━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        for(int i=0;i<boardRows;i++){ //loop for rows
+            System.out.print(gray + i + "  ┃"); //print row index
+            for (int j = 0; j < boardColumns; j++){
+                notAv = false;
+                for(Cell cell1 : notAvailable) { //if not Available
+                    if (cell1.getRow() == i && cell1.getColumn() == j){
+                        notAv = true;
+                    }
+                }
+                if(notAv){
+                    System.out.print(gray + " ▇ ");
+                }
+                else{
+                    if (board[i][j] != null) {
+                        tileColor = board[i][j].getColor();
+                        System.out.print(" " + tileColor.coloredText() + tileColor.colorLetter() + " ");
+                    } else {
+                        System.out.print(gray +" ░ ");
+                    }
+                }
+            }
+            System.out.print(gray + "┃\n");
+        }
+        System.out.println(gray + "    ━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     }
 
     /**
