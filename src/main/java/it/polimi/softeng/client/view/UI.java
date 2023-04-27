@@ -1,5 +1,7 @@
 package it.polimi.softeng.client.view;
 
+import it.polimi.softeng.model.Tile;
+
 /**
  * UI interfaces shows method that CLI and GUI implements to show information about game
  */
@@ -11,7 +13,7 @@ public interface UI {
     /**
      * Visualizer of Shelfie state
      */
-    public void shelfieVisualizer();
+    public void shelfieVisualizer(Tile[][] shelfie);
     /**
      * Visualizer of CommonCards used in game
      */

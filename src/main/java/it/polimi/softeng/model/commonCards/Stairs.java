@@ -2,7 +2,7 @@ package it.polimi.softeng.model.commonCards;
 
 import it.polimi.softeng.model.Shelfie;
 
-import static it.polimi.softeng.model.Constants.shelfieColumns;
+import static it.polimi.softeng.Constants.shelfieColumns;
 
 public class Stairs extends CommonCards{
 

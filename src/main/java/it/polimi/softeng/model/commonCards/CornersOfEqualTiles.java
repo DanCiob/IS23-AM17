@@ -1,6 +1,6 @@
 package it.polimi.softeng.model.commonCards;
 
-import static it.polimi.softeng.model.Constants.*;
+import static it.polimi.softeng.Constants.*;
 import it.polimi.softeng.model.Shelfie;
 
 /**

@@ -1,7 +1,7 @@
 package it.polimi.softeng.model;
 
 import it.polimi.softeng.customExceptions.IllegalInsertException;
-import static it.polimi.softeng.model.Constants.*;
+import static it.polimi.softeng.Constants.*;
 import java.util.ArrayList;
 
 public class Shelfie {

@@ -5,9 +5,12 @@ import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import it.polimi.softeng.client.view.CommonOperationsFramework;
 import it.polimi.softeng.client.view.UI;
+import it.polimi.softeng.Constants.*;
 
 import java.io.PrintStream;
 import java.util.Scanner;
+
+import static it.polimi.softeng.Constants.*;
 
 public class CLI extends CommonOperationsFramework implements UI, Runnable{
     /**
@@ -143,12 +146,11 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
     }
 
     /**
+     * @param shelfie is userShelfie
      * Visual representation of shelfie
      */
     @Override
-    public void shelfieVisualizer() {
-            Tile[][] shelfie = UserShelfie.getGrid();
-
+    public void shelfieVisualizer(Tile[][] shelfie) {
             Tile.TileColor tileColor;
             String gray = "\u001B[37m";
             if(shelfie != null){
@@ -218,8 +220,12 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
      * Game routine that wait for commands
      */
     public void game() {
+        //POSSIBLE COMMANDS
+        commands();
+
         String command = input.nextLine();
 
+        //First check of command good formatting
         if (command.charAt(5) != ' ')
         {
             System.out.println("Please write a command in @CMND text format!");
@@ -234,5 +240,28 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
         actionToJSON(op ,action);
 
         System.out.println("Test");
+    }
+
+    /**
+     * Print all possible commands doable by user
+     */
+    public void commands()
+    {
+        System.out.println(ANSI_GREEN + "  .___  ___. ____    ____         _______. __    __   _______  __       _______  __   _______    \n" +
+                "  |   \\/   | \\   \\  /   /        /       ||  |  |  | |   ____||  |     |   ____||  | |   ____|   \n" +
+                "  |  \\  /  |  \\   \\/   /        |   (----`|  |__|  | |  |__   |  |     |  |__   |  | |  |__      \n" +
+                "  |  |\\/|  |   \\_    _/          \\   \\    |   __   | |   __|  |  |     |   __|  |  | |   __|     \n" +
+                "  |  |  |  |     |  |        .----)   |   |  |  |  | |  |____ |  `----.|  |     |  | |  |____    \n" +
+                "  |__|  |__|     |__|        |_______/    |__|  |__| |_______||_______||__|     |__| |_______|   \n" +
+                "                                                                                                 " +
+                "" + ANSI_RESET);
+
+        System.out.println("Type " + ANSI_GREEN + "@VBOR " + ANSI_RESET + "to view current state of board");
+        System.out.println("Type " + ANSI_GREEN + "@VSHE " + ANSI_RESET + "to view current state of your shelfie");
+        System.out.println("Type " + ANSI_GREEN + "@VSCO " + ANSI_RESET + "to view current state of board");
+        System.out.println("Type " + ANSI_GREEN + "@VPLA " + ANSI_RESET + "to view current connected player");
+        //TBD format of game move
+        System.out.println("Type " + ANSI_GREEN + "@GAME " + ANSI_RESET + "to do a game move");
+        System.out.println("Type " + ANSI_GREEN + "@CHAT " + ANSI_RESET + "to send a chat message\n EX: - @CHAT nameOfRecevier message - if you want to send a message to everybody type all in nameOfReceiver");
     }
 }

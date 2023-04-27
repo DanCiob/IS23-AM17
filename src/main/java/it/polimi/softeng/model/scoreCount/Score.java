@@ -7,7 +7,7 @@ import it.polimi.softeng.model.Tile;
 import java.util.ArrayList;
 import java.util.Stack;
 import java.util.Vector;
-import static it.polimi.softeng.model.Constants.*;
+import static it.polimi.softeng.Constants.*;
 
 
 public class Score {

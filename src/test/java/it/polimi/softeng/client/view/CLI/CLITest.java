@@ -1,17 +1,26 @@
-package it.polimi.softeng.CLI;
+package it.polimi.softeng.client.view.CLI;
 
-import it.polimi.softeng.client.view.*;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.*;
 
-public class CLITest {
+class CLITest {
+    private CLI cli = new CLI();
 
     @Test
-    public void shelfieVisualizerTest(){
+    void setupCLI() {
+    }
+
+    @Test
+    void boardVisualizer() {
+    }
+
+    @Test
+    void shelfieVisualizer() {
         Shelfie shelfie = new Shelfie();
         ArrayList<Tile> tilesToBeInserted = new ArrayList<>();
         Tile tile1, tile2, tile3, tile4, tile5, tile6;
@@ -62,4 +71,41 @@ public class CLITest {
         cli.shelfieVisualizer(shelfie.getGrid());
     }
 
+    @Test
+    void commonCardsVisualizer() {
+    }
+
+    @Test
+    void personalCardVisualizer() {
+    }
+
+    @Test
+    void scoreVisualizer() {
+    }
+
+    @Test
+    void chatVisualizer() {
+    }
+
+    @Test
+    void onlinePlayersVisualizer() {
+    }
+
+    @Test
+    void beginGame() {
+    }
+
+    @Test
+    void run() {
+    }
+
+    @Test
+    void game() {
+    }
+
+    @Test
+    void commandsTest() {
+        cli.commands();
+        assertTrue(true);
+    }
 }

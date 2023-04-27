@@ -4,7 +4,7 @@ import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 
 import java.util.ArrayList;
-import static it.polimi.softeng.model.Constants.*;
+import static it.polimi.softeng.Constants.*;
 
 
 public class TwoSquareOfEquals extends CommonCards {

@@ -4,7 +4,7 @@ import it.polimi.softeng.model.scoreCount.Score;
 import it.polimi.softeng.model.commonCards.*;
 import java.util.ArrayList;
 import java.util.Random;
-import static it.polimi.softeng.model.Constants.*;
+import static it.polimi.softeng.Constants.*;
 
 
 import static it.polimi.softeng.model.PersonalCards.FillPersonalCardsBag;

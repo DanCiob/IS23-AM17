@@ -2,7 +2,7 @@ package it.polimi.softeng.model.commonCards;
 
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
-import static it.polimi.softeng.model.Constants.*;
+import static it.polimi.softeng.Constants.*;
 
 
 public class DiagonalOfEquals extends CommonCards {

@@ -1,7 +1,7 @@
 package it.polimi.softeng.model;
 import java.util.ArrayList;
 import java.util.Random;
-import static it.polimi.softeng.model.Constants.*;
+import static it.polimi.softeng.Constants.*;
 
 
 public class Board implements BoardSetter{
