@@ -1,5 +1,6 @@
 package it.polimi.softeng.client.view.CLI;
 
+import it.polimi.softeng.model.Board;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import org.junit.jupiter.api.Test;
@@ -16,8 +17,58 @@ class CLITest {
     }
 
     @Test
-    void boardVisualizer() {
+    void boardVisualizerTest4Players() {
+        Board board = new Board();
+        board.resetBoard(4);
+        Tile[][] table = board.getBoard();
+
+        table[1][4] = new Tile(0, Tile.TileColor.BLUE);
+        table[4][7] = new Tile(0, Tile.TileColor.WHITE);
+        table[7][5] = new Tile(0, Tile.TileColor.YELLOW);
+        table[5][1] = new Tile(0, Tile.TileColor.CYAN);
+        table[4][4] = new Tile(0, Tile.TileColor.GREEN);
+        table[3][2] = new Tile(0, Tile.TileColor.PURPLE);
+
+        CLI cli = new CLI();
+        cli.boardVisualizer(table, board.getNotAvailable());
+
+
     }
+
+    @Test
+    void boardVisualizerTest3Players() {
+        Board board = new Board();
+        board.resetBoard(3);
+        Tile[][] table = board.getBoard();
+
+        table[1][4] = new Tile(0, Tile.TileColor.BLUE);
+        table[4][7] = new Tile(0, Tile.TileColor.WHITE);
+        table[7][5] = new Tile(0, Tile.TileColor.YELLOW);
+        table[5][1] = new Tile(0, Tile.TileColor.CYAN);
+        table[4][4] = new Tile(0, Tile.TileColor.GREEN);
+        table[3][2] = new Tile(0, Tile.TileColor.PURPLE);
+
+        CLI cli = new CLI();
+        cli.boardVisualizer(table, board.getNotAvailable());
+    }
+
+    @Test
+    void boardVisualizerTest2Players() {
+        Board board = new Board();
+        board.resetBoard(2);
+        Tile[][] table = board.getBoard();
+
+        table[1][4] = new Tile(0, Tile.TileColor.BLUE);
+        table[4][7] = new Tile(0, Tile.TileColor.WHITE);
+        table[7][5] = new Tile(0, Tile.TileColor.YELLOW);
+        table[5][1] = new Tile(0, Tile.TileColor.CYAN);
+        table[4][4] = new Tile(0, Tile.TileColor.GREEN);
+        table[3][2] = new Tile(0, Tile.TileColor.PURPLE);
+
+        CLI cli = new CLI();
+        cli.boardVisualizer(table, board.getNotAvailable());
+    }
+
 
     @Test
     void shelfieVisualizer() {
