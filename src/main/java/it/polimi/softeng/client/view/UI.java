@@ -1,6 +1,9 @@
 package it.polimi.softeng.client.view;
 
+import it.polimi.softeng.model.Cell;
 import it.polimi.softeng.model.Tile;
+
+import java.util.ArrayList;
 
 /**
  * UI interfaces shows method that CLI and GUI implements to show information about game
@@ -9,7 +12,7 @@ public interface UI {
     /**
      * Visualizer of Board state
      */
-    public void boardVisualizer();
+    public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable);
     /**
      * Visualizer of Shelfie state
      */

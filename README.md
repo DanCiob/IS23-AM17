@@ -10,7 +10,7 @@
 | Socket |🟡|
 | CLI |🟡|
 | GUI |🟡|
-| Multiple games |🔴|
+| Multiple games |🟡|
 | Chat |🟡|
-| Persistence |🟡|
+| Persistence |🔴|
 | Resilience |🟡|
