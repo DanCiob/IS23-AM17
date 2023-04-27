@@ -206,11 +206,13 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
 
     @Override
     public void run() {
+        boolean firstRun = true;
         setupCLI();
 
         while(GameIsOn)
         {
-            game();
+            game(firstRun);
+            firstRun = false;
         }
 
         input.close();
@@ -218,11 +220,12 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
     }
 
     /**
+     * @param firstRun
      * Game routine that wait for commands
      */
-    public void game() {
+    public void game(boolean firstRun) {
         //POSSIBLE COMMANDS
-        commands();
+        commands(firstRun);
 
         String command = input.nextLine();
 
@@ -256,19 +259,13 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
     }
 
     /**
-     * Print all possible commands doable by user
+     * @param firstRun
+     * Print all possible commands doable by user eventually with MyShelfie logo (only at CLI first start)
      */
-    public void commands()
+    public void commands(boolean firstRun)
     {
-        System.out.println(ANSI_GREEN + "  .___  ___. ____    ____         _______. __    __   _______  __       _______  __   _______    \n" +
-                "  |   \\/   | \\   \\  /   /        /       ||  |  |  | |   ____||  |     |   ____||  | |   ____|   \n" +
-                "  |  \\  /  |  \\   \\/   /        |   (----`|  |__|  | |  |__   |  |     |  |__   |  | |  |__      \n" +
-                "  |  |\\/|  |   \\_    _/          \\   \\    |   __   | |   __|  |  |     |   __|  |  | |   __|     \n" +
-                "  |  |  |  |     |  |        .----)   |   |  |  |  | |  |____ |  `----.|  |     |  | |  |____    \n" +
-                "  |__|  |__|     |__|        |_______/    |__|  |__| |_______||_______||__|     |__| |_______|   \n" +
-                "                                                                                                 " +
-                "" + ANSI_RESET);
-
+        if (firstRun)
+            logo();
         System.out.println("\n" +
                 "+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+\n" +
                 "|                                     Command                                     |                                       Effect                                      |\n" +
@@ -282,5 +279,17 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
                 "| "+ANSI_GREEN+"@CHAT nameOfReceiver message"+ANSI_RESET+"                                                    | Send a chat message (to send a message to everybody type 'all' in nameOfReceiver) |\n" +
                 "+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+\n" +
                 "\n");
+    }
+
+    public void logo()
+    {
+        System.out.println(ANSI_GREEN + "  .___  ___. ____    ____         _______. __    __   _______  __       _______  __   _______    \n" +
+                "  |   \\/   | \\   \\  /   /        /       ||  |  |  | |   ____||  |     |   ____||  | |   ____|   \n" +
+                "  |  \\  /  |  \\   \\/   /        |   (----`|  |__|  | |  |__   |  |     |  |__   |  | |  |__      \n" +
+                "  |  |\\/|  |   \\_    _/          \\   \\    |   __   | |   __|  |  |     |   __|  |  | |   __|     \n" +
+                "  |  |  |  |     |  |        .----)   |   |  |  |  | |  |____ |  `----.|  |     |  | |  |____    \n" +
+                "  |__|  |__|     |__|        |_______/    |__|  |__| |_______||_______||__|     |__| |_______|   \n" +
+                "                                                                                                 " +
+                "" + ANSI_RESET);
     }
 }
