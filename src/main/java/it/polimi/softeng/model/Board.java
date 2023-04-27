@@ -17,13 +17,17 @@ public class Board implements BoardSetter{
         return board;
     }
 
+    /**
+     * This method define the notAvailable cells that are in the matrix but not in the board depending on the number of players
+     * @param numberOfPlayers indicates how many player are partecipating to the current game
+     */
+
     public void setNotAvailable(int numberOfPlayers) {
         Cell temp;
-        /*
-          the following loops define the notAvailable cells that are in the matrix but not in the board
-          we use the symmetries of the board to declare not available cells
-         */
 
+        /*
+          the following loops define the notAvailable cells using the symmetries of the board
+         */
         for(int j = 0; j < 3; j++){ //columns
             for(int i = 3 - j; i >= 0 ; i--){ //rows
                     temp = new Cell();//top left corner
@@ -146,10 +150,11 @@ public class Board implements BoardSetter{
         return notAvailable;
     }
 
+    /**
+     * This method calls {@link #setNotAvailable(int)} method and initializes every tile of the board with null
+     * @param numberOfPlayers number of players in the current game
+     */
     public void resetBoard(int numberOfPlayers){
-        /*
-         it initializes every tile of the board with null
-         */
         setNotAvailable(numberOfPlayers);
         for(int i = 0; i<boardRows;i++){
             for(int j = 0; j<boardColumns;j++){
