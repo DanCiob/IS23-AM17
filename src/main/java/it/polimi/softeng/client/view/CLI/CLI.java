@@ -281,7 +281,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
         else
         {
             switch (op) {
-                case ("@VBOR") -> boardVisualizer();
+                case ("@VBOR") -> boardVisualizer(UserBoard.getBoard(), UserBoard.getNotAvailable());
                 case ("@VSHE") -> shelfieVisualizer(UserShelfie.getGrid());
             }
         }
