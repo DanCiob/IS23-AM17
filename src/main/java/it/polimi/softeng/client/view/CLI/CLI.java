@@ -183,6 +183,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
 
     }
 
+    //May be unified with onlinePlayersVisualizer
     @Override
     public void scoreVisualizer() {
 
@@ -237,7 +238,19 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
         String op = command.substring(0, 4).toUpperCase();
         String action = command.substring(6);
 
-        actionToJSON(op ,action);
+        //These actions need to communicate with server
+        if (op.equals("@CHAT") || op.equals("@GAME") || op.equals("@VPLA") || op.equals("@VSCO") || op.equals("@VPCA") || op.equals("@VCCA"))
+            actionToJSON(op ,action);
+        //These actions are view-local
+        else
+        {
+            switch (op) {
+                case ("@VBOR") -> boardVisualizer();
+                case ("@VSHE") -> shelfieVisualizer(UserShelfie.getGrid());
+            }
+        }
+
+
 
         System.out.println("Test");
     }
@@ -256,12 +269,18 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
                 "                                                                                                 " +
                 "" + ANSI_RESET);
 
-        System.out.println("Type " + ANSI_GREEN + "@VBOR " + ANSI_RESET + "to view current state of board");
-        System.out.println("Type " + ANSI_GREEN + "@VSHE " + ANSI_RESET + "to view current state of your shelfie");
-        System.out.println("Type " + ANSI_GREEN + "@VSCO " + ANSI_RESET + "to view current state of board");
-        System.out.println("Type " + ANSI_GREEN + "@VPLA " + ANSI_RESET + "to view current connected player");
-        //TBD format of game move
-        System.out.println("Type " + ANSI_GREEN + "@GAME " + ANSI_RESET + "to do a game move");
-        System.out.println("Type " + ANSI_GREEN + "@CHAT " + ANSI_RESET + "to send a chat message\n EX: - @CHAT nameOfRecevier message - if you want to send a message to everybody type all in nameOfReceiver");
+        System.out.println("\n" +
+                "+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+\n" +
+                "|                                     Command                                     |                                       Effect                                      |\n" +
+                "+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+\n" +
+                "| "+ANSI_GREEN+"@VBOR"+ANSI_RESET+"                                                                           | Visualize board status                                                            |\n" +
+                "| "+ANSI_GREEN+"@VSHE"+ANSI_RESET+"                                                                           | Visualize shelfie status                                                          |\n" +
+                "| "+ANSI_GREEN+"@VPLA"+ANSI_RESET+"                                                                           | Visualize currently connected players and score                                   |\n" +
+                "| "+ANSI_GREEN+"@VCCA"+ANSI_RESET+"                                                                           | Visualize common objectives                                                       |\n" +
+                "| "+ANSI_GREEN+"@VPCA"+ANSI_RESET+"                                                                           | Visualize your personal card                                                      |\n" +
+                "| "+ANSI_GREEN+"@GAME gameMoveFormat"+ANSI_RESET+"                                                            | Do a game move                                                                    |\n" +
+                "| "+ANSI_GREEN+"@CHAT nameOfReceiver message"+ANSI_RESET+"                                                    | Send a chat message (to send a message to everybody type 'all' in nameOfReceiver) |\n" +
+                "+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+\n" +
+                "\n");
     }
 }

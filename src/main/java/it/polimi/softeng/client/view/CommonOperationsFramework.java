@@ -12,16 +12,28 @@ public class CommonOperationsFramework {
      */
     public JSONObject actionToJSON(String op, String action)
     {
-     /*   switch(op)
+        switch(op)
         {
-            case ("@CHAT") ->
-                case ("@GAME") ->
-                    case ("@VBOR") ->
-                        case ("@VSHE") ->
-                            case("@VSCO") ->
-                                case("@VPLA") ->
+            case ("@CHAT"): {
+
+            }
+            case ("@GAME"): {
+
+            }
+            case ("@VPCA"): {
+
+            }
+            case ("@VCCA"): {
+
+            }
+            case ("@VPLA"): {
+
+            }
+            case ("@VSCO"): {
+
+            }
         }
-*/
+
 
 
 
