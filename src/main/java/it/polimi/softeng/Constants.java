@@ -1,7 +1,7 @@
 package it.polimi.softeng;
 
 /**
- * we use this class to collect all the constants that are useful in the game such as the dimension of the shelfie
+ * we use this class to collect all the constants that are useful in the game
  */
 
 public abstract class Constants {

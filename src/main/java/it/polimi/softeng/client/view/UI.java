@@ -13,26 +13,32 @@ public interface UI {
      * Visualizer of Board state
      */
     public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable);
+
     /**
      * Visualizer of Shelfie state
      */
     public void shelfieVisualizer(Tile[][] shelfie);
+
     /**
      * Visualizer of CommonCards used in game
      */
     public void commonCardsVisualizer();
+
     /**
      * Visualizer of PersonalCard
      */
     public void personalCardVisualizer();
+
     /**
      * Visualizer of CurrentScore
      */
     public void scoreVisualizer();
+
     /**
      * Visualizer of Chat
      */
     public void chatVisualizer();
+
     /**
      * Visualizer of current connected players
      */
