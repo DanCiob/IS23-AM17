@@ -6,7 +6,6 @@ import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import it.polimi.softeng.client.view.CommonOperationsFramework;
 import it.polimi.softeng.client.view.UI;
-import it.polimi.softeng.Constants.*;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -19,24 +18,32 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
      * Local representation of Board
      */
     private Board UserBoard;
+
     /**
      * Local representation of Shelfie
      */
     private Shelfie UserShelfie;
+
+    /**
+     * Player information
+     */
     private int UserScore;
     private String Nickname;
     private String ServerAddress;
     private int Port;
+
     /**
      * 1 -> player want to create new game (FA: multi-game management)
-     * 2 -> player want to join (if present) current game
+     * 2 -> player want to join (if present) a game which is already started
      */
-    private int CreateNewGame;
+    private int StartGame;
+
     /**
-     * 1 -> Easy Mode
-     * 2 -> Normal Mode
+     * 1 -> Easy Mode (only one Common Card is used the game)
+     * 2 -> Normal Mode (two Common Cards are used during the game)
      */
     private int GameMode;
+
     private int NumOfPlayer;
     private boolean GameIsOn;
     private Scanner input;
@@ -57,38 +64,38 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
             mode = input.nextInt();
 
             switch (mode) {
-                case 1:
+                case 1: //socket
                     System.out.println("Connection with Socket...");
                     System.out.println("Digit server IP");
                     System.out.println(">");
-
                     ServerAddress = input.nextLine();
+
                     System.out.println("Digit server Port");
                     System.out.println(">");
                     Port = input.nextInt();
 
-                    System.out.println("Want to create a game(1) or join (if present) a current one(2)?");
+                    System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");
                     System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
                     System.out.println(">");
                     do {
-                        CreateNewGame = input.nextInt();
-                    }while(CreateNewGame != 1 || CreateNewGame != 2);
+                        StartGame = input.nextInt();
+                    }while(StartGame != 1 && StartGame != 2);
 
-                    if (CreateNewGame == 1)
+                    if (StartGame == 1)
                     {
-                        System.out.println("How many players do you want to play with (2-4)?");
+                        System.out.println("Insert the number of players(2-4)");
                         System.out.println(">");
                         int NumOfPlayer = 0;
                         do {
-                            input.nextInt();
-                        }while (NumOfPlayer > 4 || NumOfPlayer < 2);
+                            NumOfPlayer = input.nextInt();
+                        }while (NumOfPlayer < 2 || NumOfPlayer > 4);
 
                         System.out.println("Do you want to play with Easy mode(1) or Normal mode(2)?");
                         System.out.println(">");
                         int GameMode = 0;
                         do {
-                            input.nextInt();
-                        }while (GameMode != 1 || GameMode != 2);
+                            GameMode = input.nextInt();
+                        }while (GameMode != 1 && GameMode != 2);
                     }
 
                     //do {
@@ -97,7 +104,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
                     //Connect to server
                     //}while(nicknameNotUnique)
                     break;
-                case 2:
+
+                case 2://RMI
                     System.out.println("Connection with RMI...");
                     System.out.println("Digit server IP");
                     System.out.println(">");
@@ -107,16 +115,16 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
                     System.out.println(">");
                     Port = input.nextInt();
 
-                    System.out.println("Want to create a game(1) or join (if present) a current one(2)?");
+                    System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");                    System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
                     System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
                     System.out.println(">");
                     do {
-                        CreateNewGame = input.nextInt();
-                    }while(CreateNewGame != 1 || CreateNewGame != 2);
+                        StartGame = input.nextInt();
+                    }while(StartGame != 1 && StartGame != 2);
 
-                    if (CreateNewGame == 1)
+                    if (StartGame == 1)
                     {
-                        System.out.println("How many players do you want to play with (2-4)?");
+                        System.out.println("Insert the number of players(2-4)?");
                         System.out.println(">");
                         do {
                             NumOfPlayer = input.nextInt();
@@ -126,7 +134,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
                         System.out.println(">");
                         do {
                             GameMode = input.nextInt();
-                        }while (GameMode != 1 || GameMode != 2);
+                        }while (GameMode != 1 && GameMode != 2);
                     }
 
                     //do {
@@ -138,7 +146,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
                 default:
                     System.out.println("Unrecognized connection method, please digit 1 or 2...");
             }
-        } while (mode != 1 || mode != 2);
+        } while (mode != 1 && mode != 2);
     }
 
 
@@ -160,8 +168,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
             for (int j = 0; j < boardColumns; j++){
                 notAv = false;
                 for(Cell cell1 : notAvailable) { //if not Available
-                    if (cell1.getRow() == i && cell1.getColumn() == j){
+                    if (cell1.getRow() == i && cell1.getColumn() == j) {
                         notAv = true;
+                        break;
                     }
                 }
                 if(notAv){
@@ -210,7 +219,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
     }
 
     @Override
-    public void commonCardsVisualizer() {
+    public void commonCardsVisualizer() { //con descrizione
 
     }
 
@@ -231,7 +240,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
     }
 
     @Override
-    public void onlinePlayersVisualizer() {
+    public void onlinePlayersVisualizer() { //nome e punteggio
 
     }
 
@@ -257,13 +266,13 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
      * Game routine that wait for commands
      */
     public void game() {
-        //POSSIBLE COMMANDS
+        //Print Available Commands
         commands();
 
         String command = input.nextLine();
 
         //First check of command good formatting
-        if (command.charAt(5) != ' ')
+        if ((command.charAt(0) != '@') || (command.charAt(5) != ' '))
         {
             System.out.println("Please write a command in @CMND text format!");
             return;
