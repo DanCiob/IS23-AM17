@@ -11,7 +11,7 @@ import static it.polimi.softeng.model.scoreCount.Score.verifyMaxDifferentColor;
  * 'n' and 'm' are two configurable parameters (target and maxDifferentColor)
  */
 
-public class RowsOfDifferentTypes extends CommonCards {
+public class RowsOfMaxDiffTypes extends CommonCards {
     public boolean verifyShape(Shelfie shelfie) {
         final int maxDifferentColor = 3; //maximum number of different colors for each row
         final int target = 4; //number of rows with different colors to complete the achievement

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import static it.polimi.softeng.Constants.*;
 
 
-public class TwoSquareOfEquals extends CommonCards {
+public class TwoSquaresOfEquals extends CommonCards {
     /**
      * count used to see how many squares I've found while searching
      */

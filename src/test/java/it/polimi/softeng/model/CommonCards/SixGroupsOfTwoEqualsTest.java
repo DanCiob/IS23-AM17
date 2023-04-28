@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Covered cases: more than six groups of two, exactly six groups of two, less than six groups of two, empty shelfie
  * (more than two tiles in a groups counts like a group of two)
  */
-class SixGroupOfTwoEqualsTest {
+class SixGroupsOfTwoEqualsTest {
     ArrayList<Tile> tiles = new ArrayList<>();
     Shelfie shelfie = new Shelfie();
 

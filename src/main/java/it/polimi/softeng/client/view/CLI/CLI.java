@@ -158,13 +158,13 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
      */
     public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable){
         Tile.TileColor tileColor;
-        String gray = "\u001B[37m";
         boolean notAv = false;
 
-        System.out.println(gray + "     0  1  2  3  4  5  6  7  8"); //print column index
-        System.out.println(gray + "    ━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.println(ANSI_RESET + "BOARD:");
+        System.out.println(ANSI_GREY + "     0  1  2  3  4  5  6  7  8"); //print column index
+        System.out.println("    ━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         for(int i=0;i<boardRows;i++){ //loop for rows
-            System.out.print(gray + i + "  ┃"); //print row index
+            System.out.print(i + "  ┃"); //print row index
             for (int j = 0; j < boardColumns; j++){
                 notAv = false;
                 for(Cell cell1 : notAvailable) { //if not Available
@@ -174,20 +174,20 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
                     }
                 }
                 if(notAv){
-                    System.out.print(gray + " ▇ ");
+                    System.out.print(ANSI_GREY + " ▇ ");
                 }
                 else{
                     if (board[i][j] != null) {
                         tileColor = board[i][j].getColor();
                         System.out.print(" " + tileColor.coloredText() + tileColor.colorLetter() + " ");
                     } else {
-                        System.out.print(gray +" ░ ");
+                        System.out.print(ANSI_GREY + " ░ ");
                     }
                 }
             }
-            System.out.print(gray + "┃\n");
+            System.out.print(ANSI_GREY + "┃\n");
         }
-        System.out.println(gray + "    ━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━━━━━━━━━━━━━" + ANSI_RESET);
     }
 
     /**
@@ -197,11 +197,11 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
     @Override
     public void shelfieVisualizer(Tile[][] shelfie) {
             Tile.TileColor tileColor;
-            String gray = "\u001B[37m";
             if(shelfie != null){
-                System.out.println(gray + "    ----------------");
+                System.out.println(ANSI_RESET + "SHELFIE:");
+                System.out.println(ANSI_GREY + "    ----------------");
                 for(int i=5;i>=0;i--){
-                    System.out.print(gray + i + "  | ");
+                    System.out.print(ANSI_GREY + i + "  | ");
                     for(int j=0;j<5;j++){
                         if(shelfie[i][j] !=null){
                             tileColor = shelfie[i][j].getColor();
@@ -210,16 +210,164 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
                             System.out.print("   ");
                         }
                     }
-                    System.out.println(gray + "|");
+                    System.out.println(ANSI_GREY + "|");
                 }
-                System.out.println(gray + "    ----------------");
-                System.out.println(gray + "     0  1  2  3  4" + Tile.TileColor.WHITE.coloredText());
+                System.out.println(ANSI_GREY + "    ----------------");
+                System.out.println(ANSI_GREY + "     0  1  2  3  4" + Tile.TileColor.WHITE.coloredText());
 
         }
     }
 
     @Override
-    public void commonCardsVisualizer() { //con descrizione
+    public void commonCardsVisualizer(String commonCard) {
+        switch (commonCard) {
+            case "ColumnsOfMaxDiffTypes" -> {
+                System.out.println(ANSI_BLUE + "ColumnsOfMaxDiffTypes:");
+                System.out.println(ANSI_RESET + "Three columns each formed by 6 tiles of maximum three different types.");
+                System.out.println("One column can show the same or a different combination of another column.");
+                System.out.println(ANSI_GREY + "+-----+");
+                for (int i = 0; i < shelfieRows; i++) {
+                    System.out.println(ANSI_GREY + "| " + ANSI_GREEN + "[•]" + ANSI_GREY + " |");
+                }
+                System.out.println("+-----+");
+                System.out.println(ANSI_GREEN + "x" + target_ColumnsOfMaxDiffTypes + " columns of max " + maxDiffTypes_ColumnsOfMaxDiffTypes + " different types");
+            }
+            case "CornersOfEquals" -> {
+                System.out.println(ANSI_BLUE + "CornersOfEquals:");
+                System.out.println(ANSI_RESET + "Four tiles of the same type in the four corners of the bookshelf. ");
+                System.out.println(ANSI_GREY + "+---------------+");
+                System.out.print(ANSI_GREY + "| " + ANSI_GREEN + "[=] ");
+                for (int j = 0; j < shelfieColumns - 2; j++) { //2 are the corners
+                    System.out.print("• ");
+                }
+                System.out.println("[=]" + ANSI_GREY + " |");
+                for (int i = 0; i < shelfieRows - 2; i++) { //2 are the corners
+                    System.out.println(ANSI_GREY + "| " + ANSI_GREEN + " •         • " + ANSI_GREY + " |");
+                }
+                System.out.println(ANSI_GREY + "| " + ANSI_GREEN + "[=] • • • [=]" + ANSI_GREY + " |");
+                System.out.println(ANSI_GREY + "+---------------+");
+            }
+            case "DiagonalOfEquals" -> {
+                System.out.println(ANSI_BLUE + "DiagonalOfEquals:");
+                System.out.println(ANSI_RESET + "Five tiles of the same type forming a diagonal.");
+                System.out.println(ANSI_GREY + "+---------------------+");
+                for (int i = 0; i < shelfieColumns; i++) {
+                    System.out.print(ANSI_GREY + "| " + ANSI_GREEN);
+                    for (int j = 0; j < shelfieColumns; j++){
+                        if(i != j) {
+                            System.out.print("    ");
+                        }
+                        else System.out.print("[=] ");
+                    }
+                    System.out.println(ANSI_GREY + "| ");
+                }
+                System.out.println(ANSI_GREY + "+---------------------+");
+            }
+            case "FourGroupsOfFourEquals" -> {
+                System.out.println(ANSI_BLUE + "FourGroupsOfFourEquals:");
+                System.out.println(ANSI_RESET + "Four groups each containing at least 4 tiles of the same type (not necessarily in the depicted shape).");
+                System.out.println("The tiles of one group can be different from those of another group.");
+                System.out.println(ANSI_GREY + "+-----+");
+                for (int i = 0; i < dimension_FourGroupsOfFourEquals; i++) {
+                    System.out.println(ANSI_GREY + "| " + ANSI_GREEN + "[=]" + ANSI_GREY + " |");
+                }
+                System.out.println("+-----+");
+                System.out.println(ANSI_GREEN + "  x" + groups_FourGroupsOfFourEquals);
+            }
+            case "NEqualTiles" -> {
+                System.out.println(ANSI_BLUE + "NEqualTiles:");
+                System.out.println(ANSI_RESET + "Eight tiles of the same type. There’s no restriction about the position of these tiles.");
+                System.out.println(ANSI_GREY + "+-------------+");
+                System.out.println("| " + ANSI_GREEN + "  [•] [•]" + ANSI_GREY + "   |");
+                System.out.println("| " + ANSI_GREEN + "[•] [•] [•]" + ANSI_GREY + " |");
+                System.out.println("| " + ANSI_GREEN + "[•] [•] [•]" + ANSI_GREY + " |");
+                System.out.println(ANSI_GREY + "+-------------+");
+            }
+            case "RowsOfMaxDiffTypes" -> {
+                System.out.println(ANSI_BLUE + "RowsOfMaxDiffTypes:");
+                System.out.println(ANSI_RESET + "Four lines each formed by 5 tiles of maximum three different types.");
+                System.out.println("One line can show the same or a different combination of another line.");
+                System.out.println(ANSI_GREY + "+---------------------+");
+                System.out.print(ANSI_GREY + "| " + ANSI_GREEN);
+                for (int i = 0; i < shelfieColumns; i++){
+                    System.out.print("[•] ");
+                }
+                System.out.println(ANSI_GREY + "|");
+                System.out.println("+---------------------+");
+                System.out.println(ANSI_GREEN + "x" + target_RowsOfMaxDiffTypes + " rows of max " + maxDiffTypes_RowsOfMaxDiffTypes + " different types");
+            }
+            case "SixGroupsOfTwoEquals" -> {
+                System.out.println(ANSI_BLUE + "SixGroupsOfTwoEquals:");
+                System.out.println(ANSI_RESET + "Six groups each containing at least 2 tiles of the same type (not necessarily in the depicted shape).");
+                System.out.println("The tiles of one group can be different from those of another group.");
+                System.out.println(ANSI_GREY + "+-----+");
+                for (int i = 0; i < dimension_SixGroupsOfTwoEquals; i++) {
+                    System.out.println(ANSI_GREY + "| " + ANSI_GREEN + "[=]" + ANSI_GREY + " |");
+                }
+                System.out.println("+-----+");
+                System.out.println(ANSI_GREEN + "  x" + groups_SixGroupsOfTwoEquals);
+            }
+            case "Stairs" -> {
+                System.out.println(ANSI_BLUE + "Stairs:");
+                System.out.println(ANSI_RESET + "Five columns of increasing or decreasing height.");
+                System.out.println("Starting from the first column on the left or on the right, each next column must be made of exactly one more tile.");
+                System.out.println("Tiles can be of any type.");
+                System.out.println(ANSI_GREY + "+---------------------+");
+                for (int i = 0; i < shelfieColumns; i++){
+                    System.out.print(ANSI_GREY + "| " + ANSI_GREEN);
+                    for (int j = 0; j < shelfieColumns; j++){
+                        if (j <= i ){
+                            System.out.print("[•] ");
+                        }
+                        else System.out.print("    ");
+                    }
+                    System.out.println(ANSI_GREY + "| ");
+                }
+                System.out.println(ANSI_GREY + "+---------------------+");
+            }
+            case "TwoColumnsOfSixDifferent" -> {
+                System.out.println(ANSI_BLUE + "TwoColumnsOfSixDifferent:");
+                System.out.println(ANSI_RESET + "Two columns each formed by 6 different types of tiles.");
+                System.out.println(ANSI_GREY + "+-----+");
+                for (int i = 0; i < shelfieRows; i++) {
+                    System.out.println(ANSI_GREY + "| " + ANSI_GREEN + "[≠]" + ANSI_GREY + " |");
+                }
+                System.out.println(ANSI_GREY + "+-----+");
+                System.out.println(ANSI_GREEN + "  x" + target_TwoColumnsOfSixDifferent);
+            }
+            case "TwoRowsOfFiveDifferent" -> {
+                System.out.println(ANSI_BLUE + "TwoRowsOfFiveDifferent:");
+                System.out.println(ANSI_RESET + "Two lines each formed by 5 different types of tiles.");
+                System.out.println("One line can show the same or a different combination of the other line.");
+                System.out.println(ANSI_GREY + "+---------------------+");
+                System.out.print(ANSI_GREY + "| " + ANSI_GREEN);
+                for (int i = 0; i < shelfieColumns; i++){
+                    System.out.print("[≠] ");
+                }
+                System.out.println(ANSI_GREY + "|");
+                System.out.println(ANSI_GREY + "+---------------------+");
+                System.out.println(ANSI_GREEN + "          x" + target_TwoRowsOfFiveDifferent);
+            }
+            case "TwoSquaresOfEquals" -> {
+                System.out.println(ANSI_BLUE + "TwoSquaresOfEquals:");
+                System.out.println(ANSI_RESET + "Two groups each containing 4 tiles of the same type in a 2x2 square.");
+                System.out.println("The tiles of one square can be different from those of the other square.");
+                System.out.println(ANSI_GREY + "+---------+");
+                System.out.println(ANSI_GREY + "| " + ANSI_GREEN + "[=] [=]" + ANSI_GREY + " |");
+                System.out.println(ANSI_GREY + "| " + ANSI_GREEN + "[=] [=]" + ANSI_GREY + " |");
+                System.out.println(ANSI_GREY + "+---------+");
+                System.out.println(ANSI_GREEN + "    x" + groups_TwoSquaresOfEquals);
+            }
+            case "XOfEquals" -> {
+                System.out.println(ANSI_BLUE + "XOfEquals:");
+                System.out.println(ANSI_RESET + "Five tiles of the same type forming an X.");
+                System.out.println(ANSI_GREY + "+-------------+");
+                System.out.println(ANSI_GREY + "| " + ANSI_GREEN + "[=]     [=]" + ANSI_GREY + " |");
+                System.out.println(ANSI_GREY + "| " + ANSI_GREEN + "    [=]    " + ANSI_GREY + " |");
+                System.out.println(ANSI_GREY + "| " + ANSI_GREEN + "[=]     [=]" + ANSI_GREY + " |");
+                System.out.println(ANSI_GREY + "+-------------+");
+            }
+        }
 
     }
 

@@ -30,8 +30,29 @@ public abstract class Constants {
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
+    public static final String ANSI_GREY = "\u001B[37m";
     public static final int numOfCommands = 6;
+
+    //CommonCards
+        //ColumnsOfMaxDiffTypes
+        public static final int maxDiffTypes_ColumnsOfMaxDiffTypes = 3; //maximum number of different colors for each column
+        public static final int target_ColumnsOfMaxDiffTypes = 3; //number of columns with different colors to complete the achievement
+        //RowsOfMaxDiffTypes
+        public static final int maxDiffTypes_RowsOfMaxDiffTypes = 3; //maximum number of different colors for each row
+        public static final int target_RowsOfMaxDiffTypes = 4; //number of rows with different colors to complete the achievement
+        //SixGroupsOfTwoEquals
+        public static final int dimension_SixGroupsOfTwoEquals = 2; //dimension of every group
+        public static final int groups_SixGroupsOfTwoEquals = 6; //number of groups
+        //FourGroupsOfFourEquals
+        public static final int dimension_FourGroupsOfFourEquals = 4; //dimension of every group
+        public static final int groups_FourGroupsOfFourEquals = 4; //number of groups
+        //TwoSquaresOfEquals
+        public static final int groups_TwoSquaresOfEquals = 2;
+        //TwoColumnsOfSixDifferent
+        public static final int target_TwoColumnsOfSixDifferent = 2;
+        //TwoRowsOfFiveDifferent
+        public static final int target_TwoRowsOfFiveDifferent = 2;
+
 
     private Constants() {
     }

@@ -22,7 +22,7 @@ public interface UI {
     /**
      * Visualizer of CommonCards used in game
      */
-    public void commonCardsVisualizer();
+    public void commonCardsVisualizer(String commonCard);
 
     /**
      * Visualizer of PersonalCard
