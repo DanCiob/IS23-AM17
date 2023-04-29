@@ -1,5 +1,6 @@
 package it.polimi.softeng.model;
 
+import it.polimi.softeng.client.view.CLI.CLI;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
@@ -622,10 +623,132 @@ class BoardTest {
         }
     }
 
+    @Test
+    public void positionTilesAfterMovesOf2Tiles(){
+        Board board = new Board();
+        Game game = new Game();
+        ArrayList<Cell> tbr = new ArrayList<>();
+        game.initializeTile();
+        board.resetBoard(4);
+        board.positionTiles(game.getTileBag());
+
+        Cell cell1 = new Cell();
+        cell1.setRow(0);
+        cell1.setColumn(3);
+        tbr.add(cell1);
+        Cell cell2 = new Cell();
+        cell2.setRow(1);
+        cell2.setColumn(3);
+        tbr.add(cell2);
+        board.updateBoard(tbr);
+        assertNull(board.getBoard()[0][3]);
+        assertNull(board.getBoard()[1][3]);
+        board.positionTiles(game.getTileBag());
+        assertNotNull(board.getBoard()[0][3]);
+        assertNotNull(board.getBoard()[1][3]);
+    }
+
+    @Test
+    public void positionTilesAfterMovesOf3Tiles(){
+        Board board = new Board();
+        Game game = new Game();
+        ArrayList<Cell> tbr = new ArrayList<>();
+        game.initializeTile();
+        board.resetBoard(4);
+        board.positionTiles(game.getTileBag());
+
+        Cell cell1 = new Cell();
+        cell1.setRow(3);
+        cell1.setColumn(8);
+        tbr.add(cell1);
+        Cell cell2 = new Cell();
+        cell2.setRow(4);
+        cell2.setColumn(8);
+        tbr.add(cell2);
+        board.updateBoard(tbr);
+        assertNull(board.getBoard()[3][8]);
+        assertNull(board.getBoard()[4][8]);
+        tbr.clear();
+
+        Cell cell3 = new Cell();
+        cell3.setRow(3);
+        cell3.setColumn(7);
+        tbr.add(cell3);
+        Cell cell4 = new Cell();
+        cell4.setRow(4);
+        cell4.setColumn(7);
+        tbr.add(cell4);
+        Cell cell5 = new Cell();
+        cell5.setRow(5);
+        cell5.setColumn(7);
+        tbr.add(cell5);
+        assertTrue(board.checkLegalChoice(tbr));
+        board.updateBoard(tbr);
+        assertNull(board.getBoard()[3][7]);
+        assertNull(board.getBoard()[4][7]);
+        assertNull(board.getBoard()[5][7]);
+
+        board.positionTiles(game.getTileBag());
+        assertNotNull(board.getBoard()[3][8]);
+        assertNotNull(board.getBoard()[4][8]);
+        assertNotNull(board.getBoard()[3][7]);
+        assertNotNull(board.getBoard()[4][7]);
+        assertNotNull(board.getBoard()[5][7]);
+    }
+
 
     @Test
     public void checkIslandsTest(){
         Board board = new Board();
+        Game game = new Game();
+        game.initializeTile();
+        board.resetBoard(4);
+        board.setBoard(1, 3);
+        board.setBoard(0, 4);
+        assertTrue(board.checkIslands());
+    }
 
+    @Test
+    public void checkIslandsTestFalse(){
+        Board board = new Board();
+        Game game = new Game();
+        game.initializeTile();
+        board.resetBoard(4);
+        board.setBoard(0, 3);
+        board.setBoard(0, 4);
+        assertNotNull(board.getBoard()[0][3]);
+        assertNotNull(board.getBoard()[0][4]);
+        assertFalse(board.checkIslands());
+    }
+
+    @Test
+    public void checkIslandEdges(){
+        Board board = new Board();
+        Game game = new Game();
+        game.initializeTile();
+        board.resetBoard(3);
+        board.setBoard(0, 3);
+        assertNotNull(board.getBoard()[0][3]);
+        assertTrue(board.checkIslands());
+
+        board.setBoard(1, 4);
+        assertNotNull(board.getBoard()[1][4]);
+        assertTrue(board.checkIslands());
+
+        board.setBoard(2, 5);
+        assertNotNull(board.getBoard()[2][5]);
+        assertTrue(board.checkIslands());
+
+        board.setBoard(3, 8);
+        assertNotNull(board.getBoard()[3][8]);
+        assertTrue(board.checkIslands());
+
+        board.setBoard(8, 5);
+        assertNotNull(board.getBoard()[8][5]);
+        assertTrue(board.checkIslands());
+
+        board.setBoard(7, 5);
+        assertNotNull(board.getBoard()[7][5]);
+        assertFalse(board.checkIslands());
     }
 }

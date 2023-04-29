@@ -1,11 +1,9 @@
 package it.polimi.softeng.client.view.CLI;
 
-import it.polimi.softeng.model.Board;
-import it.polimi.softeng.model.Cell;
-import it.polimi.softeng.model.Shelfie;
-import it.polimi.softeng.model.Tile;
+import it.polimi.softeng.model.*;
 import it.polimi.softeng.client.view.CommonOperationsFramework;
 import it.polimi.softeng.client.view.UI;
+import it.polimi.softeng.model.PersonalCards;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -199,20 +197,20 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
             Tile.TileColor tileColor;
             if(shelfie != null){
                 System.out.println(ANSI_RESET + "SHELFIE:");
-                System.out.println(ANSI_GREY + "    ----------------");
-                for(int i=5;i>=0;i--){
-                    System.out.print(ANSI_GREY + i + "  | ");
-                    for(int j=0;j<5;j++){
+                System.out.println(ANSI_GREY + "    ---------------");
+                for(int i=shelfieRows-1;i>=0;i--){
+                    System.out.print(ANSI_GREY + i + "  |");
+                    for(int j=0;j<shelfieColumns;j++){
                         if(shelfie[i][j] !=null){
                             tileColor = shelfie[i][j].getColor();
-                            System.out.print( tileColor.coloredText() + tileColor.colorLetter() + "  ");
+                            System.out.print( tileColor.coloredText() + " " + tileColor.colorLetter() + " ");
                         }else{
                             System.out.print("   ");
                         }
                     }
                     System.out.println(ANSI_GREY + "|");
                 }
-                System.out.println(ANSI_GREY + "    ----------------");
+                System.out.println(ANSI_GREY + "    ---------------");
                 System.out.println(ANSI_GREY + "     0  1  2  3  4" + Tile.TileColor.WHITE.coloredText());
 
         }
@@ -372,8 +370,28 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
     }
 
     @Override
-    public void personalCardVisualizer() {
-
+    public void personalCardVisualizer(PersonalCards personalCard) {
+        boolean tile;
+        System.out.println(ANSI_GREY + "    ---------------");
+        for(int i=shelfieRows-1;i>=0;i--){
+            System.out.print(ANSI_GREY + i + "  |");
+            for(int j=0;j<shelfieColumns;j++){
+                tile = false;
+                for(PersonalCards.ObjectiveCell objectiveCell: personalCard.getObjective()){
+                    if(objectiveCell.getRow()==i && objectiveCell.getColumn()==j){
+                        //System.out.print(objectiveCell.getColor().coloredText() + " ∎ ");
+                        System.out.print(objectiveCell.getColor().coloredText() + " " + objectiveCell.getColor().colorLetter() + " ");
+                        tile = true;
+                    }
+                }
+                if(tile == false){
+                    System.out.print(ANSI_GREY + "   ");
+                }
+            }
+            System.out.println(ANSI_GREY + "|");
+        }
+        System.out.println(ANSI_GREY + "    ---------------");
+        System.out.println(ANSI_GREY + "     0  1  2  3  4" + Tile.TileColor.WHITE.coloredText());
     }
 
     //May be unified with onlinePlayersVisualizer

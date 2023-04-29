@@ -10,7 +10,7 @@ public class Board implements BoardSetter{
      * column numbering : goes from left to right
      * row numbering : goes from top to bottom
      */
-    private final Tile[][] board = new Tile[boardRows][boardColumns];
+    private Tile[][] board = new Tile[boardRows][boardColumns];
     private ArrayList<Cell> notAvailable = new ArrayList<>(); /**arrayList with the cells that can't be used**/
 
     public Tile[][] getBoard() {
@@ -257,10 +257,16 @@ public class Board implements BoardSetter{
         return true; //there are only islands
     }
 
-    /*
+
     public String boardChangeNotifier(){
+
+
+        return null;
     }
-    */
 
 
+
+    public void setBoard(int  i, int j) {
+        board[i][j] = new Tile(0, Tile.TileColor.BLUE);
+    }
 }

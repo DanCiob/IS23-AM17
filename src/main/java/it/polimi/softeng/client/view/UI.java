@@ -1,6 +1,7 @@
 package it.polimi.softeng.client.view;
 
 import it.polimi.softeng.model.Cell;
+import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.Tile;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public interface UI {
     /**
      * Visualizer of PersonalCard
      */
-    public void personalCardVisualizer();
+    public void personalCardVisualizer(PersonalCards personalCard);
 
     /**
      * Visualizer of CurrentScore

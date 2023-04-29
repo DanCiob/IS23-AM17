@@ -1,6 +1,7 @@
 package it.polimi.softeng.client.view.CLI;
 
 import it.polimi.softeng.model.Board;
+import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import org.junit.jupiter.api.Test;
@@ -214,6 +215,10 @@ class CLITest {
 
     @Test
     void personalCardVisualizer() {
+        ArrayList<PersonalCards> arrayPersonalCards = new ArrayList<>();
+        arrayPersonalCards = PersonalCards.FillPersonalCardsBag();
+        CLI cli = new CLI();
+        cli.personalCardVisualizer(arrayPersonalCards.get(0));
     }
 
     @Test
