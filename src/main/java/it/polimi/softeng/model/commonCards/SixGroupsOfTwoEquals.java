@@ -3,7 +3,7 @@ import it.polimi.softeng.model.Shelfie;
 
 import static it.polimi.softeng.model.scoreCount.Score.GroupsOfEqualTiles;
 
-public class SixGroupOfTwoEquals extends CommonCards {
+public class SixGroupsOfTwoEquals extends CommonCards {
 
     /**
      * @param s is the shelfie

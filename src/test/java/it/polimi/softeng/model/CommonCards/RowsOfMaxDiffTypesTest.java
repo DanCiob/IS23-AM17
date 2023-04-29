@@ -4,7 +4,7 @@ import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import it.polimi.softeng.model.commonCards.CommonCards;
-import it.polimi.softeng.model.commonCards.RowsOfDifferentTypes;
+import it.polimi.softeng.model.commonCards.RowsOfMaxDiffTypes;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * The test verifies if RowsOfDifferentTypes is correct, considering both incompleted rows and
+ * The test verifies if RowsOfMaxDiffTypes is correct, considering both incompleted rows and
  *  rows with 1, 2, 3, 4, 5 different types of Tiles
  */
 
-class RowsOfDifferentTypesTest {
+class RowsOfMaxDiffTypesTest {
 
     @Test
     void FourRowsOfOneThreeTypes(){
@@ -30,7 +30,7 @@ class RowsOfDifferentTypesTest {
                                      W   W   W   W   W <
 
         */
-        CommonCards card = new RowsOfDifferentTypes();
+        CommonCards card = new RowsOfMaxDiffTypes();
         ArrayList<Tile> tiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
         Tile t1, t2, t3;
@@ -184,7 +184,7 @@ class RowsOfDifferentTypesTest {
                                      W   W   W   Y   Y <
                                      W   W   W   W   W <
         */
-        CommonCards card = new RowsOfDifferentTypes();
+        CommonCards card = new RowsOfMaxDiffTypes();
         ArrayList<Tile> tiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
         Tile t1, t2, t3;
@@ -338,7 +338,7 @@ class RowsOfDifferentTypesTest {
                                      W   W   W   Y   Y <
                                      W   W   W   W   W <
         */
-        CommonCards card = new RowsOfDifferentTypes();
+        CommonCards card = new RowsOfMaxDiffTypes();
         ArrayList<Tile> tiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
         Tile t1, t2, t3;
@@ -482,7 +482,7 @@ class RowsOfDifferentTypesTest {
                                      W   W   W   -   -
                                      W   W   W   -   -
         */
-        CommonCards card = new RowsOfDifferentTypes();
+        CommonCards card = new RowsOfMaxDiffTypes();
         ArrayList<Tile> tiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
         Tile t1, t2, t3;

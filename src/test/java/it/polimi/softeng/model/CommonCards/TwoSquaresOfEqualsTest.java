@@ -4,14 +4,14 @@ import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import it.polimi.softeng.model.commonCards.CommonCards;
-import it.polimi.softeng.model.commonCards.TwoSquareOfEquals;
+import it.polimi.softeng.model.commonCards.TwoSquaresOfEquals;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TwoSquareOfEqualsTest {
+class TwoSquaresOfEqualsTest {
     /**
      * testing with a grid of W,B,G,W,B,G rows (no squares) looking for a false response
      */
@@ -19,7 +19,7 @@ class TwoSquareOfEqualsTest {
     public void noSquaresTest(){
         ArrayList<Tile> tiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
-        CommonCards card = new TwoSquareOfEquals();
+        CommonCards card = new TwoSquaresOfEquals();
         Tile tile1;
         Tile tile2;
         Tile tile3;
@@ -52,7 +52,7 @@ class TwoSquareOfEqualsTest {
     public void oneSquareTest(){
         ArrayList<Tile> tiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
-        CommonCards card = new TwoSquareOfEquals();
+        CommonCards card = new TwoSquaresOfEquals();
         Tile tile1;
         Tile tile2;
         Tile tile3;
@@ -89,7 +89,7 @@ class TwoSquareOfEqualsTest {
     public void twoSquaresTest(){
         ArrayList<Tile> tiles = new ArrayList<>();
         Shelfie shelfie = new Shelfie();
-        CommonCards card = new TwoSquareOfEquals();
+        CommonCards card = new TwoSquaresOfEquals();
         Tile tile1;
         Tile tile2;
         Tile tile3;

@@ -115,15 +115,15 @@ public class Game implements PlayerManager{
             switch(k){
                 case 0 -> commonCards.add(new DiagonalOfEquals());
                 case 1 -> commonCards.add(new NEqualTiles());
-                case 2 -> commonCards.add(new CornersOfEqualTiles());
+                case 2 -> commonCards.add(new CornersOfEquals());
                 case 3 -> commonCards.add(new FourGroupsOfFourEquals());
-                case 4 -> commonCards.add(new RowsOfDifferentTypes());
-                case 5 -> commonCards.add(new SixGroupOfTwoEquals());
+                case 4 -> commonCards.add(new RowsOfMaxDiffTypes());
+                case 5 -> commonCards.add(new SixGroupsOfTwoEquals());
                 case 6 -> commonCards.add(new Stairs());
-                case 7 -> commonCards.add(new ColumnsOfDifferentTypes());
+                case 7 -> commonCards.add(new ColumnsOfMaxDiffTypes());
                 case 8 -> commonCards.add(new TwoColumnsOfSixDifferent());
                 case 9 -> commonCards.add(new TwoRowsOfFiveDifferent());
-                case 10 -> commonCards.add(new TwoSquareOfEquals());
+                case 10 -> commonCards.add(new TwoSquaresOfEquals());
                 case 11 -> commonCards.add(new XOfEquals());
             }
         }else{
@@ -141,15 +141,15 @@ public class Game implements PlayerManager{
                 switch(commonCardsNum.get(i)){
                     case 0 -> commonCards.add(new DiagonalOfEquals());
                     case 1 -> commonCards.add(new NEqualTiles());
-                    case 2 -> commonCards.add(new CornersOfEqualTiles());
+                    case 2 -> commonCards.add(new CornersOfEquals());
                     case 3 -> commonCards.add(new FourGroupsOfFourEquals());
-                    case 4 -> commonCards.add(new RowsOfDifferentTypes());
-                    case 5 -> commonCards.add(new SixGroupOfTwoEquals());
+                    case 4 -> commonCards.add(new RowsOfMaxDiffTypes());
+                    case 5 -> commonCards.add(new SixGroupsOfTwoEquals());
                     case 6 -> commonCards.add(new Stairs());
-                    case 7 -> commonCards.add(new ColumnsOfDifferentTypes());
+                    case 7 -> commonCards.add(new ColumnsOfMaxDiffTypes());
                     case 8 -> commonCards.add(new TwoColumnsOfSixDifferent());
                     case 9 -> commonCards.add(new TwoRowsOfFiveDifferent());
-                    case 10 -> commonCards.add(new TwoSquareOfEquals());
+                    case 10 -> commonCards.add(new TwoSquaresOfEquals());
                     case 11 -> commonCards.add(new XOfEquals());
                 }
                 i++;

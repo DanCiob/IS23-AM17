@@ -1,6 +1,11 @@
 package it.polimi.softeng.model;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Random;
+import java.io.FileWriter;
+import java.io.IOException;
 import static it.polimi.softeng.Constants.*;
 
 
@@ -10,7 +15,7 @@ public class Board implements BoardSetter{
      * column numbering : goes from left to right
      * row numbering : goes from top to bottom
      */
-    private final Tile[][] board = new Tile[boardRows][boardColumns];
+    private Tile[][] board = new Tile[boardRows][boardColumns];
     private ArrayList<Cell> notAvailable = new ArrayList<>(); /**arrayList with the cells that can't be used**/
 
     public Tile[][] getBoard() {
@@ -234,8 +239,7 @@ public class Board implements BoardSetter{
             cell2 = positionsToBeRemoved.get(0);
             cell3 = positionsToBeRemoved.get(1);
             cell4 = positionsToBeRemoved.get(2);
-            if((cell2.getRow() == cell3.getRow() && cell2.getRow() == cell4.getRow()) || (cell2.getColumn() == cell3.getColumn() && cell2.getColumn() == cell4.getColumn()))
-                return true;
+            return (cell2.getRow() == cell3.getRow() && cell2.getRow() == cell4.getRow()) || (cell2.getColumn() == cell3.getColumn() && cell2.getColumn() == cell4.getColumn());
         }
 
         return false;
@@ -257,10 +261,37 @@ public class Board implements BoardSetter{
         return true; //there are only islands
     }
 
-    /*
+
     public String boardChangeNotifier(){
+        JSONObject jsonObject = new JSONObject();
+
+        for(int i=0;i<boardRows;i++){
+            JSONArray array = new JSONArray();
+            array.clear();
+            for(int j=0;j<boardColumns;j++){
+                if(board[i][j]!=null){
+                    JSONArray array1 = new JSONArray();
+                    array1.add(i);
+                    array1.add(j);
+                    array1.add(board[i][j].getColor());
+                    array.add(array1);
+                }
+            }
+            String row = "Row " + i;
+            jsonObject.put(row, array);
+            /*try (FileWriter file = new FileWriter("c:\\test.json")) {
+                file.write(jsonObject.toJSONString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
+        }
+        System.out.print(jsonObject);
+        return null;
     }
-    */
 
 
+
+    public void setBoard(int  i, int j) {
+        board[i][j] = new Tile(0, Tile.TileColor.BLUE);
+    }
 }

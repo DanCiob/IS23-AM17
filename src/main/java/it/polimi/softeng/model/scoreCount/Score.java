@@ -250,11 +250,13 @@ public class Score {
      * To distinguish them we use Mode.ROW for FourRowsOfOneTwoThreeTypes and Mode.COLUMN for ThreeColumnsOfOneTwoThreeTypes
      * @param s is the shelfie
      * @param maxDifferentColor indicates how many different color can a row / column contain
-     * @param target indicates how many rows or column do you need to complete the CommonCard
-     * @param maxOuter indicates the upper limit of outer cycle,
-     *                 maxOuter = shelfieRows for ROW, maxOuter = shelfieColumns for COLUMN
-     * @param maxInner indicates the upper limit of inner cycle,
-     *                 maxInner = shelfieColumns for ROW, maxInner = shelfieRows for COLUMN
+     * @param target indicates how many rows / column do you need to complete the CommonCard
+     * @param maxOuter indicates the upper limit of outer cycle:
+     *         - maxOuter = shelfieRows for ROW
+     *         - maxOuter = shelfieColumns for COLUMN
+     * @param maxInner indicates the upper limit of inner cycle:
+     *         - maxInner = shelfieColumns for ROW
+     *         - maxInner = shelfieRows for COLUMN
      * @param mode indicates which mode (ROW-COLUMN) the method have to verify
      * @return true if the shelfie completes the CommonCard
      */

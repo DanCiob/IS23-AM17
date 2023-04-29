@@ -1,8 +1,11 @@
 package it.polimi.softeng.client.view.CLI;
 
+import it.polimi.softeng.JSONParser.ChatParser;
 import it.polimi.softeng.model.Board;
+import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -124,10 +127,111 @@ class CLITest {
 
     @Test
     void commonCardsVisualizer() {
+        commonCardsVisualizer_ColumnsOfMaxDiffTypes();
+        commonCardsVisualizer_CornersOfEquals();
+        commonCardsVisualizer_DiagonalOfEquals();
+        commonCardsVisualizer_FourGroupsOfFourEquals();
+        commonCardsVisualizer_NEqualTiles();
+        commonCardsVisualizer_RowsOfMaxDiffTypes();
+        commonCardsVisualizer_SixGroupsOfTwoEquals();
+        commonCardsVisualizer_Stairs();
+        commonCardsVisualizer_TwoColumnsOfSixDifferent();
+        commonCardsVisualizer_TwoRowsOfFiveDifferent();
+        commonCardsVisualizer_TwoSquaresOfEquals();
+        commonCardsVisualizer_XOfEquals();
     }
 
     @Test
+    void commonCardsVisualizer_SixGroupsOfTwoEquals() {
+        String commonCard = "SixGroupsOfTwoEquals";
+        cli.commonCardsVisualizer(commonCard);
+    }
+
+    @Test
+    void commonCardsVisualizer_FourGroupsOfFourEquals() {
+        String commonCard = "FourGroupsOfFourEquals";
+        cli.commonCardsVisualizer(commonCard);
+    }
+
+    @Test
+    void commonCardsVisualizer_CornersOfEquals() {
+        String commonCard = "CornersOfEquals";
+        cli.commonCardsVisualizer(commonCard);
+    }
+
+    @Test
+    void commonCardsVisualizer_TwoSquaresOfEquals() {
+        String commonCard = "TwoSquaresOfEquals";
+        cli.commonCardsVisualizer(commonCard);
+    }
+
+    @Test
+    void commonCardsVisualizer_ColumnsOfMaxDiffTypes() {
+        String commonCard = "ColumnsOfMaxDiffTypes";
+        cli.commonCardsVisualizer(commonCard);
+    }
+
+    @Test
+    void commonCardsVisualizer_TwoColumnsOfSixDifferent(){
+        String commonCard = "TwoColumnsOfSixDifferent";
+        cli.commonCardsVisualizer(commonCard);
+    }
+
+    @Test
+    void commonCardsVisualizer_NEqualTiles(){
+        String commonCard = "NEqualTiles";
+        cli.commonCardsVisualizer(commonCard);
+    }
+
+    @Test
+    void commonCardsVisualizer_TwoRowsOfFiveDifferent(){
+        String commonCard = "TwoRowsOfFiveDifferent";
+        cli.commonCardsVisualizer(commonCard);
+    }
+
+    @Test
+    void commonCardsVisualizer_RowsOfMaxDiffTypes(){
+        String commonCard = "RowsOfMaxDiffTypes";
+        cli.commonCardsVisualizer(commonCard);
+    }
+
+    @Test
+    void commonCardsVisualizer_DiagonalOfEquals(){
+        String commonCard = "DiagonalOfEquals";
+        cli.commonCardsVisualizer(commonCard);
+    }
+
+    @Test
+    void commonCardsVisualizer_XOfEquals(){
+        String commonCard = "XOfEquals";
+        cli.commonCardsVisualizer(commonCard);
+    }
+
+    @Test
+    void commonCardsVisualizer_Stairs(){
+        String commonCard = "Stairs";
+        cli.commonCardsVisualizer(commonCard);
+    }
+
+
+
+    @Test
     void personalCardVisualizer() {
+        ArrayList<PersonalCards> arrayPersonalCards = new ArrayList<>();
+        arrayPersonalCards = PersonalCards.FillPersonalCardsBag();
+        CLI cli = new CLI();
+        cli.personalCardVisualizer(arrayPersonalCards.get(0));
+        cli.personalCardVisualizer(arrayPersonalCards.get(1));
+        cli.personalCardVisualizer(arrayPersonalCards.get(2));
+        cli.personalCardVisualizer(arrayPersonalCards.get(3));
+        cli.personalCardVisualizer(arrayPersonalCards.get(4));
+        cli.personalCardVisualizer(arrayPersonalCards.get(5));
+        cli.personalCardVisualizer(arrayPersonalCards.get(6));
+        cli.personalCardVisualizer(arrayPersonalCards.get(7));
+        cli.personalCardVisualizer(arrayPersonalCards.get(8));
+        cli.personalCardVisualizer(arrayPersonalCards.get(9));
+        cli.personalCardVisualizer(arrayPersonalCards.get(10));
+        cli.personalCardVisualizer(arrayPersonalCards.get(11));
     }
 
     @Test
@@ -136,6 +240,11 @@ class CLITest {
 
     @Test
     void chatVisualizer() {
+        CLI cli = new CLI();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("receiver", "Tom");
+        jsonObject.put("message", "Hello!");
+        cli.chatVisualizer(jsonObject);
     }
 
     @Test

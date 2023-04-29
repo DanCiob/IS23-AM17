@@ -1,7 +1,9 @@
 package it.polimi.softeng.client.view;
 
 import it.polimi.softeng.model.Cell;
+import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.Tile;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 
@@ -22,12 +24,12 @@ public interface UI {
     /**
      * Visualizer of CommonCards used in game
      */
-    public void commonCardsVisualizer();
+    public void commonCardsVisualizer(String commonCard);
 
     /**
      * Visualizer of PersonalCard
      */
-    public void personalCardVisualizer();
+    public void personalCardVisualizer(PersonalCards personalCard);
 
     /**
      * Visualizer of CurrentScore
@@ -37,7 +39,7 @@ public interface UI {
     /**
      * Visualizer of Chat
      */
-    public void chatVisualizer();
+    public void chatVisualizer(JSONObject jsonMessage);
 
     /**
      * Visualizer of current connected players
