@@ -1,9 +1,11 @@
 package it.polimi.softeng.client.view.CLI;
 
+import it.polimi.softeng.JSONParser.ChatParser;
 import it.polimi.softeng.model.Board;
 import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -219,6 +221,17 @@ class CLITest {
         arrayPersonalCards = PersonalCards.FillPersonalCardsBag();
         CLI cli = new CLI();
         cli.personalCardVisualizer(arrayPersonalCards.get(0));
+        cli.personalCardVisualizer(arrayPersonalCards.get(1));
+        cli.personalCardVisualizer(arrayPersonalCards.get(2));
+        cli.personalCardVisualizer(arrayPersonalCards.get(3));
+        cli.personalCardVisualizer(arrayPersonalCards.get(4));
+        cli.personalCardVisualizer(arrayPersonalCards.get(5));
+        cli.personalCardVisualizer(arrayPersonalCards.get(6));
+        cli.personalCardVisualizer(arrayPersonalCards.get(7));
+        cli.personalCardVisualizer(arrayPersonalCards.get(8));
+        cli.personalCardVisualizer(arrayPersonalCards.get(9));
+        cli.personalCardVisualizer(arrayPersonalCards.get(10));
+        cli.personalCardVisualizer(arrayPersonalCards.get(11));
     }
 
     @Test
@@ -227,6 +240,11 @@ class CLITest {
 
     @Test
     void chatVisualizer() {
+        CLI cli = new CLI();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("receiver", "Tom");
+        jsonObject.put("message", "Hello!");
+        cli.chatVisualizer(jsonObject);
     }
 
     @Test

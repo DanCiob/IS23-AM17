@@ -751,4 +751,14 @@ class BoardTest {
         assertNotNull(board.getBoard()[7][5]);
         assertFalse(board.checkIslands());
     }
+
+    @Test
+    public void boardChangeNotifier(){
+        Board board = new Board();
+        Game game = new Game();
+        game.initializeTile();
+        board.resetBoard(3);
+        board.positionTiles(game.getTileBag());
+        board.boardChangeNotifier();
+    }
 }

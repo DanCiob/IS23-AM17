@@ -3,6 +3,7 @@ package it.polimi.softeng.client.view;
 import it.polimi.softeng.model.Cell;
 import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.Tile;
+import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 
@@ -38,7 +39,7 @@ public interface UI {
     /**
      * Visualizer of Chat
      */
-    public void chatVisualizer();
+    public void chatVisualizer(JSONObject jsonMessage);
 
     /**
      * Visualizer of current connected players
