@@ -5,6 +5,7 @@ import it.polimi.softeng.model.*;
 import it.polimi.softeng.client.view.CommonOperationsFramework;
 import it.polimi.softeng.client.view.UI;
 import it.polimi.softeng.model.PersonalCards;
+import it.polimi.softeng.model.commonCards.CommonCards;
 import org.json.simple.JSONObject;
 
 import java.io.PrintStream;
@@ -28,6 +29,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
      * Player information
      */
     private int UserScore;
+    private PersonalCards personalCard;
     private String Nickname;
     private String ServerAddress;
     private int Port;
@@ -452,13 +454,12 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
             return;
         }
 
-
         //Command is in @CMND format (every command is 4 letters), uppercase avoid case sensitivity
         String op = command.substring(0, 4).toUpperCase();
         String action = command.substring(6);
 
         //These actions need to communicate with server
-        if (op.equals("@CHAT") || op.equals("@GAME") || op.equals("@VPLA") || op.equals("@VSCO") || op.equals("@VPCA") || op.equals("@VCCA"))
+        if (op.equals("@CHAT") || op.equals("@GAME") || op.equals("@VPLA") || op.equals("@VSCO") || op.equals("@VCCA"))
             actionToJSON(op ,action);
         //These actions are view-local
         else
@@ -466,10 +467,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
             switch (op) {
                 case ("@VBOR") -> boardVisualizer(UserBoard.getBoard(), UserBoard.getNotAvailable());
                 case ("@VSHE") -> shelfieVisualizer(UserShelfie.getGrid());
+                case ("@VPCA") -> personalCardVisualizer(personalCard);
             }
         }
-
-
 
         System.out.println("Test");
     }
