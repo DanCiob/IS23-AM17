@@ -11,10 +11,12 @@ import org.json.simple.JSONObject;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static it.polimi.softeng.Constants.*;
 
-public class CLI extends CommonOperationsFramework implements UI, Runnable{
+public class CLI extends CommonOperationsFramework implements UI, Runnable {
     /**
      * Local representation of Board
      */
@@ -56,8 +58,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
      * CLI initialization, connection to server, choose of gameMode
      * After setup CLI is ready to be used
      */
-    public void setupCLI(){
-        int mode = 0;
+    public void setupCLI() {
+        int mode;
 
         System.out.println("Initializing CLI...");
         System.out.println("Do you want to connect using Socket(1) or RMI(2)?");
@@ -66,87 +68,82 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
             mode = input.nextInt();
 
             switch (mode) {
-                case 1: //socket
+                case 1 -> { //socket
                     System.out.println("Connection with Socket...");
                     System.out.println("Digit server IP");
                     System.out.println(">");
                     ServerAddress = input.nextLine();
-
                     System.out.println("Digit server Port");
                     System.out.println(">");
                     Port = input.nextInt();
-
                     System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");
                     System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
                     System.out.println(">");
                     do {
                         StartGame = input.nextInt();
-                    }while(StartGame != 1 && StartGame != 2);
-
-                    if (StartGame == 1)
-                    {
+                    } while (StartGame != 1 && StartGame != 2);
+                    if (StartGame == 1) {
                         System.out.println("Insert the number of players(2-4)");
                         System.out.println(">");
-                        int NumOfPlayer = 0;
+                        int NumOfPlayer;
                         do {
                             NumOfPlayer = input.nextInt();
-                        }while (NumOfPlayer < 2 || NumOfPlayer > 4);
+                        } while (NumOfPlayer < 2 || NumOfPlayer > 4);
 
                         System.out.println("Do you want to play with Easy mode(1) or Normal mode(2)?");
                         System.out.println(">");
-                        int GameMode = 0;
+                        int GameMode;
                         do {
                             GameMode = input.nextInt();
-                        }while (GameMode != 1 && GameMode != 2);
+                        } while (GameMode != 1 && GameMode != 2);
                     }
 
                     //do {
-                    System.out.println("Insert nickname");
-                    Nickname = input.nextLine();
-                    //Connect to server
-                    //}while(nicknameNotUnique)
-                    break;
+                    System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed)");
+                    System.out.println(">");
+                    do {
+                        Nickname = input.nextLine();
+                    } while (isOkNickname());
+                }
 
-                case 2://RMI
+                //Connect to server
+                //}while(nicknameNotUnique)
+                case 2 -> {//RMI
                     System.out.println("Connection with RMI...");
                     System.out.println("Digit server IP");
                     System.out.println(">");
                     ServerAddress = input.nextLine();
-
                     System.out.println("Digit server Port");
                     System.out.println(">");
                     Port = input.nextInt();
-
-                    System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");                    System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
+                    System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");
+                    System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
                     System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
                     System.out.println(">");
                     do {
                         StartGame = input.nextInt();
-                    }while(StartGame != 1 && StartGame != 2);
-
-                    if (StartGame == 1)
-                    {
+                    } while (StartGame != 1 && StartGame != 2);
+                    if (StartGame == 1) {
                         System.out.println("Insert the number of players(2-4)?");
                         System.out.println(">");
                         do {
                             NumOfPlayer = input.nextInt();
-                        }while (NumOfPlayer > 4 || NumOfPlayer < 2);
+                        } while (NumOfPlayer > 4 || NumOfPlayer < 2);
 
                         System.out.println("Do you want to play with Easy mode(1) or Normal mode(2)?");
                         System.out.println(">");
                         do {
                             GameMode = input.nextInt();
-                        }while (GameMode != 1 && GameMode != 2);
+                        } while (GameMode != 1 && GameMode != 2);
                     }
 
                     //do {
                     System.out.println("Insert nickname");
                     Nickname = input.nextLine();
-                    //Connect to server
-                    //}while(nicknameNotUnique)
-                    break;
-                default:
-                    System.out.println("Unrecognized connection method, please digit 1 or 2...");
+                }
+                //Connect to server
+                //}while(nicknameNotUnique)
+                default -> System.out.println("Unrecognized connection method, please digit 1 or 2...");
             }
         } while (mode != 1 && mode != 2);
     }
@@ -154,31 +151,29 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
 
     @Override
     /**
-     *
      * @param board
      * @param notAvailable
      */
-    public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable){
+    public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable) {
         Tile.TileColor tileColor;
-        boolean notAv = false;
+        boolean notAv;
 
         System.out.println(ANSI_RESET + "BOARD:");
         System.out.println(ANSI_GREY + "     0  1  2  3  4  5  6  7  8"); //print column index
         System.out.println("    ━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-        for(int i=0;i<boardRows;i++){ //loop for rows
+        for (int i = 0; i < boardRows; i++) { //loop for rows
             System.out.print(i + "  ┃"); //print row index
-            for (int j = 0; j < boardColumns; j++){
+            for (int j = 0; j < boardColumns; j++) {
                 notAv = false;
-                for(Cell cell1 : notAvailable) { //if not Available
+                for (Cell cell1 : notAvailable) { //if not Available
                     if (cell1.getRow() == i && cell1.getColumn() == j) {
                         notAv = true;
                         break;
                     }
                 }
-                if(notAv){
+                if (notAv) {
                     System.out.print(ANSI_GREY + " ▇ ");
-                }
-                else{
+                } else {
                     if (board[i][j] != null) {
                         tileColor = board[i][j].getColor();
                         System.out.print(" " + tileColor.coloredText() + tileColor.colorLetter() + " ");
@@ -194,28 +189,28 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
 
     /**
      * @param shelfie is userShelfie
-     * Visual representation of shelfie
+     *                Visual representation of shelfie
      */
     @Override
     public void shelfieVisualizer(Tile[][] shelfie) {
-            Tile.TileColor tileColor;
-            if(shelfie != null){
-                System.out.println(ANSI_RESET + "SHELFIE:");
-                System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━");
-                for(int i=shelfieRows-1;i>=0;i--){
-                    System.out.print(ANSI_GREY + i + "  ┃");
-                    for(int j=0;j<shelfieColumns;j++){
-                        if(shelfie[i][j] !=null){
-                            tileColor = shelfie[i][j].getColor();
-                            System.out.print( tileColor.coloredText() + " " + tileColor.colorLetter() + " ");
-                        }else{
-                            System.out.print(ANSI_GREY + " ░ ");
-                        }
+        Tile.TileColor tileColor;
+        if (shelfie != null) {
+            System.out.println(ANSI_RESET + "SHELFIE:");
+            System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━");
+            for (int i = shelfieRows - 1; i >= 0; i--) {
+                System.out.print(ANSI_GREY + i + "  ┃");
+                for (int j = 0; j < shelfieColumns; j++) {
+                    if (shelfie[i][j] != null) {
+                        tileColor = shelfie[i][j].getColor();
+                        System.out.print(tileColor.coloredText() + " " + tileColor.colorLetter() + " ");
+                    } else {
+                        System.out.print(ANSI_GREY + " ░ ");
                     }
-                    System.out.println(ANSI_GREY + "┃");
                 }
-                System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━");
-                System.out.println(ANSI_GREY + "     0  1  2  3  4" + Tile.TileColor.WHITE.coloredText());
+                System.out.println(ANSI_GREY + "┃");
+            }
+            System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━");
+            System.out.println(ANSI_GREY + "     0  1  2  3  4" + Tile.TileColor.WHITE.coloredText());
 
         }
     }
@@ -255,11 +250,10 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
                 System.out.println(ANSI_GREY + "+---------------------+");
                 for (int i = 0; i < shelfieColumns; i++) {
                     System.out.print(ANSI_GREY + "| " + ANSI_GREEN);
-                    for (int j = 0; j < shelfieColumns; j++){
-                        if(i != j) {
+                    for (int j = 0; j < shelfieColumns; j++) {
+                        if (i != j) {
                             System.out.print("    ");
-                        }
-                        else System.out.print("[=] ");
+                        } else System.out.print("[=] ");
                     }
                     System.out.println(ANSI_GREY + "| ");
                 }
@@ -291,7 +285,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
                 System.out.println("One line can show the same or a different combination of another line.");
                 System.out.println(ANSI_GREY + "+---------------------+");
                 System.out.print(ANSI_GREY + "| " + ANSI_GREEN);
-                for (int i = 0; i < shelfieColumns; i++){
+                for (int i = 0; i < shelfieColumns; i++) {
                     System.out.print("[•] ");
                 }
                 System.out.println(ANSI_GREY + "|");
@@ -315,13 +309,12 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
                 System.out.println("Starting from the first column on the left or on the right, each next column must be made of exactly one more tile.");
                 System.out.println("Tiles can be of any type.");
                 System.out.println(ANSI_GREY + "+---------------------+");
-                for (int i = 0; i < shelfieColumns; i++){
+                for (int i = 0; i < shelfieColumns; i++) {
                     System.out.print(ANSI_GREY + "| " + ANSI_GREEN);
-                    for (int j = 0; j < shelfieColumns; j++){
-                        if (j <= i ){
+                    for (int j = 0; j < shelfieColumns; j++) {
+                        if (j <= i) {
                             System.out.print("[•] ");
-                        }
-                        else System.out.print("    ");
+                        } else System.out.print("    ");
                     }
                     System.out.println(ANSI_GREY + "| ");
                 }
@@ -343,7 +336,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
                 System.out.println("One line can show the same or a different combination of the other line.");
                 System.out.println(ANSI_GREY + "+---------------------+");
                 System.out.print(ANSI_GREY + "| " + ANSI_GREEN);
-                for (int i = 0; i < shelfieColumns; i++){
+                for (int i = 0; i < shelfieColumns; i++) {
                     System.out.print("[≠] ");
                 }
                 System.out.println(ANSI_GREY + "|");
@@ -377,17 +370,17 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
     public void personalCardVisualizer(PersonalCards personalCard) {
         boolean tile;
         System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━");
-        for(int i=shelfieRows-1;i>=0;i--){
+        for (int i = shelfieRows - 1; i >= 0; i--) {
             System.out.print(ANSI_GREY + i + "  ┃");
-            for(int j=0;j<shelfieColumns;j++){
+            for (int j = 0; j < shelfieColumns; j++) {
                 tile = false;
-                for(PersonalCards.ObjectiveCell objectiveCell: personalCard.getObjective()){
-                    if(objectiveCell.getRow()==i && objectiveCell.getColumn()==j){
+                for (PersonalCards.ObjectiveCell objectiveCell : personalCard.getObjective()) {
+                    if (objectiveCell.getRow() == i && objectiveCell.getColumn() == j) {
                         System.out.print(objectiveCell.getColor().coloredText() + " ▇ ");
                         tile = true;
                     }
                 }
-                if(tile == false){
+                if (!tile) {
                     System.out.print(ANSI_GREY + " ░ ");
                 }
             }
@@ -417,8 +410,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
 
     }
 
-    public void beginGame (boolean value)
-    {
+    public void beginGame(boolean value) {
         this.GameIsOn = value;
     }
 
@@ -427,8 +419,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
         boolean firstRun = true;
         setupCLI();
 
-        while(GameIsOn)
-        {
+        while (GameIsOn) {
             game(firstRun);
             firstRun = false;
         }
@@ -438,8 +429,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
     }
 
     /**
-     * @param firstRun
-     * Game routine that wait for commands
+     * @param firstRun Game routine that wait for commands
      */
     public void game(boolean firstRun) {
         //POSSIBLE COMMANDS
@@ -448,8 +438,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
         String command = input.nextLine();
 
         //First check of command good formatting
-        if ((command.charAt(0) != '@') || (command.charAt(5) != ' '))
-        {
+        if ((command.charAt(0) != '@') || (command.charAt(5) != ' ')) {
             System.out.println("Please write a command in @CMND text format!");
             return;
         }
@@ -460,14 +449,14 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
 
         //These actions need to communicate with server
         if (op.equals("@CHAT") || op.equals("@GAME") || op.equals("@VPLA") || op.equals("@VSCO") || op.equals("@VCCA"))
-            actionToJSON(op ,action);
-        //These actions are view-local
-        else
-        {
+            actionToJSON(op, action);
+            //These actions are view-local
+        else {
             switch (op) {
                 case ("@VBOR") -> boardVisualizer(UserBoard.getBoard(), UserBoard.getNotAvailable());
                 case ("@VSHE") -> shelfieVisualizer(UserShelfie.getGrid());
                 case ("@VPCA") -> personalCardVisualizer(personalCard);
+                default -> System.out.println("Unrecognized command");
             }
         }
 
@@ -475,30 +464,27 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
     }
 
     /**
-     * @param firstRun
-     * Print all possible commands doable by user eventually with MyShelfie logo (only at CLI first start)
+     * @param firstRun Print all possible commands doable by user eventually with MyShelfie logo (only at CLI first start)
      */
-    public void commands(boolean firstRun)
-    {
+    public void commands(boolean firstRun) {
         if (firstRun)
             logo();
         System.out.println("\n" +
                 "+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+\n" +
                 "|                                     Command                                     |                                       Effect                                      |\n" +
                 "+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+\n" +
-                "| "+ANSI_GREEN+"@VBOR"+ANSI_RESET+"                                                                           | Visualize board status                                                            |\n" +
-                "| "+ANSI_GREEN+"@VSHE"+ANSI_RESET+"                                                                           | Visualize shelfie status                                                          |\n" +
-                "| "+ANSI_GREEN+"@VPLA"+ANSI_RESET+"                                                                           | Visualize currently connected players and score                                   |\n" +
-                "| "+ANSI_GREEN+"@VCCA"+ANSI_RESET+"                                                                           | Visualize common objectives                                                       |\n" +
-                "| "+ANSI_GREEN+"@VPCA"+ANSI_RESET+"                                                                           | Visualize your personal card                                                      |\n" +
-                "| "+ANSI_GREEN+"@GAME gameMoveFormat"+ANSI_RESET+"                                                            | Do a game move                                                                    |\n" +
-                "| "+ANSI_GREEN+"@CHAT nameOfReceiver message"+ANSI_RESET+"                                                    | Send a chat message (to send a message to everybody type 'all' in nameOfReceiver) |\n" +
+                "| " + ANSI_GREEN + "@VBOR" + ANSI_RESET + "                                                                           | Visualize board status                                                            |\n" +
+                "| " + ANSI_GREEN + "@VSHE" + ANSI_RESET + "                                                                           | Visualize shelfie status                                                          |\n" +
+                "| " + ANSI_GREEN + "@VPLA" + ANSI_RESET + "                                                                           | Visualize currently connected players and score                                   |\n" +
+                "| " + ANSI_GREEN + "@VCCA" + ANSI_RESET + "                                                                           | Visualize common objectives                                                       |\n" +
+                "| " + ANSI_GREEN + "@VPCA" + ANSI_RESET + "                                                                           | Visualize your personal card                                                      |\n" +
+                "| " + ANSI_GREEN + "@GAME gameMoveFormat" + ANSI_RESET + "                                                            | Do a game move                                                                    |\n" +
+                "| " + ANSI_GREEN + "@CHAT 'nameOfReceiver' message" + ANSI_RESET + "                                                    | Send a chat message (to send a message to everybody type 'all' in nameOfReceiver) |\n" +
                 "+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+\n" +
                 "\n");
     }
 
-    public void logo()
-    {
+    public void logo() {
         System.out.println(ANSI_GREEN + "  .___  ___. ____    ____         _______. __    __   _______  __       _______  __   _______    \n" +
                 "  |   \\/   | \\   \\  /   /        /       ||  |  |  | |   ____||  |     |   ____||  | |   ____|   \n" +
                 "  |  \\  /  |  \\   \\/   /        |   (----`|  |__|  | |  |__   |  |     |  |__   |  | |  |__      \n" +
@@ -507,5 +493,15 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable{
                 "  |__|  |__|     |__|        |_______/    |__|  |__| |_______||_______||__|     |__| |_______|   \n" +
                 "                                                                                                 " +
                 "" + ANSI_RESET);
+    }
+
+    /**
+     * Verify that inserted nickname follows regex standard defined for nicknames
+     * @return true if Nickname follow regex standard defined for nicknames
+     */
+    public boolean isOkNickname (){
+        Pattern pattern = Pattern.compile(nicknameREGEX);
+        Matcher matcher = pattern.matcher(this.Nickname);
+        return matcher.matches();
     }
 }

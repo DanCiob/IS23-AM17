@@ -1,6 +1,7 @@
 package it.polimi.softeng.client.view;
 
-import it.polimi.softeng.JSONParser.ChatParser;
+import it.polimi.softeng.JSONWriter.ChatWriter;
+import it.polimi.softeng.JSONWriter.GameMoveWriter;
 import org.json.simple.JSONObject;
 
 public class CommonOperationsFramework {
@@ -16,11 +17,20 @@ public class CommonOperationsFramework {
         switch(op)
         {
             case ("@CHAT"): {
-                //Send to server
+                if (!ChatWriter.chatMessageRegex(action))
+                {
+                    System.out.println("Error in Chat message syntax, try again!");
+                    return false;
+                }
+                //sendToServer(ChatMessageWriter.writeChatMessage());
             }
             case ("@GAME"): {
-                //Remove spaces to avoid parsing problem
-                action = action.replace(" ", "");
+                if (!GameMoveWriter.gameMoveRegex(action))
+                {
+                    System.out.println("Error in Game Move syntax, try again!");
+                    return false;
+                }
+                //sendToServer(GameMoveWriter.writeGameMove());
             }
 
             case ("@VCCA"): {
