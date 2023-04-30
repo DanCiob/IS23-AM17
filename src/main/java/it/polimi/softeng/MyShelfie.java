@@ -1,5 +1,7 @@
 package it.polimi.softeng;
 
+
+import it.polimi.softeng.client.view.CLI.CLI;
 import it.polimi.softeng.connectionProtocol.ClientSide;
 import it.polimi.softeng.connectionProtocol.ServerSide;
 
@@ -37,13 +39,15 @@ public class MyShelfie {
                 System.out.println("You've chosen : client CLI");
 
                 //creates the client CLI
-                ClientSide.main(null);
+                //CLI cli = new CLI();
+                ClientSide clientSide = new ClientSide();
+                clientSide.setupConnection("socket");
+                clientSide.sendMessage("helo");
             }
             case 50 ->{
                 System.out.println("You've chosen : client GUI");
 
                 //creates the client GUI
-                ClientSide.main(null);
             }
 
             default -> System.out.println("Unrecognized mode, closing application...");

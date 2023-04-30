@@ -1,5 +1,8 @@
 package it.polimi.softeng.connectionProtocol;
 
+import it.polimi.softeng.model.Player;
+
+import javax.swing.text.PlainDocument;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -38,16 +41,27 @@ public class ServerSide {
         //accepting the client connection
         Socket clientSocket = null;
         ExecutorService executor = Executors.newCachedThreadPool();
+        int i = 0;
         while(true){
             System.out.print("waiting...");
             try{
                 clientSocket = serverSocket.accept();
                 executor.submit(new ClientHandler(clientSocket));
                 System.out.println("client accepted !");
+                i++;
             }catch(IOException e){
                 e.printStackTrace();
                 System.out.println("client accept failed !");
             }
         }
+    }
+
+    /**
+     * setter method for the map playerToSocket which connects the player name string to its relative socket
+     * @param playerName a string with the playername
+     * @param socket the relative clientsocket
+     */
+    public void enterPlayerToSocket(String playerName, Socket socket) {
+        playerToSocket.put(playerName,socket);
     }
 }
