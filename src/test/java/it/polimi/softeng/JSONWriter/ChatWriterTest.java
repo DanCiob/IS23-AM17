@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import static it.polimi.softeng.JSONWriter.ChatWriter.chatMessageRegex;
 import static it.polimi.softeng.JSONWriter.ChatWriter.writeChatMessage;
+import static it.polimi.softeng.JSONWriter.SignatureWriter.signObject;
 import static junit.framework.Assert.*;
 
 class ChatWriterTest {
@@ -41,12 +42,12 @@ class ChatWriterTest {
             throw new RuntimeException(e);
         }
 
-        JSONChatMessageTest1.write(writeChatMessage("'user1' HI!").toJSONString());
-        JSONChatMessageTest2.write(writeChatMessage("'all' HI!").toJSONString());
-        JSONChatMessageTest3.write(writeChatMessage("'user2' Good morning!").toJSONString());
-        JSONChatMessageTest4.write(writeChatMessage("'u4' test").toJSONString());
-        JSONChatMessageTest5.write(writeChatMessage("'user5' HI!").toJSONString());
-        JSONChatMessageTest6.write(writeChatMessage("'user6' HI!").toJSONString());
+        JSONChatMessageTest1.write(signObject(writeChatMessage("'user1' HI!"), "@CHAT", "requester").toJSONString());
+        JSONChatMessageTest2.write(signObject(writeChatMessage("'all' HI!"), "@CHAT", "requester").toJSONString());
+        JSONChatMessageTest3.write(signObject(writeChatMessage("'user2' Good morning!"), "@CHAT", "requester").toJSONString());
+        JSONChatMessageTest4.write(signObject(writeChatMessage("'u4' test"), "@CHAT", "requester").toJSONString());
+        JSONChatMessageTest5.write(signObject(writeChatMessage("'user5' HI!"), "@CHAT", "requester").toJSONString());
+        JSONChatMessageTest6.write(signObject(writeChatMessage("'user6' HI!"), "@CHAT", "requester").toJSONString());
 
         JSONChatMessageTest1.close();
         JSONChatMessageTest2.close();

@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import static it.polimi.softeng.JSONWriter.GameMoveWriter.*;
+import static it.polimi.softeng.JSONWriter.SignatureWriter.signObject;
 import static junit.framework.Assert.*;
 
 class GameMoveWriterTest {
@@ -58,12 +59,12 @@ class GameMoveWriterTest {
             throw new RuntimeException(e);
         }
 
-        JSONGameMoveTest1.write(writeGameMove("(0,1 ),3 ").toJSONString());
-        JSONGameMoveTest2.write(writeGameMove("(0,1),(2,4),2").toJSONString());
-        JSONGameMoveTest3.write(writeGameMove("(0,1),(2,4),(6,3),2").toJSONString());
-        JSONGameMoveTest4.write(writeGameMove("(0,5 ),3 ").toJSONString());
-        JSONGameMoveTest5.write(writeGameMove("(4,2),(3,1),0").toJSONString());
-        JSONGameMoveTest6.write(writeGameMove("(1,2),(2,4),(5,3),1").toJSONString());
+        JSONGameMoveTest1.write(signObject(writeGameMove("(0,1 ),3 "), "@GAME", "requester").toJSONString());
+        JSONGameMoveTest2.write(signObject(writeGameMove("(0,1),(2,4),2"), "@GAME", "requester").toJSONString());
+        JSONGameMoveTest3.write(signObject(writeGameMove("(0,1),(2,4),(6,3),2"), "@GAME", "requester").toJSONString());
+        JSONGameMoveTest4.write(signObject(writeGameMove("(0,5 ),3 "), "@GAME", "requester").toJSONString());
+        JSONGameMoveTest5.write(signObject(writeGameMove("(4,2),(3,1),0"), "@GAME", "requester").toJSONString());
+        JSONGameMoveTest6.write(signObject(writeGameMove("(1,2),(2,4),(5,3),1"), "@GAME", "requester").toJSONString());
 
         JSONGameMoveTest1.close();
         JSONGameMoveTest2.close();
