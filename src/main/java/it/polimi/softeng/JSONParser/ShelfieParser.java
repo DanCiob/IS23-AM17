@@ -18,7 +18,7 @@ public class ShelfieParser{
     /**
      * this is the main method of the class; when it's called it clears the list of the tiles to be inserted from the previous use and converts the JSON message containing the
      * infos into tiles and an int column
-     * @param moveMessage string containing the JSON message; such message must follow the syntax that can be found in the file {@link it/polimi/softeng/JSONMessages/MoveMessage.json}
+     * @param moveMessage string containing the JSON message; such message must follow the syntax that can be found in the file {@link it/polimi/softeng/JSONMessages/GameMoveMessage.json}
      *                    with a maximum of 3 tiles
      */
     public void shelfieParser(String moveMessage){

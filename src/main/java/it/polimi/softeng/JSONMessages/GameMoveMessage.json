@@ -1,0 +1,17 @@
+{
+  "tileList": [
+    {
+      "row": "0",
+      "column": "0"
+    },
+    {
+      "row": "0",
+      "column": "1"
+    },
+    {
+      "row": "0",
+      "column": "2"
+    }
+  ],
+  "column" : "2"
+}

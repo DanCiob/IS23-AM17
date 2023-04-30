@@ -265,7 +265,7 @@ class CLITest {
 
     @Test
     void commandsTest() {
-        cli.commands();
-        assertTrue(true);
+        cli.commands(true);
+        cli.commands(false);
     }
 }

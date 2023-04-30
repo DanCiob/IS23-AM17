@@ -5,7 +5,7 @@ package it.polimi.softeng;
  */
 
 public abstract class Constants {
-    //shelfie
+    //Shelfie
     public static final int shelfieRows = 6;
     public static final int shelfieColumns = 5;
     //board
@@ -32,6 +32,15 @@ public abstract class Constants {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_GREY = "\u001B[37m";
     public static final int numOfCommands = 6;
+
+    //Regex for JSON
+    //Allows gameMove in JSON defined standard -> ex: (0,1),(2,3),2
+    public static final String gameREGEX = "^([(][0-9][,][0-9][)][,]){1,3}[0-4]$";
+    //Allows chat message in JSON defined standard -> ex: 'receiver' message
+    public static final String chatREGEX = "^['][a-zA-Z0-9_]+['][ ].+$";
+    //Allows nickname in specific standard
+    public static final String nicknameREGEX = "^[a-zA-Z0-9_]+$";
+
 
     //CommonCards
         //ColumnsOfMaxDiffTypes
