@@ -22,7 +22,7 @@ public class CommonOperationsFramework {
                     System.out.println("Error in Chat message syntax, try again!");
                     return false;
                 }
-                //sendToServer(ChatMessageWriter.writeChatMessage());
+                //sendToServer(ChatMessageWriter.writeChatMessage().toString());
             }
             case ("@GAME"): {
                 if (!GameMoveWriter.gameMoveRegex(action))
@@ -30,9 +30,12 @@ public class CommonOperationsFramework {
                     System.out.println("Error in Game Move syntax, try again!");
                     return false;
                 }
-                //sendToServer(GameMoveWriter.writeGameMove());
+                //sendToServer(GameMoveWriter.writeGameMove().toString());
             }
 
+            case ("@LOGN") : {
+                //sendLoginRequest(action);
+            }
             case ("@VCCA"): {
 
             }

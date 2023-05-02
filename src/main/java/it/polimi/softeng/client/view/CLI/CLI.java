@@ -5,7 +5,6 @@ import it.polimi.softeng.model.*;
 import it.polimi.softeng.client.view.CommonOperationsFramework;
 import it.polimi.softeng.client.view.UI;
 import it.polimi.softeng.model.PersonalCards;
-import it.polimi.softeng.model.commonCards.CommonCards;
 import org.json.simple.JSONObject;
 
 import java.io.PrintStream;
@@ -76,6 +75,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     System.out.println("Digit server Port");
                     System.out.println(">");
                     Port = input.nextInt();
+                    //Connect with server
                     System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");
                     System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
                     System.out.println(">");
@@ -151,8 +151,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     @Override
     /**
-     * @param board
-     * @param notAvailable
+     * @param board is playerBoard
+     * @param notAvailable is notAvailable cells
      */
     public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable) {
         Tile.TileColor tileColor;
@@ -448,7 +448,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         String action = command.substring(6);
 
         //These actions need to communicate with server
-        if (op.equals("@CHAT") || op.equals("@GAME") || op.equals("@VPLA") || op.equals("@VSCO") || op.equals("@VCCA"))
+        if (op.equals("@LOGN") || op.equals("@CHAT") || op.equals("@GAME") || op.equals("@VPLA") || op.equals("@VSCO") || op.equals("@VCCA"))
             actionToJSON(op, action);
             //These actions are view-local
         else {
