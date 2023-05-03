@@ -32,11 +32,6 @@ public interface UI {
     public void personalCardVisualizer(PersonalCards personalCard);
 
     /**
-     * Visualizer of CurrentScore
-     */
-    public void scoreVisualizer();
-
-    /**
      * Visualizer of Chat
      */
     public void chatVisualizer(JSONObject jsonMessage);

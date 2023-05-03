@@ -1,1 +1,11 @@
-{"requester":"requester","request":"@GAME","column":3,"tileList":[{"column":1,"row":0}]}
+{
+  "requester": "requester",
+  "request": "@GAME",
+  "column": 3,
+  "tileList": [
+    {
+      "column": 1,
+      "row": 0
+    }
+  ]
+}
