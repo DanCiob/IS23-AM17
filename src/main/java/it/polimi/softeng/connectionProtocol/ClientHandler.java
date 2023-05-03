@@ -7,50 +7,45 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ClientHandler implements Runnable{
-    Socket clientSocket;
-    Boolean nickNameNotConfirmed = true;
+    private BufferedReader in = null;
+    private PrintWriter out = null;
+    private Socket clientSocket;
 
     public ClientHandler(Socket clientSocket){
-            this.clientSocket = clientSocket;
+        this.clientSocket = clientSocket;
     }
 
     @Override
     public void run() {
-
-        //routine that gets the output stream for the server to a single client
-        PrintWriter out = null; // allocate to write answer to client.
+        System.out.println("new clientHandler created !");
         try {
-            out = new PrintWriter(clientSocket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //routine that gets the input stream for the server to a single client
-        BufferedReader in = null;
         try{
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            System.out.println("single input established");
-        }catch (IOException e ){
-            e.printStackTrace();
+            out = new PrintWriter(clientSocket.getOutputStream(),true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
-        while (true) {
-            String s;
-            try {
-                s = in.readLine();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            if(s != null) System.out.println(s);
-        }
+        Thread t = new Thread(()-> readMessage(in));
+        t.start();
 
-
-        /*
-        //routine for login
-        while(nickNameNotConfirmed){
-
-        }*/
     }
 
-
+    public void readMessage(BufferedReader in){
+        String s = "";
+        try {
+            while ((s = in.readLine()) != null) {
+                System.out.println(s);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void sendMessage(String message){
+        out.println(message);
+    }
 }

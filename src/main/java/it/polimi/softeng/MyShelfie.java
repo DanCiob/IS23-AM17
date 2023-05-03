@@ -29,11 +29,13 @@ public class MyShelfie {
         }
 
         switch (mode){
-            case 48 ->{
+            case '0' ->{
                 System.out.println("You've chosen : server mode");
 
                 //creates the server
-                ServerSide.main(null);
+                ServerSide serverSide = new ServerSide();
+
+
             }
             case 49 ->{
                 System.out.println("You've chosen : client CLI");
@@ -41,16 +43,18 @@ public class MyShelfie {
                 //creates the client CLI
                 //CLI cli = new CLI();
                 ClientSide clientSide = new ClientSide();
-                clientSide.setupConnection("socket");
-                clientSide.sendMessage("helo");
+
+                clientSide.sendMessage("helo\n ");
             }
             case 50 ->{
                 System.out.println("You've chosen : client GUI");
+                break;
 
                 //creates the client GUI
             }
 
             default -> System.out.println("Unrecognized mode, closing application...");
+
         }
     }
 }
