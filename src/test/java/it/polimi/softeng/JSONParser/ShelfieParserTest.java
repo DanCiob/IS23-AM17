@@ -1,12 +1,13 @@
 package it.polimi.softeng.JSONParser;
 
+import it.polimi.softeng.customExceptions.IllegalInsertException;
+import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-
+import it.polimi.softeng.model.Cell;
 import java.util.ArrayList;
 
 class ShelfieParserTest {
@@ -110,5 +111,82 @@ class ShelfieParserTest {
         assertEquals("BLUE",colorToString(parser.getTilesToBeInserted().get(0).getColor()));
         assertEquals("WHITE",colorToString(parser.getTilesToBeInserted().get(1).getColor()));
         assertEquals(3,parser.getColumn());
+    }
+
+
+    @Test
+    public void shelfieFullParsertest(){
+        Cell cell, cell1;
+        ArrayList<Tile> tiles = new ArrayList<>();
+        ArrayList<Cell> pos = new ArrayList<>();
+
+        tiles.add(new Tile(0, Tile.TileColor.BLUE));
+        cell = new Cell();
+        cell.setRow(0);
+        cell.setColumn(0);
+        pos.add(0, cell);
+
+        tiles.add(new Tile(1, Tile.TileColor.GREEN));
+        cell = new Cell();
+        cell.setRow(1);
+        cell.setColumn(0);
+        pos.add(1, cell);
+        tiles.add(new Tile(2, Tile.TileColor.PURPLE));
+        cell1 = new Cell();
+        cell1.setRow(2);
+        cell1.setColumn(0);
+        pos.add(2, cell1);
+        tiles.clear();
+
+        tiles.add(new Tile(3, Tile.TileColor.WHITE));
+        cell = new Cell();
+        cell.setRow(0);
+        cell.setColumn(1);
+        pos.add(3, cell);
+        tiles.add(new Tile(4, Tile.TileColor.BLUE));
+        cell1 = new Cell();
+        cell1.setRow(1);
+        cell1.setColumn(1);
+        pos.add(4, cell1);
+        tiles.clear();
+
+        tiles.add(new Tile(5, Tile.TileColor.CYAN));
+        cell = new Cell();
+        cell.setRow(0);
+        cell.setColumn(4);
+        pos.add(5, cell);
+        tiles.add(new Tile(6, Tile.TileColor.BLUE));
+        cell1 = new Cell();
+        cell1.setRow(1);
+        cell1.setColumn(4);
+        pos.add(6, cell1);
+
+
+        ShelfieParser shelfieParser = new ShelfieParser();
+        Shelfie shelfie = shelfieParser.shelfieFullParser(writemsgFullShelfie(tiles, pos));
+
+        int row, column;
+        for(Tile tile : tiles){
+            row = pos.get(tile.getId()).getRow();
+            column = pos.get(tile.getId()).getColumn();
+            assertTrue(shelfie.getGrid()[row][column]!=null && shelfie.getGrid()[row][column].getColor() == tile.getColor());
+        }
+    }
+
+    private String writemsgFullShelfie(ArrayList<Tile> tileList, ArrayList<Cell> positions){
+        JSONObject msg = new JSONObject();
+
+        JSONArray list = new JSONArray();
+        for(Tile tile : tileList){
+            JSONObject jsonTile = new JSONObject();
+            jsonTile.put("id", tile.getId());
+            jsonTile.put("color", colorToString(tile.getColor()));
+            jsonTile.put("row", positions.get(tile.getId()).getRow());
+            jsonTile.put("column", positions.get(tile.getId()).getColumn());
+            list.add(jsonTile);
+        }
+        msg.put("tileList",list);
+
+        return msg.toString();
     }
 }
