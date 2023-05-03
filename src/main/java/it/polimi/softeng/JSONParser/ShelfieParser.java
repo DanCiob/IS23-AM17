@@ -4,6 +4,8 @@ import it.polimi.softeng.model.Tile;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import it.polimi.softeng.Constants;
+import it.polimi.softeng.model.Shelfie;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -48,6 +50,42 @@ public class ShelfieParser{
         long jsonColumn = (long) jsonObject.get("column");
         column = (int) jsonColumn;
 
+    }
+
+
+    /**
+     *
+     * @param shelfieMessage which is the json  of the entire shelfie
+     * @return the object shelfie represented by the json string shelfieMessage
+     */
+    public Shelfie shelfieFullParser(String shelfieMessage){
+        Shelfie shelfie = new Shelfie();
+        int row, column;
+        Long rowLong, columnLong;
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject;
+        try {
+            jsonObject = (JSONObject) parser.parse(shelfieMessage);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        JSONArray tiles = (JSONArray) jsonObject.get("tileList");
+        Iterator<JSONObject> iterator = tiles.iterator();
+        int i = 0;
+        while(iterator.hasNext()){
+            JSONObject tileJson = (JSONObject) tiles.get(i);
+            Long id = ((long) tileJson.get("id"));      //necessary workaround as JSON outputs a long value for some reason
+            int idInt = id.intValue();
+            rowLong = (Long) tileJson.get("row");
+            row = rowLong.intValue();
+            columnLong = (Long) tileJson.get("column");
+            column = columnLong.intValue();
+            shelfie.setGrid(row, column, idInt, PersonalCardsParser.StringToColor((String)tileJson.get("color")));
+            iterator.next();
+            i++;
+        }
+        return shelfie;
     }
 
     // these methods may be useless when i make shelfieParser call the methods of interface to modify the model
