@@ -20,7 +20,6 @@ public class ChatParser {
 
         receiver = (String) jsonObject.get("receiver");
         message = (String) jsonObject.get("message");
-
     }
 
     public String getReceiver() {

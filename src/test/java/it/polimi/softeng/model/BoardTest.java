@@ -1,5 +1,6 @@
 package it.polimi.softeng.model;
 
+import it.polimi.softeng.JSONWriter.BoardWriter;
 import it.polimi.softeng.client.view.CLI.CLI;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ class BoardTest {
     public void setNotAvailable2Players(){
         int count = 0;
         Board board = new Board();
-        board.setNotAvailable(2);
+        board.resetBoard(2);
 
         for(Cell cell1 : board.getNotAvailable()){
             if(cell1.getColumn() == 5 && cell1.getRow() == 8)
@@ -59,7 +60,7 @@ class BoardTest {
     public void setNotAvailable3Players(){
         int count = 0;
         Board board = new Board();
-        board.setNotAvailable(3);
+        board.resetBoard(3);
 
         for(Cell cell1 : board.getNotAvailable()){
             if(cell1.getRow() == 5 && cell1.getColumn() == 8)
@@ -78,6 +79,8 @@ class BoardTest {
                 count=0;
             if(cell1.getRow() == 2 && cell1.getColumn() == 2)
                 count=0;
+            if(cell1.getRow() == 5 && cell1.getColumn() == 0)
+                fail();
         }
 
         assertTrue(count == 6);
@@ -87,8 +90,10 @@ class BoardTest {
     public void setNotAvailable4Players(){
         int count = 0;
         Board board = new Board();
-        board.setNotAvailable(4);
+        board.resetBoard(4);
         for(Cell cell1 : board.getNotAvailable()){
+            if(cell1.getRow() == 5 && cell1.getColumn() == 0)
+                fail();
             if(cell1.getColumn() == 0 && cell1.getRow() == 0)
                 count++;
             if(cell1.getRow() == 0 && cell1.getColumn() == 1)
@@ -142,8 +147,8 @@ class BoardTest {
     public void setNotAvailable2PlayersB(){
         int count = 0;
         Board board = new Board();
+        board.resetBoard(2);
 
-        board.setNotAvailable(2);
         for(Cell cell1 : board.getNotAvailable()){
             if(cell1.getRow() == 0 && cell1.getColumn() == 0)//top left (all not available cells)
                 count++;
@@ -240,7 +245,7 @@ class BoardTest {
     public void setNotAvailable3PlayersB(){
         int count = 0;
         Board board = new Board();
-        board.setNotAvailable(3);
+        board.resetBoard(3);
 
         for(Cell cell1 : board.getNotAvailable()){
             if(cell1.getRow() == 0 && cell1.getColumn() == 0)//top left (all not available cells)
@@ -338,8 +343,8 @@ class BoardTest {
     public void setNotAvailable4PlayersB(){
         int count = 0;
         Board board = new Board();
+        board.resetBoard(4);
 
-        board.setNotAvailable(4);
         for(Cell cell1 : board.getNotAvailable()){
             if(cell1.getRow() == 0 && cell1.getColumn() == 0)//top left (all not available cells)
                 count++;
@@ -444,7 +449,7 @@ class BoardTest {
 
 
         //set the  tiles of the board at a value to check if it removes it correctly, using the method from the game to initialize the bag
-        board.setNotAvailable(2);
+        board.resetBoard(2);
         game.initializeTile();
         board.positionTiles(game.getTileBag());
 
@@ -468,7 +473,7 @@ class BoardTest {
 
 
         //set the  tiles of the board at a value to check if it removes it correctly, using the method from the game to initialize the bag
-        board.setNotAvailable(2);
+        board.resetBoard(2);
         game.initializeTile();
         assertNull(board.getBoard()[1][3]);
         board.positionTiles(game.getTileBag());
@@ -494,7 +499,7 @@ class BoardTest {
 
 
         //set the  tiles of the board at a value to check if it removes it correctly, using the method from the game to initialize the bag
-        board.setNotAvailable(2);
+        board.resetBoard(2);
         game.initializeTile();
         assertNull(board.getBoard()[5][1]);
         assertNull(board.getBoard()[4][1]);
@@ -530,7 +535,7 @@ class BoardTest {
 
 
         //set the  tiles of the board at a value to check if it removes it correctly, using the method from the game to initialize the bag
-        board.setNotAvailable(2);
+        board.resetBoard(2);
         game.initializeTile();
         assertNull(board.getBoard()[1][3]);
         assertNull(board.getBoard()[1][4]);
@@ -582,7 +587,6 @@ class BoardTest {
         ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
         Cell cell = new Cell();
         Game game = new Game();
-        board.setNotAvailable(4);
         board.resetBoard(4);
         game.initializeTile();
         board.positionTiles(game.getTileBag());
@@ -604,10 +608,11 @@ class BoardTest {
     public void positionTilesTest(){
         Board board = new Board();
         Game game = new Game();
-        ArrayList<Cell> notAvailable = board.getNotAvailable();
+        ArrayList<Cell> notAvailable;
         boolean posNotUsed;
         game.initializeTile();
         board.resetBoard(4);
+        notAvailable = board.getNotAvailable();
         board.positionTiles(game.getTileBag());
         for(int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -752,13 +757,4 @@ class BoardTest {
         assertFalse(board.checkIslands());
     }
 
-    @Test
-    public void boardChangeNotifier(){
-        Board board = new Board();
-        Game game = new Game();
-        game.initializeTile();
-        board.resetBoard(3);
-        board.positionTiles(game.getTileBag());
-        board.boardChangeNotifier();
-    }
 }

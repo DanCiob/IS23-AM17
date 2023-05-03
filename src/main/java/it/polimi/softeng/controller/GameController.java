@@ -1,15 +1,22 @@
 package it.polimi.softeng.controller;
 
+import it.polimi.softeng.model.Cell;
+
+import java.util.ArrayList;
+
 public class GameController {
-    private String nickname = new String();
+    private String nickname;
 
-    public void gameParser(String s){
-        /*char c;
-        for(int i=0;i<s.length();i++){
-            c = s.charAt(i);
-            if(c == '-'){
+    /**
+     * Call model update with information collected by client
+     * @param tilesToBeRemoved is positions of cell to be removed
+     * @param column is column of insertion
+     * @param requester is receiver of updates
+     */
+    public static void sendGameMove(ArrayList<Cell> tilesToBeRemoved, int column, String requester) {
 
-            }
-        }*/
+        //Board update
+        //Shelfie update
+        //Update client ?
     }
 }

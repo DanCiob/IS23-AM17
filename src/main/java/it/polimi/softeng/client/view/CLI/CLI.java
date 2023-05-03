@@ -1,6 +1,7 @@
 package it.polimi.softeng.client.view.CLI;
 
 import it.polimi.softeng.JSONParser.ChatParser;
+import it.polimi.softeng.client.view.MessageHandler;
 import it.polimi.softeng.model.*;
 import it.polimi.softeng.client.view.CommonOperationsFramework;
 import it.polimi.softeng.client.view.UI;
@@ -48,11 +49,15 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      */
     private int GameMode;
 
+    /**
+     * 1 -> Connected with Socket
+     * 2 -> Connected with RMI
+     */
+    private int ConnectionMode = 0;
     private int NumOfPlayer;
     private boolean GameIsOn;
     private Scanner input;
     private PrintStream output;
-
 
     /**
      * CLI initialization, connection to server, choose of gameMode
@@ -65,9 +70,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         System.out.println("Do you want to connect using Socket(1) or RMI(2)?");
         System.out.println(">");
         do {
-            mode = input.nextInt();
+            ConnectionMode = input.nextInt();
 
-            switch (mode) {
+            switch (ConnectionMode) {
                 case 1 -> { //socket
                     System.out.println("Connection with Socket...");
                     System.out.println("Digit server IP");
@@ -145,14 +150,14 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 //}while(nicknameNotUnique)
                 default -> System.out.println("Unrecognized connection method, please digit 1 or 2...");
             }
-        } while (mode != 1 && mode != 2);
+        } while (ConnectionMode != 1 && ConnectionMode != 2);
     }
 
 
     @Override
     /**
-     * @param board
-     * @param notAvailable
+     * @param board is playerBoard
+     * @param notAvailable is notAvailable cells
      */
     public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable) {
         Tile.TileColor tileColor;
@@ -390,19 +395,11 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         System.out.println(ANSI_GREY + "     0  1  2  3  4" + Tile.TileColor.WHITE.coloredText());
     }
 
-    //May be unified with onlinePlayersVisualizer
-    @Override
-    public void scoreVisualizer() {
-
-    }
-
     @Override
     public void chatVisualizer(JSONObject jsonMessage) {
         ChatParser chatParser = new ChatParser();
         chatParser.chatParser(jsonMessage.toJSONString());
         System.out.println(chatParser.getReceiver() + ": " + chatParser.getMessage());
-
-
     }
 
     @Override
@@ -447,16 +444,35 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         String op = command.substring(0, 4).toUpperCase();
         String action = command.substring(6);
 
-        //These actions need to communicate with server
-        if (op.equals("@CHAT") || op.equals("@GAME") || op.equals("@VPLA") || op.equals("@VSCO") || op.equals("@VCCA"))
-            actionToJSON(op, action);
-            //These actions are view-local
-        else {
-            switch (op) {
-                case ("@VBOR") -> boardVisualizer(UserBoard.getBoard(), UserBoard.getNotAvailable());
-                case ("@VSHE") -> shelfieVisualizer(UserShelfie.getGrid());
-                case ("@VPCA") -> personalCardVisualizer(personalCard);
-                default -> System.out.println("Unrecognized command");
+        boolean needServer = op.equals("@LOGN") || op.equals("@CHAT") || op.equals("@GAME") || op.equals("@VPLA") || op.equals("@VSCO") || op.equals("@VCCA");
+        switch (ConnectionMode) {
+            case 1 -> {
+                //These actions need to communicate with server
+                if (needServer)
+                    actionToJSON(op, action);
+                    //These actions are view-local
+                else {
+                    switch (op) {
+                        case ("@VBOR") -> boardVisualizer(UserBoard.getBoard(), UserBoard.getNotAvailable());
+                        case ("@VSHE") -> shelfieVisualizer(UserShelfie.getGrid());
+                        case ("@VPCA") -> personalCardVisualizer(personalCard);
+                        default -> System.out.println("Unrecognized command");
+                    }
+                }
+            }
+            case 2 -> {
+                //These actions need to communicate with server
+                if (needServer)
+                    RMIInvoker(op, action);
+                    //These actions are view-local
+                else {
+                    switch (op) {
+                        case ("@VBOR") -> boardVisualizer(UserBoard.getBoard(), UserBoard.getNotAvailable());
+                        case ("@VSHE") -> shelfieVisualizer(UserShelfie.getGrid());
+                        case ("@VPCA") -> personalCardVisualizer(personalCard);
+                        default -> System.out.println("Unrecognized command");
+                    }
+                }
             }
         }
 
@@ -503,5 +519,35 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         Pattern pattern = Pattern.compile(nicknameREGEX);
         Matcher matcher = pattern.matcher(this.Nickname);
         return matcher.matches();
+    }
+
+    @Override
+    public void boardUpdater(Board b) {
+
+    }
+
+    @Override
+    public void shelfieUpdater(Shelfie s) {
+
+    }
+
+    @Override
+    public void scoreUpdater(int s) {
+
+    }
+
+    @Override
+    public void personalCardUpdater(PersonalCards pc) {
+
+    }
+
+    @Override
+    public void boardUpdaterFromJSON() {
+
+    }
+
+    @Override
+    public void shelfieUpdaterFromJSON() {
+
     }
 }

@@ -1,51 +1,42 @@
 package it.polimi.softeng.JSONParser;
 
-import it.polimi.softeng.model.Player;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-
 public class LoginParser {
+    String nickname;
+    int numOfPlayer;
+    int gameMode;
+    int startGame;
 
     /**
-     * @param path       is login JSON file
-     * @param playerList is current player list
+     * @param message is login JSON file
      */
-    public static void updatePlayerListFromLogin(String path, ArrayList<Player> playerList) {
+    public void loginParser(String message) throws ParseException {
 
         JSONParser parser = new JSONParser();
+        JSONObject obj = (JSONObject) parser.parse(message);
 
-        try (Reader reader = new FileReader(path)) {
+        nickname = (String) obj.get("nickname");
+        numOfPlayer = (int) obj.get("numOfPlayer");
+        gameMode = (int) obj.get("gameMode");
+        startGame = (int) obj.get("startGame");
+    }
 
-            JSONObject jsonObject = (JSONObject) parser.parse(reader);
-            //No player in game
-            if (playerList.size() == 0)
-            {
-                String nickname = (String) jsonObject.get("nickname");
-                int numPlayer = (int)(long) jsonObject.get("numOfPlayer");
+    public String getNickname() {
+        return nickname;
+    }
 
-                playerList.add(new Player(nickname, 0));
-            }
-            //Players already in game -> tbd numOfPlayers in game
-            /*else if (playerList.size() < getnumOfPlayers())
-            {
-                String nickname = (String) jsonObject.get("nickname");
+    public int getNumOfPlayer() {
+        return numOfPlayer;
+    }
 
-                playerList.add(new Player(nickname, 0));
-            }*/
-            else
-            {
-                //refuse connection
-            }
+    public int getGameMode() {
+        return gameMode;
+    }
 
-
-        } catch (IOException | ParseException e) {
-            throw new RuntimeException(e);
-        }
+    public int getStartGame() {
+        return startGame;
     }
 }

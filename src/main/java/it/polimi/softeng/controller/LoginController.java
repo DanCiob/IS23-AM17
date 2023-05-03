@@ -1,6 +1,6 @@
 package it.polimi.softeng.controller;
 
-public class LoginParser {
+public class LoginController {
     private String IP_address;
     private String Nickname;
 

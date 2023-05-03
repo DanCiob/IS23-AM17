@@ -27,7 +27,7 @@ public class Board implements BoardSetter{
      * @param numberOfPlayers indicates how many player are partecipating to the current game
      */
 
-    public void setNotAvailable(int numberOfPlayers) {
+    private void setNotAvailable(int numberOfPlayers) {
         Cell temp;
 
         /*
@@ -57,6 +57,7 @@ public class Board implements BoardSetter{
 
             }
         }
+
 
         if(numberOfPlayers < 4){
             /*
@@ -260,36 +261,6 @@ public class Board implements BoardSetter{
         }
         return true; //there are only islands
     }
-
-
-    public String boardChangeNotifier(){
-        JSONObject jsonObject = new JSONObject();
-
-        for(int i=0;i<boardRows;i++){
-            JSONArray array = new JSONArray();
-            array.clear();
-            for(int j=0;j<boardColumns;j++){
-                if(board[i][j]!=null){
-                    JSONArray array1 = new JSONArray();
-                    array1.add(i);
-                    array1.add(j);
-                    array1.add(board[i][j].getColor());
-                    array.add(array1);
-                }
-            }
-            String row = "Row " + i;
-            jsonObject.put(row, array);
-            /*try (FileWriter file = new FileWriter("c:\\test.json")) {
-                file.write(jsonObject.toJSONString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
-        }
-        System.out.print(jsonObject);
-        return null;
-    }
-
-
 
     public void setBoard(int  i, int j) {
         board[i][j] = new Tile(0, Tile.TileColor.BLUE);

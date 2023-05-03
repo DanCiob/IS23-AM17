@@ -132,4 +132,9 @@ public class Shelfie {
     public String shelfieChangeNotifier(){
         return null;
     }
+
+
+    public void setGrid(int row, int column, int id, Tile.TileColor color){
+        grid[row][column] = new Tile(id, color);
+    }
 }
