@@ -32,6 +32,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      * Player information
      */
     private int UserScore;
+
     private PersonalCards personalCard;
     private String Nickname;
     private String ServerAddress;
@@ -59,6 +60,12 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     private Scanner input;
     private PrintStream output;
 
+    public PrintStream getOutput() {
+        return output;
+    }
+
+    private MessageHandler messageHandler;
+
     /**
      * CLI initialization, connection to server, choose of gameMode
      * After setup CLI is ready to be used
@@ -84,6 +91,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");
                     System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
                     System.out.println(">");
+
+                   // connectCLI(ServerAddress, Port);
+
                     do {
                         StartGame = input.nextInt();
                     } while (StartGame != 1 && StartGame != 2);
@@ -103,6 +113,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         } while (GameMode != 1 && GameMode != 2);
                     }
 
+                    //TODO nicknameUniqueness
                     //do {
                     System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed)");
                     System.out.println(">");
@@ -111,8 +122,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     } while (isOkNickname());
                 }
 
-                //Connect to server
-                //}while(nicknameNotUnique)
+
+                //}while(nicknameNotUnique())
                 case 2 -> {//RMI
                     System.out.println("Connection with RMI...");
                     System.out.println("Digit server IP");
@@ -141,7 +152,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                             GameMode = input.nextInt();
                         } while (GameMode != 1 && GameMode != 2);
                     }
-
+                    //TODO nicknameUniqueness
                     //do {
                     System.out.println("Insert nickname");
                     Nickname = input.nextLine();
@@ -411,6 +422,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         this.GameIsOn = value;
     }
 
+    /**
+     * Main class of CLI
+     */
     @Override
     public void run() {
         boolean firstRun = true;
@@ -426,7 +440,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     }
 
     /**
-     * @param firstRun Game routine that wait for commands
+     * @param firstRun Game routine that wait for commands and eventually call RMI or send by Socket
      */
     public void game(boolean firstRun) {
         //POSSIBLE COMMANDS
@@ -444,7 +458,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         String op = command.substring(0, 4).toUpperCase();
         String action = command.substring(6);
 
-        boolean needServer = op.equals("@LOGN") || op.equals("@CHAT") || op.equals("@GAME") || op.equals("@VPLA") || op.equals("@VSCO") || op.equals("@VCCA");
+        boolean needServer = op.equals("@LOGN") || op.equals("@CHAT") || op.equals("@GAME") || op.equals("@VPLA") || op.equals("@VCCA");
         switch (ConnectionMode) {
             case 1 -> {
                 //These actions need to communicate with server
@@ -521,33 +535,40 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         return matcher.matches();
     }
 
+    /**
+     * Called by RMI or Socket for board update
+     * @param b is new Board
+     */
     @Override
     public void boardUpdater(Board b) {
-
+        this.UserBoard = b;
     }
 
+    /**
+     * Called by RMI or Socket for shelfie update
+     * @param s is new Shelfie
+     */
     @Override
     public void shelfieUpdater(Shelfie s) {
-
+        this.UserShelfie = s;
     }
 
+    /**
+     * Called by RMI or Socket for score update
+     * @param s is new score
+     */
     @Override
     public void scoreUpdater(int s) {
-
+        this.UserScore = s;
     }
 
+    /**
+     * Called by RMI or Socket for personal car update -> only at the beginning
+     * @param pc is personal card
+     */
     @Override
     public void personalCardUpdater(PersonalCards pc) {
-
+        this.personalCard = pc;
     }
 
-    @Override
-    public void boardUpdaterFromJSON() {
-
-    }
-
-    @Override
-    public void shelfieUpdaterFromJSON() {
-
-    }
 }

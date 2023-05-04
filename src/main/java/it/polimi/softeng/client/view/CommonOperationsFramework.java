@@ -32,7 +32,11 @@ public abstract class CommonOperationsFramework {
                 }
                 //sendToServer(GameMoveWriter.writeGameMove());
             }
+            case ("@LOGN"): {
 
+            }break;
+
+            /*TODO future release
             case ("@VCCA"): {
 
             }
@@ -42,7 +46,7 @@ public abstract class CommonOperationsFramework {
             case ("@VSCO"): {
 
             }
-            break;
+            break;*/
             default:
                 System.out.println("Unrecognized operation!");
         }
@@ -102,8 +106,4 @@ public abstract class CommonOperationsFramework {
 
     public abstract void personalCardUpdater (PersonalCards pc);
 
-    public abstract void boardUpdaterFromJSON();
-
-    public abstract void shelfieUpdaterFromJSON();
-
-}
+    }

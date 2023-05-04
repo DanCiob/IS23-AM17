@@ -4,7 +4,6 @@ import it.polimi.softeng.model.Tile;
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import it.polimi.softeng.Constants;
 import it.polimi.softeng.model.Shelfie;
 
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class ShelfieParser{
      * @param moveMessage string containing the JSON message; such message must follow the syntax that can be found in the file {@link it/polimi/softeng/JSONMessages/GameMoveMessage.json}
      *                    with a maximum of 3 tiles
      */
-    public void shelfieParser(String moveMessage){
+    public void shelfieParserServerSide(String moveMessage){
         tilesToBeInserted.clear();
         JSONParser parser = new JSONParser();
 
@@ -55,10 +54,10 @@ public class ShelfieParser{
 
     /**
      *
-     * @param shelfieMessage which is the json  of the entire shelfie
+     * @param shelfieMessage which is the json of the entire shelfie
      * @return the object shelfie represented by the json string shelfieMessage
      */
-    public Shelfie shelfieFullParser(String shelfieMessage){
+    public Shelfie shelfieParserClientSide(String shelfieMessage){
         Shelfie shelfie = new Shelfie();
         int row, column;
         Long rowLong, columnLong;

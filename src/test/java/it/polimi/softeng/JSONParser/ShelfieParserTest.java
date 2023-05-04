@@ -1,6 +1,5 @@
 package it.polimi.softeng.JSONParser;
 
-import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import org.json.simple.JSONArray;
@@ -69,7 +68,7 @@ class ShelfieParserTest {
 
         ShelfieParser parser = new ShelfieParser();
 
-        parser.shelfieParser(jsonMsg.toString());
+        parser.shelfieParserServerSide(jsonMsg.toString());
 
         assertEquals(1, parser.getTilesToBeInserted().get(0).getId());
         assertEquals(2, parser.getTilesToBeInserted().get(1).getId());
@@ -95,7 +94,7 @@ class ShelfieParserTest {
 
         ShelfieParser parser = new ShelfieParser();
 
-        parser.shelfieParser(jsonMsg.toString());
+        parser.shelfieParserServerSide(jsonMsg.toString());
 
         tiles.clear();
         tile1 = new Tile(4, Tile.TileColor.BLUE);
@@ -104,7 +103,7 @@ class ShelfieParserTest {
         tiles.add(tile2);
 
         JSONObject jsonMsg2 = writemsg(tiles, 3);
-        parser.shelfieParser(jsonMsg2.toString());
+        parser.shelfieParserServerSide(jsonMsg2.toString());
 
         assertEquals(4, parser.getTilesToBeInserted().get(0).getId());
         assertEquals(5, parser.getTilesToBeInserted().get(1).getId());
@@ -161,7 +160,7 @@ class ShelfieParserTest {
 
 
         ShelfieParser shelfieParser = new ShelfieParser();
-        Shelfie shelfie = shelfieParser.shelfieFullParser(writemsgFullShelfie(tiles, pos));
+        Shelfie shelfie = shelfieParser.shelfieParserClientSide(writemsgFullShelfie(tiles, pos));
 
         int row, column;
         for(Tile tile : tiles){
