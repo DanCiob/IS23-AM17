@@ -15,7 +15,7 @@ public class GameController {
      */
     public static void sendGameMove(ArrayList<Cell> tilesToBeRemoved, int column, String requester) {
 
-        //Board update
+        //GameBoard update
         //Shelfie update
         //Update client ?
     }

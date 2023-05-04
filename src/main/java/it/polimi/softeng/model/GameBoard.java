@@ -1,15 +1,12 @@
 package it.polimi.softeng.model;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.io.FileWriter;
-import java.io.IOException;
+
 import static it.polimi.softeng.Constants.*;
 
 
-public class Board implements BoardSetter{
+public class GameBoard implements BoardSetter{
     /**
      * matrix that represents the board;
      * column numbering : goes from left to right
@@ -254,7 +251,7 @@ public class Board implements BoardSetter{
     public boolean checkIslands(){
         for(int i=0; i<boardRows-1; i++){
             for(int j=0; j<boardColumns-1; j++){
-                if(board[i][j]!=null && ((i>0 && board[i-1][j]!=null) || (j>0 && board[i][j-1]!=null) || (i<boardRows-1 && board[i+1][j]!=null) || (j<boardRows-1 &&board[i][j+1]!=null))){
+                if(board[i][j]!=null && ((i>0 && board[i-1][j]!=null) || (j>0 && board[i][j-1]!=null) || (i<boardRows-1 && board[i+1][j]!=null) || (j<boardRows-1 && board[i][j+1]!=null))){
                     return false;
                 }
             }
@@ -262,7 +259,17 @@ public class Board implements BoardSetter{
         return true; //there are only islands
     }
 
-    public void setBoard(int  i, int j) {
+    /*
+    This method set tiles in the board with not relavant id and color
+    It is used only for Testing
+    */
+    public void setBoardforTest(int  i, int j) {
         board[i][j] = new Tile(0, Tile.TileColor.BLUE);
     }
+
+    public void setBoard(int  i, int j, Tile tile) {
+        board[i][j] = tile;
+    }
+
+
 }

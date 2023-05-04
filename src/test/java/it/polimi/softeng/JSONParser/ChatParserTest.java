@@ -36,7 +36,7 @@ class ChatParserTest {
 
         chatParser.chatParser(msg.toJSONString());
         assertEquals("helo", chatParser.getMessage());
-        assertEquals(null, chatParser.getReceiver());
+        assertNull(chatParser.getReceiver());
     }
 
     @Test

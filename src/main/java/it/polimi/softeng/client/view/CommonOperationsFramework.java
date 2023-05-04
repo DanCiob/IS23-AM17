@@ -2,7 +2,7 @@ package it.polimi.softeng.client.view;
 
 import it.polimi.softeng.JSONWriter.ChatWriter;
 import it.polimi.softeng.JSONWriter.GameMoveWriter;
-import it.polimi.softeng.model.Board;
+import it.polimi.softeng.model.GameBoard;
 import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.Shelfie;
 import org.json.simple.JSONObject;
@@ -94,7 +94,7 @@ public abstract class CommonOperationsFramework {
         return true;
     }
 
-    public abstract void boardUpdater(Board b);
+    public abstract void boardUpdater(GameBoard b);
 
     public abstract void shelfieUpdater(Shelfie s);
 

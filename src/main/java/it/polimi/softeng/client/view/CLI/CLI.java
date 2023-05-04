@@ -1,12 +1,10 @@
 package it.polimi.softeng.client.view.CLI;
 
 import it.polimi.softeng.JSONParser.ChatParser;
-import it.polimi.softeng.client.view.MessageHandler;
 import it.polimi.softeng.model.*;
 import it.polimi.softeng.client.view.CommonOperationsFramework;
 import it.polimi.softeng.client.view.UI;
 import it.polimi.softeng.model.PersonalCards;
-import it.polimi.softeng.model.commonCards.CommonCards;
 import org.json.simple.JSONObject;
 
 import java.io.PrintStream;
@@ -19,9 +17,9 @@ import static it.polimi.softeng.Constants.*;
 
 public class CLI extends CommonOperationsFramework implements UI, Runnable {
     /**
-     * Local representation of Board
+     * Local representation of GameBoard
      */
-    private Board UserBoard;
+    private GameBoard userGameBoard;
 
     /**
      * Local representation of Shelfie
@@ -403,8 +401,15 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     }
 
     @Override
-    public void onlinePlayersVisualizer() { //nome e punteggio
-
+    public void scoreVisualizer(ArrayList<Player> players) { //player and score
+        CommandLineTable scoreTable = new CommandLineTable();
+        //st.setRightAlign(true);//if true then cell text is right aligned
+        scoreTable.setShowVerticalLines(true);//if false (default) then no vertical lines are shown
+        scoreTable.setHeaders("Player", "Score");//optional - if not used then there will be no header and horizontal lines
+        for (Player player : players) {
+            scoreTable.addRow(player.getNickname(), Integer.toString(player.getCurrentScore()));
+        }
+        scoreTable.print();
     }
 
     public void beginGame(boolean value) {
@@ -453,7 +458,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     //These actions are view-local
                 else {
                     switch (op) {
-                        case ("@VBOR") -> boardVisualizer(UserBoard.getBoard(), UserBoard.getNotAvailable());
+                        case ("@VBOR") -> boardVisualizer(userGameBoard.getBoard(), userGameBoard.getNotAvailable());
                         case ("@VSHE") -> shelfieVisualizer(UserShelfie.getGrid());
                         case ("@VPCA") -> personalCardVisualizer(personalCard);
                         default -> System.out.println("Unrecognized command");
@@ -467,7 +472,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     //These actions are view-local
                 else {
                     switch (op) {
-                        case ("@VBOR") -> boardVisualizer(UserBoard.getBoard(), UserBoard.getNotAvailable());
+                        case ("@VBOR") -> boardVisualizer(userGameBoard.getBoard(), userGameBoard.getNotAvailable());
                         case ("@VSHE") -> shelfieVisualizer(UserShelfie.getGrid());
                         case ("@VPCA") -> personalCardVisualizer(personalCard);
                         default -> System.out.println("Unrecognized command");
@@ -522,7 +527,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     }
 
     @Override
-    public void boardUpdater(Board b) {
+    public void boardUpdater(GameBoard b) {
 
     }
 

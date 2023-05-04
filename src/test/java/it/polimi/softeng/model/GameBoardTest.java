@@ -1,37 +1,37 @@
 package it.polimi.softeng.model;
 
-import it.polimi.softeng.JSONWriter.BoardWriter;
-import it.polimi.softeng.client.view.CLI.CLI;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
+
+import static it.polimi.softeng.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class BoardTest {
+class GameBoardTest {
 
     @Test
     public void resetBoardTest(){
-        Board board = new Board();
-        board.resetBoard(2);
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.resetBoard(2);
 
         for(int i=0;i<9;i++){
             for(int j=0;j<9;j++){
-                assertNull(board.getBoard()[i][j]);
+                assertNull(gameBoard.getBoard()[i][j]);
             }
         }
 
-        board.resetBoard(3);
+        gameBoard.resetBoard(3);
 
         for(int i=0;i<9;i++){
             for(int j=0;j<9;j++){
-                assertNull(board.getBoard()[i][j]);
+                assertNull(gameBoard.getBoard()[i][j]);
             }
         }
 
-        board.resetBoard(4);
+        gameBoard.resetBoard(4);
 
         for(int i=0;i<9;i++){
             for(int j=0;j<9;j++){
-                assertNull(board.getBoard()[i][j]);
+                assertNull(gameBoard.getBoard()[i][j]);
             }
         }
 
@@ -40,10 +40,10 @@ class BoardTest {
     @Test
     public void setNotAvailable2Players(){
         int count = 0;
-        Board board = new Board();
-        board.resetBoard(2);
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.resetBoard(2);
 
-        for(Cell cell1 : board.getNotAvailable()){
+        for(Cell cell1 : gameBoard.getNotAvailable()){
             if(cell1.getColumn() == 5 && cell1.getRow() == 8)
                 count++;
             if(cell1.getRow() == 7 && cell1.getColumn() == 3)
@@ -59,10 +59,10 @@ class BoardTest {
     @Test
     public void setNotAvailable3Players(){
         int count = 0;
-        Board board = new Board();
-        board.resetBoard(3);
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.resetBoard(3);
 
-        for(Cell cell1 : board.getNotAvailable()){
+        for(Cell cell1 : gameBoard.getNotAvailable()){
             if(cell1.getRow() == 5 && cell1.getColumn() == 8)
                 count++;
             if(cell1.getRow() == 5 && cell1.getColumn() == 7)
@@ -89,9 +89,9 @@ class BoardTest {
     @Test
     public void setNotAvailable4Players(){
         int count = 0;
-        Board board = new Board();
-        board.resetBoard(4);
-        for(Cell cell1 : board.getNotAvailable()){
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.resetBoard(4);
+        for(Cell cell1 : gameBoard.getNotAvailable()){
             if(cell1.getRow() == 5 && cell1.getColumn() == 0)
                 fail();
             if(cell1.getColumn() == 0 && cell1.getRow() == 0)
@@ -146,10 +146,10 @@ class BoardTest {
     @Test
     public void setNotAvailable2PlayersB(){
         int count = 0;
-        Board board = new Board();
-        board.resetBoard(2);
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.resetBoard(2);
 
-        for(Cell cell1 : board.getNotAvailable()){
+        for(Cell cell1 : gameBoard.getNotAvailable()){
             if(cell1.getRow() == 0 && cell1.getColumn() == 0)//top left (all not available cells)
                 count++;
             if(cell1.getRow() == 0 && cell1.getColumn() == 1)
@@ -230,7 +230,7 @@ class BoardTest {
             if(cell1.getRow() == 8 && cell1.getColumn() == 4)
                 count++;
 
-            if(cell1.getRow() == 3 && cell1.getColumn() == 4)//random cells in the centre of the board
+            if(cell1.getRow() == 3 && cell1.getColumn() == 4)//random cells in the centre of the gameBoard
                 fail();
             if(cell1.getRow() == 7 && cell1.getColumn() == 4)
                 fail();
@@ -244,10 +244,10 @@ class BoardTest {
     @Test
     public void setNotAvailable3PlayersB(){
         int count = 0;
-        Board board = new Board();
-        board.resetBoard(3);
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.resetBoard(3);
 
-        for(Cell cell1 : board.getNotAvailable()){
+        for(Cell cell1 : gameBoard.getNotAvailable()){
             if(cell1.getRow() == 0 && cell1.getColumn() == 0)//top left (all not available cells)
                 count++;
             if(cell1.getRow() == 0 && cell1.getColumn() == 1)
@@ -328,7 +328,7 @@ class BoardTest {
             if(cell1.getRow() == 8 && cell1.getColumn() == 4)
                 count++;
 
-            if(cell1.getRow() == 3 && cell1.getColumn() == 5)//random cells in the centre of the board
+            if(cell1.getRow() == 3 && cell1.getColumn() == 5)//random cells in the centre of the gameBoard
                 fail();
             if(cell1.getRow() == 6 && cell1.getColumn() == 4)
                 fail();
@@ -342,10 +342,10 @@ class BoardTest {
     @Test
     public void setNotAvailable4PlayersB(){
         int count = 0;
-        Board board = new Board();
-        board.resetBoard(4);
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.resetBoard(4);
 
-        for(Cell cell1 : board.getNotAvailable()){
+        for(Cell cell1 : gameBoard.getNotAvailable()){
             if(cell1.getRow() == 0 && cell1.getColumn() == 0)//top left (all not available cells)
                 count++;
             if(cell1.getRow() == 0 && cell1.getColumn() == 1)
@@ -426,7 +426,7 @@ class BoardTest {
             if(cell1.getRow() == 8 && cell1.getColumn() == 4)
                 fail();
 
-            if(cell1.getRow() == 3 && cell1.getColumn() == 2)//random cells in the centre of the board
+            if(cell1.getRow() == 3 && cell1.getColumn() == 2)//random cells in the centre of the gameBoard
                 fail();
             if(cell1.getRow() == 3 && cell1.getColumn() == 7)
                 fail();
@@ -441,30 +441,30 @@ class BoardTest {
 
     @Test
     public void updateBoard0Tiles(){
-        Board board = new Board();
+        GameBoard gameBoard = new GameBoard();
         ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
         Cell cell = new Cell();
         Game game = new Game();
 
 
 
-        //set the  tiles of the board at a value to check if it removes it correctly, using the method from the game to initialize the bag
-        board.resetBoard(2);
+        //set the  tiles of the gameBoard at a value to check if it removes it correctly, using the method from the game to initialize the bag
+        gameBoard.resetBoard(2);
         game.initializeTile();
-        board.positionTiles(game.getTileBag());
+        gameBoard.positionTiles(game.getTileBag());
 
-        assertNotNull(board.getBoard()[5][1]);
-        assertNotNull(board.getBoard()[4][1]);
+        assertNotNull(gameBoard.getBoard()[5][1]);
+        assertNotNull(gameBoard.getBoard()[4][1]);
         positionsToBeRemoved.add(cell);
-        assertFalse(board.checkLegalChoice(positionsToBeRemoved));
-        board.updateBoard(positionsToBeRemoved);
-        assertNotNull(board.getBoard()[4][1]);
-        assertNotNull(board.getBoard()[5][1]);
+        assertFalse(gameBoard.checkLegalChoice(positionsToBeRemoved));
+        gameBoard.updateBoard(positionsToBeRemoved);
+        assertNotNull(gameBoard.getBoard()[4][1]);
+        assertNotNull(gameBoard.getBoard()[5][1]);
     }
 
     @Test
     public void updateBoard1Tiles(){
-        Board board = new Board();
+        GameBoard gameBoard = new GameBoard();
         ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
         //ArrayList<Cell> bag = new ArrayList<>();
         Cell cell1 = new Cell();
@@ -472,24 +472,24 @@ class BoardTest {
 
 
 
-        //set the  tiles of the board at a value to check if it removes it correctly, using the method from the game to initialize the bag
-        board.resetBoard(2);
+        //set the  tiles of the gameBoard at a value to check if it removes it correctly, using the method from the game to initialize the bag
+        gameBoard.resetBoard(2);
         game.initializeTile();
-        assertNull(board.getBoard()[1][3]);
-        board.positionTiles(game.getTileBag());
+        assertNull(gameBoard.getBoard()[1][3]);
+        gameBoard.positionTiles(game.getTileBag());
 
-        assertNotNull(board.getBoard()[1][3]);
+        assertNotNull(gameBoard.getBoard()[1][3]);
         cell1.setRow(1);
         cell1.setColumn(3);
         positionsToBeRemoved.add(cell1);
-        assertTrue(board.checkLegalChoice(positionsToBeRemoved));
-        board.updateBoard(positionsToBeRemoved);
-        assertNull(board.getBoard()[1][3]);
+        assertTrue(gameBoard.checkLegalChoice(positionsToBeRemoved));
+        gameBoard.updateBoard(positionsToBeRemoved);
+        assertNull(gameBoard.getBoard()[1][3]);
     }
 
     @Test
     public void updateBoard2Tiles(){
-        Board board = new Board();
+        GameBoard gameBoard = new GameBoard();
         ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
         //ArrayList<Cell> bag = new ArrayList<>();
         Cell cell1 = new Cell();
@@ -498,15 +498,15 @@ class BoardTest {
 
 
 
-        //set the  tiles of the board at a value to check if it removes it correctly, using the method from the game to initialize the bag
-        board.resetBoard(2);
+        //set the  tiles of the gameBoard at a value to check if it removes it correctly, using the method from the game to initialize the bag
+        gameBoard.resetBoard(2);
         game.initializeTile();
-        assertNull(board.getBoard()[5][1]);
-        assertNull(board.getBoard()[4][1]);
-        board.positionTiles(game.getTileBag());
+        assertNull(gameBoard.getBoard()[5][1]);
+        assertNull(gameBoard.getBoard()[4][1]);
+        gameBoard.positionTiles(game.getTileBag());
 
-        assertNotNull(board.getBoard()[5][1]);
-        assertNotNull(board.getBoard()[4][1]);
+        assertNotNull(gameBoard.getBoard()[5][1]);
+        assertNotNull(gameBoard.getBoard()[4][1]);
         /* cell.setX(4);
         cell.setY(0);
         positionsToBeRemoved.add(cell);*/
@@ -516,15 +516,15 @@ class BoardTest {
         cell2.setRow(4);
         cell2.setColumn(1);
         positionsToBeRemoved.add(cell2);
-        assertTrue(board.checkLegalChoice(positionsToBeRemoved));
-        board.updateBoard(positionsToBeRemoved);
-        assertNull(board.getBoard()[4][1]);
-        assertNull(board.getBoard()[5][1]);
+        assertTrue(gameBoard.checkLegalChoice(positionsToBeRemoved));
+        gameBoard.updateBoard(positionsToBeRemoved);
+        assertNull(gameBoard.getBoard()[4][1]);
+        assertNull(gameBoard.getBoard()[5][1]);
     }
 
     @Test
     public void updateBoard3Tiles(){
-        Board board = new Board();
+        GameBoard gameBoard = new GameBoard();
         ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
         //ArrayList<Cell> bag = new ArrayList<>();
         Cell cell1 = new Cell();
@@ -534,34 +534,34 @@ class BoardTest {
 
 
 
-        //set the  tiles of the board at a value to check if it removes it correctly, using the method from the game to initialize the bag
-        board.resetBoard(2);
+        //set the  tiles of the gameBoard at a value to check if it removes it correctly, using the method from the game to initialize the bag
+        gameBoard.resetBoard(2);
         game.initializeTile();
-        assertNull(board.getBoard()[1][3]);
-        assertNull(board.getBoard()[1][4]);
-        assertNull(board.getBoard()[2][3]);
-        assertNull(board.getBoard()[2][4]);
-        assertNull(board.getBoard()[2][5]);
-        board.positionTiles(game.getTileBag());
+        assertNull(gameBoard.getBoard()[1][3]);
+        assertNull(gameBoard.getBoard()[1][4]);
+        assertNull(gameBoard.getBoard()[2][3]);
+        assertNull(gameBoard.getBoard()[2][4]);
+        assertNull(gameBoard.getBoard()[2][5]);
+        gameBoard.positionTiles(game.getTileBag());
 
-        assertNotNull(board.getBoard()[1][3]);
-        assertNotNull(board.getBoard()[1][4]);
+        assertNotNull(gameBoard.getBoard()[1][3]);
+        assertNotNull(gameBoard.getBoard()[1][4]);
         cell1.setRow(1);
         cell1.setColumn(3);
         positionsToBeRemoved.add(cell1);
         cell2.setRow(1);
         cell2.setColumn(4);
         positionsToBeRemoved.add(cell2);
-        assertTrue(board.checkLegalChoice(positionsToBeRemoved));
-        board.updateBoard(positionsToBeRemoved);
-        assertNull(board.getBoard()[1][3]);
-        assertNull(board.getBoard()[1][4]);
+        assertTrue(gameBoard.checkLegalChoice(positionsToBeRemoved));
+        gameBoard.updateBoard(positionsToBeRemoved);
+        assertNull(gameBoard.getBoard()[1][3]);
+        assertNull(gameBoard.getBoard()[1][4]);
         positionsToBeRemoved.clear();
 
 
-        assertNotNull(board.getBoard()[2][3]);
-        assertNotNull(board.getBoard()[2][4]);
-        assertNotNull(board.getBoard()[2][5]);
+        assertNotNull(gameBoard.getBoard()[2][3]);
+        assertNotNull(gameBoard.getBoard()[2][4]);
+        assertNotNull(gameBoard.getBoard()[2][5]);
         cell1 = new Cell();
         cell2 = new Cell();
         cell3 = new Cell();
@@ -574,45 +574,45 @@ class BoardTest {
         cell3.setRow(2);
         cell3.setColumn(5);
         positionsToBeRemoved.add(cell3);
-        assertTrue(board.checkLegalChoice(positionsToBeRemoved));
-        board.updateBoard(positionsToBeRemoved);
-        assertNull(board.getBoard()[2][3]);
-        assertNull(board.getBoard()[2][4]);
-        assertNull(board.getBoard()[2][5]);
+        assertTrue(gameBoard.checkLegalChoice(positionsToBeRemoved));
+        gameBoard.updateBoard(positionsToBeRemoved);
+        assertNull(gameBoard.getBoard()[2][3]);
+        assertNull(gameBoard.getBoard()[2][4]);
+        assertNull(gameBoard.getBoard()[2][5]);
     }
 
     @Test
     public void checkLegalChoiceTest(){
-        Board board = new Board();
+        GameBoard gameBoard = new GameBoard();
         ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
         Cell cell = new Cell();
         Game game = new Game();
-        board.resetBoard(4);
+        gameBoard.resetBoard(4);
         game.initializeTile();
-        board.positionTiles(game.getTileBag());
+        gameBoard.positionTiles(game.getTileBag());
 
         cell.setRow(0);
         cell.setColumn(0);
         positionsToBeRemoved.add(cell);
-        assertFalse(board.checkLegalChoice(positionsToBeRemoved));
+        assertFalse(gameBoard.checkLegalChoice(positionsToBeRemoved));
 
         positionsToBeRemoved = new ArrayList<>();
         cell = new Cell();
         cell.setRow(5);
         cell.setColumn(0);
         positionsToBeRemoved.add(cell);
-        assertTrue(board.checkLegalChoice(positionsToBeRemoved));
+        assertTrue(gameBoard.checkLegalChoice(positionsToBeRemoved));
     }
 
     @Test
     public void checkLegalChoiceLinear(){
-        Board board = new Board();
+        GameBoard gameBoard = new GameBoard();
         ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
         Cell cell = new Cell();
         Game game = new Game();
-        board.resetBoard(4);
+        gameBoard.resetBoard(4);
         game.initializeTile();
-        board.positionTiles(game.getTileBag());
+        gameBoard.positionTiles(game.getTileBag());
         cell.setRow(0);
         cell.setColumn(3);
         positionsToBeRemoved.add(cell);
@@ -620,20 +620,20 @@ class BoardTest {
         cell.setRow(1);
         cell.setColumn(5);
         positionsToBeRemoved.add(cell);
-        assertFalse(board.checkLegalChoice(positionsToBeRemoved));
+        assertFalse(gameBoard.checkLegalChoice(positionsToBeRemoved));
 
     }
 
     @Test
     public void positionTilesTest(){
-        Board board = new Board();
+        GameBoard gameBoard = new GameBoard();
         Game game = new Game();
         ArrayList<Cell> notAvailable;
         boolean posNotUsed;
         game.initializeTile();
-        board.resetBoard(4);
-        notAvailable = board.getNotAvailable();
-        board.positionTiles(game.getTileBag());
+        gameBoard.resetBoard(4);
+        notAvailable = gameBoard.getNotAvailable();
+        gameBoard.positionTiles(game.getTileBag());
         for(int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 posNotUsed = false;
@@ -642,7 +642,7 @@ class BoardTest {
                         posNotUsed = true;
                 }
                 if(!posNotUsed){
-                    assertNotNull(board.getBoard()[i][j]);
+                    assertNotNull(gameBoard.getBoard()[i][j]);
                 }
             }
         }
@@ -650,12 +650,12 @@ class BoardTest {
 
     @Test
     public void positionTilesAfterMovesOf2Tiles(){
-        Board board = new Board();
+        GameBoard gameBoard = new GameBoard();
         Game game = new Game();
         ArrayList<Cell> tbr = new ArrayList<>();
         game.initializeTile();
-        board.resetBoard(4);
-        board.positionTiles(game.getTileBag());
+        gameBoard.resetBoard(4);
+        gameBoard.positionTiles(game.getTileBag());
 
         Cell cell1 = new Cell();
         cell1.setRow(0);
@@ -665,22 +665,22 @@ class BoardTest {
         cell2.setRow(1);
         cell2.setColumn(3);
         tbr.add(cell2);
-        board.updateBoard(tbr);
-        assertNull(board.getBoard()[0][3]);
-        assertNull(board.getBoard()[1][3]);
-        board.positionTiles(game.getTileBag());
-        assertNotNull(board.getBoard()[0][3]);
-        assertNotNull(board.getBoard()[1][3]);
+        gameBoard.updateBoard(tbr);
+        assertNull(gameBoard.getBoard()[0][3]);
+        assertNull(gameBoard.getBoard()[1][3]);
+        gameBoard.positionTiles(game.getTileBag());
+        assertNotNull(gameBoard.getBoard()[0][3]);
+        assertNotNull(gameBoard.getBoard()[1][3]);
     }
 
     @Test
     public void positionTilesAfterMovesOf3Tiles(){
-        Board board = new Board();
+        GameBoard gameBoard = new GameBoard();
         Game game = new Game();
         ArrayList<Cell> tbr = new ArrayList<>();
         game.initializeTile();
-        board.resetBoard(4);
-        board.positionTiles(game.getTileBag());
+        gameBoard.resetBoard(4);
+        gameBoard.positionTiles(game.getTileBag());
 
         Cell cell1 = new Cell();
         cell1.setRow(3);
@@ -690,9 +690,9 @@ class BoardTest {
         cell2.setRow(4);
         cell2.setColumn(8);
         tbr.add(cell2);
-        board.updateBoard(tbr);
-        assertNull(board.getBoard()[3][8]);
-        assertNull(board.getBoard()[4][8]);
+        gameBoard.updateBoard(tbr);
+        assertNull(gameBoard.getBoard()[3][8]);
+        assertNull(gameBoard.getBoard()[4][8]);
         tbr.clear();
 
         Cell cell3 = new Cell();
@@ -707,74 +707,99 @@ class BoardTest {
         cell5.setRow(5);
         cell5.setColumn(7);
         tbr.add(cell5);
-        assertTrue(board.checkLegalChoice(tbr));
-        board.updateBoard(tbr);
-        assertNull(board.getBoard()[3][7]);
-        assertNull(board.getBoard()[4][7]);
-        assertNull(board.getBoard()[5][7]);
+        assertTrue(gameBoard.checkLegalChoice(tbr));
+        gameBoard.updateBoard(tbr);
+        assertNull(gameBoard.getBoard()[3][7]);
+        assertNull(gameBoard.getBoard()[4][7]);
+        assertNull(gameBoard.getBoard()[5][7]);
 
-        board.positionTiles(game.getTileBag());
-        assertNotNull(board.getBoard()[3][8]);
-        assertNotNull(board.getBoard()[4][8]);
-        assertNotNull(board.getBoard()[3][7]);
-        assertNotNull(board.getBoard()[4][7]);
-        assertNotNull(board.getBoard()[5][7]);
+        gameBoard.positionTiles(game.getTileBag());
+        assertNotNull(gameBoard.getBoard()[3][8]);
+        assertNotNull(gameBoard.getBoard()[4][8]);
+        assertNotNull(gameBoard.getBoard()[3][7]);
+        assertNotNull(gameBoard.getBoard()[4][7]);
+        assertNotNull(gameBoard.getBoard()[5][7]);
     }
 
 
     @Test
     public void checkIslandsTest(){
-        Board board = new Board();
+        GameBoard gameBoard = new GameBoard();
         Game game = new Game();
         game.initializeTile();
-        board.resetBoard(4);
-        board.setBoard(1, 3);
-        board.setBoard(0, 4);
-        assertTrue(board.checkIslands());
+        gameBoard.resetBoard(4);
+        gameBoard.setBoardforTest(1, 3);
+        gameBoard.setBoardforTest(0, 4);
+        assertTrue(gameBoard.checkIslands());
     }
 
     @Test
     public void checkIslandsTestFalse(){
-        Board board = new Board();
+        GameBoard gameBoard = new GameBoard();
         Game game = new Game();
         game.initializeTile();
-        board.resetBoard(4);
-        board.setBoard(0, 3);
-        board.setBoard(0, 4);
-        assertNotNull(board.getBoard()[0][3]);
-        assertNotNull(board.getBoard()[0][4]);
-        assertFalse(board.checkIslands());
+        gameBoard.resetBoard(4);
+        gameBoard.setBoardforTest(0, 3);
+        gameBoard.setBoardforTest(0, 4);
+        assertNotNull(gameBoard.getBoard()[0][3]);
+        assertNotNull(gameBoard.getBoard()[0][4]);
+        assertFalse(gameBoard.checkIslands());
     }
 
     @Test
     public void checkIslandEdges(){
-        Board board = new Board();
+        GameBoard gameBoard = new GameBoard();
         Game game = new Game();
         game.initializeTile();
-        board.resetBoard(3);
-        board.setBoard(0, 3);
-        assertNotNull(board.getBoard()[0][3]);
-        assertTrue(board.checkIslands());
+        gameBoard.resetBoard(3);
+        gameBoard.setBoardforTest(0, 3);
+        assertNotNull(gameBoard.getBoard()[0][3]);
+        assertTrue(gameBoard.checkIslands());
 
-        board.setBoard(1, 4);
-        assertNotNull(board.getBoard()[1][4]);
-        assertTrue(board.checkIslands());
+        gameBoard.setBoardforTest(1, 4);
+        assertNotNull(gameBoard.getBoard()[1][4]);
+        assertTrue(gameBoard.checkIslands());
 
-        board.setBoard(2, 5);
-        assertNotNull(board.getBoard()[2][5]);
-        assertTrue(board.checkIslands());
+        gameBoard.setBoardforTest(2, 5);
+        assertNotNull(gameBoard.getBoard()[2][5]);
+        assertTrue(gameBoard.checkIslands());
 
-        board.setBoard(3, 8);
-        assertNotNull(board.getBoard()[3][8]);
-        assertTrue(board.checkIslands());
+        gameBoard.setBoardforTest(3, 8);
+        assertNotNull(gameBoard.getBoard()[3][8]);
+        assertTrue(gameBoard.checkIslands());
 
-        board.setBoard(8, 5);
-        assertNotNull(board.getBoard()[8][5]);
-        assertTrue(board.checkIslands());
+        gameBoard.setBoardforTest(8, 5);
+        assertNotNull(gameBoard.getBoard()[8][5]);
+        assertTrue(gameBoard.checkIslands());
 
-        board.setBoard(7, 5);
-        assertNotNull(board.getBoard()[7][5]);
-        assertFalse(board.checkIslands());
+        gameBoard.setBoardforTest(7, 5);
+        assertNotNull(gameBoard.getBoard()[7][5]);
+        assertFalse(gameBoard.checkIslands());
     }
 
+    @Test
+    void setBoard() {
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.resetBoard(2);
+        Tile t1 = new Tile(0, Tile.TileColor.WHITE);
+        Tile t2 = new Tile(1, Tile.TileColor.BLUE);
+        Tile t3 = new Tile(2, Tile.TileColor.GREEN);
+
+        gameBoard.setBoard(4, 4, t1);
+        gameBoard.setBoard(2, 3, t2);
+        gameBoard.setBoard(4, 7, t3);
+
+        Tile t4 = gameBoard.getBoard()[4][4];
+        assertEquals(0, t4.getId());
+        assertEquals(Tile.TileColor.WHITE, t4.getColor());
+
+        Tile t5 = gameBoard.getBoard()[2][3];
+        assertEquals(1, t5.getId());
+        assertEquals(Tile.TileColor.BLUE, t5.getColor());
+
+        Tile t6 = gameBoard.getBoard()[4][7];
+        assertEquals(2, t6.getId());
+        assertEquals(Tile.TileColor.GREEN, t6.getColor());
+
+    }
 }

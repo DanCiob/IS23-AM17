@@ -3,15 +3,13 @@ package it.polimi.softeng.JSONWriter;
 import it.polimi.softeng.model.Cell;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import it.polimi.softeng.model.Board;
-
-import java.util.ArrayList;
+import it.polimi.softeng.model.GameBoard;
 
 import static it.polimi.softeng.Constants.boardColumns;
 import static it.polimi.softeng.Constants.boardRows;
 
 public class BoardWriter {
-    public JSONObject boardChangeNotifier(Board board){
+    public JSONObject boardChangeNotifier(GameBoard gameBoard){
         JSONObject jsonObject = new JSONObject();
         JSONArray tilesOfARow;
         JSONArray rows = new JSONArray();
@@ -21,12 +19,12 @@ public class BoardWriter {
             tilesOfARow = new JSONArray();
             tilesOfARow.clear();
             for(int j=0;j<boardColumns;j++){
-                if(board.getBoard()[i][j]!=null){
+                if(gameBoard.getBoard()[i][j]!=null){
                     posAndColor = new JSONObject();
                     posAndColor.put("row", i);
                     posAndColor.put("column", j);
-                    posAndColor.put("id", board.getBoard()[i][j].getId());
-                    posAndColor.put("color", board.getBoard()[i][j].getColor().toString());
+                    posAndColor.put("id", gameBoard.getBoard()[i][j].getId());
+                    posAndColor.put("color", gameBoard.getBoard()[i][j].getColor().toString());
                     tilesOfARow.add(posAndColor);
                 }
             }
@@ -39,7 +37,7 @@ public class BoardWriter {
 
             JSONArray positionsNotAvailable = new JSONArray();
             JSONObject pos;
-            for(Cell cell : board.getNotAvailable()){
+            for(Cell cell : gameBoard.getNotAvailable()){
                 pos = new JSONObject();
                 pos.put("row", cell.getRow());
                 pos.put("column", cell.getColumn());

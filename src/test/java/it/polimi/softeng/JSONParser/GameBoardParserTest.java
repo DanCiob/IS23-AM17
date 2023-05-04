@@ -1,30 +1,31 @@
 package it.polimi.softeng.JSONParser;
 
+import it.polimi.softeng.model.GameBoard;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
-import it.polimi.softeng.model.Board;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class BoardParserTest {
+class GameBoardParserTest {
 
     @Test
     void boardParserTest1(){
-        Board board = new Board();
+        GameBoard gameBoard = new GameBoard();
         int [][] updatedPositions = new int[1][2];
         updatedPositions[0][0] = 0;
         updatedPositions[0][1] = 5;
         JSONObject msg = writeMsg(updatedPositions);
         BoardParser boardParser = new BoardParser();
 
-        boardParser.boardParser(msg.toString(), board);
+        boardParser.boardParser(msg.toString(), gameBoard);
         assertEquals(0, boardParser.getPositionsToBeRemoved().get(0).getRow());
         assertEquals(5, boardParser.getPositionsToBeRemoved().get(0).getColumn());
     }
 
     @Test
     void boardParserTest2(){
-        Board board = new Board();
+        GameBoard gameBoard = new GameBoard();
         int [][] updatedPositions = new int[2][2];
         updatedPositions[0][0] = 5;
         updatedPositions[0][1] = 3;
@@ -33,7 +34,7 @@ class BoardParserTest {
         JSONObject msg = writeMsg(updatedPositions);
         BoardParser boardParser = new BoardParser();
 
-        boardParser.boardParser(msg.toString(), board);
+        boardParser.boardParser(msg.toString(), gameBoard);
         assertEquals(5, boardParser.getPositionsToBeRemoved().get(0).getRow());
         assertEquals(3, boardParser.getPositionsToBeRemoved().get(0).getColumn());
         assertEquals(6, boardParser.getPositionsToBeRemoved().get(1).getRow());
@@ -42,7 +43,7 @@ class BoardParserTest {
 
     @Test
     void boardParserTest3(){
-        Board board = new Board();
+        GameBoard gameBoard = new GameBoard();
         int [][] updatedPositions = new int[3][2];
         updatedPositions[0][0] = 3;
         updatedPositions[0][1] = 0;
@@ -53,7 +54,7 @@ class BoardParserTest {
         JSONObject msg = writeMsg(updatedPositions);
         BoardParser boardParser = new BoardParser();
 
-        boardParser.boardParser(msg.toString(), board);
+        boardParser.boardParser(msg.toString(), gameBoard);
         assertEquals(3, boardParser.getPositionsToBeRemoved().get(0).getRow());
         assertEquals(0, boardParser.getPositionsToBeRemoved().get(0).getColumn());
         assertEquals(4, boardParser.getPositionsToBeRemoved().get(1).getRow());
@@ -65,7 +66,7 @@ class BoardParserTest {
         updatedPositions1[0][0] = 4;
         updatedPositions1[0][1] = 4;
         JSONObject msg1 = writeMsg(updatedPositions1);
-        boardParser.boardParser(msg1.toString(), board);
+        boardParser.boardParser(msg1.toString(), gameBoard);
         assertEquals(4, boardParser.getPositionsToBeRemoved().get(0).getRow());
         assertEquals(4, boardParser.getPositionsToBeRemoved().get(0).getColumn());
     }
