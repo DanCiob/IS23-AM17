@@ -70,7 +70,7 @@ public class ShelfieParser{
             throw new RuntimeException(e);
         }
 
-        JSONArray tiles = (JSONArray) jsonObject.get("tileList");
+        JSONArray tiles = (JSONArray) jsonObject.get("shelfieGrid");
         Iterator<JSONObject> iterator = tiles.iterator();
         int i = 0;
         while(iterator.hasNext()){

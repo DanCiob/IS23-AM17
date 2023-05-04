@@ -13,10 +13,10 @@ public class BoardWriterTest {
         Board board = new Board();
         Game game = new Game();
         game.initializeTile();
-        board.resetBoard(3);
+        board.resetBoard(2);
         board.positionTiles(game.getTileBag());
         BoardWriter boardWriter = new BoardWriter();
-        JSONObject jsonObject = boardWriter.boardChangeNotifier(board, board.getNotAvailable());
+        JSONObject jsonObject = boardWriter.boardChangeNotifier(board);
         try (FileWriter file = new FileWriter("src/main/java/it/polimi/softeng/JSONMessages/Test/BoardWriterMessage.json")) {
             file.write(jsonObject.toJSONString());
         } catch (IOException e) {
