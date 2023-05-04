@@ -30,6 +30,7 @@ public class BoardWriter {
                     tilesOfARow.add(posAndColor);
                 }
             }
+
             String row = "Row " + i;
             rowObject = new JSONObject();
             rowObject.put(row, tilesOfARow);

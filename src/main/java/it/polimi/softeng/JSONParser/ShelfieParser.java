@@ -69,7 +69,6 @@ public class ShelfieParser{
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
         JSONArray tiles = (JSONArray) jsonObject.get("shelfieGrid");
         Iterator<JSONObject> iterator = tiles.iterator();
         int i = 0;
