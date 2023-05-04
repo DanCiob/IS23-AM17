@@ -1,6 +1,6 @@
 package it.polimi.softeng.JSONWriter;
 
-import it.polimi.softeng.model.Board;
+import it.polimi.softeng.model.GameBoard;
 import it.polimi.softeng.model.Game;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import java.io.IOException;
 public class BoardWriterTest {
     @Test
     public void boardChangeNotifier(){
-        Board board = new Board();
+        GameBoard board = new GameBoard();
         Game game = new Game();
         game.initializeTile();
         board.resetBoard(2);

@@ -5,13 +5,13 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import it.polimi.softeng.model.Board;
+import it.polimi.softeng.model.GameBoard;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class BoardParser {
     private ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
-    public void boardParser(String s, Board board){
+    public void boardParser(String s, GameBoard board){
         Cell temp;
         int i;
         Long tempX,tempY;
