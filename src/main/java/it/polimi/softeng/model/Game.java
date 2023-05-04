@@ -5,16 +5,15 @@ import it.polimi.softeng.model.commonCards.*;
 import java.util.ArrayList;
 import java.util.Random;
 import static it.polimi.softeng.Constants.*;
-
-
 import static it.polimi.softeng.model.PersonalCards.FillPersonalCardsBag;
 
 public class Game implements PlayerManager{
     //board section
-    private Board gameBoard = new Board();
+    private GameBoard gameBoard = new GameBoard();
     private ArrayList<Tile> tileBag = new ArrayList<>();
     private BadgeEndGame endGameBadge;
     private boolean simpleRules = false;
+
     //player section
     /**
      * this arrayList contains the references to the players; the order of the elements in the array refers to the order of
@@ -320,7 +319,7 @@ public class Game implements PlayerManager{
 
     //methods for testing purpose
 
-    public Board getGameBoard() {
+    public GameBoard getGameBoard() {
         return gameBoard;
     }
 

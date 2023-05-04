@@ -19,9 +19,9 @@ import static it.polimi.softeng.Constants.*;
 
 public class CLI extends CommonOperationsFramework implements UI, Runnable {
     /**
-     * Local representation of Board
+     * Local representation of GameBoard
      */
-    private Board UserBoard;
+    private GameBoard userGameBoard;
 
     /**
      * Local representation of Shelfie
@@ -32,7 +32,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      * Player information
      */
     private int UserScore;
-
     private PersonalCards personalCard;
     private String Nickname;
     private String ServerAddress;
@@ -152,7 +151,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                             GameMode = input.nextInt();
                         } while (GameMode != 1 && GameMode != 2);
                     }
-                    //TODO nicknameUniqueness
+
                     //do {
                     System.out.println("Insert nickname");
                     Nickname = input.nextLine();
@@ -414,8 +413,15 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     }
 
     @Override
-    public void onlinePlayersVisualizer() { //nome e punteggio
-
+    public void scoreVisualizer(ArrayList<Player> players) { //player and score
+        CommandLineTable scoreTable = new CommandLineTable();
+        //st.setRightAlign(true);//if true then cell text is right aligned
+        scoreTable.setShowVerticalLines(true);//if false (default) then no vertical lines are shown
+        scoreTable.setHeaders("Player", "Score");//optional - if not used then there will be no header and horizontal lines
+        for (Player player : players) {
+            scoreTable.addRow(player.getNickname(), Integer.toString(player.getCurrentScore()));
+        }
+        scoreTable.print();
     }
 
     public void beginGame(boolean value) {
@@ -440,7 +446,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     }
 
     /**
-     * @param firstRun Game routine that wait for commands and eventually call RMI or send by Socket
+     * @param firstRun Game routine that wait for commands
      */
     public void game(boolean firstRun) {
         //POSSIBLE COMMANDS
@@ -467,7 +473,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     //These actions are view-local
                 else {
                     switch (op) {
-                        case ("@VBOR") -> boardVisualizer(UserBoard.getBoard(), UserBoard.getNotAvailable());
+                        case ("@VBOR") -> boardVisualizer(userGameBoard.getBoard(), userGameBoard.getNotAvailable());
                         case ("@VSHE") -> shelfieVisualizer(UserShelfie.getGrid());
                         case ("@VPCA") -> personalCardVisualizer(personalCard);
                         default -> System.out.println("Unrecognized command");
@@ -540,8 +546,11 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      * @param b is new Board
      */
     @Override
-    public void boardUpdater(Board b) {
+    public void boardUpdater(GameBoard b) {
         this.UserBoard = b;
+    }
+    public void boardUpdater(Board b) {
+
     }
 
     /**
@@ -571,4 +580,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         this.personalCard = pc;
     }
 
+    @Override
+    public void shelfieUpdaterFromJSON() {
+
+    }
 }

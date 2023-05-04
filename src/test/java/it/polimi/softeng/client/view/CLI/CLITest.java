@@ -1,16 +1,10 @@
 package it.polimi.softeng.client.view.CLI;
 
-import it.polimi.softeng.JSONParser.ChatParser;
-import it.polimi.softeng.model.Board;
-import it.polimi.softeng.model.PersonalCards;
-import it.polimi.softeng.model.Shelfie;
-import it.polimi.softeng.model.Tile;
+import it.polimi.softeng.model.*;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CLITest {
     private CLI cli = new CLI();
@@ -21,9 +15,9 @@ class CLITest {
 
     @Test
     void boardVisualizerTest4Players() {
-        Board board = new Board();
-        board.resetBoard(4);
-        Tile[][] table = board.getBoard();
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.resetBoard(4);
+        Tile[][] table = gameBoard.getBoard();
 
         table[1][4] = new Tile(0, Tile.TileColor.BLUE);
         table[4][7] = new Tile(0, Tile.TileColor.WHITE);
@@ -33,16 +27,15 @@ class CLITest {
         table[3][2] = new Tile(0, Tile.TileColor.PURPLE);
 
         CLI cli = new CLI();
-        cli.boardVisualizer(table, board.getNotAvailable());
-
+        cli.boardVisualizer(table, gameBoard.getNotAvailable());
 
     }
 
     @Test
     void boardVisualizerTest3Players() {
-        Board board = new Board();
-        board.resetBoard(3);
-        Tile[][] table = board.getBoard();
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.resetBoard(3);
+        Tile[][] table = gameBoard.getBoard();
 
         table[1][4] = new Tile(0, Tile.TileColor.BLUE);
         table[4][7] = new Tile(0, Tile.TileColor.WHITE);
@@ -52,14 +45,14 @@ class CLITest {
         table[3][2] = new Tile(0, Tile.TileColor.PURPLE);
 
         CLI cli = new CLI();
-        cli.boardVisualizer(table, board.getNotAvailable());
+        cli.boardVisualizer(table, gameBoard.getNotAvailable());
     }
 
     @Test
     void boardVisualizerTest2Players() {
-        Board board = new Board();
-        board.resetBoard(2);
-        Tile[][] table = board.getBoard();
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.resetBoard(2);
+        Tile[][] table = gameBoard.getBoard();
 
         table[1][4] = new Tile(0, Tile.TileColor.BLUE);
         table[4][7] = new Tile(0, Tile.TileColor.WHITE);
@@ -69,7 +62,7 @@ class CLITest {
         table[3][2] = new Tile(0, Tile.TileColor.PURPLE);
 
         CLI cli = new CLI();
-        cli.boardVisualizer(table, board.getNotAvailable());
+        cli.boardVisualizer(table, gameBoard.getNotAvailable());
     }
 
 
@@ -236,6 +229,15 @@ class CLITest {
 
     @Test
     void scoreVisualizer() {
+        CLI cli = new CLI();
+        ArrayList<Player> players = new ArrayList<>();
+        Player p1 = new Player("Alice", 200);
+        players.add(p1);
+        Player p2 = new Player("Daniel", 100);
+        players.add(p2);
+        Player p3 = new Player("Andrea",0);
+        players.add(p3);
+        cli.scoreVisualizer(players);
     }
 
     @Test
@@ -245,10 +247,6 @@ class CLITest {
         jsonObject.put("receiver", "Tom");
         jsonObject.put("message", "Hello!");
         cli.chatVisualizer(jsonObject);
-    }
-
-    @Test
-    void onlinePlayersVisualizer() {
     }
 
     @Test

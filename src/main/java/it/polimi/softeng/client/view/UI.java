@@ -2,6 +2,7 @@ package it.polimi.softeng.client.view;
 
 import it.polimi.softeng.model.Cell;
 import it.polimi.softeng.model.PersonalCards;
+import it.polimi.softeng.model.Player;
 import it.polimi.softeng.model.Tile;
 import org.json.simple.JSONObject;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  */
 public interface UI {
     /**
-     * Visualizer of Board state
+     * Visualizer of GameBoard state
      */
     public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable);
 
@@ -39,6 +40,5 @@ public interface UI {
     /**
      * Visualizer of current connected players
      */
-    public void onlinePlayersVisualizer();
-
+    public void scoreVisualizer(ArrayList<Player> players);
 }
