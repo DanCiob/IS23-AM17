@@ -1,18 +1,26 @@
 package it.polimi.softeng.connectionProtocol;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Objects;
 
 public class ClientHandler implements Runnable{
     private BufferedReader in = null;
     private PrintWriter out = null;
     private Socket clientSocket;
+    private ServerSide serverSide;
+    private Boolean nickNameNotConfirmed = true;
 
-    public ClientHandler(Socket clientSocket){
+    public ClientHandler(Socket clientSocket, ServerSide serverSide){
         this.clientSocket = clientSocket;
+        this.serverSide = serverSide;
     }
 
     @Override
@@ -33,6 +41,7 @@ public class ClientHandler implements Runnable{
         Thread t = new Thread(()-> readMessage(in));
         t.start();
 
+
     }
 
     public void readMessage(BufferedReader in){
@@ -40,6 +49,9 @@ public class ClientHandler implements Runnable{
         try {
             while ((s = in.readLine()) != null) {
                 System.out.println(s);
+                if(nickNameNotConfirmed){
+                    scanForNickName(s);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,5 +59,31 @@ public class ClientHandler implements Runnable{
     }
     public void sendMessage(String message){
         out.println(message);
+    }
+
+    public void scanForNickName(String message){
+        System.out.println("im here");
+        JSONParser parser = new JSONParser();
+        JSONObject obj = null;
+        if(message != null){
+            try {
+                obj = (JSONObject) parser.parse(message);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        if(obj != null && Objects.equals((String) obj.get("request"), "@LOGN")){
+
+            String nickname = (String) obj.get("nickname");
+            if(!serverSide.getNickNameList().contains(nickname)){
+                System.out.println(nickname);
+                serverSide.addUser(this,nickname);
+                nickNameNotConfirmed = false;
+            }
+            else{
+                //da sostituire con una sendMessage di errore
+                System.out.println("nickName già usato");
+           }
+        }
     }
 }
