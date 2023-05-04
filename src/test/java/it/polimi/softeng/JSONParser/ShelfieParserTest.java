@@ -136,7 +136,6 @@ class ShelfieParserTest {
         cell1.setRow(2);
         cell1.setColumn(0);
         pos.add(2, cell1);
-        tiles.clear();
 
         tiles.add(new Tile(3, Tile.TileColor.WHITE));
         cell = new Cell();
@@ -148,7 +147,6 @@ class ShelfieParserTest {
         cell1.setRow(1);
         cell1.setColumn(1);
         pos.add(4, cell1);
-        tiles.clear();
 
         tiles.add(new Tile(5, Tile.TileColor.CYAN));
         cell = new Cell();
@@ -171,6 +169,8 @@ class ShelfieParserTest {
             column = pos.get(tile.getId()).getColumn();
             assertTrue(shelfie.getGrid()[row][column]!=null && shelfie.getGrid()[row][column].getColor() == tile.getColor());
         }
+
+
     }
 
     private String writemsgFullShelfie(ArrayList<Tile> tileList, ArrayList<Cell> positions){
@@ -185,7 +185,7 @@ class ShelfieParserTest {
             jsonTile.put("column", positions.get(tile.getId()).getColumn());
             list.add(jsonTile);
         }
-        msg.put("tileList",list);
+        msg.put("shelfieGrid",list);
 
         return msg.toString();
     }

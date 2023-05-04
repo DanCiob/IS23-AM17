@@ -25,6 +25,7 @@ public class BoardWriter {
                     posAndColor = new JSONObject();
                     posAndColor.put("row", i);
                     posAndColor.put("column", j);
+                    posAndColor.put("id", board.getBoard()[i][j].getId());
                     posAndColor.put("color", board.getBoard()[i][j].getColor().toString());
                     tilesOfARow.add(posAndColor);
                 }
