@@ -11,7 +11,7 @@ import static it.polimi.softeng.Constants.boardColumns;
 import static it.polimi.softeng.Constants.boardRows;
 
 public class BoardWriter {
-    public String boardChangeNotifier(Board board, ArrayList<Cell> notAvailable){
+    public JSONObject boardChangeNotifier(Board board, ArrayList<Cell> notAvailable){
         JSONObject jsonObject = new JSONObject();
         JSONArray array;
         JSONObject posAndColor;
@@ -24,7 +24,7 @@ public class BoardWriter {
                     posAndColor = new JSONObject();
                     posAndColor.put("row", i);
                     posAndColor.put("column", j);
-                    posAndColor.put("color", board.getBoard()[i][j].getColor());
+                    posAndColor.put("color", board.getBoard()[i][j].getColor().toString());
                     array.add(posAndColor);
                 }
             }
@@ -46,7 +46,7 @@ public class BoardWriter {
                 e.printStackTrace();
             }*/
         }
-        System.out.print(jsonObject);
-        return null;
+        //System.out.print(jsonObject);
+        return jsonObject;
     }
 }

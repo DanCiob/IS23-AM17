@@ -605,6 +605,26 @@ class BoardTest {
     }
 
     @Test
+    public void checkLegalChoiceLinear(){
+        Board board = new Board();
+        ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
+        Cell cell = new Cell();
+        Game game = new Game();
+        board.resetBoard(4);
+        game.initializeTile();
+        board.positionTiles(game.getTileBag());
+        cell.setRow(0);
+        cell.setColumn(3);
+        positionsToBeRemoved.add(cell);
+        cell = new Cell();
+        cell.setRow(1);
+        cell.setColumn(5);
+        positionsToBeRemoved.add(cell);
+        assertFalse(board.checkLegalChoice(positionsToBeRemoved));
+
+    }
+
+    @Test
     public void positionTilesTest(){
         Board board = new Board();
         Game game = new Game();
