@@ -1,7 +1,5 @@
 package it.polimi.softeng.JSONWriter;
 
-import it.polimi.softeng.customExceptions.IllegalInsertException;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.regex.Matcher;
@@ -31,14 +29,14 @@ public class ChatWriter {
      * @param chatMessage contains string with chatMessage
      * @return a JSONObject containing chatMessage translated in JSON format
      */
-    public static JSONObject writeChatMessage(String chatMessage) throws IllegalInsertException {
+    public static JSONObject writeChatMessage(String chatMessage){
         JSONObject ChatJSON = new JSONObject();
         String receiver;
         String message;
 
         //Double check of syntax correcteness
         if (!chatMessageRegex(chatMessage))
-            throw new IllegalInsertException("Error syntax not respected!");
+            return null;
 
         String[] separator = chatMessage.split(" ");
         receiver = separator[0];

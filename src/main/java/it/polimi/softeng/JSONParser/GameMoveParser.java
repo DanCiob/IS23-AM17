@@ -19,7 +19,7 @@ public class GameMoveParser {
      *
      * @param gameMove contains from one to three tiles and column of insertion
      */
-    public void GameMoveParser (String gameMove)
+    public void gameMoveParser(String gameMove)
     {
         ArrayList<Cell> tilesToBeRemoved = new ArrayList<>();
         JSONParser parser = new JSONParser();

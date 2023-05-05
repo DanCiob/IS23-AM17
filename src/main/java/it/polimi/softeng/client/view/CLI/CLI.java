@@ -1,6 +1,7 @@
 package it.polimi.softeng.client.view.CLI;
 
 import it.polimi.softeng.JSONParser.ChatParser;
+import it.polimi.softeng.JSONParser.GameMoveParser;
 import it.polimi.softeng.JSONWriter.ChatWriter;
 import it.polimi.softeng.JSONWriter.GameMoveWriter;
 import it.polimi.softeng.client.view.MessageHandler;
@@ -12,13 +13,14 @@ import it.polimi.softeng.client.view.UI;
 import it.polimi.softeng.model.PersonalCards;
 import org.json.simple.JSONObject;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static it.polimi.softeng.Constants.*;
+import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
+import static it.polimi.softeng.JSONWriter.GameMoveWriter.writeGameMove;
 
 public class CLI extends CommonOperationsFramework implements UI, Runnable {
     /**
@@ -73,10 +75,12 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     }
 
     //TODO remove
-    public CLI () {
+    public CLI() {
         this.clientSide = new ClientSide();
         this.input = new Scanner(System.in);
-    };
+    }
+
+
 
     /**
      * CLI initialization, connection to server, choose of gameMode
@@ -153,6 +157,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         System.out.println(">");
                         do {
                             NumOfPlayer = input.nextInt();
+
+                            if (NumOfPlayer > 4 || NumOfPlayer < 2)
+                                eventManager(INVALID_NUMBER_OF_PLAYERS);
                         } while (NumOfPlayer > 4 || NumOfPlayer < 2);
 
                         System.out.println("Do you want to play with Easy mode(1) or Normal mode(2)?");
@@ -483,12 +490,18 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         switch (ConnectionMode) {
             case 1 -> {
                 //These actions need to communicate with server
-                if (needServer)
-                {
+                if (needServer) {
+                    //Block illegal move
+                    if (op.equals("@GAME")) {
+                        errorCheckerClientSide(op, action);
+                        if (errorCheckerClientSide(op, action))
+                            return;
+                    }
+
                     JSONObject toBeSent = actionToJSON(op, action);
                     if (toBeSent.equals(null))
                         System.out.println("Error in message syntax, try again!");
-                    clientSide.sendMessage(toBeSent.toJSONString());
+                    clientSide.sendMessage(clientSignObject(toBeSent, op, Nickname).toJSONString());
                 }
                 //These actions are view-local
                 else {
@@ -504,7 +517,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 //These actions need to communicate with server
                 if (needServer)
                     RMIInvoker(op, action);
-                    //These actions are view-local
+                //These actions are view-local
                 else {
                     switch (op) {
                         case ("@VBOR") -> boardVisualizer(UserGameBoard.getBoard(), UserGameBoard.getNotAvailable());
@@ -539,25 +552,25 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 "\n");
         */
 
-            if (firstRun)
-                logo();
+        if (firstRun)
+            logo();
 
-            CommandLineTable scoreTable = new CommandLineTable();
-            scoreTable.setShowVerticalLines(true);
-            scoreTable.setHeaders("Command", "Effect", "Example of command");
+        CommandLineTable scoreTable = new CommandLineTable();
+        scoreTable.setShowVerticalLines(true);
+        scoreTable.setHeaders("Command", "Effect", "Example of command");
 
-            scoreTable.addRow(ANSI_GREEN + "@VBOR" + ANSI_RESET, "Visualize board status", "@VBOR");
-            scoreTable.addRow(ANSI_GREEN + "@VSHE" + ANSI_RESET, "Visualize shelfie status", "@VSHE");
-            scoreTable.addRow(ANSI_GREEN + "@VPLA" + ANSI_RESET, "Visualize currently connected players and score", "@VPLA");
-            scoreTable.addRow(ANSI_GREEN + "@VCCA" + ANSI_RESET, "Visualize common objectives", "@VCCA");
-            scoreTable.addRow(ANSI_GREEN + "@VPCA" + ANSI_RESET, "Visualize your personal card", "@VPCA");
-            scoreTable.addRow(ANSI_GREEN + "@GAME gameMoveFormat" + ANSI_RESET, "Do a game move", "@GAME (rowTile1,columnTil1),(rowTile2,columnTil2),(rowTile3,columnTil3),numColumnOfInsertion");
-            scoreTable.addRow(ANSI_GREEN + "@GAME gameMoveFormat" + ANSI_RESET, "Do a game move","EX: (5,5),(5,6),2");
-            scoreTable.addRow(ANSI_GREEN + "@GAME gameMoveFormat" + ANSI_RESET, "Do a game move","You must select at least 1 but less than 3 (included), picking order is inserting order in shelfie");
-            scoreTable.addRow(ANSI_GREEN + "@CHAT 'nameOfReceiver' message" + ANSI_RESET, "Send a chat message (to send a message to everybody type 'all' in nameOfReceiver)", "@CHAT 'userRec' HI!");
+        scoreTable.addRow(ANSI_GREEN + "@VBOR" + ANSI_RESET, "Visualize board status", "@VBOR");
+        scoreTable.addRow(ANSI_GREEN + "@VSHE" + ANSI_RESET, "Visualize shelfie status", "@VSHE");
+        scoreTable.addRow(ANSI_GREEN + "@VPLA" + ANSI_RESET, "Visualize currently connected players and score", "@VPLA");
+        scoreTable.addRow(ANSI_GREEN + "@VCCA" + ANSI_RESET, "Visualize common objectives", "@VCCA");
+        scoreTable.addRow(ANSI_GREEN + "@VPCA" + ANSI_RESET, "Visualize your personal card", "@VPCA");
+        scoreTable.addRow(ANSI_GREEN + "@GAME gameMoveFormat" + ANSI_RESET, "Do a game move", "@GAME (rowTile1,columnTil1),(rowTile2,columnTil2),(rowTile3,columnTil3),numColumnOfInsertion");
+        scoreTable.addRow(ANSI_GREEN + "@GAME gameMoveFormat" + ANSI_RESET, "Do a game move", "EX: (5,5),(5,6),2");
+        scoreTable.addRow(ANSI_GREEN + "@GAME gameMoveFormat" + ANSI_RESET, "Do a game move", "You must select at least 1 but less than 3 (included), picking order is inserting order in shelfie");
+        scoreTable.addRow(ANSI_GREEN + "@CHAT 'nameOfReceiver' message" + ANSI_RESET, "Send a chat message (to send a message to everybody type 'all' in nameOfReceiver)", "@CHAT 'userRec' HI!");
 
-            scoreTable.print();
-        }
+        scoreTable.print();
+    }
 
     public void logo() {
         System.out.println(ANSI_GREEN + "  .___  ___. ____    ____         _______. __    __   _______  __       _______  __   _______    \n" +
@@ -572,39 +585,39 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     /**
      * Verify that inserted nickname follows regex standard defined for nicknames
+     *
      * @return true if Nickname follow regex standard defined for nicknames
      */
-    public boolean isOkNickname (){
+    public boolean isOkNickname() {
         Pattern pattern = Pattern.compile(nicknameREGEX);
         Matcher matcher = pattern.matcher(this.Nickname);
         return matcher.matches();
     }
 
     /**
-     *
      * @param op     is command
      * @param action is command text sent by UI
      * @return a JSONObject containing encoded action
      * @throws IllegalInsertException
      */
-    public JSONObject actionToJSON(String op, String action) throws IllegalInsertException
-    {
+    public JSONObject actionToJSON(String op, String action) {
         switch (op) {
             case ("@CHAT"): {
-                if (!ChatWriter.chatMessageRegex(action))
+                if (!ChatWriter.chatMessageRegex(action) || ChatWriter.writeChatMessage(action) == null)
                     eventManager("chatError");
                 else
                     return ChatWriter.writeChatMessage(action);
             }
             case ("@GAME"): {
-                if (!GameMoveWriter.gameMoveRegex(action))
+                if (!GameMoveWriter.gameMoveRegex(action) || GameMoveWriter.writeGameMove(action) == null)
                     eventManager("gameMoveError");
                 else
-                    return GameMoveWriter.writeGameMove(action);
+                    return writeGameMove(action);
             }
             case ("@LOGN"): {
 
-            }break;
+            }
+            break;
 
             /*TODO future release
             case ("@VCCA"): {
@@ -624,8 +637,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     }
 
     /**
-     *
-     * @param op is command
+     * @param op     is command
      * @param action is command text sent by UI
      * @return true if action is correctly executed
      */
@@ -646,7 +658,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 //TODO InvokeMethodToGameMove
             }
 
-            case ("@LOGN") : {
+            case ("@LOGN"): {
                 //sendLoginRequest(action);
             }
             //TODO InvokeLogin
@@ -667,14 +679,14 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         System.out.println("Test");
         return true;
     }
+
     /**
      * Called by messageHandler or actionToJSON with various event
+     *
      * @param event is received event fired by MessageHandler
      */
-    public void eventManager (String event)
-    {
-        switch(event)
-        {
+    public void eventManager(String event) {
+        switch (event) {
             //Client-side errors
             case ("chatError") -> System.out.println("Error in chat message syntax, try again!");
             case ("gameMoveError") -> System.out.println("Error in game move syntax, try again!");
@@ -688,18 +700,46 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
             //Servers-side errors
             case (NICKNAME_NOT_UNIQUE) -> System.out.println(NICKNAME_NOT_UNIQUE);
-            case (PLAYER_DISCONNECTED) -> System.out.println(NICKNAME_NOT_UNIQUE);
+            case (PLAYER_DISCONNECTED) -> System.out.println(PLAYER_DISCONNECTED);
             case (INVALID_NUMBER_OF_PLAYERS) -> System.out.println(INVALID_NUMBER_OF_PLAYERS);
             case (INVALID_CHOICE_OF_TILES) -> System.out.println(INVALID_CHOICE_OF_TILES);
             case (INVALID_COLUMN) -> System.out.println(INVALID_COLUMN);
             case (INVALID_RECEIVER) -> System.out.println(INVALID_RECEIVER);
+            case (ALREADY_LOGGED_IN) -> System.out.println(ALREADY_LOGGED_IN);
 
             default -> System.out.println("Unrecognized event!");
         }
     }
 
     /**
+     * Block illegal move in clientSide
+     */
+    public boolean errorCheckerClientSide(String op, String action) {
+        JSONObject obj = actionToJSON(op, action);
+        GameMoveParser gmp = new GameMoveParser();
+
+        if (!UserGameBoard.checkLegalChoice(gmp.getTilesToBeRemoved())) {
+            eventManager(INVALID_CHOICE_OF_TILES);
+            return false;
+        }
+
+        //Create an arrayList of tile from arrayList of cell
+        ArrayList<Tile> tilesToBeRemoved = null;
+        for (Cell c : gmp.getTilesToBeRemoved()) {
+            tilesToBeRemoved.add(UserGameBoard.getBoard()[c.getRow()][c.getColumn()]);
+        }
+
+        if (!UserShelfie.checkLegalInsert(tilesToBeRemoved, gmp.getColumn())) {
+            eventManager(INVALID_COLUMN);
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
      * Called by RMI or Socket for board update
+     *
      * @param b is new Board
      */
     @Override
@@ -709,6 +749,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     /**
      * Called by RMI or Socket for shelfie update
+     *
      * @param s is new Shelfie
      */
     @Override
@@ -718,6 +759,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     /**
      * Called by RMI or Socket for score update
+     *
      * @param s is new score
      */
     @Override
@@ -727,6 +769,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     /**
      * Called by RMI or Socket for personal car update -> only at the beginning
+     *
      * @param pc is personal card
      */
     @Override

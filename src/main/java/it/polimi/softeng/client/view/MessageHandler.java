@@ -93,6 +93,14 @@ public class MessageHandler {
                 String error = (String) objError.get("errorType");
                 cli.eventManager(error);
             }
+
+            case ("@CONF") -> {
+                JSONParser p1 = new JSONParser();
+                JSONObject objMess = (JSONObject) p1.parse(message);
+
+                String mess = (String) objMess.get("confirm");
+                cli.eventManager(mess);
+            }
             default -> System.out.println("Unrecognized request");
         }
     }

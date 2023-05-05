@@ -48,6 +48,7 @@ public abstract class Constants {
     public static final String INVALID_CHOICE_OF_TILES = "Error: You can't select these tiles, try again!";
     public static final String INVALID_COLUMN = "Error: You can't select these column (column cannot contain selected tiles)";
     public static final String INVALID_RECEIVER = "Error: Receiver doesn't exist";
+    public static final String ALREADY_LOGGED_IN = "Error: You're already in a game";
 
 
     //CommonCards

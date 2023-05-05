@@ -4,7 +4,7 @@ public class LoginController {
     private String IP_address;
     private String Nickname;
 
-    public void gameParser(String s)
+    public void sendLoginRequest(String s , int numOfPlayer, int gameMode, int startGame)
     {
         int positionSeparator = 0;
         for (int i = 0; i < s.length(); i++)

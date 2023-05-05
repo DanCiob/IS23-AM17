@@ -13,7 +13,7 @@ public class GameController {
      * @param column is column of insertion
      * @param requester is receiver of updates
      */
-    public static void sendGameMove(ArrayList<Cell> tilesToBeRemoved, int column, String requester) {
+    public void sendGameMove(ArrayList<Cell> tilesToBeRemoved, int column, String requester) {
 
         //GameBoard update
         //Shelfie update

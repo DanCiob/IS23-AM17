@@ -1,6 +1,5 @@
 package it.polimi.softeng.JSONWriter;
 
-import it.polimi.softeng.customExceptions.IllegalInsertException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -76,7 +75,7 @@ public class GameMoveWriter {
      * @param gameMove contains string with gamemove
      * @return a JSONObject containing gamemode translated in JSON format
      */
-    public static JSONObject writeGameMove(String gameMove) throws IllegalInsertException {
+    public static JSONObject writeGameMove(String gameMove){
         //Remove spaces in gameMove
         String gameMoveFiltered = gameMove.replace(" ", "");
         JSONObject GameMoveJSON = new JSONObject();
@@ -87,7 +86,7 @@ public class GameMoveWriter {
 
         //Double check of syntax correcteness
         if(!gameMoveRegex(gameMoveFiltered))
-            throw new IllegalInsertException("Error, syntax not respected");
+            return null;
         class coupleInt {
             int row;
             int column;
