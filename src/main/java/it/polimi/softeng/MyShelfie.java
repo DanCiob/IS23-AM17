@@ -1,7 +1,7 @@
 package it.polimi.softeng;
 
 
-import it.polimi.softeng.connectionProtocol.ClientSide;
+import it.polimi.softeng.client.view.CLI.CLI;
 import it.polimi.softeng.connectionProtocol.ServerSide;
 
 import java.io.*;
@@ -48,11 +48,12 @@ public class MyShelfie {
                 System.out.println("You've chosen : client CLI");
 
                 //creates the client CLI
-                //CLI cli = new CLI();
-                ClientSide clientSide = new ClientSide();
+                CLI cli = new CLI();
+                cli.run();
+                //ClientSide clientSide = new ClientSide();
                 String userInput;
                 while ((userInput = stdIn.readLine()) != null) {
-                    clientSide.sendMessage(userInput);
+                    cli.getClientSide().sendMessage(userInput);
                 }
 
             }

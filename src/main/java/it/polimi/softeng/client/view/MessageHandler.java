@@ -38,27 +38,21 @@ public class MessageHandler {
             case ("@CHAT") -> {
                     JSONParser p1 = new JSONParser();
                     JSONObject objChat = (JSONObject) p1.parse(message);
+                    cli.eventManager("chatEvent");
                     cli.chatVisualizer(objChat);
                     }
 
-            /*TODO waiting boardParser
+
             case ("@BORD") -> {
-                //TODO get board and notAvailable cells from JSON and print
-                for (String s: NicknameCLI.keySet())
-                {
                     JSONParser p1 = new JSONParser();
                     JSONObject objBoard = (JSONObject) p1.parse(message);
+                    //TODO use correct parser
                     BoardParser bParser = new BoardParser();
-                    CLI currentCLI = NicknameCLI.get(s);
-
-                    //TODO clarifications on parser
-                    //Update board of all player
-                    bParser.boardParser(objBoard.toJSONString(), currentCLI.getUserBoard());
-                    currentCLI.getOutput().print("Received board update!");
-                    currentCLI.boardVisualizer(currentCLI.getUserBoard().getBoard(), currentCLI.getUserBoard().getNotAvailable());
+                    //TODO GameBoard newBoard = bParser.boardParser();
+                    cli.eventManager("boardEvent");
+                    //TODO cli.boardVisualizer(newBoard);
                 }
-            }
-           */
+
             case ("@SHEL") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objShelfie = (JSONObject) p1.parse(message);
@@ -70,7 +64,7 @@ public class MessageHandler {
                 //Set new shelfie
                 cli.shelfieUpdater(newShelfie);
                 //Visualize new Shelfie
-                cli.getOutput().println("Update of your shelfie!");
+                cli.eventManager("shelfieEvent");
                 cli.shelfieVisualizer(newShelfie.getGrid());
             }
 
@@ -81,11 +75,11 @@ public class MessageHandler {
                 switch((int) objCC.get("numOfCommonCards"))
                 {
                     case 1 -> {
-                        cli.getOutput().println("Common Cards for this match!");
+                        cli.eventManager("commonCardEvent");
                         cli.commonCardsVisualizer(objCC.get("commonCard1").toString());
                     }
                     case 2 -> {
-                        cli.getOutput().println("Common Cards for this match!");
+                        cli.eventManager("commonCardEvent");
                         cli.commonCardsVisualizer(objCC.get("commonCard1").toString());
                         cli.commonCardsVisualizer(objCC.get("commonCard1").toString());
                     }
@@ -96,11 +90,9 @@ public class MessageHandler {
                 JSONParser p1 = new JSONParser();
                 JSONObject objError = (JSONObject) p1.parse(message);
 
-                objError.get("errorType");
-                cli.getOutput().println("Error received :(");
-                cli.getOutput().println(objError.get("content").toString());
+                String error = (String) objError.get("errorType");
+                cli.eventManager(error);
             }
-
             default -> System.out.println("Unrecognized request");
         }
     }
