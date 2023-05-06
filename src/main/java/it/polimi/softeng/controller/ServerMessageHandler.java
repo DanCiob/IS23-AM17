@@ -41,7 +41,7 @@ public class ServerMessageHandler {
                 //Invoke chatController
                 ChatParser cp = new ChatParser();
                 cp.chatParser(message);
-                boolean confirm = controller.fetchChatRequest (cp.getReceiver(), cp.getMessage());
+                boolean confirm = controller.fetchChatRequest (cp.getReceiver(), message);
 
                 if (!confirm)
                     serverSide.sendMessage(serverSignObject(writeError(INVALID_RECEIVER), "@ERRO", requester).toJSONString(), requester);

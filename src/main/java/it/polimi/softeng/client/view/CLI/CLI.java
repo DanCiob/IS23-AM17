@@ -3,7 +3,9 @@ package it.polimi.softeng.client.view.CLI;
 import it.polimi.softeng.JSONParser.ChatParser;
 import it.polimi.softeng.JSONParser.GameMoveParser;
 import it.polimi.softeng.JSONWriter.ChatWriter;
+import it.polimi.softeng.JSONWriter.ClientSignatureWriter;
 import it.polimi.softeng.JSONWriter.GameMoveWriter;
+import it.polimi.softeng.JSONWriter.LoginWriter;
 import it.polimi.softeng.client.view.MessageHandler;
 import it.polimi.softeng.connectionProtocol.ClientSide;
 import it.polimi.softeng.customExceptions.IllegalInsertException;
@@ -55,11 +57,16 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     private int GameMode;
 
     /**
+     * NumOfPlayer for current game
+     */
+    private int NumOfPlayer;
+
+    /**
      * 1 -> Connected with Socket
      * 2 -> Connected with RMI
      */
     private int ConnectionMode = 0;
-    private int NumOfPlayer;
+
     private boolean GameIsOn;
     private final Scanner input;
 
@@ -76,7 +83,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     //TODO remove
     public CLI() {
-        this.clientSide = new ClientSide();
+        this.messageHandler = new MessageHandler(this);
+        this.clientSide = new ClientSide(messageHandler);
         this.input = new Scanner(System.in);
     }
 
@@ -113,7 +121,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         input.nextLine();
                     } while (StartGame != 1 && StartGame != 2);
                     if (StartGame == 1) {
-                        int NumOfPlayer;
                         do {
                             System.out.println("Insert the number of players(2-4)");
                             System.out.println(">");
@@ -123,7 +130,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
                         System.out.println("Do you want to play with Easy mode(1) or Normal mode(2)?");
                         System.out.println(">");
-                        int GameMode;
                         do {
                             GameMode = input.nextInt();
                             input.nextLine();
@@ -139,6 +145,11 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
                         //TODO LoginWriter...
                     } while (!isOkNickname());
+
+                    LoginWriter lw = new LoginWriter();
+                    String login = ClientSignatureWriter.clientSignObject(lw.writeLogin(Nickname, GameMode, StartGame, NumOfPlayer), "@LOGN", Nickname).toJSONString();
+                    System.out.println(login);
+                    clientSide.sendMessage(login);
                 }
 
 
@@ -436,7 +447,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     public void chatVisualizer(JSONObject jsonMessage) {
         ChatParser chatParser = new ChatParser();
         chatParser.chatParser(jsonMessage.toJSONString());
-        System.out.println(chatParser.getReceiver() + ": " + chatParser.getMessage());
+        System.out.println(chatParser.getRequester() + ": " + chatParser.getMessage());
     }
 
     @Override
@@ -514,7 +525,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             }
         }
 
-        String action = command.substring(6);
+        String action = command.substring(6, command.length());
+        System.out.println();
 
         boolean recognizedCommand = op.equals("@LOGN") || op.equals("@CHAT") || op.equals("@GAME") || op.equals("@VPLA") || op.equals("@VCCA");
 

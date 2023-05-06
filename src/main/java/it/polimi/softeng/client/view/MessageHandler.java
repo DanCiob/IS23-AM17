@@ -16,7 +16,6 @@ public class MessageHandler {
      * Assigned CLI and assigned SocketListener
      */
     CLI cli;
-    //SocketListener socketListener;
 
     public MessageHandler(CLI cli) {
         this.cli = cli;

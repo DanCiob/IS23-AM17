@@ -51,8 +51,8 @@ public class ClientHandler implements Runnable{
         String s = "";
         try {
             while ((s = in.readLine()) != null) {
-                serverMessageHandler.parsingMessage(s);
                 System.out.println(s);
+                serverMessageHandler.parsingMessage(s);
                 if(nickNameNotConfirmed){
                     scanForNickName(s);
                 }

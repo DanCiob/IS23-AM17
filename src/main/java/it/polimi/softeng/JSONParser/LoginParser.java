@@ -19,9 +19,9 @@ public class LoginParser {
         JSONObject obj = (JSONObject) parser.parse(message);
 
         nickname = (String) obj.get("nickname");
-        numOfPlayer = (int) obj.get("numOfPlayer");
-        gameMode = (int) obj.get("gameMode");
-        startGame = (int) obj.get("startGame");
+        numOfPlayer = (int) (long) obj.get("numOfPlayer");
+        gameMode = (int) (long) obj.get("gameMode");
+        startGame = (int) (long) obj.get("startGame");
     }
 
     public String getNickname() {
