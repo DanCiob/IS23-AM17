@@ -38,7 +38,7 @@ public class ChatWriter {
         if (!chatMessageRegex(chatMessage))
             return null;
 
-        String[] separator = chatMessage.split(" ");
+        String[] separator = chatMessage.split(" ", 2);
         receiver = separator[0];
         message = separator[1];
 

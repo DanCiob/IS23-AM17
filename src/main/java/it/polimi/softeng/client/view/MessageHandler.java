@@ -37,7 +37,10 @@ public class MessageHandler {
             case ("@CHAT") -> {
                     JSONParser p1 = new JSONParser();
                     JSONObject objChat = (JSONObject) p1.parse(message);
-                    cli.eventManager("chatEvent");
+                    if (receiver.equals("all"))
+                        cli.eventManager("globalChatEvent");
+                    else
+                        cli.eventManager("chatEvent");
                     cli.chatVisualizer(objChat);
                     }
 

@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
+
 class CLITest {
     private CLI cli = new CLI();
 
@@ -265,5 +268,11 @@ class CLITest {
     void commandsTest() {
         cli.commands(true);
         cli.commands(false);
+    }
+
+    @Test
+    void isOkCommand() {
+        assertTrue(cli.isOkCommand("@CHAT 'all' HI!"));
+        assertFalse(cli.isOkCommand("@CH AT"));
     }
 }

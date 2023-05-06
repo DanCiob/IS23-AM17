@@ -2,8 +2,6 @@ package it.polimi.softeng.controller;
 
 import it.polimi.softeng.connectionProtocol.ServerSide;
 
-import javax.naming.InvalidNameException;
-
 public class ChatController {
 
     /**
@@ -12,9 +10,10 @@ public class ChatController {
      * @param message is chat message
      * @param serverSide is socket communicator
      */
-    public void sendChatMessage(String receiver, String message, ServerSide serverSide) throws InvalidNameException {
+    public void sendChatMessage(String receiver, String message, ServerSide serverSide){
         if (receiver.equals("all"))
             serverSide.sendMessageToAll(message);
+        //TODO need to avoid send message to sender
         else
             serverSide.sendMessage(message, receiver);
     }
