@@ -1,5 +1,6 @@
 package it.polimi.softeng.connectionProtocol;
 
+import it.polimi.softeng.controller.ServerMessageHandler;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -17,10 +18,12 @@ public class ClientHandler implements Runnable{
     private Socket clientSocket;
     private ServerSide serverSide;
     private Boolean nickNameNotConfirmed = true;
+    private ServerMessageHandler serverMessageHandler;
 
-    public ClientHandler(Socket clientSocket, ServerSide serverSide){
+    public ClientHandler(Socket clientSocket, ServerSide serverSide, ServerMessageHandler serverMessageHandler){
         this.clientSocket = clientSocket;
         this.serverSide = serverSide;
+        this.serverMessageHandler = serverMessageHandler;
     }
 
     @Override
@@ -49,11 +52,12 @@ public class ClientHandler implements Runnable{
         try {
             while ((s = in.readLine()) != null) {
                 System.out.println(s);
+                serverMessageHandler.parsingMessage(s);
                 if(nickNameNotConfirmed){
                     scanForNickName(s);
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
     }

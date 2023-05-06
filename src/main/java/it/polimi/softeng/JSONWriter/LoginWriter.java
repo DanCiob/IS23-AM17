@@ -8,9 +8,9 @@ public class LoginWriter {
         JSONObject obj = new JSONObject();
 
         obj.put("nickname", nickname);
-        obj.put("gameMode", gameMode-48);
-        obj.put("startGame", startGame-48);
-        obj.put("numOfPlayer", numOfPlayer-48);
+        obj.put("gameMode", gameMode);
+        obj.put("startGame", startGame);
+        obj.put("numOfPlayer", numOfPlayer);
 
         return obj;
     }

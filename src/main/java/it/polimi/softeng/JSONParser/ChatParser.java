@@ -7,6 +7,7 @@ import org.json.simple.parser.ParseException;
 public class ChatParser {
     String receiver;
     String message;
+    String requester;
 
     public void chatParser(String chatMessage){
         JSONParser parser = new JSONParser();
@@ -18,8 +19,13 @@ public class ChatParser {
             throw new RuntimeException(e);
         }
 
+        requester = (String) jsonObject.get("requester");
         receiver = (String) jsonObject.get("receiver");
         message = (String) jsonObject.get("message");
+    }
+
+    public String getRequester() {
+        return requester;
     }
 
     public String getReceiver() {

@@ -3,6 +3,7 @@ package it.polimi.softeng;
 
 import it.polimi.softeng.client.view.CLI.CLI;
 import it.polimi.softeng.connectionProtocol.ServerSide;
+import it.polimi.softeng.controller.Controller;
 
 import java.io.*;
 
@@ -35,13 +36,17 @@ public class MyShelfie {
             case 0 ->{
                 System.out.println("You've chosen : server mode");
 
-                //creates the server
-                ServerSide serverSide = new ServerSide();
+                //Creates controller
+                Controller controller = new Controller();
 
+                //creates the server
+                //ServerSide serverSide = new ServerSide();
+
+                /*
                 String userInput;
                 while ((userInput = stdIn.readLine()) != null) {
                     serverSide.sendMessageToAll(userInput);
-                }
+                }*/
             }
 
             case 1 ->{
@@ -51,10 +56,10 @@ public class MyShelfie {
                 CLI cli = new CLI();
                 cli.run();
                 //ClientSide clientSide = new ClientSide();
-                String userInput;
+                /*String userInput;
                 while ((userInput = stdIn.readLine()) != null) {
                     cli.getClientSide().sendMessage(userInput);
-                }
+                }*/
 
             }
             case 2 ->{
