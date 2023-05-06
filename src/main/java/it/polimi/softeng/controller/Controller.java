@@ -5,7 +5,6 @@ import it.polimi.softeng.model.Cell;
 import it.polimi.softeng.model.Game;
 import it.polimi.softeng.model.Tile;
 
-import javax.naming.InvalidNameException;
 import java.util.ArrayList;
 
 /**
@@ -36,24 +35,22 @@ public class Controller {
     /**
      * Process chat request decoded from JSON by ServerMessageHandler
      *
-     * @param receiver
-     * @param message
+     * @param receiver is receiver of chat message
+     * @param message is JSON message encoded
      */
-    public boolean fetchChatRequest(String receiver, String message) {
-        try {
+    public boolean fetchChatRequest(String receiver, String message, String sender) {
+            if((!serverSide.getNickNameList().contains(receiver) || receiver.equals(sender)) && !receiver.equals("all"))
+                return false;
             chatController.sendChatMessage(receiver, message, serverSide);
             return true;
-        } catch (InvalidNameException e) {
-            return false;
-        }
     }
 
     /**
      * Process chat request decoded from JSON by ServerMessageHandler
      *
-     * @param positionsToBeRemoved
-     * @param column
-     * @param requester
+     * @param positionsToBeRemoved is positions to be removed from board
+     * @param column is column of insertion in shelfie
+     * @param requester is requester of game move
      * @return true if move is done by currentPlayerTurn, false if not
      */
     public boolean fetchGameMoveRequest(ArrayList<Cell> positionsToBeRemoved, int column, String requester) {
@@ -101,6 +98,15 @@ public class Controller {
             return false;
 
         return true;
+    }
+
+    /**
+     * Used to send error messages to client
+     * @param error
+     * @param receiver
+     */
+    public void sendErrorMessage (String error, String receiver) {
+        serverSide.sendMessage(error, receiver);
     }
 }
 

@@ -17,6 +17,7 @@ import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -481,11 +482,15 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
         while (GameIsOn) {
             try {
+                //Wait for errors
+                TimeUnit.SECONDS.sleep(1);
                 game(firstRun);
             }
             //Error in JSON writing, caused by error in syntax
             catch (IllegalInsertException e) {
                 System.out.println("Error in your message, try again!");
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
             firstRun = false;
         }
@@ -502,36 +507,50 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
         String command = input.nextLine();
 
-        //First check of command good formatting
-        if ((command.charAt(0) != '@') || command.length() < 5) {
-            System.out.println("Please write a command in @CMND text format!");
+        //Check empty command
+        if (command == null) {
+            System.out.println("Empty command!");
+            return;
+        }
+
+        if (command.equalsIgnoreCase("@CMND") || command.equalsIgnoreCase("@VBOR") || command.equalsIgnoreCase("@VSHE") || command.equalsIgnoreCase("@VPCA") || command.equalsIgnoreCase("@VPLA") || command.equalsIgnoreCase("@VCCA")) {
+            switch (command) {
+                case ("@CMND") -> {
+                    return;
+                }
+
+                case ("@VBOR") -> {
+                    boardVisualizer(UserGameBoard.getBoard(), UserGameBoard.getNotAvailable());
+                    return;
+                }
+                case ("@VSHE") -> {
+                    shelfieVisualizer(UserShelfie.getGrid());
+                    return;
+                }
+                case ("@VPCA") -> {
+                    personalCardVisualizer(PersonalCard);
+                    return;
+                }
+
+                //TODO actionToJSON for commonCards and players
+                //TODO RMIInvoker for commonCards and players
+                //TODO return;
+            }
+        }
+
+        if (!isOkCommand(command)) {
+            System.out.println("Please write a command that you can see in the table");
             return;
         }
 
         //Command is in @CMND format (every command is 4 letters), uppercase avoid case sensitivity
         String op = command.substring(0, 5).toUpperCase();
-        switch (op) {
-            case ("@VBOR") -> {
-                boardVisualizer(UserGameBoard.getBoard(), UserGameBoard.getNotAvailable());
-                return;
-            }
-            case ("@VSHE") -> {
-                shelfieVisualizer(UserShelfie.getGrid());
-                return;
-            }
-            case ("@VPCA") -> {
-                personalCardVisualizer(PersonalCard);
-                return;
-            }
+        String action = command.substring(6);
+
+        if (!op.equals("@GAME") && !op.equals("@CHAT")) {
+            System.out.println("Please write a command that you can see in the table");
+            return;
         }
-
-        String action = command.substring(6, command.length());
-        System.out.println();
-
-        boolean recognizedCommand = op.equals("@LOGN") || op.equals("@CHAT") || op.equals("@GAME") || op.equals("@VPLA") || op.equals("@VCCA");
-
-        if (!recognizedCommand)
-            System.out.println("Unrecognized command, try again!");
 
         switch (ConnectionMode) {
             case 1 -> {
@@ -545,11 +564,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 }
 
                 JSONObject toBeSent = actionToJSON(op, action);
-                System.out.println(toBeSent.toJSONString());
-                if (toBeSent.equals(null))
-                    System.out.println("Error in message syntax, try again!");
-                clientSide.sendMessage(clientSignObject(toBeSent, op, Nickname).toJSONString());
 
+                if (toBeSent != null)
+                    clientSide.sendMessage(clientSignObject(toBeSent, op, Nickname).toJSONString());
             }
 
 
@@ -574,22 +591,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      * @param firstRun Print all possible commands doable by user eventually with MyShelfie logo (only at CLI first start)
      */
     public void commands(boolean firstRun) {
-        /*
-        System.out.println("\n" +
-                "+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+\n" +
-                "|                                     Command                                     |                                       Effect                                      |\n" +
-                "+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+\n" +
-                "| " + ANSI_GREEN + "@VBOR" + ANSI_RESET + "                                                                           | Visualize board status                                                            |\n" +
-                "| " + ANSI_GREEN + "@VSHE" + ANSI_RESET + "                                                                           | Visualize shelfie status                                                          |\n" +
-                "| " + ANSI_GREEN + "@VPLA" + ANSI_RESET + "                                                                           | Visualize currently connected players and score                                   |\n" +
-                "| " + ANSI_GREEN + "@VCCA" + ANSI_RESET + "                                                                           | Visualize common objectives                                                       |\n" +
-                "| " + ANSI_GREEN + "@VPCA" + ANSI_RESET + "                                                                           | Visualize your personal card                                                      |\n" +
-                "| " + ANSI_GREEN + "@GAME gameMoveFormat" + ANSI_RESET + "                                                            | Do a game move                                                                    |\n" +
-                "| " + ANSI_GREEN + "@CHAT 'nameOfReceiver' message" + ANSI_RESET + "                                                    | Send a chat message (to send a message to everybody type 'all' in nameOfReceiver) |\n" +
-                "+---------------------------------------------------------------------------------+-----------------------------------------------------------------------------------+\n" +
-                "\n");
-        */
-
         if (firstRun)
             logo();
 
@@ -597,6 +598,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         scoreTable.setShowVerticalLines(true);
         scoreTable.setHeaders("Command", "Effect", "Example of command");
 
+        scoreTable.addRow(ANSI_GREEN + "@CMND" + ANSI_RESET, "To show command table again", "@CMND");
         scoreTable.addRow(ANSI_GREEN + "@VBOR" + ANSI_RESET, "Visualize board status", "@VBOR");
         scoreTable.addRow(ANSI_GREEN + "@VSHE" + ANSI_RESET, "Visualize shelfie status", "@VSHE");
         scoreTable.addRow(ANSI_GREEN + "@VPLA" + ANSI_RESET, "Visualize currently connected players and score", "@VPLA");
@@ -633,6 +635,18 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     }
 
     /**
+     * Verify that inserted command follows regex standard defined for commands
+     *
+     * @param command
+     * @return true if command follows regex standard
+     */
+    public boolean isOkCommand(String command) {
+        Pattern pattern = Pattern.compile(commandREGEX);
+        Matcher matcher = pattern.matcher(command);
+        return matcher.lookingAt();
+    }
+
+    /**
      * @param op     is command
      * @param action is command text sent by UI
      * @return a JSONObject containing encoded action
@@ -641,16 +655,18 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     public JSONObject actionToJSON(String op, String action) {
         switch (op) {
             case ("@CHAT"): {
-                if (!ChatWriter.chatMessageRegex(action) || ChatWriter.writeChatMessage(action) == null)
+                if (!ChatWriter.chatMessageRegex(action) || ChatWriter.writeChatMessage(action) == null) {
                     eventManager("chatError");
-                else
+                    return null;
+                } else
                     return ChatWriter.writeChatMessage(action);
             }
             case ("@GAME"): {
-                if (!GameMoveWriter.gameMoveRegex(action) || GameMoveWriter.writeGameMove(action) == null)
+                if (!GameMoveWriter.gameMoveRegex(action) || GameMoveWriter.writeGameMove(action) == null) {
                     eventManager("gameMoveError");
-                else
-                    return writeGameMove(action);
+                    return null;
+                } else
+                    return GameMoveWriter.writeGameMove(action);
             }
             case ("@LOGN"): {
 
@@ -662,9 +678,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
             }
             case ("@VPLA"): {
-
-            }
-            case ("@VSCO"): {
 
             }
             break;*/
@@ -731,6 +744,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
             //Events
             case ("chatEvent") -> System.out.println("Received chat message");
+            case ("globalChatEvent") -> System.out.println("Received global chat message");
             case ("boardEvent") -> System.out.println("Received board update");
             case ("shelfieEvent") -> System.out.println("Received shelfie update");
             case ("personalCardEvent") -> System.out.println("Your personal card for this game");
@@ -744,6 +758,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             case (INVALID_COLUMN) -> System.out.println(INVALID_COLUMN);
             case (INVALID_RECEIVER) -> System.out.println(INVALID_RECEIVER);
             case (ALREADY_LOGGED_IN) -> System.out.println(ALREADY_LOGGED_IN);
+            case (YOU_ARE_RECEIVER) -> System.out.println(YOU_ARE_RECEIVER);
 
             default -> System.out.println("Unrecognized event!");
         }

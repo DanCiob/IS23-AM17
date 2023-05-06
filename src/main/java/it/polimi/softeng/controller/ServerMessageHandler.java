@@ -20,6 +20,7 @@ public class ServerMessageHandler {
 
     public ServerMessageHandler(Controller controller) {
         this.controller = controller;
+
     }
 
     /**
@@ -41,10 +42,15 @@ public class ServerMessageHandler {
                 //Invoke chatController
                 ChatParser cp = new ChatParser();
                 cp.chatParser(message);
-                boolean confirm = controller.fetchChatRequest (cp.getReceiver(), message);
+                boolean confirm = controller.fetchChatRequest (cp.getReceiver(), message, requester);
 
-                if (!confirm)
-                    serverSide.sendMessage(serverSignObject(writeError(INVALID_RECEIVER), "@ERRO", requester).toJSONString(), requester);
+                if (cp.getReceiver().equals(requester))
+                    controller.sendErrorMessage(serverSignObject(writeError(YOU_ARE_RECEIVER), "@ERRO", requester).toJSONString(), requester);
+                else if (!confirm)
+                    controller.sendErrorMessage(serverSignObject(writeError(INVALID_RECEIVER), "@ERRO", requester).toJSONString(), requester);
+                else
+                    //Descriptive output
+                    System.out.println("Received chat message request from " + requester);
             }
 
             case ("@GAME") -> {
@@ -54,7 +60,10 @@ public class ServerMessageHandler {
                 boolean confirm = controller.fetchGameMoveRequest (gp.getTilesToBeRemoved(), gp.getColumn(), gp.getRequester());
 
                 if (!confirm)
-                    serverSide.sendMessage(serverSignObject(writeError(INVALID_RECEIVER), "@ERRO", requester).toJSONString(), requester);
+                    controller.sendErrorMessage(serverSignObject(writeError(INVALID_RECEIVER), "@ERRO", requester).toJSONString(), requester);
+                else
+                    //Descriptive output
+                    System.out.println("Received game move request from " + requester);
             }
 
             case ("@LOGN") -> {
@@ -65,6 +74,9 @@ public class ServerMessageHandler {
 
                 if (!confirm)
                     serverSide.sendMessage(serverSignObject(writeError(ALREADY_LOGGED_IN), "@ERRO", requester).toJSONString(), requester);
+
+                //Descriptive output
+                System.out.println("Received login request from " + requester);
             }
 
             case ("@VPLA") -> {

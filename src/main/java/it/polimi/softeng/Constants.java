@@ -40,6 +40,8 @@ public abstract class Constants {
     public static final String chatREGEX = "^['][a-zA-Z0-9_]+['][ ].+$";
     //Allows nickname in specific standard
     public static final String nicknameREGEX = "^[a-zA-Z0-9_]+$";
+    //Allows first part of commands only in specific standard
+    public static final String commandREGEX = "^[@][A-Za-z]{4}[ ]";
 
     //Errors
     public static final String NICKNAME_NOT_UNIQUE = "Error: Nickname not unique, try again";
@@ -49,6 +51,7 @@ public abstract class Constants {
     public static final String INVALID_COLUMN = "Error: You can't select these column (column cannot contain selected tiles)";
     public static final String INVALID_RECEIVER = "Error: Receiver doesn't exist";
     public static final String ALREADY_LOGGED_IN = "Error: You're already in a game";
+    public static final String YOU_ARE_RECEIVER = "Error: You can't send a message to yourself!";
 
 
     //CommonCards
