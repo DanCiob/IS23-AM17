@@ -29,7 +29,7 @@ public class TwoSquaresOfEquals extends CommonCards {
             for(int j = 0; j < shelfieRows - 1; j++){    //cycles groups of two tiles on the same column
 
                 //I see where I have two tiles of the same colour in one column that I haven't used for squares
-                if(s.getTile(j,i).getColor() == s.getTile(j+1,i).getColor() && !usedTiles.contains(s.getTile(j,i)) && !usedTiles.contains(s.getTile(j+1,i))){
+                if(s.getTile(j,i)!=null && s.getTile(j+1,i) != null && s.getTile(j,i).getColor() == s.getTile(j+1,i).getColor() && !usedTiles.contains(s.getTile(j,i)) && !usedTiles.contains(s.getTile(j+1,i))){
 
                     //I see where I have two tiles of the same colour in right next column that I haven't used for squares
                     if(s.getTile(j,i+1).getColor() == s.getTile(j+1,i+1).getColor() && !usedTiles.contains(s.getTile(j,i+1)) && !usedTiles.contains(s.getTile(j+1,i+1))){

@@ -43,6 +43,7 @@ public class Game implements PlayerManager{
      * method used to place the tiles on the board
      */
     public void initializeBoard(){
+        gameBoard.resetBoard(players.size());
         gameBoard.positionTiles(tileBag);
     }
 
@@ -345,6 +346,17 @@ public class Game implements PlayerManager{
 
     public Player getFirstPlayer() {
         return firstPlayer;
+    }
+
+    public boolean checkEndGame(){
+        if(currentPlayer.getShelfie().checkFull()){
+            return true;
+        }
+        return false;
+    }
+
+    public Player getWinner() {
+        return winner;
     }
 }
 
