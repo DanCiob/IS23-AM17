@@ -18,6 +18,10 @@ public class ServerMessageHandler {
     private Controller controller;
     private ServerSide serverSide;
 
+    public ServerMessageHandler(Controller controller) {
+        this.controller = controller;
+    }
+
     /**
      *
      * @param message containing JSON message in form of string with request

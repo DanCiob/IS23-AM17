@@ -1,6 +1,7 @@
 package it.polimi.softeng.connectionProtocol;
 
-import it.polimi.softeng.connectionProtocol.ClientHandler;
+import it.polimi.softeng.controller.ServerMessageHandler;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -19,8 +20,12 @@ public class ServerSide {
     private ArrayList<ClientHandler> clientList = new ArrayList<>();
     private ArrayList<String> nickNameList = new ArrayList<>();
     private Map<String,ClientHandler> clientToName = new HashMap<>();
+    private ServerMessageHandler serverMessageHandler = null;
 
-    public ServerSide() {
+    public ServerSide(ServerMessageHandler serverMessageHandler) {
+
+        this.serverMessageHandler = serverMessageHandler;
+
         try {
             serverSocket = new ServerSocket(portNumber);
             System.out.println("server socket up");
@@ -28,12 +33,11 @@ public class ServerSide {
             e.printStackTrace();
         }
 
-
-        Thread t = new Thread(() -> clientAcceptor(serverSocket,clientList));
+        Thread t = new Thread(() -> clientAcceptor(serverSocket,clientList, serverMessageHandler));
         t.start();
     }
 
-    public void clientAcceptor(ServerSocket serverSocket, ArrayList<ClientHandler> clientList){
+    public void clientAcceptor(ServerSocket serverSocket, ArrayList<ClientHandler> clientList, ServerMessageHandler serverMessageHandler){
         Socket clientSocket = null;
         ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -41,7 +45,7 @@ public class ServerSide {
             try {
                 clientSocket = serverSocket.accept();
                 System.out.println("client accepted ");
-                ClientHandler clientHandler = new ClientHandler(clientSocket,this);
+                ClientHandler clientHandler = new ClientHandler(clientSocket,this, serverMessageHandler);
                 executor.submit(clientHandler);
                 clientList.add(clientHandler);
             } catch (IOException e) {
@@ -67,5 +71,9 @@ public class ServerSide {
 
     public ArrayList<String> getNickNameList() {
         return nickNameList;
+    }
+
+    public ServerMessageHandler getServerMessageHandler() {
+        return serverMessageHandler;
     }
 }

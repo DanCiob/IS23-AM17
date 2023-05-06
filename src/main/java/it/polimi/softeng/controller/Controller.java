@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Controller {
     private final Game currentGame;
     private final GameController gameController;
-    private final LoginController loginController;
+    private final PlayerController playerController;
 
     private final BoardController boardController;
     private final ShelfieController shelfieController;
@@ -23,25 +23,25 @@ public class Controller {
     private final ServerMessageHandler messageHandler;
 
     public Controller() {
-        this.messageHandler = new ServerMessageHandler();
+        this.messageHandler = new ServerMessageHandler(this);
         this.currentGame = new Game();
         this.gameController = new GameController();
-        this.loginController = new LoginController();
+        this.playerController = new PlayerController();
         this.boardController = new BoardController();
         this.shelfieController = new ShelfieController();
         this.chatController = new ChatController();
-        this.serverSide = new ServerSide();
+        this.serverSide = new ServerSide(this.messageHandler);
     }
 
     /**
      * Process chat request decoded from JSON by ServerMessageHandler
      *
-     * @param requester
+     * @param receiver
      * @param message
      */
-    public boolean fetchChatRequest(String requester, String message) {
+    public boolean fetchChatRequest(String receiver, String message) {
         try {
-            chatController.sendChatMessage(requester, message);
+            chatController.sendChatMessage(receiver, message, serverSide);
             return true;
         } catch (InvalidNameException e) {
             return false;
@@ -76,7 +76,7 @@ public class Controller {
         }*/
 
         //TODO startGame for multiple games
-        loginController.sendLoginRequest(nickname, gameMode, numOfPlayer, startGame);
+        playerController.sendLoginRequest(nickname, gameMode, numOfPlayer, startGame);
         return true;
     }
 
