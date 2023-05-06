@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import it.polimi.softeng.model.GameBoard;
+import it.polimi.softeng.model.Tile;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -40,5 +41,77 @@ public class BoardParser {
 
     public ArrayList<Cell> getPositionsToBeRemoved() {
         return positionsToBeRemoved;
+    }
+
+
+    public GameBoard gameBoardFullParser(String boardMessage) {
+        GameBoard gameBoard = new GameBoard();
+        Cell cell = new Cell();
+        JSONParser parser = new JSONParser();
+        JSONObject jsonBoard;
+        Long c, r;
+
+        try {
+            jsonBoard = (JSONObject) parser.parse(boardMessage);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        //notAvailable Cells
+        JSONArray notAvailableArray = (JSONArray) jsonBoard.get("notAvailable"); //the array of not available
+        Iterator<JSONArray> iterator = notAvailableArray.iterator();
+        int i = 0;
+        while (iterator.hasNext()) {
+            JSONObject notAvailableCell = (JSONObject) notAvailableArray.get(i);
+
+            c = (long) notAvailableCell.get("column");
+            cell.setColumn(c.intValue());
+            r = (long) notAvailableCell.get("row");
+            cell.setRow(r.intValue());
+            gameBoard.getNotAvailable().add(cell);
+
+            i++;
+            iterator.next();
+        }
+
+        //Rows
+        JSONArray rows = (JSONArray) jsonBoard.get("Tiles"); //rows = outer array of rows
+//        JSONObject rows = (JSONObject) jsonBoard.get("Rows");
+        Iterator<JSONObject> iterator1 = rows.iterator();
+        int j = 0;
+        int k;
+        Long id, row, column;
+
+        while (iterator1.hasNext()) { //j<9
+            JSONObject jso = (JSONObject) rows.get(j);
+            id = (long) jso.get("id");
+            Tile tile = new Tile(id.intValue(), PersonalCardsParser.StringToColor((String) jso.get("color")));
+            row = (long) jso.get("row");
+            column = (long) jso.get("column");
+            gameBoard.setBoard(row.intValue(), column.intValue(), tile);
+
+            //JSONArray rowOfTiles = (JSONArray) jso.get(j); //rowOfTiles = array of tiles
+            //System.out.println(rowOfTiles);
+            //JSONObject rowOfTiles = (JSONObject) rows.get(j);
+            //Iterator<JSONObject> iterator2 = rowOfTiles.iterator();
+            //k = 0;
+
+            //while (iterator2.hasNext()) {
+                //JSONObject posColorId = (JSONObject) rowOfTiles.get(k);
+                /*id = (long) posColorId.get("id");
+                Tile tile = new Tile(id.intValue(), PersonalCardsParser.StringToColor((String) posColorId.get("color")));
+                row = (long) posColorId.get("rowOfTiles");
+                gameBoard.setBoard(row.intValue(), (int)posColorId.get("column"), tile);
+
+
+                k++;
+                iterator2.next();*/
+           // }
+
+            j++;
+            iterator1.next();
+        }
+
+        return gameBoard;
     }
 }

@@ -1,13 +1,15 @@
 package it.polimi.softeng.JSONParser;
 
+import it.polimi.softeng.JSONWriter.BoardWriter;
 import it.polimi.softeng.model.GameBoard;
+import it.polimi.softeng.model.Tile;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GameBoardParserTest {
+class BoardParserTest {
 
     @Test
     void boardParserTest1(){
@@ -86,4 +88,70 @@ class GameBoardParserTest {
         msg.put("board", array);
         return msg;
     }
+
+    @Test
+    void gameBoardFullParserTest() {
+        GameBoard gameBoard = new GameBoard();
+        String msg;
+
+        gameBoard.resetBoard(2);
+
+        //board
+        Tile t1 = new Tile(0, Tile.TileColor.WHITE);
+        gameBoard.setBoard(3, 7, t1);
+
+        Tile t2 = new Tile(1, Tile.TileColor.BLUE);
+        gameBoard.setBoard(6, 4, t2);
+
+        Tile t3 = new Tile(2, Tile.TileColor.GREEN);
+        gameBoard.setBoard(1, 3, t3);
+
+        //msg = writeMsgFullBoard(gameBoard);
+        BoardWriter boardWriter = new BoardWriter();
+        msg = boardWriter.boardChangeNotifier(gameBoard).toString();
+
+        BoardParser boardParser = new BoardParser();
+        GameBoard gameBoard1 = boardParser.gameBoardFullParser(msg);
+
+        assertEquals(gameBoard.getBoard()[3][7].getId(), gameBoard1.getBoard()[3][7].getId());
+        assertEquals(gameBoard.getBoard()[6][4].getId(), gameBoard1.getBoard()[6][4].getId());
+        assertEquals(gameBoard.getBoard()[1][3].getId(), gameBoard1.getBoard()[1][3].getId());
+
+        assertEquals(gameBoard.getBoard()[3][7].getColor(), gameBoard1.getBoard()[3][7].getColor());
+        assertEquals(gameBoard.getBoard()[6][4].getColor(), gameBoard1.getBoard()[6][4].getColor());
+        assertEquals(gameBoard.getBoard()[1][3].getColor(), gameBoard1.getBoard()[1][3].getColor());
+
+    }
+
+   /* private String writeMsgFullBoard(GameBoard gameBoard){
+        JSONObject msg = new JSONObject();
+
+        JSONArray notAvailable = new JSONArray();
+        for (Cell c : gameBoard.getNotAvailable()){
+            JSONObject cell = new JSONObject();
+            cell.put("column", c.getColumn());
+            cell.put("row", c.getRow());
+            notAvailable.add(cell);
+        }
+        msg.put("notAvailable", notAvailable);
+
+        JSONArray rows = new JSONArray(); //rows: array of rows
+        for (int i = 0; i<boardRows; i++){
+            JSONArray rowOfTiles = new JSONArray(); // rowOfTiles: array of tiles
+            for (int j = 0; j<boardColumns; j++){
+                if (gameBoard.getBoard()[i][j] != null){
+                    JSONObject posColorId = new JSONObject();
+                    posColorId.put("color", gameBoard.getBoard()[i][j].getColor().toString());
+                    posColorId.put("column", j);
+                    posColorId.put("row", i);
+                    posColorId.put("id", gameBoard.getBoard()[i][j].getId());
+                    rowOfTiles.add(posColorId);
+                }
+            }
+            rows.add("Row " + i);
+        }
+        msg.put("Rows", rows);
+
+        return msg.toString();
+    }*/
 }
