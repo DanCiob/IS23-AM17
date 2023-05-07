@@ -1,5 +1,6 @@
 package it.polimi.softeng.model;
 
+import it.polimi.softeng.model.interfaces.GameInterface;
 import it.polimi.softeng.model.interfaces.PlayerInterface;
 import it.polimi.softeng.model.scoreCount.Score;
 import it.polimi.softeng.model.commonCards.*;
@@ -8,7 +9,7 @@ import java.util.Random;
 import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.model.PersonalCards.FillPersonalCardsBag;
 
-public class Game implements PlayerInterface {
+public class Game implements PlayerInterface, GameInterface{
     //board section
     private GameBoard gameBoard = new GameBoard();
     private ArrayList<Tile> tileBag = new ArrayList<>();
@@ -28,11 +29,24 @@ public class Game implements PlayerInterface {
 
     //maybe finished
     //dovremmo controllare che non parta con meno del numero di giocatori scelto
+    public void beginGame(ArrayList<String> nameList){
+        //vedi cosa serve
+        initializeTile();
+        initializeBoard();
+        for(String name : nameList){
+            createNewPlayer(name);
+        }
+        chooseCommonCards();
+        choosePersonalCards();
+        initializebadgeScore();
+        initializeBadgeEndGame();
+        chooseFirstPlayer();
+    }
+    //here for testing purpose
     public void beginGame(){
         //vedi cosa serve
         initializeTile();
         initializeBoard();
-        //inizializzare le carte prima dei badge
         chooseCommonCards();
         choosePersonalCards();
         initializebadgeScore();

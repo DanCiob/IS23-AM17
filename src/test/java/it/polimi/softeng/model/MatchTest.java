@@ -13,12 +13,13 @@ public class MatchTest {
     Game game = new Game();
 
     public void fullMatch(){
-        game.createNewPlayer("Alice");
-        game.createNewPlayer("Andrea");
-        game.createNewPlayer("Daniel");
-        game.createNewPlayer("Nicolas");
+        ArrayList<String>nameList = new ArrayList<>();
+        nameList.add("Alice");
+        nameList.add("Andrea");
+        nameList.add("Daniel");
+        nameList.add("Nicolas");
 
-        game.beginGame();
+        game.beginGame(nameList);
 
         while(!(game.checkEndGame())){
 

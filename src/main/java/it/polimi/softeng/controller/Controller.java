@@ -114,7 +114,7 @@ public class Controller {
      */
     public void startGame ()
     {
-       gameController.startGame();
+       gameController.startGame(serverSide.getNickNameList());
     }
 }
 
