@@ -20,23 +20,12 @@ public class MatchTest {
 
         game.beginGame();
 
-        while(game.checkEndGame()){
+        while(!(game.checkEndGame())){
 
-            //game.turn(); //da continuare e poi non so cose
+            //mossa, update shelfie e board da inserire in turn
 
-            //if there are only islands on the board
-            if(game.getGameBoard().checkIslands()){
-                game.getGameBoard().positionTiles(game.getTileBag());
-            }
+            game.turn(); //da continuare
 
-            //verify common cards
-            for(CommonCards card : game.getCommonCards()){
-                if(card.verifyShape(game.getCurrentPlayer().getShelfie())){
-                    //current player has completed a common card, so he receives the badge. The badge is removed from the arrayList
-                    game.getCurrentPlayer().updateScore(card.getBadge().getScore());
-                }
-            }
-            //end of turn()
 
             game.setNextPlayer();
 
@@ -50,11 +39,11 @@ public class MatchTest {
         fullMatch();
         CLI cli = new CLI();
         cli.scoreVisualizer(game.getPlayers());
-        System.out.println("Il vincitore è " + game.getWinner());
+        System.out.println("Il vincitore è " + game.getWinner().getNickname());
     }
 
     @Test
-    public void PartialTest(){
+    public void partialTest(){
 
         game.createNewPlayer("Alice");
         game.createNewPlayer("Andrea");
@@ -224,6 +213,108 @@ public class MatchTest {
         game.turn();
         game.setNextPlayer();
 
+
+    }
+
+    @Test
+    public void endOgGameTest(){
+        partialTest();
+        ArrayList<Cell> move = new ArrayList<>();
+        ArrayList<Tile> tiles = new ArrayList<>();
+
+        /*Cell cell = new Cell();
+        cell.setRow(3);
+        cell.setColumn(1);
+        Cell cell1 = new Cell();
+        cell1.setRow(3);
+        cell1.setColumn(2);
+        Cell cell2 = new Cell();
+        cell2.setRow(3);
+        cell2.setColumn(3);
+        move.clear();
+        move.add(cell);
+        move.add(cell1);
+        move.add(cell2);*/
+        game.setCurrentPlayer(game.getFirstPlayer());
+        game.setCurrentPlayer(game.getNextPlayer());
+        tiles.clear();
+        Tile tile = new Tile(10, game.getGameBoard().getBoard()[3][1].getColor());
+        Tile tile1 = new Tile(11, game.getGameBoard().getBoard()[3][2].getColor());
+        Tile tile2 = new Tile(12, game.getGameBoard().getBoard()[3][3].getColor());
+        Tile tile3 = new Tile(13, game.getGameBoard().getBoard()[2][5].getColor());
+        Tile tile4 = new Tile(14, game.getGameBoard().getBoard()[2][6].getColor());
+        Tile tile5 = new Tile(15, game.getGameBoard().getBoard()[4][0].getColor());
+
+        tiles.add(tile);
+        tiles.add(tile1);
+        tiles.add(tile2);
+        tiles.add(tile3);
+        tiles.add(tile4);
+        tiles.add(tile5);
+        //game.getGameBoard().updateBoard(move);
+        game.getCurrentPlayer().getShelfie().insertTileForTesting(tiles, 1);
+
+        tiles.clear();
+        tile = new Tile(16, game.getGameBoard().getBoard()[4][1].getColor());
+        tile1 = new Tile(17, game.getGameBoard().getBoard()[4][2].getColor());
+        tile2 = new Tile(18, game.getGameBoard().getBoard()[4][3].getColor());
+        tile3 = new Tile(19, game.getGameBoard().getBoard()[4][5].getColor());
+        tile4 = new Tile(20, game.getGameBoard().getBoard()[4][6].getColor());
+        tile5 = new Tile(21, game.getGameBoard().getBoard()[4][7].getColor());
+
+        tiles.add(tile);
+        tiles.add(tile1);
+        tiles.add(tile2);
+        tiles.add(tile3);
+        tiles.add(tile4);
+        tiles.add(tile5);
+        //game.getGameBoard().updateBoard(move);
+        game.getCurrentPlayer().getShelfie().insertTileForTesting(tiles, 2);
+
+        tiles.clear();
+        tile = new Tile(16, game.getGameBoard().getBoard()[5][1].getColor());
+        tile1 = new Tile(17, game.getGameBoard().getBoard()[5][2].getColor());
+        tile2 = new Tile(18, game.getGameBoard().getBoard()[5][3].getColor());
+        tile3 = new Tile(19, game.getGameBoard().getBoard()[5][5].getColor());
+        tile4 = new Tile(20, game.getGameBoard().getBoard()[5][6].getColor());
+        tile5 = new Tile(21, game.getGameBoard().getBoard()[5][7].getColor());
+
+        tiles.add(tile);
+        tiles.add(tile1);
+        tiles.add(tile2);
+        tiles.add(tile3);
+        tiles.add(tile4);
+        tiles.add(tile5);
+        //game.getGameBoard().updateBoard(move);
+        game.getCurrentPlayer().getShelfie().insertTileForTesting(tiles, 3);
+
+        tiles.clear();
+        tile = new Tile(16, game.getGameBoard().getBoard()[8][4].getColor());
+        tile1 = new Tile(17, game.getGameBoard().getBoard()[6][2].getColor());
+        tile2 = new Tile(18, game.getGameBoard().getBoard()[6][3].getColor());
+        tile3 = new Tile(19, game.getGameBoard().getBoard()[6][5].getColor());
+        tile4 = new Tile(20, game.getGameBoard().getBoard()[6][6].getColor());
+        tile5 = new Tile(21, game.getGameBoard().getBoard()[7][4].getColor());
+
+        tiles.add(tile);
+        tiles.add(tile1);
+        tiles.add(tile2);
+        tiles.add(tile3);
+        tiles.add(tile4);
+        tiles.add(tile5);
+        //game.getGameBoard().updateBoard(move);
+        game.getCurrentPlayer().getShelfie().insertTileForTesting(tiles, 4);
+        System.out.println(game.getCurrentPlayer().getNickname());
+        shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
+
+        game.turn();
+
+        if(game.checkEndGame()){
+            game.getCurrentPlayer().updateScore(game.getEndGameBadge().getScore());
+            game.lastTurn();
+            System.out.println("Il vincitore è " + game.getWinner().getNickname());
+
+        }
 
     }
 
