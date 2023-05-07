@@ -32,7 +32,7 @@ public class TwoSquaresOfEquals extends CommonCards {
                 if(s.getTile(j,i)!=null && s.getTile(j+1,i) != null && s.getTile(j,i).getColor() == s.getTile(j+1,i).getColor() && !usedTiles.contains(s.getTile(j,i)) && !usedTiles.contains(s.getTile(j+1,i))){
 
                     //I see where I have two tiles of the same colour in right next column that I haven't used for squares
-                    if(s.getTile(j,i+1).getColor() == s.getTile(j+1,i+1).getColor() && !usedTiles.contains(s.getTile(j,i+1)) && !usedTiles.contains(s.getTile(j+1,i+1))){
+                    if(s.getTile(j,i+1)!=null && s.getTile(j+1,i+1)!=null && s.getTile(j,i+1).getColor() == s.getTile(j+1,i+1).getColor() && !usedTiles.contains(s.getTile(j,i+1)) && !usedTiles.contains(s.getTile(j+1,i+1))){
 
                         //I check if the tiles I've found are the same colour
                         if(s.getTile(j,i+1).getColor() == s.getTile(j,i).getColor()){
