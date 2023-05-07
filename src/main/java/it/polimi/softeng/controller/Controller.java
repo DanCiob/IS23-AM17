@@ -1,5 +1,8 @@
 package it.polimi.softeng.controller;
 
+import it.polimi.softeng.JSONWriter.BoardWriter;
+import it.polimi.softeng.JSONWriter.ErrorWriter;
+import it.polimi.softeng.JSONWriter.ServerSignatureWriter;
 import it.polimi.softeng.connectionProtocol.ServerSide;
 import it.polimi.softeng.model.Cell;
 import it.polimi.softeng.model.Game;
@@ -24,7 +27,7 @@ public class Controller {
     public Controller() {
         this.messageHandler = new ServerMessageHandler(this);
         this.currentGame = new Game();
-        this.gameController = new GameController();
+        this.gameController = new GameController(this);
         this.playerController = new PlayerController();
         this.boardController = new BoardController();
         this.shelfieController = new ShelfieController();
@@ -59,8 +62,14 @@ public class Controller {
             if (!confirm)
                 return false;
 
-            gameController.sendGameMove(positionsToBeRemoved, column, requester);
-            return true;
+            try {
+                gameController.sendGameMove(positionsToBeRemoved, column, requester);
+                return true;
+            }catch (RuntimeException e)
+            {
+                return false;
+            }
+
         } else
             return false;
     }
@@ -115,6 +124,10 @@ public class Controller {
     public void startGame ()
     {
        gameController.startGame(serverSide.getNickNameList());
+    }
+
+    public ServerSide getServerSide() {
+        return this.serverSide;
     }
 }
 

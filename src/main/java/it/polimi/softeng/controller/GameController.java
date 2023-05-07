@@ -29,11 +29,29 @@ public class GameController {
      * @param column is column of insertion
      * @param requester is receiver of updates
      */
-    public void sendGameMove(ArrayList<Cell> tilesToBeRemoved, int column, String requester) {
-
+    public boolean sendGameMove(ArrayList<Cell> tilesToBeRemoved, int column, String requester) {
+        Tile[][] board= game.getGameBoard().getBoard();
+        ArrayList<Tile> tiles = new ArrayList<>();
+        for(Cell position : tilesToBeRemoved){
+            tiles.add(board[position.getRow()][position.getColumn()]);
+        }
         //GameBoard update
+        boolean confirm = game.getGameBoard().updateBoard(tilesToBeRemoved);
+
+        if (!confirm)
+            return false;
         //Shelfie update
-        //Update client ?
+        try {
+            game.getCurrentPlayer().getShelfie().insertTile(tiles, column);
+        } catch (IllegalInsertException e) {
+            throw new RuntimeException(e);
+        }
+        //Update board
+        controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(BoardWriter.boardChangeNotifier(game.getGameBoard()), "@BORD", "all").toJSONString());
+        //Update shelfie
+        //TODO make shelfies visible by everybody
+        controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(BoardWriter.boardChangeNotifier(game.getGameBoard()), "@SHEL", requester).toJSONString(), requester);
+        return true;
     }
 
     /**

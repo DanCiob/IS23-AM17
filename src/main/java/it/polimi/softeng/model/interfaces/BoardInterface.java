@@ -8,5 +8,5 @@ import java.util.ArrayList;
  * Communicate with board (CONTROLLER-MODEL)
  */
 public interface BoardInterface {
-    public void updateBoard(ArrayList<Cell> positionsToBeRemoved);
+    boolean updateBoard(ArrayList<Cell> positionsToBeRemoved);
 }

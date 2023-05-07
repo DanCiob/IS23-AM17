@@ -6,6 +6,7 @@ import it.polimi.softeng.model.commonCards.CommonCards;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import static it.polimi.softeng.Constants.*;
 
@@ -46,12 +47,13 @@ public class MatchTest {
     @Test
     public void partialTest(){
 
-        game.createNewPlayer("Alice");
-        game.createNewPlayer("Andrea");
-        game.createNewPlayer("Daniel");
-        game.createNewPlayer("Nicolas");
+        ArrayList<String>nameList = new ArrayList<>();
+        nameList.add("Alice");
+        nameList.add("Andrea");
+        nameList.add("Daniel");
+        nameList.add("Nicolas");
 
-        game.beginGame();
+        game.beginGame(nameList);
         visualizers();
 
         //first player

@@ -168,19 +168,28 @@ public class GameBoard implements BoardInterface {
         }
     }
 
-    public void updateBoard(ArrayList<Cell> positionsToBeRemoved){
+    /**
+     * This method update board after gamemove
+     * @param positionsToBeRemoved contains coordinates of tiles to be removed
+     * @return true if removal is succesfull
+     */
+    public boolean updateBoard(ArrayList<Cell> positionsToBeRemoved){
         /*
           after every move, it removes the tiles
          */
 
-        if(checkLegalChoice(positionsToBeRemoved)){
+        if(checkLegalChoice(positionsToBeRemoved)) {
             /*
               it removes the tiles
              */
-            for(Cell cell : positionsToBeRemoved){
+            for (Cell cell : positionsToBeRemoved) {
                 board[cell.getRow()][cell.getColumn()] = null;
             }
+            return true;
         }
+        else
+            return false;
+
     }
 
     public void positionTiles(ArrayList<Tile> bag){

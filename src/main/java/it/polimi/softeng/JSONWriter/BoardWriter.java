@@ -9,7 +9,7 @@ import static it.polimi.softeng.Constants.boardColumns;
 import static it.polimi.softeng.Constants.boardRows;
 
 public class BoardWriter {
-    public JSONObject boardChangeNotifier(GameBoard gameBoard){
+    public static JSONObject boardChangeNotifier(GameBoard gameBoard){
         JSONObject jsonObject = new JSONObject();
         JSONArray tilesOfARow= new JSONArray();
         JSONArray rows = new JSONArray();

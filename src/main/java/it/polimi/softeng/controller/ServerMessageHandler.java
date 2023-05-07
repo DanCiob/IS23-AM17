@@ -64,7 +64,7 @@ public class ServerMessageHandler {
                 boolean confirm = controller.fetchGameMoveRequest (gp.getTilesToBeRemoved(), gp.getColumn(), gp.getRequester());
 
                 if (!confirm)
-                    controller.sendErrorMessage(serverSignObject(writeError(INVALID_RECEIVER), "@ERRO", requester).toJSONString(), requester);
+                    controller.sendErrorMessage(serverSignObject(writeError(ERROR_IN_GAMEMOVE), "@ERRO", requester).toJSONString(), requester);
                 else
                     //Descriptive output
                     System.out.println("Received game move request from " + requester);
