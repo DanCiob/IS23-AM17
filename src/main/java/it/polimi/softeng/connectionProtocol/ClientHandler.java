@@ -20,6 +20,7 @@ public class ClientHandler implements Runnable{
     private Boolean nickNameNotConfirmed = true;
     private ServerMessageHandler serverMessageHandler;
     private int playerNumber ;
+    String nickname;
 
     public ClientHandler(Socket clientSocket, ServerSide serverSide, ServerMessageHandler serverMessageHandler){
         this.clientSocket = clientSocket;
@@ -59,7 +60,9 @@ public class ClientHandler implements Runnable{
                 }
             }
         } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            System.out.println("utente " + nickname + "si è disconesso");
+            //TODO routine inserimento utente in lista disconnessi
+            //TODO permettere la connessione di un utente se il gioco non è gia iniziato
         }
     }
     public void sendMessage(String message){
@@ -81,7 +84,7 @@ public class ClientHandler implements Runnable{
 
             playerNumber = (int)(long) obj.get("numOfPlayer");
             serverSide.setPlayerNumber(playerNumber);
-            String nickname = (String) obj.get("nickname");
+            nickname = (String) obj.get("nickname");
             if(!serverSide.getNickNameList().contains(nickname)){
                 System.out.println(nickname);
                 serverSide.addUser(this,nickname);

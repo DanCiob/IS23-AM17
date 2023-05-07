@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static java.lang.Thread.sleep;
-
 public class ServerSide {
     private ServerSocket serverSocket = null;
     private int portNumber = 1234;
@@ -75,6 +73,14 @@ public class ServerSide {
             clientToName.get(nickName).sendMessage(message);
     }
 
+    public void sendMessageExcept(String message, String nickName){
+        for(ClientHandler client : clientList){
+            if(clientToName.get(nickName) != client){
+                client.sendMessage(message);
+            }
+        }
+    }
+
     public ArrayList<String> getNickNameList() {
         return nickNameList;
     }
@@ -82,6 +88,7 @@ public class ServerSide {
     public ServerMessageHandler getServerMessageHandler() {
         return serverMessageHandler;
     }
+
     public void setPlayerNumber(int playerNumber){
         if(numberOfPlayersNotConfirmed){
             this.playerNumber = playerNumber;
