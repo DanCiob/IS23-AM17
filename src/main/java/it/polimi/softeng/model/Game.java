@@ -198,9 +198,11 @@ public class Game implements PlayerManager{
      * this method is called after checkEndGame
      */
     public void lastTurn(){
-        while(!(currentPlayer.isFirst())){ //current player is the one that has a full shelfie
-            currentPlayer = getNextPlayer();
+        if(!(currentPlayer.isFirst()))//current player is the one that has a full shelfie
+            setCurrentPlayer(getNextPlayer());
+        while(!(currentPlayer.isFirst())){
             turn();
+            setCurrentPlayer(getNextPlayer());
         }
         calculateScore();
         selectWinner();
@@ -359,4 +361,3 @@ public class Game implements PlayerManager{
         return winner;
     }
 }
-

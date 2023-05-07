@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
 
 import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
-import static it.polimi.softeng.JSONWriter.GameMoveWriter.writeGameMove;
 
 public class CLI extends CommonOperationsFramework implements UI, Runnable {
     /**
@@ -78,9 +77,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      */
     private ClientSide clientSide;
 
-    public ClientSide getClientSide() {
-        return clientSide;
-    }
 
     //TODO remove
     public CLI() {
@@ -146,8 +142,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         //TODO LoginWriter...
                     } while (!isOkNickname());
 
-                    LoginWriter lw = new LoginWriter();
-                    String login = ClientSignatureWriter.clientSignObject(lw.writeLogin(Nickname, GameMode, StartGame, NumOfPlayer), "@LOGN", Nickname).toJSONString();
+                    String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(Nickname, GameMode, StartGame, NumOfPlayer), "@LOGN", Nickname).toJSONString();
                     System.out.println(login);
                     this.clientSide = new ClientSide(messageHandler);
                     clientSide.sendMessage(login);
@@ -485,10 +480,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 //Wait for errors
                 TimeUnit.SECONDS.sleep(1);
                 game(firstRun);
-            }
-            //Error in JSON writing, caused by error in syntax
-            catch (IllegalInsertException e) {
-                System.out.println("Error in your message, try again!");
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -501,7 +492,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     /**
      * @param firstRun Game routine that wait for commands
      */
-    public void game(boolean firstRun) throws IllegalInsertException {
+    public void game(boolean firstRun){
         //POSSIBLE COMMANDS
         commands(firstRun);
 
@@ -538,7 +529,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             }
         }
 
-        if (!isOkCommand(command)) {
+        if (!isOkCommand(command, 1)) {
             System.out.println("Please write a command that you can see in the table");
             return;
         }
@@ -556,12 +547,23 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             case 1 -> {
                 //Block illegal move
                 if (op.equals("@GAME")) {
-                    errorCheckerClientSide(op, action);
-                    if (errorCheckerClientSide(op, action)) {
-                        System.out.println("Error in gameMove format, try again!");
+                    if (!isOkCommand(command, 3)) {
+                        System.out.println("Please, check gameMove syntax");
                         return;
                     }
                 }
+                    /*TODO will be used when synced to client errorCheckerClientSide(op, action);
+                    TODO if (errorCheckerClientSide(op, action)) {
+                        TODO System.out.println("Error in gameMove format, try again!");
+                        TODO return;
+                    }TODO*/
+                    if (op.equals("@CHAT")) {
+                        if (!isOkCommand(command, 2)) {
+                            System.out.println("Please, check chat syntax");
+                            return;
+                        }
+                    }
+
 
                 JSONObject toBeSent = actionToJSON(op, action);
 
@@ -572,19 +574,33 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
             case 2 -> {
                 if (op.equals("@GAME")) {
-                    errorCheckerClientSide(op, action);
-                    if (errorCheckerClientSide(op, action)) {
-                        System.out.println("Error in gameMove format, try again!");
+                    if (!isOkCommand(command, 3)) {
+                        System.out.println("Please, check gameMove syntax");
                         return;
                     }
+                    /*TODO will be used when synced to client errorCheckerClientSide(op, action);
+                    TODO if (errorCheckerClientSide(op, action)) {
+                        TODO System.out.println("Error in gameMove format, try again!");
+                        TODO return;
+                    }TODO*/
+                        if (errorCheckerClientSide(op, action)) {
+                            System.out.println("Error in gameMove format, try again!");
+                            return;
+                        }
 
-
+                    if (op.equals("@CHAT")) {
+                        if (!isOkCommand(command, 2)) {
+                            System.out.println("Please, check chat syntax");
+                            return;
+                        }
+                    }
+                }
                     RMIInvoker(op, action);
 
                 }
             }
         }
-    }
+
 
 
     /**
@@ -598,18 +614,23 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         scoreTable.setShowVerticalLines(true);
         scoreTable.setHeaders("Command", "Effect", "Example of command");
 
-        scoreTable.addRow(ANSI_GREEN + "@CMND" + ANSI_RESET, "To show command table again", "@CMND");
-        scoreTable.addRow(ANSI_GREEN + "@VBOR" + ANSI_RESET, "Visualize board status", "@VBOR");
-        scoreTable.addRow(ANSI_GREEN + "@VSHE" + ANSI_RESET, "Visualize shelfie status", "@VSHE");
-        scoreTable.addRow(ANSI_GREEN + "@VPLA" + ANSI_RESET, "Visualize currently connected players and score", "@VPLA");
-        scoreTable.addRow(ANSI_GREEN + "@VCCA" + ANSI_RESET, "Visualize common objectives", "@VCCA");
-        scoreTable.addRow(ANSI_GREEN + "@VPCA" + ANSI_RESET, "Visualize your personal card", "@VPCA");
-        scoreTable.addRow(ANSI_GREEN + "@GAME gameMoveFormat" + ANSI_RESET, "Do a game move", "@GAME (rowTile1,columnTil1),(rowTile2,columnTil2),(rowTile3,columnTil3),numColumnOfInsertion");
-        scoreTable.addRow(ANSI_GREEN + "@GAME gameMoveFormat" + ANSI_RESET, "Do a game move", "EX: (5,5),(5,6),2");
-        scoreTable.addRow(ANSI_GREEN + "@GAME gameMoveFormat" + ANSI_RESET, "Do a game move", "You must select at least 1 but less than 3 (included), picking order is inserting order in shelfie");
-        scoreTable.addRow(ANSI_GREEN + "@CHAT 'nameOfReceiver' message" + ANSI_RESET, "Send a chat message (to send a message to everybody type 'all' in nameOfReceiver)", "@CHAT 'userRec' HI!");
 
-        scoreTable.print();
+        System.out.println("+--------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+");
+        System.out.println("| Command                        | Effect                                                                            | Example                                                                                            |");
+        System.out.println("+--------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+");
+
+        System.out.println("| " + ANSI_GREEN + "@CMND                          " + ANSI_RESET + "| To show command table again                                                       | @CMND                                                                                              |");
+        System.out.println("| " + ANSI_GREEN + "@VBOR                          " + ANSI_RESET + "| Visualize board status                                                            | @VBOR                                                                                              |");
+        System.out.println("| " + ANSI_GREEN + "@VSHE                          " + ANSI_RESET + "| Visualize shelfie status                                                          | @VSHE                                                                                              |");
+        System.out.println("| " + ANSI_GREEN + "@VPLA                          " + ANSI_RESET + "| Visualize currently connected players and score                                   | @VPLA                                                                                              |");
+        System.out.println("| " + ANSI_GREEN + "@VCCA                          " + ANSI_RESET + "| Visualize common objectives                                                       | @VCCA                                                                                              |");
+        System.out.println("| " + ANSI_GREEN + "@VPCA                          " + ANSI_RESET + "| Visualize personal objectives                                                     | @VPCA                                                                                              |");
+        System.out.println("| " + ANSI_GREEN + "@GAME gameMoveFormat           " + ANSI_RESET + "| Do a game move                                                                    | @GAME (rowTile1,columnTil1),(rowTile2,columnTil2),(rowTile3,columnTil3),numColumnOfInsertion       |");
+        System.out.println("| " + ANSI_GREEN + "--------------------           " + ANSI_RESET + "| --------------                                                                    | EX: (5,5),(5,6),2                                                                                  |");
+        System.out.println("| " + ANSI_GREEN + "--------------------           " + ANSI_RESET + "| --------------                                                                    | You must select at least 1 but less than 3 (included), picking order is inserting order in shelfie |");
+        System.out.println("| " + ANSI_GREEN + "@CHAT 'nameOfReceiver' message " + ANSI_RESET + "| Send a chat message (to send a message to everybody type 'all' in nameOfReceiver) | @CHAT 'userRec' HI!                                                                                |");
+
+        System.out.println("+--------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+");
     }
 
     public void logo() {
@@ -637,20 +658,35 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     /**
      * Verify that inserted command follows regex standard defined for commands
      *
-     * @param command
+     * @param command       is command defined by user in console
+     * @param typeOfCommand 1 for generic command, 2 for chatCheck, 3 for gameCheck
      * @return true if command follows regex standard
      */
-    public boolean isOkCommand(String command) {
-        Pattern pattern = Pattern.compile(commandREGEX);
-        Matcher matcher = pattern.matcher(command);
-        return matcher.lookingAt();
+    public boolean isOkCommand(String command, int typeOfCommand) {
+        switch (typeOfCommand) {
+            case 1 -> {
+                Pattern pattern = Pattern.compile(commandREGEX);
+                Matcher matcher = pattern.matcher(command);
+                return matcher.lookingAt();
+            }
+            case 2 -> {
+                Pattern pattern = Pattern.compile(chatCommandREGEX);
+                Matcher matcher = pattern.matcher(command);
+                return matcher.lookingAt();
+            }
+            case 3 -> {
+                Pattern pattern = Pattern.compile(gameCommandREGEX);
+                Matcher matcher = pattern.matcher(command);
+                return matcher.lookingAt();
+            }
+        }
+        return false;
     }
 
     /**
      * @param op     is command
      * @param action is command text sent by UI
      * @return a JSONObject containing encoded action
-     * @throws IllegalInsertException
      */
     public JSONObject actionToJSON(String op, String action) {
         switch (op) {
@@ -768,6 +804,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      * Block illegal move in clientSide
      */
     public boolean errorCheckerClientSide(String op, String action) {
+
+
         JSONObject obj = actionToJSON(op, action);
         GameMoveParser gmp = new GameMoveParser();
 

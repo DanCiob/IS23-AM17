@@ -222,19 +222,6 @@ public class MatchTest {
         ArrayList<Cell> move = new ArrayList<>();
         ArrayList<Tile> tiles = new ArrayList<>();
 
-        /*Cell cell = new Cell();
-        cell.setRow(3);
-        cell.setColumn(1);
-        Cell cell1 = new Cell();
-        cell1.setRow(3);
-        cell1.setColumn(2);
-        Cell cell2 = new Cell();
-        cell2.setRow(3);
-        cell2.setColumn(3);
-        move.clear();
-        move.add(cell);
-        move.add(cell1);
-        move.add(cell2);*/
         game.setCurrentPlayer(game.getFirstPlayer());
         game.setCurrentPlayer(game.getNextPlayer());
         tiles.clear();
@@ -311,7 +298,52 @@ public class MatchTest {
 
         if(game.checkEndGame()){
             game.getCurrentPlayer().updateScore(game.getEndGameBadge().getScore());
-            game.lastTurn();
+            //game.lastTurn();
+            if(!(game.getCurrentPlayer().isFirst()))//current player is the one that has a full shelfie
+                game.setCurrentPlayer(game.getNextPlayer());
+            if(!(game.getCurrentPlayer().isFirst())){
+                tile = new Tile(22, game.getGameBoard().getBoard()[4][7].getColor());
+                tiles.clear();
+                tiles.add(tile);
+                Cell cell = new Cell();
+                cell.setRow(4);
+                cell.setColumn(7);
+                move = new ArrayList<>();
+                move.add(cell);
+                game.getGameBoard().updateBoard(move);
+                try{
+                    if(game.getGameBoard().checkLegalChoice(move))
+                        game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
+                }catch (IllegalInsertException e){
+                    throw new RuntimeException(e);
+                }
+                game.turn();
+            }
+            visualizers();
+            game.setCurrentPlayer(game.getNextPlayer());
+            if(!(game.getCurrentPlayer().isFirst())){
+                tile = new Tile(23, game.getGameBoard().getBoard()[5][7].getColor());
+                tiles.clear();
+                tiles.add(tile);
+                Cell cell = new Cell();
+                cell.setRow(5);
+                cell.setColumn(7);
+                move = new ArrayList<>();
+                move.add(cell);
+                game.getGameBoard().updateBoard(move);
+                try{
+                    if(game.getGameBoard().checkLegalChoice(move))
+                        game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
+                }catch (IllegalInsertException e){
+                    throw new RuntimeException(e);
+                }                game.turn();
+            }
+            visualizers();
+            game.calculateScore();
+            game.selectWinner();
+            //end of lastTurn
+
+
             System.out.println("Il vincitore è " + game.getWinner().getNickname());
 
         }
@@ -380,5 +412,4 @@ public class MatchTest {
         shelfieVisualizer(game.getPlayers().get(2).getShelfie().getGrid());
         shelfieVisualizer(game.getPlayers().get(3).getShelfie().getGrid());
     }
-
 }

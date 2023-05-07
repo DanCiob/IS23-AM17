@@ -36,8 +36,12 @@ public abstract class Constants {
     //Regex for JSON
     //Allows gameMove in JSON defined standard -> ex: (0,1),(2,3),2
     public static final String gameREGEX = "^([(][0-9][,][0-9][)][,]){1,3}[0-4]$";
+    //Allows gameMove message command
+    public static final String gameCommandREGEX = "^[@][Gg][Aa][Mm][Ee][ ]([(][0-9][,][0-9][)][,]){1,3}[0-4]$";
     //Allows chat message in JSON defined standard -> ex: 'receiver' message
     public static final String chatREGEX = "^['][a-zA-Z0-9_]+['][ ].+$";
+    //Allows chat message command
+    public static final String chatCommandREGEX = "^[@][Cc][Hh][Aa][Tt][ ]['][a-zA-Z0-9_]+['][ ]";
     //Allows nickname in specific standard
     public static final String nicknameREGEX = "^[a-zA-Z0-9_]+$";
     //Allows first part of commands only in specific standard
