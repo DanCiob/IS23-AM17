@@ -19,6 +19,7 @@ public class ClientHandler implements Runnable{
     private ServerSide serverSide;
     private Boolean nickNameNotConfirmed = true;
     private ServerMessageHandler serverMessageHandler;
+    private int playerNumber ;
 
     public ClientHandler(Socket clientSocket, ServerSide serverSide, ServerMessageHandler serverMessageHandler){
         this.clientSocket = clientSocket;
@@ -78,6 +79,8 @@ public class ClientHandler implements Runnable{
         }
         if(obj != null && Objects.equals((String) obj.get("request"), "@LOGN")){
 
+            playerNumber = (int)(long) obj.get("numOfPlayer");
+            serverSide.setPlayerNumber(playerNumber);
             String nickname = (String) obj.get("nickname");
             if(!serverSide.getNickNameList().contains(nickname)){
                 System.out.println(nickname);
@@ -89,5 +92,9 @@ public class ClientHandler implements Runnable{
                 System.out.println("nickName già usato");
            }
         }
+    }
+
+    public int getPlayerNumber() {
+        return playerNumber;
     }
 }

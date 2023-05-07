@@ -21,6 +21,9 @@ public class ServerSide {
     private ArrayList<String> nickNameList = new ArrayList<>();
     private Map<String,ClientHandler> clientToName = new HashMap<>();
     private ServerMessageHandler serverMessageHandler = null;
+    int playerNumber = 4;
+    Boolean numberOfPlayersNotConfirmed = true;
+
 
     public ServerSide(ServerMessageHandler serverMessageHandler) {
 
@@ -40,18 +43,21 @@ public class ServerSide {
     public void clientAcceptor(ServerSocket serverSocket, ArrayList<ClientHandler> clientList, ServerMessageHandler serverMessageHandler){
         Socket clientSocket = null;
         ExecutorService executor = Executors.newCachedThreadPool();
+        int i = 0;
 
-        while(true){
+        while(i < playerNumber){
             try {
                 clientSocket = serverSocket.accept();
                 System.out.println("client accepted ");
                 ClientHandler clientHandler = new ClientHandler(clientSocket,this, serverMessageHandler);
                 executor.submit(clientHandler);
                 clientList.add(clientHandler);
+                i++;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        System.out.println("raggiunto il numero di giocatori selezionato");
     }
 
     public void sendMessageToAll(String message){
@@ -75,5 +81,11 @@ public class ServerSide {
 
     public ServerMessageHandler getServerMessageHandler() {
         return serverMessageHandler;
+    }
+    public void setPlayerNumber(int playerNumber){
+        if(numberOfPlayersNotConfirmed){
+            this.playerNumber = playerNumber;
+            numberOfPlayersNotConfirmed = false;
+        }
     }
 }

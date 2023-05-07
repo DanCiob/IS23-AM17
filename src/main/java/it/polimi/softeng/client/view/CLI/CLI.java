@@ -85,7 +85,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     //TODO remove
     public CLI() {
         this.messageHandler = new MessageHandler(this);
-        this.clientSide = new ClientSide(messageHandler);
         this.input = new Scanner(System.in);
     }
 
@@ -150,6 +149,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     LoginWriter lw = new LoginWriter();
                     String login = ClientSignatureWriter.clientSignObject(lw.writeLogin(Nickname, GameMode, StartGame, NumOfPlayer), "@LOGN", Nickname).toJSONString();
                     System.out.println(login);
+                    this.clientSide = new ClientSide(messageHandler);
                     clientSide.sendMessage(login);
                 }
 
