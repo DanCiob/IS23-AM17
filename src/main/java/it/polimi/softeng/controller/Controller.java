@@ -41,7 +41,7 @@ public class Controller {
     public boolean fetchChatRequest(String receiver, String message, String sender) {
             if((!serverSide.getNickNameList().contains(receiver) || receiver.equals(sender)) && !receiver.equals("all"))
                 return false;
-            chatController.sendChatMessage(receiver, message, serverSide);
+            chatController.sendChatMessage(receiver, message, serverSide, sender);
             return true;
     }
 

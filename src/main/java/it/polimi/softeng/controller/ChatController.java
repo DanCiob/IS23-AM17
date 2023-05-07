@@ -10,9 +10,9 @@ public class ChatController {
      * @param message is chat message
      * @param serverSide is socket communicator
      */
-    public void sendChatMessage(String receiver, String message, ServerSide serverSide){
+    public void sendChatMessage(String receiver, String message, ServerSide serverSide, String sender){
         if (receiver.equals("all"))
-            serverSide.sendMessageToAll(message);
+            serverSide.sendMessageExcept(message, sender);
         //TODO need to avoid send message to sender
         else
             serverSide.sendMessage(message, receiver);
