@@ -17,6 +17,7 @@ public class ServerSide {
 
     private ArrayList<ClientHandler> clientList = new ArrayList<>();
     private ArrayList<String> nickNameList = new ArrayList<>();
+
     private Map<String,ClientHandler> clientToName = new HashMap<>();
     private ServerMessageHandler serverMessageHandler = null;
     int playerNumber = 4;
@@ -55,7 +56,8 @@ public class ServerSide {
                 e.printStackTrace();
             }
         }
-        System.out.println("raggiunto il numero di giocatori selezionato");
+        System.out.println("Reached desired number of player");
+        serverMessageHandler.getController().startGame();
     }
 
     public void sendMessageToAll(String message){
@@ -80,6 +82,10 @@ public class ServerSide {
             }
         }
     }
+
+    //TODO function to manage disconnection, remove player from active players and adding to disconnected
+
+    //TODO function to manage reconnection, remove player from disconnected players and adding to active players
 
     public ArrayList<String> getNickNameList() {
         return nickNameList;

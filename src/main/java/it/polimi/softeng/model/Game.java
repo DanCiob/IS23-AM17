@@ -1,5 +1,6 @@
 package it.polimi.softeng.model;
 
+import it.polimi.softeng.model.interfaces.PlayerInterface;
 import it.polimi.softeng.model.scoreCount.Score;
 import it.polimi.softeng.model.commonCards.*;
 import java.util.ArrayList;
@@ -7,7 +8,7 @@ import java.util.Random;
 import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.model.PersonalCards.FillPersonalCardsBag;
 
-public class Game implements PlayerManager{
+public class Game implements PlayerInterface {
     //board section
     private GameBoard gameBoard = new GameBoard();
     private ArrayList<Tile> tileBag = new ArrayList<>();
@@ -261,6 +262,16 @@ public class Game implements PlayerManager{
      */
     public void createNewPlayer(String nickName){
         players.add(new Player(nickName, 0));
+
+    }
+
+    @Override
+    public void moveToActivePlayers(String nickname) {
+
+    }
+
+    @Override
+    public void moveToDisconnectedPlayers(String nickname) {
 
     }
 

@@ -23,6 +23,10 @@ public class ServerMessageHandler {
 
     }
 
+    public Controller getController() {
+        return controller;
+    }
+
     /**
      *
      * @param message containing JSON message in form of string with request

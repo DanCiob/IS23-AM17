@@ -1,12 +1,14 @@
 package it.polimi.softeng.model;
 
+import it.polimi.softeng.model.interfaces.BoardInterface;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 import static it.polimi.softeng.Constants.*;
 
 
-public class GameBoard implements BoardSetter{
+public class GameBoard implements BoardInterface {
     /**
      * matrix that represents the board;
      * column numbering : goes from left to right

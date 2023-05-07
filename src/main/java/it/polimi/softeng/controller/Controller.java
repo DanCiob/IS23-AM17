@@ -108,6 +108,14 @@ public class Controller {
     public void sendErrorMessage (String error, String receiver) {
         serverSide.sendMessage(error, receiver);
     }
+
+    /**
+     * Start game by creating model
+     */
+    public void startGame ()
+    {
+       gameController.startGame();
+    }
 }
 
 

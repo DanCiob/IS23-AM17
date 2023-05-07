@@ -4,6 +4,9 @@ import it.polimi.softeng.model.Cell;
 
 import java.util.ArrayList;
 
+/**
+ * Communicate gameMoves to model, communicate via interfaces
+ */
 public class GameController {
     private String nickname;
 
@@ -18,5 +21,13 @@ public class GameController {
         //GameBoard update
         //Shelfie update
         //Update client ?
+    }
+
+    /**
+     * Manage setup of model
+     */
+    public void startGame ()
+    {
+
     }
 }
