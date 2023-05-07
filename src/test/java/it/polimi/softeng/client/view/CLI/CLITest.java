@@ -272,7 +272,15 @@ class CLITest {
 
     @Test
     void isOkCommand() {
-        assertTrue(cli.isOkCommand("@CHAT 'all' HI!"));
-        assertFalse(cli.isOkCommand("@CH AT"));
+        assertTrue(cli.isOkCommand("@CHAT 'all' HI!", 2));
+        assertFalse(cli.isOkCommand("@CH AT", 2));
+        assertTrue(cli.isOkCommand("@Chat 'all' hi", 2));
+
+        assertTrue(cli.isOkCommand("@gAmE (3,3),(2,1),(1,2),2", 3));
+        assertTrue(cli.isOkCommand("@GAME (1,2),(1,1),1", 3));
+        assertFalse(cli.isOkCommand("@GAM (1,2)1", 3));
+        assertFalse(cli.isOkCommand("@GAME (1,1),())", 3));
+        assertFalse(cli.isOkCommand("@GAME (1,1)1", 3));
+        assertFalse(cli.isOkCommand("@game(1,1),2", 3));
     }
 }
