@@ -49,5 +49,4 @@ public class TwoSquaresOfEquals extends CommonCards {
         }
         return false;
     }
-
 }

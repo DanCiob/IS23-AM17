@@ -412,5 +412,4 @@ public class MatchTest {
         shelfieVisualizer(game.getPlayers().get(2).getShelfie().getGrid());
         shelfieVisualizer(game.getPlayers().get(3).getShelfie().getGrid());
     }
-
 }
