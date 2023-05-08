@@ -60,9 +60,9 @@ public class ClientHandler implements Runnable{
                 }
             }
         } catch (IOException | ParseException e) {
-            System.out.println("utente " + nickname + "si è disconesso");
-            //TODO routine inserimento utente in lista disconnessi
-            //TODO permettere la connessione di un utente se il gioco non è gia iniziato
+            System.out.println("utente " + nickname + " si è disconnesso");
+            serverSide.addDisconnectedPlayer(nickname);
+            serverSide.restartAccepting();
         }
     }
     public void sendMessage(String message){
@@ -70,7 +70,7 @@ public class ClientHandler implements Runnable{
     }
 
     public void scanForNickName(String message){
-        System.out.println("im here");
+        Boolean flag = false;
         JSONParser parser = new JSONParser();
         JSONObject obj = null;
         if(message != null){
@@ -85,14 +85,26 @@ public class ClientHandler implements Runnable{
             playerNumber = (int)(long) obj.get("numOfPlayer");
             serverSide.setPlayerNumber(playerNumber);
             nickname = (String) obj.get("nickname");
-            if(!serverSide.getNickNameList().contains(nickname)){
+            if(!serverSide.getNickNameList().contains(nickname) && serverSide.getStatus().equals("gameLobby")){
                 System.out.println(nickname);
                 serverSide.addUser(this,nickname);
                 nickNameNotConfirmed = false;
-            }
-            else{
-                //da sostituire con una sendMessage di errore
+            } else if (serverSide.getStatus().equals("gameStarted")) {
+                for(String disconnectedPlayer : serverSide.getDisconnectedPlayerList()){
+                    if(nickname.equals(disconnectedPlayer)){
+                        flag = true;
+                        System.out.println(nickname + " reconnected !");
+                        serverSide.addUser(this,nickname);
+                    }
+                }
+                if(!flag){
+                    System.out.println("nickname is not acceptable ");
+                    //codice per tirare errore di login non accettato
+                }
+            } else{
+                //TODO aggiungere messaggio di errore da inviare al client
                 System.out.println("nickName già usato");
+                //TODO eliminare il clientHandler in caso di login errato
            }
         }
     }

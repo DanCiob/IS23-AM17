@@ -93,8 +93,7 @@ public class Controller {
      * @param requester
      * @return true if move is legal
      */
-    public boolean checkLegalGameMove (ArrayList<Cell> positionsToBeRemoved, int column, String requester)
-    {
+    public boolean checkLegalGameMove (ArrayList<Cell> positionsToBeRemoved, int column, String requester) {
         if (currentGame.getGameBoard().checkLegalChoice(positionsToBeRemoved))
             return false;
 
@@ -123,7 +122,7 @@ public class Controller {
      */
     public void startGame ()
     {
-       gameController.startGame(serverSide.getNickNameList());
+       gameController.startGame(serverSide.getFinalNickNameList());
     }
 
     public ServerSide getServerSide() {
