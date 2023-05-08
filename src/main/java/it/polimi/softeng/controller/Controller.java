@@ -44,7 +44,7 @@ public class Controller {
     }
 
     /**
-     * Process chat request decoded from JSON by ServerMessageHandler
+     * Process game move request decoded from JSON by ServerMessageHandler
      *
      * @param positionsToBeRemoved is positions to be removed from board
      * @param column is column of insertion in shelfie
@@ -53,19 +53,16 @@ public class Controller {
      */
     public boolean fetchGameMoveRequest(ArrayList<Cell> positionsToBeRemoved, int column, String requester) {
         if (gameController.getCurrentGame().getCurrentPlayer().getNickname().equals(requester)) {
-            boolean confirm = checkLegalGameMove(positionsToBeRemoved, column, requester);
-            if (!confirm)
-                return false;
-
             try {
-                gameController.sendGameMove(positionsToBeRemoved, column, requester);
-                return true;
+                boolean confirm = gameController.sendGameMove(positionsToBeRemoved, column, requester);
+                return confirm;
             }catch (RuntimeException e)
             {
                 return false;
             }
 
         } else
+            //Not player's turn
             return false;
     }
 

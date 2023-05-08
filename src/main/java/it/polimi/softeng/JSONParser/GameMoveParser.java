@@ -21,7 +21,6 @@ public class GameMoveParser {
      */
     public void gameMoveParser(String gameMove)
     {
-        ArrayList<Cell> tilesToBeRemoved = new ArrayList<>();
         JSONParser parser = new JSONParser();
         JSONObject JSONObject = new JSONObject();
         JSONArray JSONArr = new JSONArray();

@@ -27,8 +27,12 @@ public class GameController {
      */
     public boolean sendGameMove(ArrayList<Cell> tilesToBeRemoved, int column, String requester) {
         //Reject request if it's not player's turn
-        if (!requester.equals(game.getCurrentPlayer()))
+        System.out.println("Current player: " + game.getCurrentPlayer().getNickname());
+        if (!requester.equals(game.getCurrentPlayer().getNickname()))
+        {
+            System.out.println("Received gameMove request by " + requester + " but it's " + game.getCurrentPlayer().getNickname() + " turn");
             return false;
+        }
 
         Tile[][] board= game.getGameBoard().getBoard();
         ArrayList<Tile> tiles = new ArrayList<>();
@@ -36,21 +40,28 @@ public class GameController {
             tiles.add(board[position.getRow()][position.getColumn()]);
         }
         //GameBoard update
+        System.out.println(tiles.size() + " will be removed");
         boolean confirm = game.getGameBoard().updateBoard(tilesToBeRemoved);
 
         if (!confirm)
             return false;
+
+        System.out.println("Board updated");
         //Shelfie update
         try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, column);
+            System.out.println("Shelfie updated");
         } catch (IllegalInsertException e) {
             throw new RuntimeException(e);
         }
+
         //Update board
         controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(BoardWriter.boardChangeNotifier(game.getGameBoard()), "@BORD", "all").toJSONString());
+        System.out.println("Updated board sent");
         //Update shelfie
         //TODO make shelfies visible by everybody
         controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(game.getCurrentPlayer().getShelfie()), "@SHEL", requester).toJSONString(), requester);
+        System.out.println("Updated shelfie sent");
 
         //Set next player
         game.setNextPlayer();

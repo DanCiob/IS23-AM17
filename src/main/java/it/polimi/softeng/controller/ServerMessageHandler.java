@@ -61,6 +61,9 @@ public class ServerMessageHandler {
                 //Invoke gameController
                 GameMoveParser gp = new GameMoveParser();
                 gp.gameMoveParser(message);
+
+                System.out.println(gp.getTilesToBeRemoved().size());
+
                 boolean confirm = controller.fetchGameMoveRequest (gp.getTilesToBeRemoved(), gp.getColumn(), gp.getRequester());
 
                 if (!confirm)

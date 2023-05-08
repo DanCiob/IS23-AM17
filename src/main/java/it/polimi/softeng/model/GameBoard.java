@@ -182,13 +182,15 @@ public class GameBoard implements BoardInterface {
             /*
               it removes the tiles
              */
-            for (Cell cell : positionsToBeRemoved) {
+            System.out.println("Valid chosen tiles");
+            for (Cell cell : positionsToBeRemoved)
                 board[cell.getRow()][cell.getColumn()] = null;
-            }
             return true;
-        }
-        else
+            }
+        else {
+            System.out.println("Error in chosen tiles");
             return false;
+        }
 
     }
 
@@ -223,6 +225,11 @@ public class GameBoard implements BoardInterface {
             i = cell.getRow();
             j = cell.getColumn();
             posNotUsable = false;
+
+            //You're choosing null tiles
+            if (board[i][j] == null)
+                return false;
+
             for(Cell cell1 : notAvailable){
                 if(cell1.getRow() == i && cell1.getColumn() == j)
                     posNotUsable = true;
