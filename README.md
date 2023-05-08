@@ -7,7 +7,7 @@
 | Basic rules |🟢|
 | Complete rules |🟢|
 | RMI |🟡|
-| Socket |🟡|
+| Socket |🟢|
 | CLI |🟡|
 | GUI |🟡|
 | Multiple games |🟡|
