@@ -113,4 +113,39 @@ public class PersonalCardsParser {
         return null;
     }
 
+    /**
+     * Read personal card from JSON file and return an object
+     * @param personalCard
+     * @return
+     * @throws ParseException
+     */
+    public static PersonalCards personalCardsParser(String personalCard) throws ParseException {
+
+        PersonalCards pcToBeRet = new PersonalCards();
+        int rowTemp = 0;
+        int columnTemp = 0;
+        String color;
+        Tile.TileColor colorTemp = null;
+        int currentCard = 0;
+
+
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) parser.parse(personalCard);
+
+        //Iterate all JSON file to read every PersonalCard
+                JSONArray CurrentCardRead = (JSONArray) jsonObject.get("personalCard");
+                Iterator iterator1 = CurrentCardRead.iterator();
+
+                //Iterate inside single PersonalCard
+                for (int i = 0; iterator1.hasNext(); i++)
+                {
+                    JSONObject currentCell = (JSONObject) iterator1.next();
+                    rowTemp = (int)(long) currentCell.get("row");
+                    columnTemp = (int)(long) currentCell.get("column");
+                    colorTemp = StringToColor((String) currentCell.get("color"));
+
+                    pcToBeRet.setObjective(i, rowTemp, columnTemp, colorTemp);
+                }
+        return pcToBeRet;
+    }
 }

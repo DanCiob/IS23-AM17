@@ -83,10 +83,12 @@ public class ServerMessageHandler {
                 System.out.println("Received login request from " + requester);
             }
 
+            //TODO
             case ("@VPLA") -> {
                 //Get players and their score
             }
 
+            //TODO -> now client responds directly
             case ("@VCCA") -> {
                 //Get commoncards
             }

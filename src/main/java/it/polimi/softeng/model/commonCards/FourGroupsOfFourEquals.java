@@ -18,4 +18,6 @@ public class FourGroupsOfFourEquals extends CommonCards {
 
         return GroupsOfEqualTiles(s, numOfGroups, sizeOfGroups);
     }
+
+    public String getName () {return "FourGroupsOfFourEquals";}
 }

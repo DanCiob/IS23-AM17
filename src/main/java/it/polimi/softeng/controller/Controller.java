@@ -11,7 +11,6 @@ import java.util.ArrayList;
  * General controller managing game, gameController, boardController, shelfieController, chatController and communicating using serverSide
  */
 public class Controller {
-    private final Game currentGame;
     private final GameController gameController;
     private final PlayerController playerController;
 
@@ -23,7 +22,6 @@ public class Controller {
 
     public Controller() {
         this.messageHandler = new ServerMessageHandler(this);
-        this.currentGame = new Game();
         this.gameController = new GameController(this);
         this.playerController = new PlayerController();
         this.boardController = new BoardController();
@@ -54,7 +52,7 @@ public class Controller {
      * @return true if move is done by currentPlayerTurn, false if not
      */
     public boolean fetchGameMoveRequest(ArrayList<Cell> positionsToBeRemoved, int column, String requester) {
-        if (currentGame.getCurrentPlayer().getNickname().equals(requester)) {
+        if (gameController.getCurrentGame().getCurrentPlayer().getNickname().equals(requester)) {
             boolean confirm = checkLegalGameMove(positionsToBeRemoved, column, requester);
             if (!confirm)
                 return false;
@@ -71,9 +69,18 @@ public class Controller {
             return false;
     }
 
+    /**
+     * Process login request from client
+     * @param nickname is nickname of player
+     * @param gameMode is easy or normal mode
+     * @param numOfPlayer is number of player (2-4)
+     * @param startGame if 1 a new game will be created, if 2 join a lobby
+     * @return true if request is successful
+     */
     public boolean fetchLoginRequest(String nickname, int gameMode, int numOfPlayer, int startGame) {
-        if (currentGame.getPlayers().contains(nickname))
-            return false;
+        //TODO check uniqueness
+        /*if (gameController.getCurrentGame().getPlayers().contains(nickname))
+            return false;*/
         /*TODO else if (currentGame.getDisconnectedPlayers().contains(nickname)) {
             //reconnect
         }*/
@@ -85,22 +92,22 @@ public class Controller {
 
     /**
      * Server-side legal move checker
-     * @param positionsToBeRemoved
-     * @param column
-     * @param requester
+     * @param positionsToBeRemoved contains tile positions that will be removed from board
+     * @param column is shelfie column of insertion
+     * @param requester is game move requester
      * @return true if move is legal
      */
     public boolean checkLegalGameMove (ArrayList<Cell> positionsToBeRemoved, int column, String requester)
     {
-        if (currentGame.getGameBoard().checkLegalChoice(positionsToBeRemoved))
+        if (gameController.getCurrentGame().getGameBoard().checkLegalChoice(positionsToBeRemoved))
             return false;
 
         //Create an arrayList of tile from arrayList of cell
         ArrayList<Tile> tilesToBeRemoved = new ArrayList<>();
         for (Cell c : positionsToBeRemoved)
-            tilesToBeRemoved.add(currentGame.getGameBoard().getBoard()[c.getRow()][c.getColumn()]);
+            tilesToBeRemoved.add(gameController.getCurrentGame().getGameBoard().getBoard()[c.getRow()][c.getColumn()]);
 
-        if (currentGame.getCurrentPlayer().getShelfie().checkLegalInsert(tilesToBeRemoved, column))
+        if (gameController.getCurrentGame().getCurrentPlayer().getShelfie().checkLegalInsert(tilesToBeRemoved, column))
             return false;
 
         return true;
@@ -108,8 +115,8 @@ public class Controller {
 
     /**
      * Used to send error messages to client
-     * @param error
-     * @param receiver
+     * @param error contains error type
+     * @param receiver is error receiver
      */
     public void sendErrorMessage (String error, String receiver) {
         serverSide.sendMessage(error, receiver);

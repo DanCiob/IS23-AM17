@@ -12,4 +12,7 @@ public class  TwoColumnsOfSixDifferent extends CommonCards{
     public boolean verifyShape(Shelfie shelfie){
         return Score.twoOfDifferent(shelfie, true);
     }
+
+    public String getName () {return "TwoColumnsOfSixDifferent";}
+
 }

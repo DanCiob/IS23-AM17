@@ -106,4 +106,6 @@ public class DiagonalOfEquals extends CommonCards {
         }
         return count == shelfieColumns;
     }
+
+    public String getName () {return "DiagonalOfEquals";}
 }

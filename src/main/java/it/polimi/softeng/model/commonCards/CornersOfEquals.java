@@ -38,4 +38,6 @@ public class CornersOfEquals extends CommonCards {
         return false;
 
     }
+
+    public String getName () {return "CornersOfEquals";}
 }

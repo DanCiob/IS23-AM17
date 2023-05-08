@@ -16,4 +16,6 @@ public class SixGroupsOfTwoEquals extends CommonCards {
 
         return GroupsOfEqualTiles(s, numOfGroups, sizeOfGroups);
     }
+
+    public String getName () {return "SixGroupsOfTwoEquals";}
 }

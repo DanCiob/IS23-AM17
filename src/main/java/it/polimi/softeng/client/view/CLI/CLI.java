@@ -41,6 +41,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     private int UserScore;
     private PersonalCards PersonalCard;
     private String Nickname;
+    private String CommonCard1 = null;
+    private String CommonCard2 = null;
     private String ServerAddress;
     private int Port;
 
@@ -78,7 +80,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     private ClientSide clientSide;
 
 
-    //TODO remove
     public CLI() {
         this.messageHandler = new MessageHandler(this);
         this.input = new Scanner(System.in);
@@ -476,29 +477,29 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         while (!GameIsOn) {
             try {
                 TimeUnit.MILLISECONDS.sleep(500);
+                if(GameIsOn) break;
                 System.out.println("[          ]");
-                if(GameIsOn)
-                    break;
+                if(GameIsOn) break;
 
                 TimeUnit.MILLISECONDS.sleep(500);
+                if(GameIsOn) break;
                 System.out.println("[===       ]");
-                if(GameIsOn)
-                    break;
+                if(GameIsOn) break;
 
                 TimeUnit.MILLISECONDS.sleep(500);
+                if(GameIsOn) break;
                 System.out.println("[=====     ]");
-                if(GameIsOn)
-                    break;
+                if(GameIsOn) break;
 
                 TimeUnit.MILLISECONDS.sleep(500);
+                if(GameIsOn) break;
                 System.out.println("[=======   ]");
-                if(GameIsOn)
-                    break;
+                if(GameIsOn) break;
 
                 TimeUnit.MILLISECONDS.sleep(500);
+                if(GameIsOn) break;
                 System.out.println("[==========]");
-                if(GameIsOn)
-                    break;
+                if(GameIsOn) break;
 
                 System.out.println("Waiting for other players to join...");
             } catch (InterruptedException e) {
@@ -553,9 +554,13 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     personalCardVisualizer(PersonalCard);
                     return;
                 }
+                case ("@VCCA") -> {
+                    commonCardsVisualizer(CommonCard1);
+                    if (CommonCard2 != null) commonCardsVisualizer(CommonCard2);
+                }
 
-                //TODO actionToJSON for commonCards and players
-                //TODO RMIInvoker for commonCards and players
+                //TODO actionToJSON for players and their score
+                //TODO RMIInvoker for players and their score
                 //TODO return;
             }
         }
@@ -725,14 +730,14 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             }
             break;
 
-            /*TODO future release
             case ("@VCCA"): {
-
+                commonCardsVisualizer(CommonCard1);
+                if (CommonCard2 != null) commonCardsVisualizer(CommonCard2);
             }
             case ("@VPLA"): {
 
             }
-            break;*/
+            break;
             default:
                 System.out.println("Unrecognized operation!");
         }
@@ -801,6 +806,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             case ("shelfieEvent") -> System.out.println("Received shelfie update");
             case ("personalCardEvent") -> System.out.println("Your personal card for this game");
             case ("commonCardEvent") -> System.out.println("Common cards for this game");
+            case ("myTurn") -> System.out.println("It's your turn!");
 
             //Servers-side errors
             case (NICKNAME_NOT_UNIQUE) -> System.out.println(NICKNAME_NOT_UNIQUE);
@@ -855,5 +861,18 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     @Override
     public void personalCardUpdater(PersonalCards pc) {
         this.PersonalCard = pc;
+    }
+
+    /**
+     * Update common card
+     * @param nameOfCommonCard is name of commoncard
+     * @param whatCommonCard is 1 or 2 depending on card updated
+     */
+    @Override
+    public void commonCardUpdater (String nameOfCommonCard, int whatCommonCard) {
+        if (whatCommonCard == 1)
+            this.CommonCard1 = nameOfCommonCard;
+        else if (whatCommonCard == 2)
+            this.CommonCard2 = nameOfCommonCard;
     }
 }

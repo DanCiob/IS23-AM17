@@ -27,4 +27,6 @@ public abstract class CommonOperationsFramework {
 
     public abstract void personalCardUpdater (PersonalCards pc);
 
+    public abstract void commonCardUpdater (String nameOfCommonCard, int whatCommonCard);
+
     }
