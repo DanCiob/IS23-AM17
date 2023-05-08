@@ -1,0 +1,19 @@
+1) Socket mode
+When connected in socket mode client-server communicate using JSON file written and read using parser and writer that
+can be found in JSONParser and JSONWriter.
+
+A message sent follows this sequence of operations:
+i) Command is written by user and recognized by CLI (or eventually selected using GUI)
+iia) If action is local (like visualize player Board or Shelfie) then CLI/GUI is self-sufficient and no JSON is sent
+iib) If action needs server then actionToJSON is called with type of operation requested and body of request.
+iii) JSON is sent to server using clientSide, the request is signed with type of action requested and nickname of
+     requester (ClientSignatureWriter)
+iv) JSON is received and parsed by server and read by ServerMessageHandler that calls appropriate controller action
+v) Controller redirect action to GameController or ChatController (depending on request)
+vi) GameController/ChatController sends message (encoded and signed by ServerSignatureWriter in JSON using writer) via
+    serverSide
+vii) Message is received via MessageHandler with similar steps of vi)
+
+An update sent by server follows same path but only with vi) and vii) step
+
+2) RMI (TBD)

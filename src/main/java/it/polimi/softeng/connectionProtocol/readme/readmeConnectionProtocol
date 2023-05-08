@@ -93,11 +93,21 @@ There are several updates that can be done:
 		}
 	]
 }
-//TBD for players and score
+
 - @VCCA, for common cards names
 {
 	"receiver": "nameOfRequester",
 	"request": "@VCCA"
+	"playerList" : [
+        {
+            "name" : "nameOfPlayer",
+            "score" : "score",
+        },
+        {
+            "name" : "nameOfPlayer",
+            "score" : "score",
+        }
+	]
 }
 
 

@@ -7,6 +7,9 @@ import it.polimi.softeng.model.Tile;
 
 import java.util.ArrayList;
 
+import static it.polimi.softeng.JSONWriter.PlayerWriter.playerAndScoreWriter;
+import static it.polimi.softeng.JSONWriter.ServerSignatureWriter.serverSignObject;
+
 /**
  * General controller managing game, gameController, boardController, shelfieController, chatController and communicating using serverSide
  */
@@ -30,7 +33,7 @@ public class Controller {
      * @param receiver is receiver of chat message
      * @param message is JSON message encoded
      */
-    public boolean fetchChatRequest(String receiver, String message, String sender) {
+    public boolean SocketChatRequest(String receiver, String message, String sender) {
             if((!serverSide.getNickNameList().contains(receiver) || receiver.equals(sender)) && !receiver.equals("all"))
                 return false;
             chatController.sendChatMessage(receiver, message, serverSide, sender);
@@ -45,7 +48,7 @@ public class Controller {
      * @param requester is requester of game move
      * @return true if move is done by currentPlayerTurn, false if not
      */
-    public boolean fetchGameMoveRequest(ArrayList<Cell> positionsToBeRemoved, int column, String requester) {
+    public boolean SocketGameMoveRequest(ArrayList<Cell> positionsToBeRemoved, int column, String requester) {
         if (gameController.getCurrentGame().getCurrentPlayer().getNickname().equals(requester)) {
             try {
                 boolean confirm = gameController.sendGameMove(positionsToBeRemoved, column, requester);
@@ -68,7 +71,7 @@ public class Controller {
      * @param startGame if 1 a new game will be created, if 2 join a lobby
      * @return true if request is successful
      */
-    public boolean fetchLoginRequest(String nickname, int gameMode, int numOfPlayer, int startGame) {
+    public boolean SocketLoginRequest(String nickname, int gameMode, int numOfPlayer, int startGame) {
         //TODO check uniqueness
         /*if (gameController.getCurrentGame().getPlayers().contains(nickname))
             return false;*/
@@ -76,6 +79,17 @@ public class Controller {
             //reconnect
         }*/
         //TODO startGame for multiple games
+        return true;
+    }
+
+    /**
+     * Send a JSONObject containing player-score info
+     * @param requester is requester
+     * @return true if everything went correctly
+     */
+    public boolean SocketPlayerScoreRequest (String requester)
+    {
+        serverSide.sendMessage(serverSignObject(playerAndScoreWriter(gameController.getCurrentGame().getPlayers()), "@VPLA", requester).toJSONString(), requester);
         return true;
     }
 

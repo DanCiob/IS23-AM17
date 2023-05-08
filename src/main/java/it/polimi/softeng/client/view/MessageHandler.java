@@ -122,6 +122,14 @@ public class MessageHandler {
                 cli.personalCardUpdater(newPC);
             }
 
+            case ("@VPLA") -> {
+                JSONParser p1 = new JSONParser();
+                JSONObject objPC = (JSONObject) p1.parse(message);
+
+                cli.eventManager("playerEvent");
+                cli.scoreVisualizer(PlayerParser.PlayerAndScoreParser(message));
+            }
+
             case ("@ERRO") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objError = (JSONObject) p1.parse(message);

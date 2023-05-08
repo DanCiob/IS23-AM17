@@ -198,12 +198,12 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     }
 
 
-    @Override
     /**
      * Visualize player's board
      * @param board is playerBoard
      * @param notAvailable is notAvailable cells
      */
+    @Override
     public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable) {
         Tile.TileColor tileColor;
         boolean notAv;
@@ -265,6 +265,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         }
     }
 
+    /**
+     * @param commonCard is commonCards used during match
+     */
     @Override
     public void commonCardsVisualizer(String commonCard) {
         switch (commonCard) {
@@ -459,12 +462,16 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         scoreTable.print();
     }
 
+    /**
+     * Notify CLI when game begins
+     * @param value is boolean
+     */
     public void beginGame(boolean value) {
         this.GameIsOn = value;
     }
 
     /**
-     * Main class of CLI
+     * Main class of CLI, continuously run from begin of game to the end
      */
     @Override
     public void run() {
@@ -522,7 +529,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     }
 
     /**
-     * @param firstRun Game routine that wait for commands
+     * Game routine that wait for commands, check syntax and send JSON/invoke method to server if needed
+     * @param firstRun is true if it's the first call of game
      */
     public void game(boolean firstRun) {
         //POSSIBLE COMMANDS
@@ -541,7 +549,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 case ("@CMND") -> {
                     return;
                 }
-
                 case ("@VBOR") -> {
                     boardVisualizer(UserGameBoard.getBoard(), UserGameBoard.getNotAvailable());
                     return;
@@ -558,6 +565,12 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     commonCardsVisualizer(CommonCard1);
                     if (CommonCard2 != null) commonCardsVisualizer(CommonCard2);
                 }
+                case ("@VPLA") -> {
+                    //Placeholder for JSON request
+                    JSONObject dummy = new JSONObject();
+                    clientSide.sendMessage(clientSignObject(dummy, "@VPLA", Nickname).toJSONString());
+                    return;
+                }
 
                 //TODO actionToJSON for players and their score
                 //TODO RMIInvoker for players and their score
@@ -565,6 +578,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             }
         }
 
+        //Check if player inserted a command that is not on the table
         if (!isOkCommand(command, 1)) {
             System.out.println("Please write a command that you can see in the table");
             return;
@@ -588,7 +602,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         return;
                     }
                 }
-
+                //Block badly formatted messages
                 if (op.equals("@CHAT")) {
                     if (!isOkCommand(command, 2)) {
                         System.out.println("Please, check chat syntax");
@@ -596,8 +610,10 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     }
                 }
 
+                //Create JSON messages containing request
                 JSONObject toBeSent = actionToJSON(op, action);
 
+                //Send message to server
                 if (toBeSent != null)
                     clientSide.sendMessage(clientSignObject(toBeSent, op, Nickname).toJSONString());
             }
@@ -617,8 +633,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         }
                     }
                 }
+                //TODO RMI Invoker
                 RMIInvoker(op, action);
-
             }
         }
     }
@@ -725,19 +741,12 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 } else
                     return GameMoveWriter.writeGameMove(action);
             }
+            //TODO check login dynamic
             case ("@LOGN"): {
 
             }
             break;
 
-            case ("@VCCA"): {
-                commonCardsVisualizer(CommonCard1);
-                if (CommonCard2 != null) commonCardsVisualizer(CommonCard2);
-            }
-            case ("@VPLA"): {
-
-            }
-            break;
             default:
                 System.out.println("Unrecognized operation!");
         }
@@ -806,6 +815,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             case ("shelfieEvent") -> System.out.println("Received shelfie update");
             case ("personalCardEvent") -> System.out.println("Your personal card for this game");
             case ("commonCardEvent") -> System.out.println("Common cards for this game");
+            case ("playerEvent") -> System.out.println("List of connected players with score");
             case ("myTurn") -> System.out.println("It's your turn!");
 
             //Servers-side errors

@@ -12,6 +12,7 @@ import org.json.simple.parser.ParseException;
 
 import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.JSONWriter.ErrorWriter.writeError;
+import static it.polimi.softeng.JSONWriter.PlayerWriter.playerAndScoreWriter;
 import static it.polimi.softeng.JSONWriter.ServerSignatureWriter.serverSignObject;
 
 public class ServerMessageHandler {
@@ -46,7 +47,7 @@ public class ServerMessageHandler {
                 //Invoke chatController
                 ChatParser cp = new ChatParser();
                 cp.chatParser(message);
-                boolean confirm = controller.fetchChatRequest (cp.getReceiver(), message, requester);
+                boolean confirm = controller.SocketChatRequest (cp.getReceiver(), message, requester);
 
                 if (cp.getReceiver().equals(requester))
                     controller.sendErrorMessage(serverSignObject(writeError(YOU_ARE_RECEIVER), "@ERRO", requester).toJSONString(), requester);
@@ -64,7 +65,7 @@ public class ServerMessageHandler {
 
                 System.out.println(gp.getTilesToBeRemoved().size());
 
-                boolean confirm = controller.fetchGameMoveRequest (gp.getTilesToBeRemoved(), gp.getColumn(), gp.getRequester());
+                boolean confirm = controller.SocketGameMoveRequest (gp.getTilesToBeRemoved(), gp.getColumn(), gp.getRequester());
 
                 if (!confirm)
                     controller.sendErrorMessage(serverSignObject(writeError(ERROR_IN_GAMEMOVE), "@ERRO", requester).toJSONString(), requester);
@@ -76,7 +77,7 @@ public class ServerMessageHandler {
             case ("@LOGN") -> {
                 LoginParser lp = new LoginParser();
                 lp.loginParser(message);
-                boolean confirm = controller.fetchLoginRequest(lp.getNickname(), lp.getGameMode(), lp.getStartGame(), lp.getNumOfPlayer());
+                boolean confirm = controller.SocketLoginRequest(lp.getNickname(), lp.getGameMode(), lp.getStartGame(), lp.getNumOfPlayer());
                 //TODO Multiple games -> startGame
 
                 if (!confirm)
@@ -86,12 +87,12 @@ public class ServerMessageHandler {
                 System.out.println("Received login request from " + requester);
             }
 
-            //TODO
             case ("@VPLA") -> {
                 //Get players and their score
+                controller.SocketPlayerScoreRequest(requester);
             }
 
-            //TODO -> now client responds directly
+            //TODO -> now client responds directly check if this case is necessary
             case ("@VCCA") -> {
                 //Get commoncards
             }
