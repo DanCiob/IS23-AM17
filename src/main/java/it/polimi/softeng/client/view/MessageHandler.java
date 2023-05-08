@@ -2,6 +2,7 @@ package it.polimi.softeng.client.view;
 
 import it.polimi.softeng.JSONParser.*;
 import it.polimi.softeng.client.view.CLI.CLI;
+import it.polimi.softeng.model.GameBoard;
 import it.polimi.softeng.model.Shelfie;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -44,17 +45,21 @@ public class MessageHandler {
                     cli.chatVisualizer(objChat);
                     }
 
-
+            //Invoke board visualizer
             case ("@BORD") -> {
                     JSONParser p1 = new JSONParser();
                     JSONObject objBoard = (JSONObject) p1.parse(message);
-                    //TODO use correct parser
                     BoardParser bParser = new BoardParser();
-                    //TODO GameBoard newBoard = bParser.boardParser();
+
+                    GameBoard newBoard = bParser.gameBoardFullParser(objBoard.toJSONString());
+                    //First receiving of board begins game
+                    cli.beginGame(true);
                     cli.eventManager("boardEvent");
-                    //TODO cli.boardVisualizer(newBoard);
+                    cli.boardVisualizer(newBoard.getBoard(), newBoard.getNotAvailable());
+                    cli.boardUpdater(newBoard);
                 }
 
+            //Invoke shelfie visualizer
             case ("@SHEL") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objShelfie = (JSONObject) p1.parse(message);
@@ -68,6 +73,7 @@ public class MessageHandler {
                 //Visualize new Shelfie
                 cli.eventManager("shelfieEvent");
                 cli.shelfieVisualizer(newShelfie.getGrid());
+                cli.shelfieUpdater(newShelfie);
             }
 
             case ("@VCCA") -> {

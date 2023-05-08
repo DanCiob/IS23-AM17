@@ -1,8 +1,5 @@
 package it.polimi.softeng.controller;
 
-import it.polimi.softeng.JSONWriter.BoardWriter;
-import it.polimi.softeng.JSONWriter.ErrorWriter;
-import it.polimi.softeng.JSONWriter.ServerSignatureWriter;
 import it.polimi.softeng.connectionProtocol.ServerSide;
 import it.polimi.softeng.model.Cell;
 import it.polimi.softeng.model.Game;
@@ -123,7 +120,7 @@ public class Controller {
      */
     public void startGame ()
     {
-       gameController.startGame(serverSide.getNickNameList());
+        gameController.startGame(serverSide.getNickNameList());
     }
 
     public ServerSide getServerSide() {

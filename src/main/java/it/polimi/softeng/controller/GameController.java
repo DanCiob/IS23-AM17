@@ -5,9 +5,7 @@ import it.polimi.softeng.JSONWriter.ServerSignatureWriter;
 import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Cell;
 import it.polimi.softeng.model.Game;
-import it.polimi.softeng.model.GameBoard;
 import it.polimi.softeng.model.Tile;
-import it.polimi.softeng.model.interfaces.BoardInterface;
 
 import java.util.ArrayList;
 
@@ -50,7 +48,7 @@ public class GameController {
         controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(BoardWriter.boardChangeNotifier(game.getGameBoard()), "@BORD", "all").toJSONString());
         //Update shelfie
         //TODO make shelfies visible by everybody
-        controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(BoardWriter.boardChangeNotifier(game.getGameBoard()), "@SHEL", requester).toJSONString(), requester);
+        //TODO controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(game.getCurrentPlayer().getShelfie()), "@SHEL", requester).toJSONString(), requester);
         return true;
     }
 
@@ -61,5 +59,9 @@ public class GameController {
     {
         game = new Game();
         game.beginGame(nameList);
+        controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(BoardWriter.boardChangeNotifier(game.getGameBoard()), "@BORD", "all").toJSONString());
+        //TODO send first update of Shelfie to everybody
+        //TODO send personal Cards to everyone
+        //TODO send CommonCards to everyone
     }
 }

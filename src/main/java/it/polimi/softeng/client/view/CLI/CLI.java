@@ -67,7 +67,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      */
     private int ConnectionMode = 0;
 
-    private boolean GameIsOn;
+    private volatile boolean GameIsOn;
     private final Scanner input;
 
     private MessageHandler messageHandler;
@@ -469,11 +469,42 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     public void run() {
         boolean firstRun = true;
         setupCLI();
-        GameIsOn = true;
+        GameIsOn = false;
 
         System.out.println("Waiting for other players to join...");
         //Waiting for beginning of game
-        while (!GameIsOn) ;
+        while (!GameIsOn) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(500);
+                System.out.println("[          ]");
+                if(GameIsOn)
+                    break;
+
+                TimeUnit.MILLISECONDS.sleep(500);
+                System.out.println("[===       ]");
+                if(GameIsOn)
+                    break;
+
+                TimeUnit.MILLISECONDS.sleep(500);
+                System.out.println("[=====     ]");
+                if(GameIsOn)
+                    break;
+
+                TimeUnit.MILLISECONDS.sleep(500);
+                System.out.println("[=======   ]");
+                if(GameIsOn)
+                    break;
+
+                TimeUnit.MILLISECONDS.sleep(500);
+                System.out.println("[==========]");
+                if(GameIsOn)
+                    break;
+
+                System.out.println("Waiting for other players to join...");
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        };
 
         while (GameIsOn) {
             try {
@@ -492,7 +523,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     /**
      * @param firstRun Game routine that wait for commands
      */
-    public void game(boolean firstRun){
+    public void game(boolean firstRun) {
         //POSSIBLE COMMANDS
         commands(firstRun);
 
@@ -552,18 +583,13 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         return;
                     }
                 }
-                    /*TODO will be used when synced to client errorCheckerClientSide(op, action);
-                    TODO if (errorCheckerClientSide(op, action)) {
-                        TODO System.out.println("Error in gameMove format, try again!");
-                        TODO return;
-                    }TODO*/
-                    if (op.equals("@CHAT")) {
-                        if (!isOkCommand(command, 2)) {
-                            System.out.println("Please, check chat syntax");
-                            return;
-                        }
-                    }
 
+                if (op.equals("@CHAT")) {
+                    if (!isOkCommand(command, 2)) {
+                        System.out.println("Please, check chat syntax");
+                        return;
+                    }
+                }
 
                 JSONObject toBeSent = actionToJSON(op, action);
 
@@ -578,15 +604,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         System.out.println("Please, check gameMove syntax");
                         return;
                     }
-                    /*TODO will be used when synced to client errorCheckerClientSide(op, action);
-                    TODO if (errorCheckerClientSide(op, action)) {
-                        TODO System.out.println("Error in gameMove format, try again!");
-                        TODO return;
-                    }TODO*/
-                        if (errorCheckerClientSide(op, action)) {
-                            System.out.println("Error in gameMove format, try again!");
-                            return;
-                        }
 
                     if (op.equals("@CHAT")) {
                         if (!isOkCommand(command, 2)) {
@@ -595,12 +612,11 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         }
                     }
                 }
-                    RMIInvoker(op, action);
+                RMIInvoker(op, action);
 
-                }
             }
         }
-
+    }
 
 
     /**
@@ -800,36 +816,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             default -> System.out.println("Unrecognized event!");
         }
     }
-
-    /**
-     * Block illegal move in clientSide
-     */
-    public boolean errorCheckerClientSide(String op, String action) {
-
-
-        JSONObject obj = actionToJSON(op, action);
-        GameMoveParser gmp = new GameMoveParser();
-
-        gmp.gameMoveParser(obj.toJSONString());
-
-        if (!UserGameBoard.checkLegalChoice(gmp.getTilesToBeRemoved())) {
-            eventManager(INVALID_CHOICE_OF_TILES);
-            return false;
-        }
-
-        //Create an arrayList of tile from arrayList of cell
-        ArrayList<Tile> tilesToBeRemoved = null;
-        for (Cell c : gmp.getTilesToBeRemoved()) {
-            tilesToBeRemoved.add(UserGameBoard.getBoard()[c.getRow()][c.getColumn()]);
-        }
-
-        if (!UserShelfie.checkLegalInsert(tilesToBeRemoved, gmp.getColumn())) {
-            eventManager(INVALID_COLUMN);
-            return false;
-        }
-        return true;
-    }
-
 
     /**
      * Called by RMI or Socket for board update
