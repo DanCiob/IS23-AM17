@@ -84,6 +84,9 @@ public class ServerSide {
         Socket clientSocket = null;
         ExecutorService executor = Executors.newCachedThreadPool();
 
+        for(String player : disconnectedPlayerList){
+            System.out.println(player);
+        }
         while(clientList.size() < playerNumber){
             try {
                 clientSocket = serverSocket.accept();
@@ -94,7 +97,7 @@ public class ServerSide {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //TODO control for nickName and deleted the clientHandler if not correct
+            //todo dopo una riconessione non vengono esposti i comandi di myshelfie
         }
     }
 
