@@ -92,4 +92,7 @@ public class Stairs extends CommonCards{
         }
         return count == shelfieColumns;
     }
+
+    public String getName () {return "Stairs";}
+
 }

@@ -11,19 +11,19 @@ import static it.polimi.softeng.model.PersonalCards.FillPersonalCardsBag;
 
 public class Game implements PlayerInterface, GameInterface{
     //board section
-    private GameBoard gameBoard = new GameBoard();
-    private ArrayList<Tile> tileBag = new ArrayList<>();
+    private final GameBoard gameBoard = new GameBoard();
+    private final ArrayList<Tile> tileBag = new ArrayList<>();
     private BadgeEndGame endGameBadge;
-    private boolean simpleRules = false;
+    private final boolean simpleRules = false;
 
     //player section
     /**
      * this arrayList contains the references to the players; the order of the elements in the array refers to the order of
      * entry in the game lobby (ie player 0 is who created the game). the game turns go from player in position 0 to position player.size()
      */
-    private ArrayList<Player> players = new ArrayList<>();
+    private final ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
-    private ArrayList<CommonCards> commonCards = new ArrayList<>();
+    private final ArrayList<CommonCards> commonCards = new ArrayList<>();
     private Player winner;
     private Player firstPlayer;     //should it be final?
 
@@ -182,7 +182,7 @@ public class Game implements PlayerInterface, GameInterface{
         ArrayList<PersonalCards> personalCardsBag = new ArrayList<>();
         personalCardsBag = FillPersonalCardsBag();
         Random Random = new Random();
-        int i = 0;
+        int i;
         PersonalCards toBeAssigned;
         int j = totalPersonalCards;
         for (Player p: players)
@@ -376,10 +376,7 @@ public class Game implements PlayerInterface, GameInterface{
     }
 
     public boolean checkEndGame(){
-        if(currentPlayer.getShelfie().checkFull()){
-            return true;
-        }
-        return false;
+        return currentPlayer.getShelfie().checkFull();
     }
 
     public Player getWinner() {

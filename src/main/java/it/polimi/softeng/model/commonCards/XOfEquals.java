@@ -21,4 +21,7 @@ public class XOfEquals extends CommonCards{
         }
         return false;
     }
+
+    public String getName () {return "XOfEquals";}
+
 }

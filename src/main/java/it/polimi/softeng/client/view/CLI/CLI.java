@@ -41,6 +41,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     private int UserScore;
     private PersonalCards PersonalCard;
     private String Nickname;
+    private String CommonCard1 = null;
+    private String CommonCard2 = null;
     private String ServerAddress;
     private int Port;
 
@@ -67,7 +69,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      */
     private int ConnectionMode = 0;
 
-    private boolean GameIsOn;
+    private volatile boolean GameIsOn;
     private final Scanner input;
 
     private MessageHandler messageHandler;
@@ -78,7 +80,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     private ClientSide clientSide;
 
 
-    //TODO remove
     public CLI() {
         this.messageHandler = new MessageHandler(this);
         this.input = new Scanner(System.in);
@@ -469,11 +470,42 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     public void run() {
         boolean firstRun = true;
         setupCLI();
-        GameIsOn = true;
+        GameIsOn = false;
 
         System.out.println("Waiting for other players to join...");
         //Waiting for beginning of game
-        while (!GameIsOn) ;
+        while (!GameIsOn) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(500);
+                if(GameIsOn) break;
+                System.out.println("[          ]");
+                if(GameIsOn) break;
+
+                TimeUnit.MILLISECONDS.sleep(500);
+                if(GameIsOn) break;
+                System.out.println("[===       ]");
+                if(GameIsOn) break;
+
+                TimeUnit.MILLISECONDS.sleep(500);
+                if(GameIsOn) break;
+                System.out.println("[=====     ]");
+                if(GameIsOn) break;
+
+                TimeUnit.MILLISECONDS.sleep(500);
+                if(GameIsOn) break;
+                System.out.println("[=======   ]");
+                if(GameIsOn) break;
+
+                TimeUnit.MILLISECONDS.sleep(500);
+                if(GameIsOn) break;
+                System.out.println("[==========]");
+                if(GameIsOn) break;
+
+                System.out.println("Waiting for other players to join...");
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        };
 
         while (GameIsOn) {
             try {
@@ -492,7 +524,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     /**
      * @param firstRun Game routine that wait for commands
      */
-    public void game(boolean firstRun){
+    public void game(boolean firstRun) {
         //POSSIBLE COMMANDS
         commands(firstRun);
 
@@ -522,9 +554,13 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     personalCardVisualizer(PersonalCard);
                     return;
                 }
+                case ("@VCCA") -> {
+                    commonCardsVisualizer(CommonCard1);
+                    if (CommonCard2 != null) commonCardsVisualizer(CommonCard2);
+                }
 
-                //TODO actionToJSON for commonCards and players
-                //TODO RMIInvoker for commonCards and players
+                //TODO actionToJSON for players and their score
+                //TODO RMIInvoker for players and their score
                 //TODO return;
             }
         }
@@ -552,18 +588,13 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         return;
                     }
                 }
-                    /*TODO will be used when synced to client errorCheckerClientSide(op, action);
-                    TODO if (errorCheckerClientSide(op, action)) {
-                        TODO System.out.println("Error in gameMove format, try again!");
-                        TODO return;
-                    }TODO*/
-                    if (op.equals("@CHAT")) {
-                        if (!isOkCommand(command, 2)) {
-                            System.out.println("Please, check chat syntax");
-                            return;
-                        }
-                    }
 
+                if (op.equals("@CHAT")) {
+                    if (!isOkCommand(command, 2)) {
+                        System.out.println("Please, check chat syntax");
+                        return;
+                    }
+                }
 
                 JSONObject toBeSent = actionToJSON(op, action);
 
@@ -578,15 +609,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         System.out.println("Please, check gameMove syntax");
                         return;
                     }
-                    /*TODO will be used when synced to client errorCheckerClientSide(op, action);
-                    TODO if (errorCheckerClientSide(op, action)) {
-                        TODO System.out.println("Error in gameMove format, try again!");
-                        TODO return;
-                    }TODO*/
-                        if (errorCheckerClientSide(op, action)) {
-                            System.out.println("Error in gameMove format, try again!");
-                            return;
-                        }
 
                     if (op.equals("@CHAT")) {
                         if (!isOkCommand(command, 2)) {
@@ -595,12 +617,11 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         }
                     }
                 }
-                    RMIInvoker(op, action);
+                RMIInvoker(op, action);
 
-                }
             }
         }
-
+    }
 
 
     /**
@@ -709,14 +730,14 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             }
             break;
 
-            /*TODO future release
             case ("@VCCA"): {
-
+                commonCardsVisualizer(CommonCard1);
+                if (CommonCard2 != null) commonCardsVisualizer(CommonCard2);
             }
             case ("@VPLA"): {
 
             }
-            break;*/
+            break;
             default:
                 System.out.println("Unrecognized operation!");
         }
@@ -785,6 +806,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             case ("shelfieEvent") -> System.out.println("Received shelfie update");
             case ("personalCardEvent") -> System.out.println("Your personal card for this game");
             case ("commonCardEvent") -> System.out.println("Common cards for this game");
+            case ("myTurn") -> System.out.println("It's your turn!");
 
             //Servers-side errors
             case (NICKNAME_NOT_UNIQUE) -> System.out.println(NICKNAME_NOT_UNIQUE);
@@ -800,36 +822,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             default -> System.out.println("Unrecognized event!");
         }
     }
-
-    /**
-     * Block illegal move in clientSide
-     */
-    public boolean errorCheckerClientSide(String op, String action) {
-
-
-        JSONObject obj = actionToJSON(op, action);
-        GameMoveParser gmp = new GameMoveParser();
-
-        gmp.gameMoveParser(obj.toJSONString());
-
-        if (!UserGameBoard.checkLegalChoice(gmp.getTilesToBeRemoved())) {
-            eventManager(INVALID_CHOICE_OF_TILES);
-            return false;
-        }
-
-        //Create an arrayList of tile from arrayList of cell
-        ArrayList<Tile> tilesToBeRemoved = null;
-        for (Cell c : gmp.getTilesToBeRemoved()) {
-            tilesToBeRemoved.add(UserGameBoard.getBoard()[c.getRow()][c.getColumn()]);
-        }
-
-        if (!UserShelfie.checkLegalInsert(tilesToBeRemoved, gmp.getColumn())) {
-            eventManager(INVALID_COLUMN);
-            return false;
-        }
-        return true;
-    }
-
 
     /**
      * Called by RMI or Socket for board update
@@ -869,5 +861,18 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     @Override
     public void personalCardUpdater(PersonalCards pc) {
         this.PersonalCard = pc;
+    }
+
+    /**
+     * Update common card
+     * @param nameOfCommonCard is name of commoncard
+     * @param whatCommonCard is 1 or 2 depending on card updated
+     */
+    @Override
+    public void commonCardUpdater (String nameOfCommonCard, int whatCommonCard) {
+        if (whatCommonCard == 1)
+            this.CommonCard1 = nameOfCommonCard;
+        else if (whatCommonCard == 2)
+            this.CommonCard2 = nameOfCommonCard;
     }
 }

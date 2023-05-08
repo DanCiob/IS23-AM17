@@ -49,4 +49,7 @@ public class TwoSquaresOfEquals extends CommonCards {
         }
         return false;
     }
+
+    public String getName () {return "TwoSquaresOfEquals";}
+
 }

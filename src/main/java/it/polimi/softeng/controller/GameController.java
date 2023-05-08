@@ -1,13 +1,9 @@
 package it.polimi.softeng.controller;
 
-import it.polimi.softeng.JSONWriter.BoardWriter;
-import it.polimi.softeng.JSONWriter.ServerSignatureWriter;
+import it.polimi.softeng.JSONWriter.*;
 import it.polimi.softeng.customExceptions.IllegalInsertException;
-import it.polimi.softeng.model.Cell;
-import it.polimi.softeng.model.Game;
-import it.polimi.softeng.model.GameBoard;
-import it.polimi.softeng.model.Tile;
-import it.polimi.softeng.model.interfaces.BoardInterface;
+import it.polimi.softeng.model.*;
+import it.polimi.softeng.model.commonCards.CommonCards;
 
 import java.util.ArrayList;
 
@@ -30,6 +26,10 @@ public class GameController {
      * @param requester is receiver of updates
      */
     public boolean sendGameMove(ArrayList<Cell> tilesToBeRemoved, int column, String requester) {
+        //Reject request if it's not player's turn
+        if (!requester.equals(game.getCurrentPlayer()))
+            return false;
+
         Tile[][] board= game.getGameBoard().getBoard();
         ArrayList<Tile> tiles = new ArrayList<>();
         for(Cell position : tilesToBeRemoved){
@@ -50,16 +50,57 @@ public class GameController {
         controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(BoardWriter.boardChangeNotifier(game.getGameBoard()), "@BORD", "all").toJSONString());
         //Update shelfie
         //TODO make shelfies visible by everybody
-        controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(BoardWriter.boardChangeNotifier(game.getGameBoard()), "@SHEL", requester).toJSONString(), requester);
+        controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(game.getCurrentPlayer().getShelfie()), "@SHEL", requester).toJSONString(), requester);
+
+        //Set next player
+        game.setNextPlayer();
+
+        //Notify next player
+        controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ConfirmWriter.writeConfirm(), "@CONF", game.getCurrentPlayer().getNickname()).toJSONString(), game.getCurrentPlayer().getNickname());
+
         return true;
     }
 
     /**
-     * Manage setup of model
+     * Manage setup of model and notifications of all setup items to clients
      */
     public void startGame (ArrayList<String> nameList)
     {
         game = new Game();
         game.beginGame(nameList);
+        //Send board to everybody
+        controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(BoardWriter.boardChangeNotifier(game.getGameBoard()), "@BORD", "all").toJSONString());
+
+        //Send empty shelfie to everybody
+        for (String s : nameList)
+            controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(game.getCurrentPlayer().getShelfie()), "@SHEL", s).toJSONString(), s);
+
+        //Send personal card to everybody
+        ArrayList <Player> players = new ArrayList<>();
+        players = game.getPlayers();
+        for (String s : nameList)
+        {
+            //Get personal card related to player
+            Player actualPlayer = players.stream().filter(p -> p.getNickname().equals(s)).findAny().get();
+            PersonalCards pc = actualPlayer.getPersonalCard();
+            //Send personal card to player view
+            controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(PersonalCardWriter.writePersonalCard(pc), "@VPCA", s).toJSONString(), s);
+        }
+
+        //Send Common Cards to everyone
+        ArrayList <CommonCards> cc = game.getCommonCards();
+
+        if (cc.size() == 1)
+            controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(CommonCardWriter.writeCommonCard(cc.get(0).getName(), null), "@VCCA", "all").toJSONString());
+        else
+            controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(CommonCardWriter.writeCommonCard(cc.get(0).getName(), cc.get(1).getName()), "@VCCA", "all").toJSONString());
+
+        //Ended setup
+        //Notify first player
+        controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ConfirmWriter.writeConfirm(), "@CONF", game.getCurrentPlayer().getNickname()).toJSONString(), game.getCurrentPlayer().getNickname());
+    }
+
+    public Game getCurrentGame() {
+        return game;
     }
 }

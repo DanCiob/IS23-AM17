@@ -30,4 +30,6 @@ public abstract class CommonCards {
     public BadgeScore getBadge(){
         return badges.remove(0);
     }
+
+    public abstract String getName();
 }

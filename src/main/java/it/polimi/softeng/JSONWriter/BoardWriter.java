@@ -13,20 +13,20 @@ public class BoardWriter {
         JSONObject jsonObject = new JSONObject();
         JSONArray tilesOfARow= new JSONArray();
         JSONArray rows = new JSONArray();
-        JSONObject posAndColor, rowObject;
+        JSONObject posColorId, rowObject;
 
         for(int i=0;i<boardRows;i++){
             //tilesOfARow = new JSONArray();
             //tilesOfARow.clear();
             for(int j=0;j<boardColumns;j++){
                 if(gameBoard.getBoard()[i][j]!=null){
-                    posAndColor = new JSONObject();
-                    posAndColor.put("row", i);
-                    posAndColor.put("column", j);
-                    posAndColor.put("id", gameBoard.getBoard()[i][j].getId());
-                    posAndColor.put("color", gameBoard.getBoard()[i][j].getColor().toString());
-                    //tilesOfARow.add(posAndColor);
-                    rows.add(posAndColor);
+                    posColorId = new JSONObject();
+                    posColorId.put("row", i);
+                    posColorId.put("column", j);
+                    posColorId.put("id", gameBoard.getBoard()[i][j].getId());
+                    posColorId.put("color", gameBoard.getBoard()[i][j].getColor().toString());
+                    //tilesOfARow.add(posColorId);
+                    rows.add(posColorId);
                 }
             }
 

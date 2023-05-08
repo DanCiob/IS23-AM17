@@ -17,4 +17,5 @@ public class ColumnsOfMaxDiffTypes extends CommonCards {
         return verifyMaxDifferentColor (shelfie, maxDiffTypes_ColumnsOfMaxDiffTypes, target_ColumnsOfMaxDiffTypes, shelfieColumns, shelfieRows, mode);
     }
 
+    public String getName () {return "ColumnsOfMaxDiffTypes";}
 }

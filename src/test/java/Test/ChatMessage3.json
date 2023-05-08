@@ -1,0 +1,6 @@
+{
+  "requester": "requester",
+  "request": "@CHAT",
+  "receiver": "user2",
+  "message": "Good"
+}

@@ -12,8 +12,8 @@ public class BoardWriterTest {
     public void boardChangeNotifier(){
         GameBoard board = new GameBoard();
         Game game = new Game();
-        game.initializeTile();
-        board.resetBoard(2);
+        game.initializeTile(); //initialize and insert tiles in tilesBag
+        board.resetBoard(2); //set notAvailable positions and null all the others
         board.positionTiles(game.getTileBag());
         BoardWriter boardWriter = new BoardWriter();
         JSONObject jsonObject = boardWriter.boardChangeNotifier(board);

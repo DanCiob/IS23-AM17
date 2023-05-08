@@ -24,25 +24,25 @@ public class GameMoveParser {
         ArrayList<Cell> tilesToBeRemoved = new ArrayList<>();
         JSONParser parser = new JSONParser();
         JSONObject JSONObject = new JSONObject();
-        JSONArray JSONArray = new JSONArray();
+        JSONArray JSONArr = new JSONArray();
         try {
             JSONObject = (JSONObject) parser.parse(gameMove);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 
-        column = (int) JSONObject.get("column");
+        column = (int) (long) JSONObject.get("column");
         requester = (String) JSONObject.get("requester");
-        JSONArray = (JSONArray) JSONObject.get("tileList");
-        Iterator i = JSONArray.iterator();
-        int index = 0;
+        JSONArr = (JSONArray) JSONObject.get("tileList");
 
-        while(i.hasNext())
+        for (int index = 0; index < JSONArr.size(); index++)
         {
+            System.out.println("Reading gameMove");
+
             Cell c = new Cell();
-            JSONObject tempCell = (JSONObject) JSONArray.get(index);
-            c.setRow((int) tempCell.get("row"));
-            c.setColumn((int) tempCell.get("column"));
+            JSONObject tempCell = (JSONObject) JSONArr.get(index);
+            c.setRow((int) (long) tempCell.get("row"));
+            c.setColumn((int) (long) tempCell.get("column"));
 
             tilesToBeRemoved.add(c);
         }

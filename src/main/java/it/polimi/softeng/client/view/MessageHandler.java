@@ -2,10 +2,15 @@ package it.polimi.softeng.client.view;
 
 import it.polimi.softeng.JSONParser.*;
 import it.polimi.softeng.client.view.CLI.CLI;
+import it.polimi.softeng.model.GameBoard;
+import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.Shelfie;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import static it.polimi.softeng.JSONParser.PersonalCardsParser.personalCardsParser;
 
 
 /**
@@ -44,17 +49,21 @@ public class MessageHandler {
                     cli.chatVisualizer(objChat);
                     }
 
-
+            //Invoke board visualizer
             case ("@BORD") -> {
                     JSONParser p1 = new JSONParser();
                     JSONObject objBoard = (JSONObject) p1.parse(message);
-                    //TODO use correct parser
                     BoardParser bParser = new BoardParser();
-                    //TODO GameBoard newBoard = bParser.boardParser();
+
+                    GameBoard newBoard = bParser.gameBoardFullParser(objBoard.toJSONString());
+                    //First receiving of board begins game
+                    cli.beginGame(true);
                     cli.eventManager("boardEvent");
-                    //TODO cli.boardVisualizer(newBoard);
+                    cli.boardVisualizer(newBoard.getBoard(), newBoard.getNotAvailable());
+                    cli.boardUpdater(newBoard);
                 }
 
+            //Invoke shelfie visualizer
             case ("@SHEL") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objShelfie = (JSONObject) p1.parse(message);
@@ -68,24 +77,49 @@ public class MessageHandler {
                 //Visualize new Shelfie
                 cli.eventManager("shelfieEvent");
                 cli.shelfieVisualizer(newShelfie.getGrid());
+                cli.shelfieUpdater(newShelfie);
             }
 
             case ("@VCCA") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objCC = (JSONObject) p1.parse(message);
+                JSONArray arrayCC = (JSONArray) objCC.get("commonCardsList");;
 
-                switch((int) objCC.get("numOfCommonCards"))
+                //Read and visualize CommonCards
+                switch((int) (long) objCC.get("numOfCommonCards"))
                 {
                     case 1 -> {
                         cli.eventManager("commonCardEvent");
-                        cli.commonCardsVisualizer(objCC.get("commonCard1").toString());
+
+                        JSONObject cc1 = (JSONObject) arrayCC.get(0);
+
+                        cli.commonCardsVisualizer(cc1.get("name").toString());
+                        cli.commonCardUpdater(cc1.get("name").toString(), 1);
                     }
                     case 2 -> {
                         cli.eventManager("commonCardEvent");
-                        cli.commonCardsVisualizer(objCC.get("commonCard1").toString());
-                        cli.commonCardsVisualizer(objCC.get("commonCard1").toString());
+
+                        JSONObject cc1 = (JSONObject) arrayCC.get(0);
+                        JSONObject cc2 = (JSONObject) arrayCC.get(1);
+
+                        cli.commonCardsVisualizer(cc1.get("name").toString());
+                        cli.commonCardsVisualizer(cc2.get("name").toString());
+                        cli.commonCardUpdater(cc1.get("name").toString(), 1);
+                        cli.commonCardUpdater(cc2.get("name").toString(), 2);
                     }
                 }
+            }
+
+            case ("@VPCA") -> {
+                JSONParser p1 = new JSONParser();
+                JSONObject objPC = (JSONObject) p1.parse(message);
+
+                PersonalCards newPC = null;
+                newPC = personalCardsParser(objPC.toJSONString());
+
+                cli.eventManager("personalCardEvent");
+                cli.personalCardVisualizer(newPC);
+                cli.personalCardUpdater(newPC);
             }
 
             case ("@ERRO") -> {
@@ -101,7 +135,7 @@ public class MessageHandler {
                 JSONObject objMess = (JSONObject) p1.parse(message);
 
                 String mess = (String) objMess.get("confirm");
-                cli.eventManager(mess);
+                cli.eventManager("myTurn");
             }
             default -> System.out.println("Unrecognized request");
         }
