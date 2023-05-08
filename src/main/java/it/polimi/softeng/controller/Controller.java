@@ -12,10 +12,7 @@ import java.util.ArrayList;
  */
 public class Controller {
     private final GameController gameController;
-    private final PlayerController playerController;
 
-    private final BoardController boardController;
-    private final ShelfieController shelfieController;
     private final ChatController chatController;
     private final ServerSide serverSide;
     private final ServerMessageHandler messageHandler;
@@ -23,9 +20,6 @@ public class Controller {
     public Controller() {
         this.messageHandler = new ServerMessageHandler(this);
         this.gameController = new GameController(this);
-        this.playerController = new PlayerController();
-        this.boardController = new BoardController();
-        this.shelfieController = new ShelfieController();
         this.chatController = new ChatController();
         this.serverSide = new ServerSide(this.messageHandler);
     }
@@ -81,9 +75,7 @@ public class Controller {
         /*TODO else if (currentGame.getDisconnectedPlayers().contains(nickname)) {
             //reconnect
         }*/
-
         //TODO startGame for multiple games
-        playerController.sendLoginRequest(nickname, gameMode, numOfPlayer, startGame);
         return true;
     }
 

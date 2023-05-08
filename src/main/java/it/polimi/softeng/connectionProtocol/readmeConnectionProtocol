@@ -72,13 +72,13 @@ There are several updates that can be done:
 {
 	"receiver": "nameOfRequester",
 	"request": "@BORD",
-	//TBD
+	...
 }
 - @SHEL, for login request
 {
 	"receiver": "nameOfRequester",
 	"request": "@SHEL",
-	//TBD
+	...
 }
 - @VCCA, for common-cards update (commonCardsList size goes from 1 to 2)
 {
