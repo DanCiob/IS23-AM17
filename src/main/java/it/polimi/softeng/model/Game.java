@@ -231,18 +231,18 @@ public class Game implements PlayerInterface, GameInterface{
      * @param positionsToBeRemoved
      * @param column
      * @param tilesToInsert
-     * @return 1 if someone has a full shelfie (lastTurn to call), 0 if not
+     * @return 1 if someone has a full shelfie (lastTurn to call), 0 if not, -1 if there's an error
      */
     public int turn(ArrayList<Cell> positionsToBeRemoved, int column, ArrayList<Tile> tilesToInsert){
         //receive the action of current player
         //updates the board and the shelfie (checking if it's possible to do that)
-        gameBoard.updateBoard(positionsToBeRemoved); //it controls if the choice il legal and if so it removes them
+        if(gameBoard.updateBoard(positionsToBeRemoved) == false)//it controls if the choice il legal and if so it removes them
+            return -1;
        try{
            currentPlayer.getShelfie().insertTile(tilesToInsert, column);
        }catch (IllegalInsertException e){
-           throw  new RuntimeException(e);
+           return -1;
        }
-
 
         //if there are only islands on the board
         if(gameBoard.checkIslands()){
@@ -263,13 +263,13 @@ public class Game implements PlayerInterface, GameInterface{
             }else{
                 calculateScore();
                 selectWinner();
+                return 1;
             }
-            return 1;
         }
         else{
             setNextPlayer();
-            return 0;
         }
+        return 0;
     }
 
 
