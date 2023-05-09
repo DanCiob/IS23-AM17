@@ -168,6 +168,7 @@ public class GameBoard implements BoardInterface {
         }
     }
 
+
     /**
      * This method update board after gamemove
      * @param positionsToBeRemoved contains coordinates of tiles to be removed

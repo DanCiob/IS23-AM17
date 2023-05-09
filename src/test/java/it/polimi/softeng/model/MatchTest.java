@@ -45,7 +45,6 @@ public class MatchTest {
 
     @Test
     public void partialTest(){
-
         ArrayList<String>nameList = new ArrayList<>();
         nameList.add("Alice");
         nameList.add("Andrea");
