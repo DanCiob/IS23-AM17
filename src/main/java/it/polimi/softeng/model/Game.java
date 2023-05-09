@@ -12,7 +12,7 @@ import static it.polimi.softeng.model.PersonalCards.FillPersonalCardsBag;
 
 public class Game implements PlayerInterface, GameInterface{
     //board section
-    private final GameBoard gameBoard = new GameBoard();
+    private GameBoard gameBoard = new GameBoard();
     private final ArrayList<Tile> tileBag = new ArrayList<>();
     private BadgeEndGame endGameBadge;
     private final boolean simpleRules = false;
@@ -32,11 +32,11 @@ public class Game implements PlayerInterface, GameInterface{
     //dovremmo controllare che non parta con meno del numero di giocatori scelto
     public void beginGame(ArrayList<String> nameList){
         //vedi cosa serve
-        initializeTile();
-        initializeBoard();
         for(String name : nameList){
             createNewPlayer(name);
         }
+        initializeTile();
+        initializeBoard();
         chooseCommonCards();
         choosePersonalCards();
         initializebadgeScore();

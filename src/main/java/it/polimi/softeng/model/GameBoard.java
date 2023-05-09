@@ -26,7 +26,7 @@ public class GameBoard implements BoardInterface {
      * @param numberOfPlayers indicates how many player are partecipating to the current game
      */
 
-    private void setNotAvailable(int numberOfPlayers) {
+    public void setNotAvailable(int numberOfPlayers) {
         Cell temp;
 
         /*

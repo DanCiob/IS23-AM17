@@ -215,6 +215,206 @@ public class MatchTest {
         game.turn();
         game.setNextPlayer();
 
+        //2d turn - third player
+        cell = new Cell();
+        cell.setRow(2);
+        cell.setColumn(5);
+        cell1 = new Cell();
+        cell1.setRow(2);
+        cell1.setColumn(6);
+        move.clear();
+        move.add(cell);
+        move.add(cell1);
+        tiles.clear();
+        tile = new Tile(11, game.getGameBoard().getBoard()[2][5].getColor());
+        tile1 = new Tile(12, game.getGameBoard().getBoard()[2][6].getColor());
+        tiles.add(tile);
+        tiles.add(tile1);
+        if(game.getGameBoard().checkLegalChoice(move)){
+            game.getGameBoard().updateBoard(move);
+            try{
+                game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
+            }catch (IllegalInsertException e){
+                throw new RuntimeException(e);
+            }
+        }
+        visualizers();
+        game.turn();
+        game.setNextPlayer();
+
+        //2d turn - fourth player
+        cell = new Cell();
+        cell.setRow(3);
+        cell.setColumn(1);
+        cell1 = new Cell();
+        cell1.setRow(3);
+        cell1.setColumn(2);
+        move.clear();
+        move.add(cell);
+        move.add(cell1);
+        tiles.clear();
+        tile = new Tile(13, game.getGameBoard().getBoard()[3][1].getColor());
+        tile1 = new Tile(14, game.getGameBoard().getBoard()[3][2].getColor());
+        tiles.add(tile);
+        tiles.add(tile1);
+        if(game.getGameBoard().checkLegalChoice(move)){
+            game.getGameBoard().updateBoard(move);
+            try{
+                game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
+            }catch (IllegalInsertException e){
+                throw new RuntimeException(e);
+            }
+        }
+        visualizers();
+        game.turn();
+        game.setNextPlayer();
+
+        //3d turn - first player
+        cell = new Cell();
+        cell.setRow(3);
+        cell.setColumn(3);
+        cell1 = new Cell();
+        cell1.setRow(3);
+        cell1.setColumn(4);
+        move.clear();
+        move.add(cell);
+        move.add(cell1);
+        tiles.clear();
+        tile = new Tile(11, game.getGameBoard().getBoard()[3][3].getColor());
+        tile1 = new Tile(12, game.getGameBoard().getBoard()[3][4].getColor());
+        tiles.add(tile);
+        tiles.add(tile1);
+        if(game.getGameBoard().checkLegalChoice(move)){
+            game.getGameBoard().updateBoard(move);
+            try{
+                game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
+            }catch (IllegalInsertException e){
+                throw new RuntimeException(e);
+            }
+        }
+        visualizers();
+        game.turn();
+        game.setNextPlayer();
+
+        //3d turn - second player
+        cell = new Cell();
+        cell.setRow(3);
+        cell.setColumn(5);
+        cell1 = new Cell();
+        cell1.setRow(3);
+        cell1.setColumn(6);
+        cell2 = new Cell();
+        cell2.setRow(3);
+        cell2.setColumn(7);
+        move.clear();
+        move.add(cell);
+        move.add(cell1);
+        move.add(cell2);
+        tiles.clear();
+        tile = new Tile(11, game.getGameBoard().getBoard()[3][5].getColor());
+        tile1 = new Tile(12, game.getGameBoard().getBoard()[3][6].getColor());
+        tile2 = new Tile(12, game.getGameBoard().getBoard()[3][7].getColor());
+        tiles.add(tile);
+        tiles.add(tile1);
+        tiles.add(tile2);
+        if(game.getGameBoard().checkLegalChoice(move)){
+            game.getGameBoard().updateBoard(move);
+            try{
+                game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
+            }catch (IllegalInsertException e){
+                throw new RuntimeException(e);
+            }
+        }
+        visualizers();
+        game.turn();
+        game.setNextPlayer();
+
+        //3d turn - third player
+        cell = new Cell();
+        cell.setRow(4);
+        cell.setColumn(0);
+        cell1 = new Cell();
+        cell1.setRow(4);
+        cell1.setColumn(1);
+        cell2 = new Cell();
+        cell2.setRow(4);
+        cell2.setColumn(2);
+        move.clear();
+        move.add(cell);
+        move.add(cell1);
+        move.add(cell2);
+        tiles.clear();
+        tile = new Tile(11, game.getGameBoard().getBoard()[4][0].getColor());
+        tile1 = new Tile(12, game.getGameBoard().getBoard()[4][1].getColor());
+        tile2 = new Tile(12, game.getGameBoard().getBoard()[4][2].getColor());
+        tiles.add(tile);
+        tiles.add(tile1);
+        tiles.add(tile2);
+        if(game.getGameBoard().checkLegalChoice(move)){
+            game.getGameBoard().updateBoard(move);
+            try{
+                game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
+            }catch (IllegalInsertException e){
+                throw new RuntimeException(e);
+            }
+        }
+        visualizers();
+        game.turn();
+        game.setNextPlayer();
+
+        //3d turn - fourth player
+        cell = new Cell();
+        cell.setRow(4);
+        cell.setColumn(3);
+        cell1 = new Cell();
+        cell1.setRow(4);
+        cell1.setColumn(4);
+        move.clear();
+        move.add(cell);
+        move.add(cell1);
+        tiles.clear();
+        tile = new Tile(11, game.getGameBoard().getBoard()[4][3].getColor());
+        tile1 = new Tile(12, game.getGameBoard().getBoard()[4][4].getColor());
+        tiles.add(tile);
+        tiles.add(tile1);
+        if(game.getGameBoard().checkLegalChoice(move)){
+            game.getGameBoard().updateBoard(move);
+            try{
+                game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
+            }catch (IllegalInsertException e){
+                throw new RuntimeException(e);
+            }
+        }
+        visualizers();
+        game.turn();
+        game.setNextPlayer();
+
+        //4th turn - first player
+        cell = new Cell();
+        cell.setRow(4);
+        cell.setColumn(5);
+        cell1 = new Cell();
+        cell1.setRow(4);
+        cell1.setColumn(6);
+        move.clear();
+        move.add(cell);
+        move.add(cell1);
+        tiles.clear();
+        tile = new Tile(11, game.getGameBoard().getBoard()[4][5].getColor());
+        tile1 = new Tile(12, game.getGameBoard().getBoard()[4][6].getColor());
+        tiles.add(tile);
+        tiles.add(tile1);
+        if(game.getGameBoard().checkLegalChoice(move)){
+            game.getGameBoard().updateBoard(move);
+            try{
+                game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
+            }catch (IllegalInsertException e){
+                throw new RuntimeException(e);
+            }
+        }
+        visualizers();
+        game.turn();
+        game.setNextPlayer();
 
     }
 
@@ -413,5 +613,18 @@ public class MatchTest {
         shelfieVisualizer(game.getPlayers().get(1).getShelfie().getGrid());
         shelfieVisualizer(game.getPlayers().get(2).getShelfie().getGrid());
         shelfieVisualizer(game.getPlayers().get(3).getShelfie().getGrid());
+    }
+
+
+    @Test
+    public void twoPlayersTest(){
+        Game game = new Game();
+        ArrayList<String> nameList = new ArrayList<>();
+        nameList.add("Alice");
+        nameList.add("Andrea");
+        game.beginGame(nameList);
+
+        CLI cli = new CLI();
+        cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
     }
 }
