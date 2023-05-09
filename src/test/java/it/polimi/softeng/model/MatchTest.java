@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import static it.polimi.softeng.Constants.*;
+import static junit.framework.Assert.fail;
 
 public class MatchTest {
     Game game = new Game();
@@ -45,7 +46,7 @@ public class MatchTest {
 
     @Test
     public void partialTest(){
-        ArrayList<String>nameList = new ArrayList<>();
+        ArrayList<String> nameList = new ArrayList<>();
         nameList.add("Alice");
         nameList.add("Andrea");
         nameList.add("Daniel");
@@ -619,11 +620,195 @@ public class MatchTest {
     public void twoPlayersTest(){
         Game game = new Game();
         ArrayList<String> nameList = new ArrayList<>();
+        ArrayList<Cell> move = new ArrayList<>();
+        ArrayList<Tile> tiles = new ArrayList<>();
         nameList.add("Alice");
         nameList.add("Andrea");
         game.beginGame(nameList);
 
         CLI cli = new CLI();
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+
+        Cell cell = new Cell();
+        cell.setRow(1);
+        cell.setColumn(3);
+        Cell cell1 = new Cell();
+        cell1.setRow(1);
+        cell1.setColumn(4);
+        move.clear();
+        move.add(cell);
+        move.add(cell1);
+        tiles.clear();
+        Tile tile = new Tile(1, game.getGameBoard().getBoard()[1][3].getColor());
+        Tile tile1 = new Tile(2, game.getGameBoard().getBoard()[1][4].getColor());
+        tiles.add(tile);
+        tiles.add(tile1);
+        if(game.getGameBoard().checkLegalChoice(move)){
+            game.getGameBoard().updateBoard(move);
+            try{
+                game.getCurrentPlayer().getShelfie().insertTile(tiles, 3);
+            }catch (IllegalInsertException e){
+                throw new RuntimeException(e);
+            }
+        }
+        cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+        cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
+        game.turn();
+        game.setNextPlayer();
+
+        cell = new Cell();
+        cell.setRow(2);
+        cell.setColumn(3);
+        cell1 = new Cell();
+        cell1.setRow(2);
+        cell1.setColumn(4);
+        Cell cell2 = new Cell();
+        cell2.setRow(2);
+        cell2.setColumn(5);
+        move.clear();
+        move.add(cell);
+        move.add(cell1);
+        move.add(cell2);
+        tiles.clear();
+        tile = new Tile(3, game.getGameBoard().getBoard()[2][3].getColor());
+        tile1 = new Tile(4, game.getGameBoard().getBoard()[2][4].getColor());
+        Tile tile2 = new Tile(5, game.getGameBoard().getBoard()[2][5].getColor());
+        tiles.add(tile);
+        tiles.add(tile1);
+        tiles.add(tile2);
+        if(game.getGameBoard().checkLegalChoice(move)){
+            game.getGameBoard().updateBoard(move);
+            try{
+                game.getCurrentPlayer().getShelfie().insertTile(tiles, 3);
+            }catch (IllegalInsertException e){
+                throw new RuntimeException(e);
+            }
+        }
+        cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+        cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
+        game.turn();
+        game.setNextPlayer();
+
+        cell = new Cell();
+        cell.setRow(3);
+        cell.setColumn(2);
+        cell1 = new Cell();
+        cell1.setRow(3);
+        cell1.setColumn(3);
+        cell2 = new Cell();
+        cell2.setRow(3);
+        cell2.setColumn(4);
+        move.clear();
+        move.add(cell);
+        move.add(cell1);
+        move.add(cell2);
+        tiles.clear();
+        tile = new Tile(6, game.getGameBoard().getBoard()[3][2].getColor());
+        tile1 = new Tile(7, game.getGameBoard().getBoard()[3][3].getColor());
+        tile2 = new Tile(8, game.getGameBoard().getBoard()[3][4].getColor());
+        tiles.add(tile);
+        tiles.add(tile1);
+        tiles.add(tile2);
+        if(game.getGameBoard().checkLegalChoice(move)){
+            game.getGameBoard().updateBoard(move);
+            try{
+                game.getCurrentPlayer().getShelfie().insertTile(tiles, 3);
+            }catch (IllegalInsertException e){
+                throw new RuntimeException(e);
+            }
+        }
+        cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+        cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
+        game.turn();
+        game.setNextPlayer();
+
+        cell = new Cell();
+        cell.setRow(3);
+        cell.setColumn(5);
+        cell1 = new Cell();
+        cell1.setRow(3);
+        cell1.setColumn(6);
+        cell2 = new Cell();
+        cell2.setRow(3);
+        cell2.setColumn(7);
+        move.clear();
+        move.add(cell);
+        move.add(cell1);
+        move.add(cell2);
+        tiles.clear();
+        tile = new Tile(6, game.getGameBoard().getBoard()[3][5].getColor());
+        tile1 = new Tile(7, game.getGameBoard().getBoard()[3][6].getColor());
+        tile2 = new Tile(8, game.getGameBoard().getBoard()[3][7].getColor());
+        tiles.add(tile);
+        tiles.add(tile1);
+        tiles.add(tile2);
+        if(game.getGameBoard().checkLegalChoice(move)){
+            game.getGameBoard().updateBoard(move);
+            try{
+                game.getCurrentPlayer().getShelfie().insertTile(tiles, 3);
+            }catch (IllegalInsertException e){
+                throw new RuntimeException(e);
+            }
+        }
+        cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+        cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
+        game.turn();
+        game.setNextPlayer();
+
+        cell = new Cell();
+        cell.setRow(4);
+        cell.setColumn(5);
+        cell1 = new Cell();
+        cell1.setRow(4);
+        cell1.setColumn(6);
+        cell2 = new Cell();
+        cell2.setRow(4);
+        cell2.setColumn(7);
+        move.clear();
+        move.add(cell);
+        move.add(cell1);
+        move.add(cell2);
+        tiles.clear();
+        tile = new Tile(9, game.getGameBoard().getBoard()[4][5].getColor());
+        tile1 = new Tile(10, game.getGameBoard().getBoard()[4][6].getColor());
+        tile2 = new Tile(11, game.getGameBoard().getBoard()[4][7].getColor());
+        tiles.add(tile);
+        tiles.add(tile1);
+        tiles.add(tile2);
+
+
+        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+           fail();
+        try{
+            game.getCurrentPlayer().getShelfie().insertTile(tiles, 3);
+        }catch (IllegalInsertException e){
+            game.getGameBoard().reinsertTiles(tiles, move);
+        }
+        cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+        cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
+        game.turn();
+
+
+        cell = new Cell();
+        cell.setRow(4);
+        cell.setColumn(5);
+        move.clear();
+        move.add(cell);
+
+        tiles.clear();
+        tile = new Tile(9, game.getGameBoard().getBoard()[4][5].getColor());
+        tiles.add(tile);
+
+        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+            fail();
+        try{
+            game.getCurrentPlayer().getShelfie().insertTile(tiles, 3);
+        }catch (IllegalInsertException e){
+            game.getGameBoard().reinsertTiles(tiles, move);
+        }
+        cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+        cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
+        game.turn();
+
     }
 }

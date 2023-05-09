@@ -234,15 +234,19 @@ public class Game implements PlayerInterface, GameInterface{
     public int turn(ArrayList<Cell> positionsToBeRemoved, int column, ArrayList<Tile> tilesToInsert){
         //receive the action of current player
         //updates the board and the shelfie (checking if it's possible to do that)
+
         if(gameBoard.updateBoard(positionsToBeRemoved) == false)//it controls if the choice il legal and if so it removes them
             return -1;
 
-       try{
+        try{
            currentPlayer.getShelfie().insertTile(tilesToInsert, column);
-       }catch (IllegalInsertException e){
+        }catch (IllegalInsertException e){
            //TODO reposition tiles in board
+            gameBoard.reinsertTiles(tilesToInsert, positionsToBeRemoved);
+            tilesToInsert.clear();
+            positionsToBeRemoved.clear();
            return -1;
-       }
+        }
 
         //if there are only islands on the board
         if(gameBoard.checkIslands()){
