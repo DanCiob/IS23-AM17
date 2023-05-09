@@ -1,7 +1,6 @@
 package it.polimi.softeng.controller;
 
 import it.polimi.softeng.JSONWriter.*;
-import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.*;
 import it.polimi.softeng.model.commonCards.CommonCards;
 
@@ -34,19 +33,26 @@ public class GameController {
             return false;
         }
 
-        Tile[][] board= game.getGameBoard().getBoard();
-        ArrayList<Tile> tiles = new ArrayList<>();
-        for(Cell position : tilesToBeRemoved){
-            tiles.add(board[position.getRow()][position.getColumn()]);
+        //Turn routine update
+        int result = game.turn(tilesToBeRemoved, column);
+
+        /* TODO
+        if (result == 1)
+        {
+            Begin win routine
         }
-        //GameBoard update
-        System.out.println(tiles.size() + " will be removed");
-        boolean confirm = game.getGameBoard().updateBoard(tilesToBeRemoved);
+        */
+
+        boolean confirm = result != -1;
+
 
         if (!confirm)
             return false;
 
         System.out.println("Board updated");
+        System.out.println("Shelfie updated");
+
+        /*
         //Shelfie update
         try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, column);
@@ -54,17 +60,16 @@ public class GameController {
         } catch (IllegalInsertException e) {
             throw new RuntimeException(e);
         }
+        */
 
         //Update board
         controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(BoardWriter.boardChangeNotifier(game.getGameBoard()), "@BORD", "all").toJSONString());
         System.out.println("Updated board sent");
         //Update shelfie
         //TODO make shelfies visible by everybody
-        controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(game.getCurrentPlayer().getShelfie()), "@SHEL", requester).toJSONString(), requester);
+        //TODO if meanwhile player disconnects ?
+        controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(game.getPlayers().stream().filter(p -> p.getNickname().equals(requester)).findFirst().get().getShelfie()), "@SHEL", requester).toJSONString(), requester);
         System.out.println("Updated shelfie sent");
-
-        //Set next player
-        game.setNextPlayer();
 
         //Notify next player
         controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ConfirmWriter.writeConfirm(), "@CONF", game.getCurrentPlayer().getNickname()).toJSONString(), game.getCurrentPlayer().getNickname());
