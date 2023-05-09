@@ -222,7 +222,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     }
                 }
                 if (notAv) {
-                    System.out.print(ANSI_GREY + " ▇ ");
+                    System.out.print(ANSI_GREY + " ░ ");
                 } else {
                     if (board[i][j] != null) {
                         tileColor = board[i][j].getColor();
