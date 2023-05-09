@@ -543,7 +543,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             System.out.println("Empty command!");
             return;
         }
-
+        //TODO controllare minuscoli
         if (command.equalsIgnoreCase("@CMND") || command.equalsIgnoreCase("@VBOR") || command.equalsIgnoreCase("@VSHE") || command.equalsIgnoreCase("@VPCA") || command.equalsIgnoreCase("@VPLA") || command.equalsIgnoreCase("@VCCA")) {
             switch (command) {
                 case ("@CMND") -> {
