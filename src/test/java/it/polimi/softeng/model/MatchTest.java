@@ -19,21 +19,20 @@ public class MatchTest {
         nameList.add("Andrea");
         nameList.add("Daniel");
         nameList.add("Nicolas");
+        int column = 0;
+        ArrayList<Cell> positionsToBeRemoved = new ArrayList<>();
+        ArrayList<Tile> tilesToInsert = new ArrayList<>();
 
         game.beginGame(nameList);
 
         while(!(game.checkEndGame())){
-
-            //mossa, update shelfie e board da inserire in turn
-
-            game.turn(); //da continuare
-
-
-            game.setNextPlayer();
-
+            //TODO: modifica column
+            //TODO: modifica positionsToBeRemoved
+            //TODO: modifica tilesToInsert
+            game.turn(positionsToBeRemoved, column, tilesToInsert);
         }
-        game.getCurrentPlayer().updateScore(game.getEndGameBadge().getScore());
-        game.lastTurn();
+        //game.lastTurn();
+        //TODO modify lastturn call
     }
 
     @Test

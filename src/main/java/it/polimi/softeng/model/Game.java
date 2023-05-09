@@ -1,5 +1,6 @@
 package it.polimi.softeng.model;
 
+import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.interfaces.GameInterface;
 import it.polimi.softeng.model.interfaces.PlayerInterface;
 import it.polimi.softeng.model.scoreCount.Score;
@@ -212,23 +213,70 @@ public class Game implements PlayerInterface, GameInterface{
      * it handles the last turns after that one player has a full shelfie
      * this method is called after checkEndGame
      */
-    public void lastTurn(){
-        if(!(currentPlayer.isFirst()))//current player is the one that has a full shelfie
+  /*  public void lastTurn(){
+        getCurrentPlayer().updateScore(getEndGameBadge().getScore());
+        if(!(getNextPlayer().isFirst())){//current player is the one that has a full shelfie
             setCurrentPlayer(getNextPlayer());
-        while(!(currentPlayer.isFirst())){
-            turn();
-            setCurrentPlayer(getNextPlayer());
+            while(!(currentPlayer.isFirst())){
+                turn();
+                setCurrentPlayer(getNextPlayer());
+            }
         }
         calculateScore();
         selectWinner();
-    }
+    }*/
 
     /**
-     * this method is the turn routine
+     *
+     * @param positionsToBeRemoved
+     * @param column
+     * @param tilesToInsert
+     * @return 1 if someone has a full shelfie (lastTurn to call), 0 if not
+     */
+    public int turn(ArrayList<Cell> positionsToBeRemoved, int column, ArrayList<Tile> tilesToInsert){
+        //receive the action of current player
+        //updates the board and the shelfie (checking if it's possible to do that)
+        gameBoard.updateBoard(positionsToBeRemoved); //it controls if the choice il legal and if so it removes them
+       try{
+           currentPlayer.getShelfie().insertTile(tilesToInsert, column);
+       }catch (IllegalInsertException e){
+           throw  new RuntimeException(e);
+       }
+
+
+        //if there are only islands on the board
+        if(gameBoard.checkIslands()){
+            gameBoard.positionTiles(tileBag);
+        }
+
+        //verify common cards
+        for(CommonCards card : commonCards){
+            if(card.verifyShape(currentPlayer.getShelfie())){
+                //current player has completed a common card, so he receives the badge. The badge is removed from the arrayList
+                currentPlayer.updateScore(card.getBadge().getScore());
+            }
+        }
+        if(checkEndGame()){
+            getCurrentPlayer().updateScore(getEndGameBadge().getScore());
+            if(!(getNextPlayer().isFirst())){//current player is the one that has a full shelfie
+                setCurrentPlayer(getNextPlayer());
+            }else{
+                calculateScore();
+                selectWinner();
+            }
+            return 1;
+        }
+        else{
+            setNextPlayer();
+            return 0;
+        }
+    }
+
+
+    /**
+     * this method is used by MatchTest
      */
     public void turn(){
-        //receive the action of current player -> to do
-        //updates the board and the shelfie (checking if it's possible to do that) -> to do
 
         //if there are only islands on the board
         if(gameBoard.checkIslands()){
