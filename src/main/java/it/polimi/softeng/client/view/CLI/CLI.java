@@ -226,7 +226,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 } else {
                     if (board[i][j] != null) {
                         tileColor = board[i][j].getColor();
-                        System.out.print(" " + tileColor.coloredText() + tileColor.colorLetter() + " ");
+                        System.out.print(" " + tileColor.coloredText() + "▇" + " ");
                     } else {
                         System.out.print(ANSI_GREY + " ░ ");
                     }
@@ -252,7 +252,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 for (int j = 0; j < shelfieColumns; j++) {
                     if (shelfie[i][j] != null) {
                         tileColor = shelfie[i][j].getColor();
-                        System.out.print(tileColor.coloredText() + " " + tileColor.colorLetter() + " ");
+                        System.out.print(tileColor.coloredText() + " " + "▇" + " ");
                     } else {
                         System.out.print(ANSI_GREY + " ░ ");
                     }

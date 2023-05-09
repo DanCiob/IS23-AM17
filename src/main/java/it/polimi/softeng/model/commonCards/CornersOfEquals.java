@@ -25,10 +25,10 @@ public class CornersOfEquals extends CommonCards {
             if (s.getTile(shelfieRows - 1, 0).getColor() == s.getTile(shelfieRows - 1, shelfieColumns - 1).getColor()){
 
                 //check if right corners have the same color
-                if (s.getTile(shelfieRows - 1, shelfieColumns - 1).getColor() == s.getTile(0, shelfieColumns - 1).getColor()){
+                if ((s.getTile(0, shelfieColumns - 1)!=null)&&(s.getTile(shelfieRows - 1, shelfieColumns - 1).getColor() == s.getTile(0, shelfieColumns - 1).getColor())){
 
                     //check if bottom corners have the same color
-                    if (s.getTile(0, shelfieColumns - 1).getColor() == s.getTile(0, 0).getColor()){
+                    if ((s.getTile(0, 0)!=null)&&(s.getTile(0, shelfieColumns - 1).getColor() == s.getTile(0, 0).getColor())){
                         return true;
                     }
                 }
