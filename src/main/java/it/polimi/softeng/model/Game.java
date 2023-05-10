@@ -229,6 +229,7 @@ public class Game implements PlayerInterface, GameInterface{
 
 
     /**
+     * It's turn version used in controller
      * @param positionsToBeRemoved contains coordinates of tiles to be removed
      * @param column is column of insertion in shelfie
      * @return 1 the game is ended, 0 if not, -1 if there's an error

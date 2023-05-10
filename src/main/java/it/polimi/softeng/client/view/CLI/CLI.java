@@ -543,9 +543,14 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             System.out.println("Empty command!");
             return;
         }
-        //TODO controllare minuscoli
-        if (command.equalsIgnoreCase("@CMND") || command.equalsIgnoreCase("@VBOR") || command.equalsIgnoreCase("@VSHE") || command.equalsIgnoreCase("@VPCA") || command.equalsIgnoreCase("@VPLA") || command.equalsIgnoreCase("@VCCA")) {
-            switch (command) {
+        //Check if player inserted a command that is not on the table
+        if (!isOkCommand(command, 1)) {
+            System.out.println("Please write a command that you can see in the table");
+            return;
+        }
+
+        if (command.toUpperCase().equals("@CMND") || command.toUpperCase().equals("@VBOR") || command.toUpperCase().equals("@VSHE") || command.toUpperCase().equals("@VPCA") || command.toUpperCase().equals("@VPLA") || command.toUpperCase().equals("@VCCA")) {
+            switch (command.toUpperCase()) {
                 case ("@CMND") -> {
                     return;
                 }
@@ -564,6 +569,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 case ("@VCCA") -> {
                     commonCardsVisualizer(CommonCard1);
                     if (CommonCard2 != null) commonCardsVisualizer(CommonCard2);
+                    return;
                 }
                 case ("@VPLA") -> {
                     //Placeholder for JSON request
@@ -572,16 +578,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     return;
                 }
 
-                //TODO actionToJSON for players and their score
                 //TODO RMIInvoker for players and their score
                 //TODO return;
             }
-        }
-
-        //Check if player inserted a command that is not on the table
-        if (!isOkCommand(command, 1)) {
-            System.out.println("Please write a command that you can see in the table");
-            return;
         }
 
         //Command is in @CMND format (every command is 4 letters), uppercase avoid case sensitivity
