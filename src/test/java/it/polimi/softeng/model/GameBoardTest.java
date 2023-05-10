@@ -52,8 +52,12 @@ class GameBoardTest {
                 count--;
             if(cell1.getRow() == 4 && cell1.getColumn() == 8)
                 count++;
+            if(cell1.getRow() == 8 && cell1.getColumn() == 5)
+                count++;
         }
-        assertTrue(count == 3);
+
+
+        assertTrue(count == 4);
     }
 
     @Test

@@ -137,4 +137,8 @@ public class Shelfie {
     public void setGrid(int row, int column, int id, Tile.TileColor color){
         grid[row][column] = new Tile(id, color);
     }
+
+    public void setGridAtNull(int row, int column){
+        grid[row][column] = null;
+    }
 }

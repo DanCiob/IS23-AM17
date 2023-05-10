@@ -26,7 +26,7 @@ public class GameBoard implements BoardInterface {
      * @param numberOfPlayers indicates how many player are partecipating to the current game
      */
 
-    private void setNotAvailable(int numberOfPlayers) {
+    public void setNotAvailable(int numberOfPlayers) {
         Cell temp;
 
         /*
@@ -168,6 +168,7 @@ public class GameBoard implements BoardInterface {
         }
     }
 
+
     /**
      * This method update board after gamemove
      * @param positionsToBeRemoved contains coordinates of tiles to be removed
@@ -287,6 +288,18 @@ public class GameBoard implements BoardInterface {
 
     public void setBoard(int  i, int j, Tile tile) {
         board[i][j] = tile;
+    }
+
+    /**
+     * this method is used when a player try to insert more tiles than the free places of a row, so we need to reinsert the tiles in the board
+     */
+    public void reinsertTiles(ArrayList<Tile> tiles, ArrayList<Cell> cells){
+        int i = 0;
+        for(Cell cell: cells){
+            if(board[cell.getRow()][cell.getColumn()] == null)
+                setBoard(cell.getRow(), cell.getColumn(),  tiles.get(i));
+            i++;
+        }
     }
 
 

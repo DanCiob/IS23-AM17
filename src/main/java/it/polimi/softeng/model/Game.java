@@ -12,7 +12,7 @@ import static it.polimi.softeng.model.PersonalCards.FillPersonalCardsBag;
 
 public class Game implements PlayerInterface, GameInterface{
     //board section
-    private final GameBoard gameBoard = new GameBoard();
+    private GameBoard gameBoard = new GameBoard();
     private final ArrayList<Tile> tileBag = new ArrayList<>();
     private BadgeEndGame endGameBadge;
     private final boolean simpleRules = false;
@@ -32,11 +32,11 @@ public class Game implements PlayerInterface, GameInterface{
     //dovremmo controllare che non parta con meno del numero di giocatori scelto
     public void beginGame(ArrayList<String> nameList){
         //vedi cosa serve
-        initializeTile();
-        initializeBoard();
         for(String name : nameList){
             createNewPlayer(name);
         }
+        initializeTile();
+        initializeBoard();
         chooseCommonCards();
         choosePersonalCards();
         initializebadgeScore();
@@ -62,6 +62,7 @@ public class Game implements PlayerInterface, GameInterface{
         gameBoard.resetBoard(players.size());
         gameBoard.positionTiles(tileBag);
     }
+
 
     /**
      * this method creates all the tiles and places them in the tileBag
@@ -226,22 +227,38 @@ public class Game implements PlayerInterface, GameInterface{
         selectWinner();
     }*/
 
+
     /**
-     *
-     * @param positionsToBeRemoved
-     * @param column
-     * @param tilesToInsert
-     * @return 1 if someone has a full shelfie (lastTurn to call), 0 if not
+     * @param positionsToBeRemoved contains coordinates of tiles to be removed
+     * @param column is column of insertion in shelfie
+     * @return 1 the game is ended, 0 if not, -1 if there's an error
      */
-    public int turn(ArrayList<Cell> positionsToBeRemoved, int column, ArrayList<Tile> tilesToInsert){
+
+    public int turn(ArrayList<Cell> positionsToBeRemoved, int column){
         //receive the action of current player
         //updates the board and the shelfie (checking if it's possible to do that)
-        gameBoard.updateBoard(positionsToBeRemoved); //it controls if the choice il legal and if so it removes them
-       try{
+
+        ArrayList<Tile> tilesToInsert = new ArrayList<>();
+        for(Cell position : positionsToBeRemoved){
+            tilesToInsert.add(getGameBoard().getBoard()[position.getRow()][position.getColumn()]);
+        }
+
+        if(!gameBoard.updateBoard(positionsToBeRemoved))//it controls if the choice il legal and if so it removes them
+            return -1;
+
+        try{
            currentPlayer.getShelfie().insertTile(tilesToInsert, column);
-       }catch (IllegalInsertException e){
-           throw  new RuntimeException(e);
-       }
+        }catch (IllegalInsertException e){
+            //TODO reposition tiles in board
+            gameBoard.reinsertTiles(tilesToInsert, positionsToBeRemoved);
+            tilesToInsert.clear();
+            positionsToBeRemoved.clear();
+            for(Cell cell : positionsToBeRemoved){
+                currentPlayer.getShelfie().setGridAtNull(cell.getRow(), cell.getColumn());
+            }
+
+           return -1;
+        }
 
 
         //if there are only islands on the board
@@ -256,21 +273,26 @@ public class Game implements PlayerInterface, GameInterface{
                 currentPlayer.updateScore(card.getBadge().getScore());
             }
         }
+
+
         if(checkEndGame()){
             getCurrentPlayer().updateScore(getEndGameBadge().getScore());
             if(!(getNextPlayer().isFirst())){//current player is the one that has a full shelfie
                 setCurrentPlayer(getNextPlayer());
             }else{
-                calculateScore();
+                calculateScore(); //it checks personal cards score: TODO: testing
                 selectWinner();
+                return 1;
             }
-            return 1;
         }
         else{
             setNextPlayer();
-            return 0;
         }
+        return 0;
     }
+
+
+
 
 
     /**
