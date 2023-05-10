@@ -227,69 +227,18 @@ public class Game implements PlayerInterface, GameInterface{
         selectWinner();
     }*/
 
-    /**
-     * this method is used by MatchTest
-     */
-
-    public int turn(ArrayList<Cell> positionsToBeRemoved, int column, ArrayList<Tile> tilesToInsert){
-        //receive the action of current player
-        //updates the board and the shelfie (checking if it's possible to do that)
-
-        if(gameBoard.updateBoard(positionsToBeRemoved) == false)//it controls if the choice il legal and if so it removes them
-            return -1;
-
-        try{
-           currentPlayer.getShelfie().insertTile(tilesToInsert, column);
-        }catch (IllegalInsertException e){
-           //TODO reposition tiles in board
-            gameBoard.reinsertTiles(tilesToInsert, positionsToBeRemoved);
-            tilesToInsert.clear();
-            positionsToBeRemoved.clear();
-           return -1;
-        }
-
-        //if there are only islands on the board
-        if(gameBoard.checkIslands()){
-            gameBoard.positionTiles(tileBag);
-        }
-
-        //verify common cards
-        for(CommonCards card : commonCards){
-            if(card.verifyShape(currentPlayer.getShelfie())){
-                //current player has completed a common card, so he receives the badge. The badge is removed from the arrayList
-                currentPlayer.updateScore(card.getBadge().getScore());
-            }
-        }
-
-        //TODO Personal Cards score is checked?
-
-        if(checkEndGame()){
-            getCurrentPlayer().updateScore(getEndGameBadge().getScore());
-            if(!(getNextPlayer().isFirst())){//current player is the one that has a full shelfie
-                setCurrentPlayer(getNextPlayer());
-            }else{
-                calculateScore();
-                selectWinner();
-                return 1;
-            }
-        }
-        else{
-            setNextPlayer();
-        }
-        return 0;
-    }
 
     /**
      * @param positionsToBeRemoved contains coordinates of tiles to be removed
      * @param column is column of insertion in shelfie
-     * @return 1 if someone has a full shelfie (lastTurn to call), 0 if not, -1 if there's an error
+     * @return 1 the game is ended, 0 if not, -1 if there's an error
      */
+
     public int turn(ArrayList<Cell> positionsToBeRemoved, int column){
         //receive the action of current player
         //updates the board and the shelfie (checking if it's possible to do that)
 
         ArrayList<Tile> tilesToInsert = new ArrayList<>();
-
         for(Cell position : positionsToBeRemoved){
             tilesToInsert.add(getGameBoard().getBoard()[position.getRow()][position.getColumn()]);
         }
@@ -298,11 +247,19 @@ public class Game implements PlayerInterface, GameInterface{
             return -1;
 
         try{
-            currentPlayer.getShelfie().insertTile(tilesToInsert, column);
+           currentPlayer.getShelfie().insertTile(tilesToInsert, column);
         }catch (IllegalInsertException e){
             //TODO reposition tiles in board
-            return -1;
+            gameBoard.reinsertTiles(tilesToInsert, positionsToBeRemoved);
+            tilesToInsert.clear();
+            positionsToBeRemoved.clear();
+            for(Cell cell : positionsToBeRemoved){
+                currentPlayer.getShelfie().setGridAtNull(cell.getRow(), cell.getColumn());
+            }
+
+           return -1;
         }
+
 
         //if there are only islands on the board
         if(gameBoard.checkIslands()){
@@ -317,14 +274,13 @@ public class Game implements PlayerInterface, GameInterface{
             }
         }
 
-        //TODO Personal Cards score is checked?
 
         if(checkEndGame()){
             getCurrentPlayer().updateScore(getEndGameBadge().getScore());
             if(!(getNextPlayer().isFirst())){//current player is the one that has a full shelfie
                 setCurrentPlayer(getNextPlayer());
             }else{
-                calculateScore();
+                calculateScore(); //it checks personal cards score: TODO: testing
                 selectWinner();
                 return 1;
             }
@@ -334,6 +290,10 @@ public class Game implements PlayerInterface, GameInterface{
         }
         return 0;
     }
+
+
+
+
 
     /**
      * this method is used by MatchTest

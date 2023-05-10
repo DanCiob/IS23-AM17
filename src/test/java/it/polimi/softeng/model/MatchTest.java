@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import static it.polimi.softeng.Constants.*;
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
 public class MatchTest {
@@ -30,7 +31,7 @@ public class MatchTest {
             //TODO: modifica column
             //TODO: modifica positionsToBeRemoved
             //TODO: modifica tilesToInsert
-            game.turn(positionsToBeRemoved, column, tilesToInsert);
+            game.turn(positionsToBeRemoved, column);
         }
         //game.lastTurn();
         //TODO modify lastturn call
@@ -809,6 +810,151 @@ public class MatchTest {
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
+
+    }
+
+
+    @Test
+    public void test(){
+        Game game = new Game();
+        ArrayList<String> nameList = new ArrayList<>();
+        ArrayList<Cell> cells = new ArrayList<>();
+        ArrayList<Tile> tiles = new ArrayList<>();
+        nameList.add("Alice");
+        nameList.add("Andrea");
+        game.beginGame(nameList);
+        CLI cli = new CLI();
+
+        cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+
+
+        Cell cell = new Cell();
+        cell.setRow(1);
+        cell.setColumn(3);
+        cells.add(cell);
+        Cell cell1 = new Cell();
+        cell1.setRow(1);
+        cell1.setColumn(4);
+        cells.add(cell1);
+        int i = game.turn(cells, 0);
+        if(i == -1)
+            fail();
+        if(i==1){
+            System.out.println(" Fine ");
+            assertTrue(i==1);
+        }
+        cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+        cli.shelfieVisualizer(game.getNextPlayer().getShelfie().getGrid());
+
+
+        cells.clear();
+        cell = new Cell();
+        cell.setRow(2);
+        cell.setColumn(3);
+        cells.add(cell);
+        cell1 = new Cell();
+        cell1.setRow(2);
+        cell1.setColumn(4);
+        cells.add(cell1);
+        Cell cell2 = new Cell();
+        cell2.setRow(2);
+        cell2.setColumn(5);
+        cells.add(cell2);
+        i = game.turn(cells, 0);
+        if(i == -1)
+            fail();
+        if(i==1){
+            System.out.println(" Fine ");
+            assertTrue(i==1);
+        }
+        cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+        cli.shelfieVisualizer(game.getNextPlayer().getShelfie().getGrid());
+
+
+
+        cells.clear();
+        cell = new Cell();
+        cell.setRow(3);
+        cell.setColumn(2);
+        cells.add(cell);
+        cell1 = new Cell();
+        cell1.setRow(3);
+        cell1.setColumn(3);
+        cells.add(cell1);
+        cell2 = new Cell();
+        cell2.setRow(3);
+        cell2.setColumn(4);
+        cells.add(cell2);
+        i = game.turn(cells, 0);
+        if(i == -1)
+            fail();
+        if(i==1){
+            System.out.println(" Fine ");
+            assertTrue(i==1);
+        }
+        cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+        cli.shelfieVisualizer(game.getNextPlayer().getShelfie().getGrid());
+
+
+        cells.clear();
+        cell = new Cell();
+        cell.setRow(3);
+        cell.setColumn(5);
+        cells.add(cell);
+        cell1 = new Cell();
+        cell1.setRow(3);
+        cell1.setColumn(6);
+        cells.add(cell1);
+        cell2 = new Cell();
+        cell2.setRow(3);
+        cell2.setColumn(7);
+        cells.add(cell2);
+        i = game.turn(cells, 0);
+        if(i == -1)
+            fail();
+        if(i==1){
+            System.out.println(" Fine ");
+            assertTrue(i==1);
+        }
+        cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+        cli.shelfieVisualizer(game.getNextPlayer().getShelfie().getGrid());
+
+
+        cells.clear();
+        cell = new Cell();
+        cell.setRow(4);
+        cell.setColumn(1);
+        cells.add(cell);
+        cell1 = new Cell();
+        cell1.setRow(4);
+        cell1.setColumn(1);
+        cells.add(cell1);
+        cell2 = new Cell();
+        cell2.setRow(4);
+        cell2.setColumn(3);
+        cells.add(cell2);
+        i = game.turn(cells, 0);
+        if(i==1){
+            System.out.println(" Fine ");
+            assertTrue(i==1);
+        }
+        if(i == -1){
+            System.out.println("Errore");
+            cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
+
+            cells.clear();
+            cell = new Cell();
+            cell.setRow(4);
+            cell.setColumn(1);
+            cells.add(cell);
+            i = game.turn(cells, 0);
+            if(i == -1)
+                fail();
+            cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+            cli.shelfieVisualizer(game.getNextPlayer().getShelfie().getGrid());
+        }
+
+
 
     }
 }
