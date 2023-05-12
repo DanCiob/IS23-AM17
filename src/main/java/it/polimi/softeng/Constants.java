@@ -45,7 +45,7 @@ public abstract class Constants {
     //Allows nickname in specific standard
     public static final String nicknameREGEX = "^[a-zA-Z0-9_]+$";
     //Allows first part of commands only in specific standard
-    public static final String commandREGEX = "^[@][A-Za-z]{4}[ ]";
+    public static final String commandREGEX = "^([@][Cc][Mm][Nn][Dd])|^([@][Vv][Bb][Oo][Rr])|^([@][Vv][Ss][Hh][Ee])|^([@][Vv][Pp][Cc][Aa])|^([@][Vv][Cc][Cc][Aa])|^([@][Vv][Pp][Ll][Aa])|^([@][Cc][Hh][Aa][Tt])|^([@][Gg][Aa][Mm][Ee])";
 
     //Errors
     public static final String NICKNAME_NOT_UNIQUE = "Error: Nickname not unique, try again";
