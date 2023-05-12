@@ -296,8 +296,8 @@ public class GameBoard implements BoardInterface {
     public void reinsertTiles(ArrayList<Tile> tiles, ArrayList<Cell> cells){
         int i = 0;
         for(Cell cell: cells){
-            if(board[cell.getRow()][cell.getColumn()] == null)
-                setBoard(cell.getRow(), cell.getColumn(),  tiles.get(i));
+            //if(board[cell.getRow()][cell.getColumn()] == null)
+            setBoard(cell.getRow(), cell.getColumn(),  tiles.get(i));
             i++;
         }
     }

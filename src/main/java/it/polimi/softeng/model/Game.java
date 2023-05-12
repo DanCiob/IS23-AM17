@@ -239,6 +239,11 @@ public class Game implements PlayerInterface, GameInterface{
         //receive the action of current player
         //updates the board and the shelfie (checking if it's possible to do that)
 
+        int firstFree = 0;
+        while(firstFree<shelfieRows && currentPlayer.getShelfie().getGrid()[firstFree][column] != null){
+            firstFree++;
+        }
+
         ArrayList<Tile> tilesToInsert = new ArrayList<>();
         for(Cell position : positionsToBeRemoved){
             tilesToInsert.add(getGameBoard().getBoard()[position.getRow()][position.getColumn()]);
@@ -251,14 +256,21 @@ public class Game implements PlayerInterface, GameInterface{
            currentPlayer.getShelfie().insertTile(tilesToInsert, column);
         }catch (IllegalInsertException e){
             //TODO reposition tiles in board
+            /*for(Cell cell : positionsToBeRemoved){
+                currentPlayer.getShelfie().setGridAtNull(cell.getRow(), cell.getColumn());
+                System.out.println("Tile in pos " + cell.getRow()+ " "+ cell.getColumn() + " is " + currentPlayer.getShelfie().getGrid()[cell.getRow()][cell.getColumn()]);
+            }*/
+            for(int i=0; i< tilesToInsert.size()  && firstFree<shelfieRows; i++){
+                currentPlayer.getShelfie().setGrid(firstFree, column, tilesToInsert.get(i).getId(), getGameBoard().getBoard()[positionsToBeRemoved.get(i).getRow()][positionsToBeRemoved.get(i).getColumn()].getColor());
+                firstFree ++;
+            }
+
+
             gameBoard.reinsertTiles(tilesToInsert, positionsToBeRemoved);
             tilesToInsert.clear();
             positionsToBeRemoved.clear();
-            for(Cell cell : positionsToBeRemoved){
-                currentPlayer.getShelfie().setGridAtNull(cell.getRow(), cell.getColumn());
-            }
 
-           return -1;
+            return -1;
         }
 
 
@@ -310,7 +322,9 @@ public class Game implements PlayerInterface, GameInterface{
         for(CommonCards card : commonCards){
             if(card.verifyShape(currentPlayer.getShelfie())){
                 //current player has completed a common card, so he receives the badge. The badge is removed from the arrayList
-                currentPlayer.updateScore(card.getBadge().getScore());
+                BadgeScore badgeScore = card.getBadge();
+                if(badgeScore != null)
+                    currentPlayer.updateScore(badgeScore.getScore());
             }
         }
     }
@@ -322,7 +336,10 @@ public class Game implements PlayerInterface, GameInterface{
         int pointsToAdd;
         for(Player p : players){
             pointsToAdd = PersonalCards.getCurrentScore(p.getShelfie(), p.getPersonalCard());
+            //System.out.println("Points from personal cards of " + p.getNickname() + " : " + pointsToAdd);
             pointsToAdd = pointsToAdd + Score.ScoreForGroups(p.getShelfie());
+            //System.out.println("Points from personal cards and score for groups of " + p.getNickname() + " : " + pointsToAdd);
+
             p.updateScore(pointsToAdd);
         }
     }

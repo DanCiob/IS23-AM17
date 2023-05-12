@@ -28,6 +28,8 @@ public abstract class CommonCards {
      * @return score badge
      */
     public BadgeScore getBadge(){
+        if(badges.isEmpty())
+            return null;
         return badges.remove(0);
     }
 

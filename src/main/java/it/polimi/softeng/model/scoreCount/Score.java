@@ -152,7 +152,7 @@ public class Score {
             }
         }
         //Return achieved Score
-        return 2 * GroupDimension[0] + 3 * GroupDimension[1] + 5 * GroupDimension[2] + 6 * GroupDimension[3];
+        return 2 * GroupDimension[0] + 3 * GroupDimension[1] + 5 * GroupDimension[2] + 8 * GroupDimension[3];
 
 
     }

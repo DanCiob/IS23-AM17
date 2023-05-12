@@ -109,8 +109,10 @@ public class PersonalCardsParser {
             case "GREEN" -> {
                 return Tile.TileColor.GREEN;
             }
+            default -> {return null;}
+
+
         }
-        return null;
     }
 
     /**
