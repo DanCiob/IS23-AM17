@@ -14,4 +14,14 @@ public class LoginWriter {
 
         return obj;
     }
+    public static JSONObject writeLogin (String nickname) {
+        JSONObject obj = new JSONObject();
+
+        obj.put("nickname", nickname);
+        obj.put("gameMode", 0);
+        obj.put("startGame", 1);
+        obj.put("numOfPlayer", 2);
+
+        return obj;
+    }
 }

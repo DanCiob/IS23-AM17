@@ -1,8 +1,7 @@
 package it.polimi.softeng;
 
-
-import com.example.guiapp.GUIApplication;
 import it.polimi.softeng.client.view.CLI.CLI;
+import it.polimi.softeng.client.view.GUI.GUIAppl;
 import it.polimi.softeng.connectionProtocol.ServerSide;
 import it.polimi.softeng.controller.Controller;
 
@@ -65,8 +64,8 @@ public class MyShelfie {
             }
             case 2 ->{
                 System.out.println("You've chosen : client GUI");
-                GUIApplication guiApplication = new GUIApplication();
-                GUIApplication.main(args);
+                GUIAppl guiApplication = new GUIAppl();
+                guiApplication.main(args);
                 //creates the client GUI
             }
 

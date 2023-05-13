@@ -301,6 +301,4 @@ public class GameBoard implements BoardInterface {
             i++;
         }
     }
-
-
 }
