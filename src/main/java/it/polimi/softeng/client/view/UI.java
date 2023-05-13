@@ -42,5 +42,10 @@ public interface UI {
      */
     public void scoreVisualizer(ArrayList<Player> players);
 
-    public void loginListener(String nickname);
+    //public void loginListener(String nickname);
+
+    public void setServerAddress(String serverAddress);
+
+    public void setPort(int port);
 }
+

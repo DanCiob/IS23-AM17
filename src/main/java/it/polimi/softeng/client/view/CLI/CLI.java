@@ -885,11 +885,25 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             this.CommonCard2 = nameOfCommonCard;
     }
 
-    @Override
+   /* @Override
     public void loginListener(String nickname){
         String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(nickname), "@LOGN", nickname).toJSONString();
         System.out.println(login);
         clientSide = new ClientSide(messageHandler);
         clientSide.sendMessage(login);
+    }
+*/
+    @Override
+    public void setServerAddress(String serverAddress) {
+        ServerAddress = serverAddress;
+    }
+
+    @Override
+    public void setPort(int port) {
+        Port = port;
+    }
+
+    public void setConnectionMode(int connectionMode) {
+        ConnectionMode = connectionMode;
     }
 }
