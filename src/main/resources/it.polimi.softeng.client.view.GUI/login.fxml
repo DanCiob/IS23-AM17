@@ -12,6 +12,7 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
+<?import javafx.scene.control.ComboBox?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="it.polimi.softeng.client.view.GUI.GUIController">
     <padding>
@@ -73,9 +74,9 @@
     </HBox>
 
     <HBox spacing="20.0">
-        <Label layoutX="630.0" text="Do you want to create a new game(1) or join a game which is already started(2)?" />
+        <Label layoutX="630.0" text="Do you want to create a new game or join a game which is already started?" />
         <!--<TextField layoutX="609.0"  fx:id="newGame"/>-->
-        <ChoiceBox id="game" onMouseClicked="#onNewGame">
+        <ChoiceBox fx:id="game"> <!--onMouseClicked="#onNewGame"-->
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Create a new game" />
@@ -84,15 +85,29 @@
             </items>
         </ChoiceBox>
     </HBox>
-    <ChoiceBox fx:id="numberOfPlayer" value="number of players" visible="false">
-        <items>
-            <FXCollections fx:factory="observableArrayList">
-                <String fx:value="2" />
-                <String fx:value="3" />
-                <String fx:value="4" />
-            </FXCollections>
-        </items>
-    </ChoiceBox>
+    <HBox spacing="20.0">
+        <Label layoutX="630.0" text="Select the number of players: " />
+        <ChoiceBox fx:id="numberOfPlayer" visible="true">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="2" />
+                    <String fx:value="3" />
+                    <String fx:value="4" />
+                </FXCollections>
+            </items>
+        </ChoiceBox>
+    </HBox>
+    <HBox spacing="20.0">
+        <Label layoutX="630.0" text="SDo you want to play with Easy mode or Normal mode?" />
+        <ChoiceBox fx:id="mode" visible="true">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Easy mode" />
+                    <String fx:value="Normal mode" />
+                </FXCollections>
+            </items>
+        </ChoiceBox>    </HBox>
+
 
     <Button text="Login" onAction="#onLoginButtonClick"/>
     <Label fx:id="welcomeText"/>
