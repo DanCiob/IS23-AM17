@@ -19,8 +19,6 @@ public class GUIAppl extends Application {
         Image icon = new Image("/images/Icon.png");
         primaryStage.getIcons().add(icon);
         FXMLLoader fxmlLoader = new FXMLLoader(GUIAppl.class.getResource("/it.polimi.softeng.client.view.GUI/login.fxml"));
-        /*Group group = new Group();
-        group.getChildren().add(fxmlLoader.load());*/
         Scene scene = new Scene(fxmlLoader.load(), 640, 480);
 
         primaryStage.setTitle("My Shelfie");

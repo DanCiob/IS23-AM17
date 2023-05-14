@@ -1,21 +1,23 @@
 package it.polimi.softeng.client.view.GUI;
 
-import com.sun.javafx.scene.control.IntegerField;
 import it.polimi.softeng.JSONWriter.ClientSignatureWriter;
 import it.polimi.softeng.JSONWriter.LoginWriter;
 import it.polimi.softeng.client.view.GUIInterface;
 import it.polimi.softeng.client.view.MessageHandler;
-import it.polimi.softeng.client.view.UI;
 import it.polimi.softeng.client.view.CLI.CLI;
 import it.polimi.softeng.connectionProtocol.ClientSide;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import org.w3c.dom.Text;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 
 public class GUIController implements GUIInterface {
@@ -60,6 +62,9 @@ public class GUIController implements GUIInterface {
     @FXML
     ChoiceBox<String> mode;
 
+    @FXML
+    Button loginButton;
+
 
     @FXML
     protected void onNewGame(){
@@ -73,12 +78,21 @@ public class GUIController implements GUIInterface {
 
 
     @FXML
-    protected void onLoginButtonClick() {
+    protected void onLoginButtonClick(ActionEvent event) throws IOException{
         welcomeText.setText(nickname.getText());
         Image titleImage = new Image("/images/Title.png");
         this.TitleView = new ImageView();
         this.TitleView.setImage(titleImage);
         loginNotifier();
+        switchToGame(event);
+    }
+
+    public void switchToGame(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/gamescreen.fxml"));
+        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
 
@@ -114,10 +128,6 @@ public class GUIController implements GUIInterface {
         MessageHandler messageHandler = new MessageHandler(this);
         ClientSide clientSide = new ClientSide(messageHandler);
         clientSide.sendMessage(login);
-
-        //cli.setPort(serverPort.getText().);
-        /*cli.setPort(serverPort.getValue());
-        System.out.println(serverPort.getValue());*/
 
     }
 }
