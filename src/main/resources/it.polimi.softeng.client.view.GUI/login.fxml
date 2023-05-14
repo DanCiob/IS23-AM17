@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<?import javafx.scene.control.ComboBox?>
+<?import com.sun.javafx.scene.control.IntegerField?>
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="it.polimi.softeng.client.view.GUI.GUIController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+    <StackPane>
+        <ImageView
+                fx:id="bannerView"
+                fitHeight="150.0"
+                fitWidth="200.0"
+                layoutX="61.0"
+                layoutY="83.0"
+                pickOnBounds="true"
+                preserveRatio="true"
+        >
+            <image>
+                <Image
+                        url="/images/banner.png"
+                        backgroundLoading="true"
+                />
+            </image>
+        </ImageView>
+        <ImageView
+                fx:id="TitleView"
+                fitHeight="150.0"
+                fitWidth="200.0"
+                layoutX="61.0"
+                layoutY="83.0"
+                pickOnBounds="true"
+                preserveRatio="true"
+        >
+            <image>
+                <Image
+                        url="/images/Title.png"
+                        backgroundLoading="false"
+                />
+            </image>
+        </ImageView>
+
+    </StackPane>
+
+
+    <HBox layoutY="200" spacing="20.0">
+        <Label layoutX="100.0" text="Insert your nickname (ONLY characters a-z A-Z 0-9 and _ allowed): " />
+        <TextField layoutX="230.0" fx:id="nickname"/>
+    </HBox>
+    <HBox spacing="20.0">
+        <Label layoutX="330.0"  text="Choose socket or rmi: " />
+        <ChoiceBox fx:id="socketOrRmi" layoutX="309.0" onMouseClicked="#onNewGame"> <!--onMouseClicked="#onNewGame"-->
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Socket" />
+                    <String fx:value="Rmi" />
+                </FXCollections>
+            </items>
+        </ChoiceBox>
+    </HBox>
+
+    <HBox spacing="20.0">
+        <Label layoutX="430.0" text="Digit server IP: " />
+        <TextField layoutX="409.0" fx:id="serverIP"/>
+    </HBox>
+    <HBox spacing="20.0">
+        <Label layoutX="530.0" text="Digit server port: " />
+        <TextField layoutX="509.0" fx:id="serverPort"/>
+    </HBox>
+
+    <HBox spacing="20.0">
+        <Label layoutX="630.0" text="Do you want to create a new game or join a game which is already started?" />
+        <!--<TextField layoutX="609.0"  fx:id="newGame"/>-->
+        <ChoiceBox fx:id="game" onMouseClicked="#onNewGame"> <!--onMouseClicked="#onNewGame"-->
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Create a new game" />
+                    <String fx:value="Join a game" />
+                </FXCollections>
+            </items>
+        </ChoiceBox>
+    </HBox>
+    <HBox spacing="20.0" layoutX="630.0">
+        <Label fx:id="np" text="Insert the number of players: "/>
+        <ChoiceBox fx:id="numberOfPlayer" visible="true">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="2" />
+                    <String fx:value="3" />
+                    <String fx:value="4" />
+                </FXCollections>
+            </items>
+        </ChoiceBox>
+    </HBox>
+    <HBox spacing="20.0">
+        <Label layoutX="630.0" text="Do you want to play with Easy mode or Normal mode?" />
+        <ChoiceBox fx:id="mode" visible="true">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Easy mode" />
+                    <String fx:value="Normal mode" />
+                </FXCollections>
+            </items>
+        </ChoiceBox>
+    </HBox>
+
+
+    <Button text="Login" onAction="#onLoginButtonClick"/>
+    <Label fx:id="welcomeText"/>
+</VBox>

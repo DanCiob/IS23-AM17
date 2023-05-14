@@ -41,4 +41,11 @@ public interface UI {
      * Visualizer of current connected players
      */
     public void scoreVisualizer(ArrayList<Player> players);
+
+    //public void loginListener(String nickname);
+
+    public void setServerAddress(String serverAddress);
+
+    public void setPort(int port);
 }
+
