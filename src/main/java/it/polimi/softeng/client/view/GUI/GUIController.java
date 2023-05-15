@@ -5,6 +5,7 @@ import it.polimi.softeng.JSONWriter.LoginWriter;
 import it.polimi.softeng.client.view.GUIInterface;
 import it.polimi.softeng.client.view.MessageHandler;
 import it.polimi.softeng.client.view.CLI.CLI;
+import it.polimi.softeng.client.view.UI;
 import it.polimi.softeng.connectionProtocol.ClientSide;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,18 +16,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 
-public class GUIController implements GUIInterface {
+public class GUIController{
     CLI cli = new CLI();
     @FXML
     private Label welcomeText;
 
     @FXML
-    private Label np;
+    Label np;
     @FXML
     TextField nickname;
 
@@ -63,16 +65,27 @@ public class GUIController implements GUIInterface {
     ChoiceBox<String> mode;
 
     @FXML
+    HBox hboxNumPlayers;
+
+    @FXML
+    HBox hboxMode;
+
+    @FXML
     Button loginButton;
 
 
     @FXML
     protected void onNewGame(){
         if(game.getSelectionModel().getSelectedIndex() == 0){
-            //np.setText("Select the number of players: ");
-            numberOfPlayer.setVisible(true);
+            np.setText("Select the number of players: ");
+            hboxNumPlayers.setVisible(true);
+            hboxMode.setVisible(true);
         }
-
+        if(game.getSelectionModel().getSelectedIndex() == 1){
+            np.setText("Select the number of players: ");
+            hboxNumPlayers.setVisible(false);
+            hboxMode.setVisible(false);
+        }
     }
 
 
@@ -80,9 +93,6 @@ public class GUIController implements GUIInterface {
     @FXML
     protected void onLoginButtonClick(ActionEvent event) throws IOException{
         welcomeText.setText(nickname.getText());
-        Image titleImage = new Image("/images/Title.png");
-        this.TitleView = new ImageView();
-        this.TitleView.setImage(titleImage);
         loginNotifier();
         switchToGame(event);
     }
@@ -96,7 +106,6 @@ public class GUIController implements GUIInterface {
     }
 
 
-    @Override
     public void loginNotifier(){
         int startgame;
         int gamemode = 0;
