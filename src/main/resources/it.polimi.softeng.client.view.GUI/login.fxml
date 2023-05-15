@@ -118,6 +118,6 @@
     </HBox>
 
 
-    <Button text="Login" onAction="#onLoginButtonClick"/>
+    <Button fx:id="loginButton" text="Login" onAction="#onLoginButtonClick"/>
     <Label fx:id="welcomeText"/>
 </VBox>
