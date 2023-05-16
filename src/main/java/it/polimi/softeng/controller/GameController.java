@@ -52,16 +52,6 @@ public class GameController {
         System.out.println("Board updated");
         System.out.println("Shelfie updated");
 
-        /*
-        //Shelfie update
-        try {
-            game.getCurrentPlayer().getShelfie().insertTile(tiles, column);
-            System.out.println("Shelfie updated");
-        } catch (IllegalInsertException e) {
-            throw new RuntimeException(e);
-        }
-        */
-
         //Update board
         controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(BoardWriter.boardChangeNotifier(game.getGameBoard()), "@BORD", "all").toJSONString());
         System.out.println("Updated board sent");

@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
 
-public class CLI extends CommonOperationsFramework implements UI, Runnable {
+public class CLITest extends CommonOperationsFramework implements UI, Runnable {
     /**
      * Local representation of GameBoard
      */
@@ -85,10 +85,10 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      */
     private ServerSideMethods RMIInvoker;
 
-
-    public CLI() {
-        this.messageHandler = new MessageHandler(this);
-        this.input = new Scanner(System.in);
+    public CLITest(Scanner input, MessageHandler messageHandler, ServerSideMethods rmiInvoker) {
+        this.input = input;
+        this.messageHandler = messageHandler;
+        RMIInvoker = rmiInvoker;
     }
 
 
@@ -203,7 +203,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     try {
                         //TODO to be removed
                         String GameModeStringifed = GameMode == 1 ? "e" : "n";
-                        RMIInvoker.login(Nickname, NumOfPlayer, GameModeStringifed);
+                        RMIInvoker.login(Nickname, NumOfPlayer, GameModeStringifed, Port);
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }
@@ -630,16 +630,16 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     }
                 }
 
-                    if (op.equals("@CHAT")) {
-                        if (!isOkCommand(command, 2)) {
-                            System.out.println("Please, check chat syntax");
-                            return;
-                        }
+                if (op.equals("@CHAT")) {
+                    if (!isOkCommand(command, 2)) {
+                        System.out.println("Please, check chat syntax");
+                        return;
                     }
-                RMIInvoker(op, action);
                 }
+                RMIInvoker(op, action);
             }
         }
+    }
 
 
     /**
@@ -962,3 +962,4 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         ConnectionMode = connectionMode;
     }
 }
+
