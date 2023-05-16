@@ -249,27 +249,67 @@ public class GameBoard implements BoardInterface {
         if(positionsToBeRemoved.size() == 2){
             cell2 = positionsToBeRemoved.get(0);
             cell3 = positionsToBeRemoved.get(1);
-            if((cell2.getRow() == cell3.getRow()) || (cell2.getColumn() == cell3.getColumn()))
-                return true;
+            if(cell2.getRow() == cell3.getRow()) {
+                if(cell2.getColumn() == cell3.getColumn() + 1)
+                    return true;
+                if(cell2.getColumn() == cell3.getColumn() - 1)
+                    return true;
+            }
+            if(cell2.getColumn() == cell3.getColumn()){
+                if(cell2.getRow() == cell3.getRow() + 1)
+                    return true;
+                if(cell2.getRow() == cell3.getRow() - 1)
+                    return true;
+
+            }
         }
         if(positionsToBeRemoved.size() == 3){
             cell2 = positionsToBeRemoved.get(0);
             cell3 = positionsToBeRemoved.get(1);
             cell4 = positionsToBeRemoved.get(2);
-            return (cell2.getRow() == cell3.getRow() && cell2.getRow() == cell4.getRow()) || (cell2.getColumn() == cell3.getColumn() && cell2.getColumn() == cell4.getColumn());
+            if(cell2.getRow() == cell3.getRow() && cell2.getRow() == cell4.getRow()){
+                int c2 = cell2.getColumn(), c3 = cell2.getColumn(), c4 = cell4.getColumn();
+                if(c2==c3-1 && c3==c4-1)
+                    return true;
+                if(c2==c4-1 && c4==c3-1)
+                    return true;
+                if(c3==c2-1 && c2==c4-1)
+                    return true;
+                if(c3==c4-1 && c4==c2-1)
+                    return true;
+                if(c4==c2-1 && c2==c3-1)
+                    return true;
+                if(c4==c3-1 && c3==c2-1)
+                    return true;
+            }
+            if(cell2.getColumn() == cell3.getColumn() && cell2.getColumn() == cell4.getColumn()){
+                int r2 = cell2.getRow(), r3 = cell2.getRow(), r4 = cell4.getRow();
+                if(r2==r3-1 && r3==r4-1)
+                    return true;
+                if(r2==r4-1 && r4==r3-1)
+                    return true;
+                if(r3==r2-1 && r2==r4-1)
+                    return true;
+                if(r3==r4-1 && r4==r2-1)
+                    return true;
+                if(r4==r2-1 && r2==r3-1)
+                    return true;
+                if(r4==r3-1 && r3==r2-1)
+                    return true;
+            }
         }
 
         return false;
     }
 
     /**
-     * This method checks if every Tile on the board is an island
+     * This method checks if there are only islands on the board
      * @return true if there are only island Tiles, false if not
      */
 
     public boolean checkIslands(){
-        for(int i=0; i<boardRows-1; i++){
-            for(int j=0; j<boardColumns-1; j++){
+        for(int i=0; i<boardRows; i++){
+            for(int j=0; j<boardColumns; j++){
                 if(board[i][j]!=null && ((i>0 && board[i-1][j]!=null) || (j>0 && board[i][j-1]!=null) || (i<boardRows-1 && board[i+1][j]!=null) || (j<boardRows-1 && board[i][j+1]!=null))){
                     return false;
                 }
@@ -279,8 +319,7 @@ public class GameBoard implements BoardInterface {
     }
 
     /*
-    This method set tiles in the board with not relavant id and color
-    It is used only for Testing
+    This method is  only for testing, to quickly insert a tile in a specific position
     */
     public void setBoardforTest(int  i, int j) {
         board[i][j] = new Tile(0, Tile.TileColor.BLUE);
