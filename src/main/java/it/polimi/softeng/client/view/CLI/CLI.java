@@ -8,13 +8,14 @@ import it.polimi.softeng.JSONWriter.GameMoveWriter;
 import it.polimi.softeng.JSONWriter.LoginWriter;
 import it.polimi.softeng.client.view.MessageHandler;
 import it.polimi.softeng.connectionProtocol.ClientSide;
-import it.polimi.softeng.customExceptions.IllegalInsertException;
+import it.polimi.softeng.connectionProtocol.ServerSideMethods;
 import it.polimi.softeng.model.*;
 import it.polimi.softeng.client.view.CommonOperationsFramework;
 import it.polimi.softeng.client.view.UI;
 import it.polimi.softeng.model.PersonalCards;
 import org.json.simple.JSONObject;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -69,15 +70,20 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      */
     private int ConnectionMode = 0;
 
-    private volatile boolean GameIsOn;
+    private boolean GameIsOn;
     private final Scanner input;
 
-    private MessageHandler messageHandler;
+    private final MessageHandler messageHandler;
 
     /**
-     * Manage sending messages
+     * Manage connection -> Socket
      */
     private ClientSide clientSide;
+
+    /**
+     * Manage connection -> RMI
+     */
+    private ServerSideMethods RMIInvoker;
 
 
     public CLI() {
@@ -200,6 +206,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     /**
      * Visualize player's board
+     *
      * @param board is playerBoard
      * @param notAvailable is notAvailable cells
      */
@@ -483,43 +490,19 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         //Waiting for beginning of game
         while (!GameIsOn) {
             try {
-                TimeUnit.MILLISECONDS.sleep(500);
-                if(GameIsOn) break;
-                System.out.println("[          ]");
-                if(GameIsOn) break;
-
-                TimeUnit.MILLISECONDS.sleep(500);
-                if(GameIsOn) break;
-                System.out.println("[===       ]");
-                if(GameIsOn) break;
-
-                TimeUnit.MILLISECONDS.sleep(500);
-                if(GameIsOn) break;
-                System.out.println("[=====     ]");
-                if(GameIsOn) break;
-
-                TimeUnit.MILLISECONDS.sleep(500);
-                if(GameIsOn) break;
-                System.out.println("[=======   ]");
-                if(GameIsOn) break;
-
-                TimeUnit.MILLISECONDS.sleep(500);
-                if(GameIsOn) break;
-                System.out.println("[==========]");
-                if(GameIsOn) break;
-
+                loadingScreen();
                 System.out.println("Waiting for other players to join...");
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-        };
+        }
 
         while (GameIsOn) {
             try {
                 //Wait for errors
                 TimeUnit.SECONDS.sleep(1);
                 game(firstRun);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException | RemoteException e) {
                 throw new RuntimeException(e);
             }
             firstRun = false;
@@ -532,7 +515,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      * Game routine that wait for commands, check syntax and send JSON/invoke method to server if needed
      * @param firstRun is true if it's the first call of game
      */
-    public void game(boolean firstRun) {
+    public void game(boolean firstRun) throws RemoteException {
         //POSSIBLE COMMANDS
         commands(firstRun);
 
@@ -549,7 +532,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             return;
         }
 
-        if (command.toUpperCase().equals("@CMND") || command.toUpperCase().equals("@VBOR") || command.toUpperCase().equals("@VSHE") || command.toUpperCase().equals("@VPCA") || command.toUpperCase().equals("@VPLA") || command.toUpperCase().equals("@VCCA")) {
+        if (command.equalsIgnoreCase("@CMND") || command.equalsIgnoreCase("@VBOR") || command.equalsIgnoreCase("@VSHE") || command.equalsIgnoreCase("@VPCA") || command.equalsIgnoreCase("@VPLA") || command.equalsIgnoreCase("@VCCA")) {
             switch (command.toUpperCase()) {
                 case ("@CMND") -> {
                     return;
@@ -572,10 +555,20 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     return;
                 }
                 case ("@VPLA") -> {
-                    //Placeholder for JSON request
-                    JSONObject dummy = new JSONObject();
-                    clientSide.sendMessage(clientSignObject(dummy, "@VPLA", Nickname).toJSONString());
-                    return;
+                    switch (ConnectionMode) {
+                        //Socket
+                        case 1 -> {
+                            JSONObject dummy = new JSONObject();
+                            clientSide.sendMessage(clientSignObject(dummy, "@VPLA", Nickname).toJSONString());
+                            return;
+                        }
+                        //RMI
+                        case 2 -> {
+                            eventManager("playerEvent");
+                            scoreVisualizer(RMIInvoker.getPlayersAndScore());
+                            return;
+                        }
+                    }
                 }
 
                 //TODO RMIInvoker for players and their score
@@ -587,12 +580,13 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         String op = command.substring(0, 5).toUpperCase();
         String action = command.substring(6);
 
-        if (!op.equals("@GAME") && !op.equals("@CHAT")) {
+        if (!op.equals("@GAME") && !op.equals("@CHAT") && !op.equals("@VPLA")) {
             System.out.println("Please write a command that you can see in the table");
             return;
         }
 
         switch (ConnectionMode) {
+            //Socket
             case 1 -> {
                 //Block illegal move
                 if (op.equals("@GAME")) {
@@ -624,6 +618,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         System.out.println("Please, check gameMove syntax");
                         return;
                     }
+                }
 
                     if (op.equals("@CHAT")) {
                         if (!isOkCommand(command, 2)) {
@@ -631,12 +626,10 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                             return;
                         }
                     }
-                }
-                //TODO RMI Invoker
                 RMIInvoker(op, action);
+                }
             }
         }
-    }
 
 
     /**
@@ -650,7 +643,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         scoreTable.setShowVerticalLines(true);
         scoreTable.setHeaders("Command", "Effect", "Example of command");
 
-
+        System.out.println(ANSI_RESET);
         System.out.println("+--------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+");
         System.out.println("| Command                        | Effect                                                                            | Example                                                                                            |");
         System.out.println("+--------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+");
@@ -669,6 +662,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         System.out.println("+--------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+");
     }
 
+    /**
+     * Print MyShelfie logo
+     */
     public void logo() {
         System.out.println(ANSI_GREEN + "  .___  ___. ____    ____         _______. __    __   _______  __       _______  __   _______    \n" +
                 "  |   \\/   | \\   \\  /   /        /       ||  |  |  | |   ____||  |     |   ____||  | |   ____|   \n" +
@@ -678,6 +674,37 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 "  |__|  |__|     |__|        |_______/    |__|  |__| |_______||_______||__|     |__| |_______|   \n" +
                 "                                                                                                 " +
                 "" + ANSI_RESET);
+    }
+
+    /**
+     * Print loading animation
+     * @throws InterruptedException
+     */
+    public void loadingScreen() throws InterruptedException {
+        TimeUnit.MILLISECONDS.sleep(500);
+        if (GameIsOn) return;
+        System.out.println("[          ]");
+        if (GameIsOn) return;
+
+        TimeUnit.MILLISECONDS.sleep(500);
+        if (GameIsOn) return;
+        System.out.println("[===       ]");
+        if (GameIsOn) return;
+
+        TimeUnit.MILLISECONDS.sleep(500);
+        if (GameIsOn) return;
+        System.out.println("[=====     ]");
+        if (GameIsOn) return;
+
+        TimeUnit.MILLISECONDS.sleep(500);
+        if (GameIsOn) return;
+        System.out.println("[=======   ]");
+        if (GameIsOn) return;
+
+        TimeUnit.MILLISECONDS.sleep(500);
+        if (GameIsOn) return;
+        System.out.println("[==========]");
+        if (GameIsOn) return;
     }
 
     /**
@@ -726,28 +753,26 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      */
     public JSONObject actionToJSON(String op, String action) {
         switch (op) {
-            case ("@CHAT"): {
+            case ("@CHAT") -> {
                 if (!ChatWriter.chatMessageRegex(action) || ChatWriter.writeChatMessage(action) == null) {
                     eventManager("chatError");
                     return null;
                 } else
                     return ChatWriter.writeChatMessage(action);
             }
-            case ("@GAME"): {
+            case ("@GAME") -> {
                 if (!GameMoveWriter.gameMoveRegex(action) || GameMoveWriter.writeGameMove(action) == null) {
                     eventManager("gameMoveError");
                     return null;
                 } else
                     return GameMoveWriter.writeGameMove(action);
             }
+
             //TODO check login dynamic
-            case ("@LOGN"): {
+            case ("@LOGN") -> {
 
             }
-            break;
-
-            default:
-                System.out.println("Unrecognized operation!");
+            default -> System.out.println("Unrecognized operation!");
         }
         return null;
     }
@@ -757,35 +782,62 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      * @param action is command text sent by UI
      * @return true if action is correctly executed
      */
-    public boolean RMIInvoker(String op, String action) {
+    public boolean RMIInvoker(String op, String action)  {
         switch (op) {
             case ("@CHAT"): {
                 if (!ChatWriter.chatMessageRegex(action)) {
                     System.out.println("Error in Chat message syntax, try again!");
                     return false;
                 }
-                //TODO InvokeMethodToChat
+
+                JSONObject obj = new JSONObject();
+                obj = ChatWriter.writeChatMessage(action);
+
+
+                if (obj.get("receiver").toString().equals("all")) {
+                    try {
+                        RMIInvoker.sendMessageToAll(obj.toJSONString(), Nickname);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                else {
+                    try {
+                        RMIInvoker.sendMessage(obj.toJSONString(), (String) obj.get("receiver"), Nickname);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
             case ("@GAME"): {
                 if (!GameMoveWriter.gameMoveRegex(action)) {
                     System.out.println("Error in Game Move syntax, try again!");
                     return false;
                 }
-                //TODO InvokeMethodToGameMove
+                GameMoveParser gmp = new GameMoveParser();
+                gmp.gameMoveParser(GameMoveWriter.writeGameMove(action).toJSONString());
+
+                ArrayList<Tile> tiles = new ArrayList<>();
+                for (Cell c : gmp.getTilesToBeRemoved()) {
+                    Tile newTile = UserGameBoard.getBoard()[c.getRow()][c.getColumn()];
+                    tiles.add(newTile);
+                }
+
+                try {
+                    RMIInvoker.sendMove(tiles, gmp.getColumn());
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             case ("@LOGN"): {
-                //sendLoginRequest(action);
-            }
-            //TODO InvokeLogin
-            case ("@VCCA"): {
-
-            }
-            case ("@VPLA"): {
-
-            }
-            case ("@VSCO"): {
-
+                LoginWriter.writeLogin(Nickname, GameMode, StartGame, NumOfPlayer);
+                //TODO Right now we don't receive GameMode, StartGame, NumOfPlayer...
+                try {
+                    RMIInvoker.login(Nickname);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
             }
             break;
             default:
@@ -874,25 +926,18 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     /**
      * Update common card
+     *
      * @param nameOfCommonCard is name of commoncard
-     * @param whatCommonCard is 1 or 2 depending on card updated
+     * @param whatCommonCard   is 1 or 2 depending on card updated
      */
     @Override
-    public void commonCardUpdater (String nameOfCommonCard, int whatCommonCard) {
+    public void commonCardUpdater(String nameOfCommonCard, int whatCommonCard) {
         if (whatCommonCard == 1)
             this.CommonCard1 = nameOfCommonCard;
         else if (whatCommonCard == 2)
             this.CommonCard2 = nameOfCommonCard;
     }
 
-   /* @Override
-    public void loginListener(String nickname){
-        String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(nickname), "@LOGN", nickname).toJSONString();
-        System.out.println(login);
-        clientSide = new ClientSide(messageHandler);
-        clientSide.sendMessage(login);
-    }
-*/
     @Override
     public void setServerAddress(String serverAddress) {
         ServerAddress = serverAddress;

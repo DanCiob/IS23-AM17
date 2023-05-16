@@ -15,6 +15,8 @@ public class MyShelfie {
         System.out.println("0) server");
         System.out.println("1) client CLI");
         System.out.println("2) client GUI");
+        System.out.println("3) client RMI local testing");
+        System.out.println("4) server RMI local testing");
         System.out.println("> ");
 
         Reader in = null;
@@ -24,7 +26,7 @@ public class MyShelfie {
         }
         BufferedReader stdIn = new BufferedReader(in);
 
-        while(mode != 0 && mode != 1 && mode != 2){   //.read() returns the int ascii value, so 0 is 48(ascii) and 1 is 49(ascii)
+        while(mode != 0 && mode != 1 && mode != 2 && mode != 3 && mode != 4){   //.read() returns the int ascii value, so 0 is 48(ascii) and 1 is 49(ascii)
             try {                                        // yes, it could be written better, but works
                 mode = Integer.parseInt(stdIn.readLine());
             } catch (IOException e) {
@@ -67,6 +69,10 @@ public class MyShelfie {
                 GUIAppl guiApplication = new GUIAppl();
                 guiApplication.main(args);
                 //creates the client GUI
+            }
+            case 3 ->{
+                System.out.println("You've chosen : client RMI local testing");
+
             }
 
             default -> System.out.println("Unrecognized mode, closing application...");

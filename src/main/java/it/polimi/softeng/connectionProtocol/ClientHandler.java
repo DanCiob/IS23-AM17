@@ -19,13 +19,17 @@ public class ClientHandler implements Runnable{
     private ServerSide serverSide;
     private Boolean nickNameNotConfirmed = true;
     private ServerMessageHandler serverMessageHandler;
+    private ServerSideTCP serverSideTCP;
     private int playerNumber ;
+    private LoginManagerV2 loginManager;
     String nickname;
 
-    public ClientHandler(Socket clientSocket, ServerSide serverSide, ServerMessageHandler serverMessageHandler){
+    public ClientHandler(Socket clientSocket, ServerSide serverSide, ServerMessageHandler serverMessageHandler,ServerSideTCP serverSideTCP,LoginManagerV2 loginManager){
         this.clientSocket = clientSocket;
         this.serverSide = serverSide;
         this.serverMessageHandler = serverMessageHandler;
+        this.serverSideTCP = serverSideTCP;
+        this.loginManager = loginManager;
     }
 
     @Override
@@ -61,10 +65,10 @@ public class ClientHandler implements Runnable{
             }
         } catch (IOException | ParseException e) {
             System.out.println("utente " + nickname + " si è disconnesso");
-            serverSide.addDisconnectedPlayer(nickname);
-            serverSide.restartAccepting();
+            serverSideTCP.addDisconnectedPlayer(nickname);
         }
     }
+
     public void sendMessage(String message){
         out.println(message);
     }
@@ -83,29 +87,29 @@ public class ClientHandler implements Runnable{
         if(obj != null && Objects.equals((String) obj.get("request"), "@LOGN")){
 
             playerNumber = (int)(long) obj.get("numOfPlayer");
-            serverSide.setPlayerNumber(playerNumber);
+            loginManager.setPlayerNumber(playerNumber);   //TODO questo può essere fatto direttamente da loginManager
             nickname = (String) obj.get("nickname");
-            if(!serverSide.getNickNameList().contains(nickname) && serverSide.getStatus().equals("gameLobby")){
+            if(!loginManager.getNickNameList().contains(nickname) && loginManager.getStatus().equals("gameLobby")){
                 System.out.println(nickname);
-                serverSide.addUser(this,nickname);
+                serverSideTCP.addUser(this,nickname);
                 nickNameNotConfirmed = false;
-            } else if (serverSide.getStatus().equals("gameStarted")) {
-                for(String disconnectedPlayer : serverSide.getDisconnectedPlayerList()){
+            } else if (loginManager.getStatus().equals("gameStarted")) {
+                for(String disconnectedPlayer : loginManager.getDisconnectedPlayerList()){
                     if(nickname.equals(disconnectedPlayer)){
                         flag = true;
                         System.out.println(nickname + " reconnected !");
-                        serverSide.addUser(this,nickname);
+                        serverSideTCP.addUser(this,nickname);
                     }
                 }
                 if(!flag){
                     System.out.println("nickname is not acceptable ");
                     //codice per tirare errore di login non accettato
+                    //TODO popolare con send di messaggio di errore
                 }
             } else{
                 //TODO aggiungere messaggio di errore da inviare al client
                 System.out.println("nickName già usato");
-                //TODO eliminare il clientHandler in caso di login errato
-           }
+            }
         }
     }
 
