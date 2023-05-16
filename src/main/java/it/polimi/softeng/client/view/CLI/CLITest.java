@@ -8,6 +8,7 @@ import it.polimi.softeng.JSONWriter.GameMoveWriter;
 import it.polimi.softeng.JSONWriter.LoginWriter;
 import it.polimi.softeng.client.view.MessageHandler;
 import it.polimi.softeng.connectionProtocol.client.ClientSide;
+import it.polimi.softeng.connectionProtocol.client.ClientSideRMI;
 import it.polimi.softeng.connectionProtocol.server.ServerSideMethods;
 import it.polimi.softeng.model.*;
 import it.polimi.softeng.client.view.CommonOperationsFramework;
@@ -25,7 +26,7 @@ import java.util.regex.Pattern;
 import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
 
-public class CLITest extends CommonOperationsFramework implements UI, Runnable {
+public class CLITest extends CLI implements UI, Runnable {
     /**
      * Local representation of GameBoard
      */
@@ -83,12 +84,12 @@ public class CLITest extends CommonOperationsFramework implements UI, Runnable {
     /**
      * Manage connection -> RMI
      */
-    private ServerSideMethods RMIInvoker;
+    private ClientSideRMI RemoteMethods;
 
-    public CLITest(Scanner input, MessageHandler messageHandler, ServerSideMethods rmiInvoker) {
-        this.input = input;
-        this.messageHandler = messageHandler;
-        RMIInvoker = rmiInvoker;
+
+    public CLITest() {
+        this.messageHandler = new MessageHandler(this);
+        this.input = new Scanner(System.in);
     }
 
 
@@ -149,6 +150,7 @@ public class CLITest extends CommonOperationsFramework implements UI, Runnable {
                         //TODO LoginWriter...
                     } while (!isOkNickname());
 
+                    //TODO Now connect to 127.0.0.1
                     String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(Nickname, GameMode, StartGame, NumOfPlayer), "@LOGN", Nickname).toJSONString();
                     System.out.println(login);
                     this.clientSide = new ClientSide(messageHandler);
@@ -164,8 +166,7 @@ public class CLITest extends CommonOperationsFramework implements UI, Runnable {
                     ServerAddress = input.nextLine();
                     System.out.println("Digit server Port");
                     System.out.println(">");
-                    Port = input.nextInt();
-                    input.nextLine();
+                    Port = Integer.parseInt(input.nextLine());
                     System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");
                     System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
                     System.out.println(">");
@@ -200,13 +201,10 @@ public class CLITest extends CommonOperationsFramework implements UI, Runnable {
                         //TODO Nickname uniqueness
                     } while (!isOkNickname());
 
-                    try {
-                        //TODO to be removed
-                        String GameModeStringifed = GameMode == 1 ? "e" : "n";
-                        RMIInvoker.login(Nickname, NumOfPlayer, GameModeStringifed, Port);
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
+                    //TODO to be removed
+                    String GameModeStringifed = GameMode == 1 ? "e" : "n";
+                    this.RemoteMethods = new ClientSideRMI(ServerAddress);
+                    RMIInvoker("@LOGN", GameModeStringifed);
                 }
                 default -> System.out.println("Unrecognized connection method, please digit 1 or 2...");
             }
@@ -575,7 +573,7 @@ public class CLITest extends CommonOperationsFramework implements UI, Runnable {
                         //RMI
                         case 2 -> {
                             eventManager("playerEvent");
-                            scoreVisualizer(RMIInvoker.getPlayersAndScore());
+                            scoreVisualizer(RemoteMethods.getStub().getPlayersAndScore());
                             return;
                         }
                     }
@@ -806,14 +804,14 @@ public class CLITest extends CommonOperationsFramework implements UI, Runnable {
 
                 if (obj.get("receiver").toString().equals("all")) {
                     try {
-                        RMIInvoker.sendMessageToAll(obj.toJSONString(), Nickname);
+                        RemoteMethods.getStub().sendMessageToAll(obj.toJSONString(), Nickname);
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }
                 }
                 else {
                     try {
-                        RMIInvoker.sendMessage(obj.toJSONString(), (String) obj.get("receiver"), Nickname);
+                        RemoteMethods.getStub().sendMessage(obj.toJSONString(), (String) obj.get("receiver"), Nickname);
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }
@@ -834,17 +832,16 @@ public class CLITest extends CommonOperationsFramework implements UI, Runnable {
                 }
 
                 try {
-                    RMIInvoker.sendMove(tiles, gmp.getColumn());
+                    RemoteMethods.getStub().sendMove(tiles, gmp.getColumn());
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
             }
 
             case ("@LOGN"): {
-                LoginWriter.writeLogin(Nickname, GameMode, StartGame, NumOfPlayer);
                 //TODO Right now we don't receive GameMode, StartGame, NumOfPlayer...
                 try {
-                    RMIInvoker.login(Nickname);
+                    RemoteMethods.getStub().login(Nickname, NumOfPlayer, action, Port);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -962,4 +959,3 @@ public class CLITest extends CommonOperationsFramework implements UI, Runnable {
         ConnectionMode = connectionMode;
     }
 }
-
