@@ -29,4 +29,7 @@ public abstract class CommonOperationsFramework {
 
     public abstract void commonCardUpdater (String nameOfCommonCard, int whatCommonCard);
 
-    }
+    public abstract void setServerAddress(String serverAddress);
+
+    public abstract void setPort(int port);
+}

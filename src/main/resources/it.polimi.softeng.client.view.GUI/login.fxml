@@ -29,12 +29,10 @@
                 pickOnBounds="true"
                 preserveRatio="true"
         >
-            <image>
                 <Image
                         url="/images/banner.png"
                         backgroundLoading="true"
                 />
-            </image>
         </ImageView>
         <ImageView
                 fx:id="TitleView"
@@ -45,12 +43,10 @@
                 pickOnBounds="true"
                 preserveRatio="true"
         >
-            <image>
                 <Image
                         url="/images/Title.png"
                         backgroundLoading="false"
                 />
-            </image>
         </ImageView>
 
     </StackPane>

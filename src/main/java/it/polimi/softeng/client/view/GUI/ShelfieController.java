@@ -52,13 +52,13 @@ public class ShelfieController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Image shelfieImage = new Image("PC_back.jpg");
+        Image shelfieImage = new Image("/images/PC_back.jpg");
         shelfieView.setImage(shelfieImage);
-        Image panelImage = new Image("sfondo_parquet.jpg");
+        Image panelImage = new Image("/images/sfondo_parquet.jpg");
         panelRightView.setImage(panelImage);
         panelLeftView.setImage(panelImage);
-        Image t1 = new Image("Tile_G2.png");
-        Image t2 = new Image("Tile_B3.png");
+        Image t1 = new Image("/images/Tile_G2.png");
+        Image t2 = new Image("/images/Tile_B3.png");
         iv00.setImage(t1);
         iv03.setImage(t2);
         iv45.setImage(t2);
