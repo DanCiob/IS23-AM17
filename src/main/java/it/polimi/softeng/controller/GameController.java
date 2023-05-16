@@ -1,9 +1,11 @@
 package it.polimi.softeng.controller;
 
 import it.polimi.softeng.JSONWriter.*;
+import it.polimi.softeng.connectionProtocol.client.ClientRemoteInterface;
 import it.polimi.softeng.model.*;
 import it.polimi.softeng.model.commonCards.CommonCards;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
@@ -44,8 +46,6 @@ public class GameController {
         */
 
         boolean confirm = result != -1;
-
-
         if (!confirm)
             return false;
 
@@ -53,16 +53,50 @@ public class GameController {
         System.out.println("Shelfie updated");
 
         //Update board
+        //Notifies every RMI User -> gameBoard notifications
+        for (String s : controller.getServerSide().getServerSideRMI().getNameToStub().keySet()) {
+            ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
+            try {
+                temp.gameBoardUpdate(game.getGameBoard());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //Notifies every TCP user
         controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(BoardWriter.boardChangeNotifier(game.getGameBoard()), "@BORD", "all").toJSONString());
         System.out.println("Updated board sent");
+
         //Update shelfie
         //TODO make shelfies visible by everybody
         //TODO if meanwhile player disconnects ?
-        controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(game.getPlayers().stream().filter(p -> p.getNickname().equals(requester)).findFirst().get().getShelfie()), "@SHEL", requester).toJSONString(), requester);
+        //Is a RMI user
+        if (controller.getServerSide().getServerSideRMI().getNameToStub().keySet().contains(requester)) {
+            ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(requester);
+            try {
+                temp.gameBoardUpdate(game.getGameBoard());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //Is TCP user
+        else
+            controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(game.getPlayers().stream().filter(p -> p.getNickname().equals(requester)).findFirst().get().getShelfie()), "@SHEL", requester).toJSONString(), requester);
         System.out.println("Updated shelfie sent");
 
         //Notify next player
-        controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ConfirmWriter.writeConfirm(), "@CONF", game.getCurrentPlayer().getNickname()).toJSONString(), game.getCurrentPlayer().getNickname());
+        //Is a RMI user
+        if (controller.getServerSide().getServerSideRMI().getNameToStub().keySet().contains(requester)) {
+            ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(requester);
+            try {
+                temp.displayChatMessage("It's your turn!","System");
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //Is TCP user
+        else
+            controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ConfirmWriter.writeConfirm(), "@CONF", game.getCurrentPlayer().getNickname()).toJSONString(), game.getCurrentPlayer().getNickname());
+        System.out.println("Updated shelfie sent");
 
         return true;
     }

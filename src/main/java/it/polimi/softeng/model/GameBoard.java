@@ -231,6 +231,7 @@ public class GameBoard implements BoardInterface {
             if (board[i][j] == null)
                 return false;
 
+            //Check if chosen tiles are only from available cells
             for(Cell cell1 : notAvailable){
                 if(cell1.getRow() == i && cell1.getColumn() == j)
                     posNotUsable = true;

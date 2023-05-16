@@ -107,6 +107,15 @@ public class ServerSide {
     }
     ////////// getter methods
 
+
+    public ServerSideTCP getServerSideTCP() {
+        return serverSideTCP;
+    }
+
+    public ServerSideRMI getServerSideRMI() {
+        return serverSideRMI;
+    }
+
     public ArrayList<String> getNickNameList() {
         return loginManager.getNickNameList();
     }
