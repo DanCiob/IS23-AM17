@@ -105,7 +105,7 @@ public class ClientSideRMI {
         ClientSideMethods obj = new ClientSideMethods();
         ClientRemoteInterface stub  = null;
         try {
-            stub = (ClientRemoteInterface) UnicastRemoteObject.exportObject(obj,0);
+            stub = (ClientRemoteInterface) UnicastRemoteObject.exportObject(obj,port);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

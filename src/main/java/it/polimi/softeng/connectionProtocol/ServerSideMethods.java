@@ -4,6 +4,7 @@ import it.polimi.softeng.controller.ChatController;
 import it.polimi.softeng.model.Player;
 import it.polimi.softeng.model.Tile;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.RemoteServer;
@@ -42,6 +43,50 @@ public class ServerSideMethods implements ServerRemoteInterface{
                     if (loginManager.getDisconnectedPlayerList().contains(name)) {
                         loginManager.addNickName(name);
                         ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);
+                        serverSideRMI.addRMIClient(name,stub);
+                        return true;
+                    } else {
+                        System.out.println("name not present in disconnected names list");
+                        return false;
+                    }
+                }
+            }
+        }
+        System.out.println("name already in use !");
+        return false;
+    }
+
+    @Override
+    public Boolean login(String name, int port) throws RemoteException {
+        if(!loginManager.getNickNameList().contains(name)) {
+            String host;
+            try {
+                host = RemoteServer.getClientHost();
+            } catch (ServerNotActiveException e) {
+                throw new RuntimeException(e);
+            }
+
+            switch (loginManager.getStatus()) {
+                case ("gameLobby") -> {
+                    loginManager.addNickName(name);
+                    ClientRemoteInterface stub = null;
+                    try {
+                        stub = (ClientRemoteInterface) LocateRegistry.getRegistry("127.0.0.1", port).lookup("ClientRemoteInterface");
+                    } catch (NotBoundException e) {
+                        e.printStackTrace();
+                    }
+                    serverSideRMI.addRMIClient(name,stub);
+                    return true;
+                }
+                case ("gameStarted") -> {
+                    if (loginManager.getDisconnectedPlayerList().contains(name)) {
+                        loginManager.addNickName(name);
+                        ClientRemoteInterface stub = null;
+                        try {
+                            stub = (ClientRemoteInterface) LocateRegistry.getRegistry("127.0.0.1", port).lookup("ClientRemoteInterface");
+                        } catch (NotBoundException e) {
+                            e.printStackTrace();
+                        }
                         serverSideRMI.addRMIClient(name,stub);
                         return true;
                     } else {

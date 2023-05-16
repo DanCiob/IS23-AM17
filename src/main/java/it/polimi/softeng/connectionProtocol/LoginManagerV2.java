@@ -57,6 +57,7 @@ public class LoginManagerV2 {
     public void addNickName(String nickName) {
         nickNameList.add(nickName);
         if(nickNameList.size() == playerNumber) startGame();
+        System.out.println(nickName + " entered the game");
     }
 
     public void setPlayerNumber(int playerNumber) {

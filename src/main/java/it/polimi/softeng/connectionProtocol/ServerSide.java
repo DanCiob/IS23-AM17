@@ -104,11 +104,12 @@ public class ServerSide {
                 }
             }
         }
-
     }
     ////////// getter methods
 
     public ArrayList<String> getNickNameList() {
         return loginManager.getNickNameList();
     }
+    //////// methods for testing
+
 }

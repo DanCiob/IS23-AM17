@@ -2,10 +2,13 @@ package it.polimi.softeng;
 
 import it.polimi.softeng.client.view.CLI.CLI;
 import it.polimi.softeng.client.view.GUI.GUIAppl;
+import it.polimi.softeng.connectionProtocol.ClientSideRMI;
 import it.polimi.softeng.connectionProtocol.ServerSide;
+import it.polimi.softeng.connectionProtocol.ServerSideRMI;
 import it.polimi.softeng.controller.Controller;
 
 import java.io.*;
+import java.util.logging.Logger;
 
 public class MyShelfie {
     static int mode = 20;
@@ -26,7 +29,7 @@ public class MyShelfie {
         }
         BufferedReader stdIn = new BufferedReader(in);
 
-        while(mode != 0 && mode != 1 && mode != 2 && mode != 3 && mode != 4){   //.read() returns the int ascii value, so 0 is 48(ascii) and 1 is 49(ascii)
+        while(mode != 0 && mode != 1 && mode != 2 && mode != 3 ){   //.read() returns the int ascii value, so 0 is 48(ascii) and 1 is 49(ascii)
             try {                                        // yes, it could be written better, but works
                 mode = Integer.parseInt(stdIn.readLine());
             } catch (IOException e) {
@@ -72,11 +75,18 @@ public class MyShelfie {
             }
             case 3 ->{
                 System.out.println("You've chosen : client RMI local testing");
+                int port = 0;
+                String userInput;
+               userInput = stdIn.readLine();
+               port = Integer.valueOf(userInput);
+               System.out.println("connecting on port : " + port);
 
+
+                ClientSideRMI clientSideRMI = new ClientSideRMI(port);
+                clientSideRMI.getStub().login("pippo",port);
             }
 
             default -> System.out.println("Unrecognized mode, closing application...");
-
         }
     }
 }
