@@ -84,7 +84,7 @@
     <HBox spacing="20.0">
         <Label layoutX="630.0" text="Do you want to create a new game or join a game which is already started?" />
         <!--<TextField layoutX="609.0"  fx:id="newGame"/>-->
-        <ChoiceBox fx:id="game" onMouseClicked="#onNewGame"> <!--onMouseClicked="#onNewGame"-->
+        <ChoiceBox fx:id="game" onAction="#onNewGame">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Create a new game" />
@@ -93,9 +93,9 @@
             </items>
         </ChoiceBox>
     </HBox>
-    <HBox spacing="20.0" layoutX="630.0">
-        <Label fx:id="np" text="Insert the number of players: "/>
-        <ChoiceBox fx:id="numberOfPlayer" visible="true">
+    <HBox spacing="20.0" layoutX="630.0" fx:id="hboxNumPlayers" visible="false">
+        <Label fx:id="np"/> <!--text="Insert the number of players: "-->
+        <ChoiceBox fx:id="numberOfPlayer">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="2" />
@@ -105,7 +105,7 @@
             </items>
         </ChoiceBox>
     </HBox>
-    <HBox spacing="20.0">
+    <HBox spacing="20.0" fx:id="hboxMode" visible="false">
         <Label layoutX="630.0" text="Do you want to play with Easy mode or Normal mode?" />
         <ChoiceBox fx:id="mode" visible="true">
             <items>
