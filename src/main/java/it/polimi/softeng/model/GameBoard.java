@@ -231,6 +231,7 @@ public class GameBoard implements BoardInterface {
             if (board[i][j] == null)
                 return false;
 
+            //Check if chosen tiles are only from available cells
             for(Cell cell1 : notAvailable){
                 if(cell1.getRow() == i && cell1.getColumn() == j)
                     posNotUsable = true;
@@ -256,7 +257,7 @@ public class GameBoard implements BoardInterface {
             cell2 = positionsToBeRemoved.get(0);
             cell3 = positionsToBeRemoved.get(1);
             cell4 = positionsToBeRemoved.get(2);
-            return (cell2.getRow() == cell3.getRow() && cell2.getRow() == cell4.getRow()) || (cell2.getColumn() == cell3.getColumn() && cell2.getColumn() == cell4.getColumn());
+            return ((cell2.getRow() == cell3.getRow() && cell2.getRow() == cell4.getRow()) || (cell2.getColumn() == cell3.getColumn() && cell2.getColumn() == cell4.getColumn()));
         }
 
         return false;

@@ -141,6 +141,10 @@ public class ServerSideTCP {
             }
         }
     }
+
+    public Map<String, ClientHandler> getNickNameToClientHandler() {
+        return nickNameToClientHandler;
+    }
 }
 
 
