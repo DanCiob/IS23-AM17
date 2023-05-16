@@ -1,6 +1,6 @@
 package it.polimi.softeng.controller;
 
-import it.polimi.softeng.connectionProtocol.ServerSide;
+import it.polimi.softeng.connectionProtocol.server.ServerSide;
 
 public class ChatController {
 

@@ -1,4 +1,10 @@
-package it.polimi.softeng.connectionProtocol;
+package it.polimi.softeng.connectionProtocol.server;
+
+import it.polimi.softeng.connectionProtocol.client.ClientRemoteInterface;
+import it.polimi.softeng.connectionProtocol.server.LoginManagerV2;
+import it.polimi.softeng.connectionProtocol.server.ServerRemoteInterface;
+import it.polimi.softeng.connectionProtocol.server.ServerSide;
+import it.polimi.softeng.connectionProtocol.server.ServerSideMethods;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
@@ -8,11 +14,11 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ServerSideRMI extends ServerSideMethods{
+public class ServerSideRMI extends ServerSideMethods {
     private LoginManagerV2 loginManager;
-    private Map<String,ClientRemoteInterface> nameToStub = new HashMap<>();
+    private Map<String, ClientRemoteInterface> nameToStub = new HashMap<>();
 
-    public ServerSideRMI(LoginManagerV2 loginManager,ServerSide serverSide)  {
+    public ServerSideRMI(LoginManagerV2 loginManager, ServerSide serverSide)  {
 
         super(loginManager,null,null);   //horrendous, should work
         this.loginManager = loginManager;

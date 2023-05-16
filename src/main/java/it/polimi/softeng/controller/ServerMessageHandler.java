@@ -5,14 +5,13 @@ import it.polimi.softeng.JSONParser.ChatParser;
 import it.polimi.softeng.JSONParser.GameMoveParser;
 import it.polimi.softeng.JSONParser.LoginParser;
 import it.polimi.softeng.JSONParser.RequestParser;
-import it.polimi.softeng.connectionProtocol.ServerSide;
+import it.polimi.softeng.connectionProtocol.server.ServerSide;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.JSONWriter.ErrorWriter.writeError;
-import static it.polimi.softeng.JSONWriter.PlayerWriter.playerAndScoreWriter;
 import static it.polimi.softeng.JSONWriter.ServerSignatureWriter.serverSignObject;
 
 public class ServerMessageHandler {

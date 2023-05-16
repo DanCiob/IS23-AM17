@@ -1,5 +1,8 @@
-package it.polimi.softeng.connectionProtocol;
+package it.polimi.softeng.connectionProtocol.server;
 
+import it.polimi.softeng.connectionProtocol.server.ClientHandler;
+import it.polimi.softeng.connectionProtocol.server.LoginManagerV2;
+import it.polimi.softeng.connectionProtocol.server.ServerSide;
 import it.polimi.softeng.controller.ServerMessageHandler;
 
 import java.io.IOException;

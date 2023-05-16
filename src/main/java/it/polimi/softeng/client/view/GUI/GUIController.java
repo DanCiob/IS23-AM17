@@ -2,11 +2,9 @@ package it.polimi.softeng.client.view.GUI;
 
 import it.polimi.softeng.JSONWriter.ClientSignatureWriter;
 import it.polimi.softeng.JSONWriter.LoginWriter;
-import it.polimi.softeng.client.view.GUIInterface;
 import it.polimi.softeng.client.view.MessageHandler;
 import it.polimi.softeng.client.view.CLI.CLI;
-import it.polimi.softeng.client.view.UI;
-import it.polimi.softeng.connectionProtocol.ClientSide;
+import it.polimi.softeng.connectionProtocol.client.ClientSide;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

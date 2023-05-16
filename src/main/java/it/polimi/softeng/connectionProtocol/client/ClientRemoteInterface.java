@@ -1,4 +1,4 @@
-package it.polimi.softeng.connectionProtocol;
+package it.polimi.softeng.connectionProtocol.client;
 
 import it.polimi.softeng.model.*;
 import it.polimi.softeng.model.commonCards.CommonCards;

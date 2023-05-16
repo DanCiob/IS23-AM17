@@ -1,4 +1,6 @@
-package it.polimi.softeng.connectionProtocol;
+package it.polimi.softeng.connectionProtocol.client;
+
+import it.polimi.softeng.connectionProtocol.server.ServerRemoteInterface;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -101,6 +103,7 @@ public class ClientSideRMI {
     public ServerRemoteInterface getStub() {
         return stub;
     }
+
     public ClientSideRMI(int port) {
         ClientSideMethods obj = new ClientSideMethods();
         ClientRemoteInterface stub  = null;

@@ -2,13 +2,10 @@ package it.polimi.softeng;
 
 import it.polimi.softeng.client.view.CLI.CLI;
 import it.polimi.softeng.client.view.GUI.GUIAppl;
-import it.polimi.softeng.connectionProtocol.ClientSideRMI;
-import it.polimi.softeng.connectionProtocol.ServerSide;
-import it.polimi.softeng.connectionProtocol.ServerSideRMI;
+import it.polimi.softeng.connectionProtocol.client.ClientSideRMI;
 import it.polimi.softeng.controller.Controller;
 
 import java.io.*;
-import java.util.logging.Logger;
 
 public class MyShelfie {
     static int mode = 20;

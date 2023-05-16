@@ -1,5 +1,6 @@
-package it.polimi.softeng.connectionProtocol;
+package it.polimi.softeng.connectionProtocol.server;
 
+import it.polimi.softeng.connectionProtocol.client.ClientRemoteInterface;
 import it.polimi.softeng.controller.ChatController;
 import it.polimi.softeng.model.Player;
 import it.polimi.softeng.model.Tile;
@@ -11,7 +12,7 @@ import java.rmi.server.RemoteServer;
 import java.rmi.server.ServerNotActiveException;
 import java.util.ArrayList;
 
-public class ServerSideMethods implements ServerRemoteInterface{
+public class ServerSideMethods implements ServerRemoteInterface {
     private LoginManagerV2 loginManager;
     private ServerSideRMI serverSideRMI;
     private ServerSide serverSide;
@@ -22,6 +23,43 @@ public class ServerSideMethods implements ServerRemoteInterface{
         this.serverSideRMI = serverSideRMI;
         this.serverSide = serverSide;
     }
+
+    @Override
+    public Boolean login(String name, int playerNumber, String mode) throws RemoteException {
+        if(!loginManager.getNickNameList().contains(name)) {
+            String host;
+            try {
+                host = RemoteServer.getClientHost();
+            } catch (ServerNotActiveException e) {
+                throw new RuntimeException(e);
+            }
+
+            switch (loginManager.getStatus()) {
+                case ("gameLobby") -> {
+                    loginManager.addNickName(name);
+                    ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);
+                    serverSideRMI.addRMIClient(name,stub);
+                    loginManager.setPlayerNumber(playerNumber);
+                    //TODO add gestione modalità semplificata
+                    return true;
+                }
+                case ("gameStarted") -> {
+                    if (loginManager.getDisconnectedPlayerList().contains(name)) {
+                        loginManager.addNickName(name);
+                        ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);
+                        serverSideRMI.addRMIClient(name,stub);
+                        return true;
+                    } else {
+                        System.out.println("name not present in disconnected names list");
+                        return false;
+                    }
+                }
+            }
+        }
+        System.out.println("name already in use !");
+        return false;
+    }
+
     @Override
     public Boolean login(String name) throws RemoteException {
         if(!loginManager.getNickNameList().contains(name)) {
@@ -98,6 +136,11 @@ public class ServerSideMethods implements ServerRemoteInterface{
         }
         System.out.println("name already in use !");
         return false;
+    }
+
+    @Override
+    public Boolean login(String name, int playerNumber, String mode, int port) throws RemoteException {
+        return null;
     }
 
     @Override

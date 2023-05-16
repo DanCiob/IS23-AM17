@@ -1,6 +1,7 @@
-package it.polimi.softeng.connectionProtocol;
+package it.polimi.softeng.connectionProtocol.client;
 
 import it.polimi.softeng.client.view.MessageHandler;
+import it.polimi.softeng.connectionProtocol.CommunicationProtocolParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.BufferedReader;

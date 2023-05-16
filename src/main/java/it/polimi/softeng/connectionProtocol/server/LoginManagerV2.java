@@ -1,4 +1,4 @@
-package it.polimi.softeng.connectionProtocol;
+package it.polimi.softeng.connectionProtocol.server;
 
 import it.polimi.softeng.controller.ServerMessageHandler;
 

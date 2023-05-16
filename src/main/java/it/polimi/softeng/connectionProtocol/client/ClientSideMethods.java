@@ -1,6 +1,7 @@
-package it.polimi.softeng.connectionProtocol;
+package it.polimi.softeng.connectionProtocol.client;
 
 import it.polimi.softeng.client.view.CLI.CLI;
+import it.polimi.softeng.connectionProtocol.client.ClientRemoteInterface;
 import it.polimi.softeng.model.*;
 import it.polimi.softeng.model.commonCards.CommonCards;
 import org.json.simple.JSONObject;

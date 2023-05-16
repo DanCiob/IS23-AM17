@@ -1,8 +1,7 @@
 package it.polimi.softeng.controller;
 
-import it.polimi.softeng.connectionProtocol.ServerSide;
+import it.polimi.softeng.connectionProtocol.server.ServerSide;
 import it.polimi.softeng.model.Cell;
-import it.polimi.softeng.model.Game;
 import it.polimi.softeng.model.Tile;
 
 import java.util.ArrayList;
