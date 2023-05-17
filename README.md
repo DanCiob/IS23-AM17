@@ -8,9 +8,9 @@
 | Complete rules |🟢|
 | RMI |🟡|
 | Socket |🟢|
-| CLI |🟡|
+| CLI |🟢|
 | GUI |🟡|
 | Multiple games |🟡|
-| Chat |🟡|
+| Chat |🟢|
 | Persistence |🔴|
 | Resilience |🟡|
