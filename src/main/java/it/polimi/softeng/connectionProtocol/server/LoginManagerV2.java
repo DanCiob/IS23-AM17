@@ -1,8 +1,14 @@
 package it.polimi.softeng.connectionProtocol.server;
 
+import it.polimi.softeng.client.view.CLI.CLI;
+import it.polimi.softeng.connectionProtocol.client.ClientRemoteInterface;
+import it.polimi.softeng.connectionProtocol.client.ClientSideRMI;
 import it.polimi.softeng.controller.ServerMessageHandler;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginManagerV2 {
     private ArrayList<String> nickNameList = new ArrayList<>();
@@ -11,6 +17,7 @@ public class LoginManagerV2 {
     private int playerNumber = 4;
     private Boolean numberOfPlayersNotConfirmed = true;
     private ServerMessageHandler serverMessageHandler = null;
+    private Map<String, ClientRemoteInterface> nameToStub = new HashMap<>();
     private String status;
     private String gameLobby = "gameLobby";
     private String gameStarted = "gameStarted";
@@ -18,10 +25,6 @@ public class LoginManagerV2 {
     public LoginManagerV2(ServerMessageHandler serverMessageHandler) {
         status = gameLobby;
         this.serverMessageHandler = serverMessageHandler;
-        //da mettere in serversideRMI
-
-        /*Thread t = new Thread(() -> pingRMIUsers());
-        t.start();*/
     }
 
     public void startGame(){
@@ -30,6 +33,15 @@ public class LoginManagerV2 {
             finalNickNameList.add(player);
         }
         serverMessageHandler.getController().startGame();
+        for(String player : nickNameList){
+            if(nameToStub.containsKey(player)){
+                try {
+                    nameToStub.get(player).startGame();
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
         System.out.println("game started !");
         status = gameStarted;
     }
@@ -52,6 +64,8 @@ public class LoginManagerV2 {
         if(j != 43){
             nickNameList.remove(j);
         }
+
+        if(nameToStub.containsKey(player)) nameToStub.remove(player);
     }
 
     public void addNickName(String nickName) {
@@ -65,6 +79,9 @@ public class LoginManagerV2 {
             this.playerNumber = playerNumber;
             numberOfPlayersNotConfirmed = false;
         }
+    }
+    public void addStub(String nickName, ClientRemoteInterface stub){
+        nameToStub.put(nickName,stub);
     }
 
     /////////getter methods
@@ -88,4 +105,5 @@ public class LoginManagerV2 {
     public String getStatus() {
         return status;
     }
+
 }

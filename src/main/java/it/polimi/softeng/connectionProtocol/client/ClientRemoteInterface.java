@@ -17,6 +17,7 @@ public interface ClientRemoteInterface extends Remote {
     void sendBadge(Badge badge) throws RemoteException;
     void displayChatMessage(String message, String sender) throws RemoteException;
     void playerListUpdate(ArrayList<Player> playerList) throws RemoteException;
-
+    void startGame() throws RemoteException;
+    void endGame(boolean winner) throws RemoteException;
     Boolean ping() throws RemoteException;
 }

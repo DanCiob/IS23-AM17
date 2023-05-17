@@ -2,9 +2,11 @@ package it.polimi.softeng.model;
 
 import it.polimi.softeng.customExceptions.IllegalInsertException;
 import static it.polimi.softeng.Constants.*;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Shelfie {
+public class Shelfie implements Serializable {
     /**
      * matrix that represent the shelfie;
      * column numbering : goes from sx to dx (ie 0-->the furthest left)

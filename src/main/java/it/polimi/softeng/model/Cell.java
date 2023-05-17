@@ -1,6 +1,8 @@
 package it.polimi.softeng.model;
 
-public class Cell { private int row;
+import java.io.Serializable;
+
+public class Cell implements Serializable { private int row;
     private int column;
 
     public int getRow() {

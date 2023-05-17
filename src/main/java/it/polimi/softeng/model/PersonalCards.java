@@ -1,5 +1,6 @@
 package it.polimi.softeng.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import static it.polimi.softeng.JSONParser.PersonalCardsParser.InitializePersonalCards;
@@ -9,11 +10,11 @@ import static it.polimi.softeng.model.scoreCount.Score.PersonalCardsScore;
 /**
  * Class that represents Personal Objective
  */
-public class PersonalCards {
+public class PersonalCards implements Serializable {
     ObjectiveCell[] objective = new ObjectiveCell[6];
 
 
-    public static class ObjectiveCell {
+    public static class ObjectiveCell implements Serializable{
         int row;
         int column;
         Tile.TileColor color;

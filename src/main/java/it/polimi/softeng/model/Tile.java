@@ -1,6 +1,8 @@
 package it.polimi.softeng.model;
 
-public class Tile {
+import java.io.Serializable;
+
+public class Tile implements Serializable {
     int id;
     TileColor color;
     public enum TileColor {

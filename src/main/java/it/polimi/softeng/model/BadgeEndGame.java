@@ -1,10 +1,12 @@
 package it.polimi.softeng.model;
 
+import java.io.Serializable;
+
 /**
  * We use Singleton pattern (Eager Singleton), because BadgeEndGame has only one instance.
  */
 
-public class BadgeEndGame implements Badge {
+public class BadgeEndGame implements Badge, Serializable {
     //we immediately create the single instance
     private static final BadgeEndGame instance = new BadgeEndGame();
 

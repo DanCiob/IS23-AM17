@@ -90,7 +90,7 @@ public class MessageHandler {
             case ("@VCCA") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objCC = (JSONObject) p1.parse(message);
-                JSONArray arrayCC = (JSONArray) objCC.get("commonCardsList");;
+                JSONArray arrayCC = (JSONArray) objCC.get("commonCardsList");
 
                 //Read and visualize CommonCards
                 switch((int) (long) objCC.get("numOfCommonCards"))
@@ -151,6 +151,14 @@ public class MessageHandler {
 
                 String mess = (String) objMess.get("confirm");
                 cli.eventManager("myTurn");
+            }
+
+            case ("@ENDG") -> {
+                JSONParser p1 = new JSONParser();
+                JSONObject objMess = (JSONObject) p1.parse(message);
+
+                boolean winner = (boolean) objMess.get("result");
+                cli.endGame(winner);
             }
             default -> System.out.println("Unrecognized request");
         }

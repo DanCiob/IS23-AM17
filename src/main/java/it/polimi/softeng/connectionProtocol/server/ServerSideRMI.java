@@ -14,7 +14,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ServerSideRMI extends ServerSideMethods {
+public class ServerSideRMI extends ServerSideMethods {      //maybe we can delete this extends  ?
     private LoginManagerV2 loginManager;
     private Map<String, ClientRemoteInterface> nameToStub = new HashMap<>();
 
@@ -55,6 +55,7 @@ public class ServerSideRMI extends ServerSideMethods {
     //TODO ping rmi users
     public void addRMIClient(String nickName, ClientRemoteInterface stub){
         nameToStub.put(nickName,stub);
+        loginManager.addStub(nickName, stub);
     }
 
     public void removeRMIClient(String nickName){
@@ -62,17 +63,28 @@ public class ServerSideRMI extends ServerSideMethods {
     }
 
     public void pingRMIUsers(){
+        Boolean flag = false;
+        String playerToBeDeleted = null;
         while(true){
             for(String player : loginManager.getNickNameList()){
                 try {
-                    if(nameToStub.containsKey(player)) nameToStub.get(player).ping();
+                    if(nameToStub.containsKey(player)) {
+                        nameToStub.get(player).ping();
+                    }
                 } catch (RemoteException e) {
-                    loginManager.addDisconnectedPlayer(player);
-                    removeRMIClient(player);
+                    playerToBeDeleted = player;
+                    flag = true;
                 }
             }
+            if(flag){
+                loginManager.addDisconnectedPlayer(playerToBeDeleted);
+                removeRMIClient(playerToBeDeleted);
+                flag = false;
+                playerToBeDeleted = null;
+            }
+
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

@@ -1,8 +1,6 @@
 package it.polimi.softeng.model;
 
 import it.polimi.softeng.customExceptions.IllegalInsertException;
-import it.polimi.softeng.model.interfaces.GameInterface;
-import it.polimi.softeng.model.interfaces.PlayerInterface;
 import it.polimi.softeng.model.scoreCount.Score;
 import it.polimi.softeng.model.commonCards.*;
 import java.util.ArrayList;
@@ -10,7 +8,7 @@ import java.util.Random;
 import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.model.PersonalCards.FillPersonalCardsBag;
 
-public class Game implements PlayerInterface, GameInterface{
+public class Game{
     //board section
     private GameBoard gameBoard = new GameBoard();
     private final ArrayList<Tile> tileBag = new ArrayList<>();
@@ -367,16 +365,6 @@ public class Game implements PlayerInterface, GameInterface{
 
     }
 
-    @Override
-    public void moveToActivePlayers(String nickname) {
-
-    }
-
-    @Override
-    public void moveToDisconnectedPlayers(String nickname) {
-
-    }
-
     //should we keep a reference to removed players as long as a Game object exists ?
     /**
      * method used to remove a player from the player list Players;
@@ -424,7 +412,6 @@ public class Game implements PlayerInterface, GameInterface{
     /**
      * method used to update the value of the attribute currentPlayer
      */
-    @Override
     public void setNextPlayer() {
         setCurrentPlayer(getNextPlayer());
     }

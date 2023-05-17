@@ -11,6 +11,10 @@ import java.util.ArrayList;
 
 public class ClientSideMethods implements ClientRemoteInterface {
     private CLI cli;
+
+    public ClientSideMethods(CLI cli){
+        this.cli = cli;
+    }
     @Override
     public void playerUpdate(Player player) throws RemoteException {
         //TODO what does this function do?
@@ -84,6 +88,17 @@ public class ClientSideMethods implements ClientRemoteInterface {
         cli.eventManager("playerEvent");
         cli.scoreVisualizer(playerList);
     }
+
+    @Override
+    public void startGame() throws RemoteException {
+        cli.beginGame(true);
+    }
+
+    @Override
+    public void endGame(boolean winner) throws RemoteException {
+        cli.endGame(winner);
+    }
+
 
     @Override
     public Boolean ping() throws RemoteException {

@@ -1,6 +1,7 @@
 package it.polimi.softeng;
 
 import it.polimi.softeng.client.view.CLI.CLI;
+import it.polimi.softeng.client.view.CLI.CLITest;
 import it.polimi.softeng.client.view.GUI.GUIAppl;
 import it.polimi.softeng.connectionProtocol.client.ClientSideRMI;
 import it.polimi.softeng.controller.Controller;
@@ -72,15 +73,8 @@ public class MyShelfie {
             }
             case 3 ->{
                 System.out.println("You've chosen : client RMI local testing");
-                int port = 0;
-                String userInput;
-               userInput = stdIn.readLine();
-               port = Integer.valueOf(userInput);
-               System.out.println("connecting on port : " + port);
-
-
-                ClientSideRMI clientSideRMI = new ClientSideRMI(port);
-                clientSideRMI.getStub().login("pippo",port);
+                CLITest cli = new CLITest();
+                cli.run();
             }
 
             default -> System.out.println("Unrecognized mode, closing application...");

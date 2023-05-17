@@ -131,7 +131,9 @@ public class ServerSideTCP {
     }
 
     public void sendMessage(String message, String nickName){
-        nickNameToClientHandler.get(nickName).sendMessage(message);
+        if(nickNameToClientHandler.containsKey(nickName)){
+            nickNameToClientHandler.get(nickName).sendMessage(message);
+        }
     }
 
     public void sendMessageExcept(String message, String nickName){
@@ -140,6 +142,10 @@ public class ServerSideTCP {
                 client.sendMessage(message);
             }
         }
+    }
+
+    public Map<String, ClientHandler> getNickNameToClientHandler() {
+        return nickNameToClientHandler;
     }
 }
 
