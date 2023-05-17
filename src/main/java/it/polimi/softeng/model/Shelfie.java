@@ -101,6 +101,7 @@ public class Shelfie implements Serializable {
      * @return boolean value
      */
     public boolean checkLegalInsert(ArrayList<Tile> tilesToBeInserted, int column){
+        //WHAT IF COLUMN > SHELFIECOLUMN ?
         //controls of correctness of the given array (just to be safe)
         if(tilesToBeInserted.size() > maxTilesForMove) return false;
         if(tilesToBeInserted.isEmpty()) return false;

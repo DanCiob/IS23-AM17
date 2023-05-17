@@ -12,117 +12,43 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane prefWidth="774.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="it.polimi.softeng.client.view.GUI.ShelfieController">
-   <children>
-      <BorderPane prefHeight="200.0" prefWidth="200.0">
-         <right>
-            <AnchorPane prefHeight="200.0" prefWidth="157.0" BorderPane.alignment="CENTER">
-               <children>
-                  <ImageView fx:id="panelRightView" fitHeight="558.0" fitWidth="202.0" layoutX="-7.0" pickOnBounds="true">
-                     <image>
-                        <Image url="/images/sfondo_parquet.jpg" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="130.0" fitWidth="130.0" layoutX="33.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="/images/scoring_2.jpg" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="130.0" fitWidth="130.0" layoutX="33.0" layoutY="214.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="/images/scoring_2.jpg" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="102.0" fitWidth="85.0" layoutX="56.0" layoutY="399.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="/images/end_game.jpg" />
-                     </image>
-                  </ImageView>
-               </children>
-            </AnchorPane>
-         </right>
-         <left>
-            <AnchorPane prefHeight="588.0" prefWidth="174.0" BorderPane.alignment="CENTER">
-               <children>
-                  <ImageView fx:id="panelLeftView" fitHeight="558.0" fitWidth="200.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true">
-                     <image>
-                        <Image url="/images/sfondo_parquet.jpg" />
-                     </image>
-                  </ImageView>
-                  <Text layoutX="29.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Shelfie of Alice" textAlignment="CENTER" wrappingWidth="141.346923828125">
-                     <font>
-                        <Font size="46.0" />
-                     </font>
-                  </Text>
-                  <Button layoutX="45.0" layoutY="427.0" mnemonicParsing="false" text="Back to the board" />
-              </children>
-            </AnchorPane>
-         </left>
-         <center>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                   <ImageView fx:id="shelfieView" fitHeight="558.0" fitWidth="379.0" pickOnBounds="true">
-                       <Image url="/images/PC_back.jpg" />
-                   </ImageView>
-                  <AnchorPane layoutX="66.0" layoutY="97.0" prefHeight="304.0" prefWidth="236.0">
-                     <children>
-                        <GridPane gridLinesVisible="true" hgap="7.0" prefHeight="302.0" prefWidth="250.0" scaleShape="false" vgap="7.0">
-                          <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="52.0" minWidth="10.0" prefWidth="46.399993896484375" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="56.79999389648438" minWidth="10.0" prefWidth="44.39999389648437" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="56.99999389648437" minWidth="10.0" prefWidth="43.20000610351562" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="57.600012207031256" minWidth="10.0" prefWidth="44.20001831054688" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="55.199987792968756" minWidth="10.0" prefWidth="47.39998168945314" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints maxHeight="50.40000610351562" minHeight="10.0" prefHeight="46.5" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="71.2" minHeight="10.0" prefHeight="46.5" vgrow="SOMETIMES" />
-                            <RowConstraints maxHeight="102.79999694824217" minHeight="0.0" prefHeight="47.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="112.39997558593751" minHeight="3.1999999999999886" prefHeight="46.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="89.39999999999998" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="50.39998779296877" minHeight="4.800024414062506" prefHeight="46.5" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <ImageView fx:id="iv00" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fx:id="iv10" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
-                              <ImageView fx:id="iv20" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
-                              <ImageView fx:id="iv30" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" />
-                              <ImageView fx:id="iv40" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" />
-                              <ImageView fx:id="iv01" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" />
-                              <ImageView fx:id="iv11" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <ImageView fx:id="iv21" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <ImageView fx:id="iv31" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                              <ImageView fx:id="iv41" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                              <ImageView fx:id="iv02" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
-                              <ImageView fx:id="iv12" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <ImageView fx:id="iv22" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                              <ImageView fx:id="iv32" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                              <ImageView fx:id="iv42" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                              <ImageView fx:id="iv03" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3" />
-                              <ImageView fx:id="iv13" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <ImageView fx:id="iv23" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                              <ImageView fx:id="iv33" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                              <ImageView fx:id="iv43" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-                              <ImageView fx:id="iv04" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4" />
-                              <ImageView fx:id="iv14" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <ImageView fx:id="iv24" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                              <ImageView fx:id="iv34" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                              <ImageView fx:id="iv44" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-                              <ImageView fx:id="iv05" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="5" />
-                              <ImageView fx:id="iv15" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <ImageView fx:id="iv25" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                              <ImageView fx:id="iv35" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-                              <ImageView fx:id="iv45" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="5" />
-                           </children>
-                        </GridPane>
-                     </children>
-                  </AnchorPane>
-               </children>
-            </AnchorPane>
-         </center>
-      </BorderPane>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-   </children>
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="it.polimi.softeng.client.view.GUI.GUIGameController">
+   <GridPane fx:id="gridPane" gridLinesVisible="true">
+      <ImageView GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+      <ImageView GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+      <ImageView GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+      <ImageView GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+      <ImageView GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+      <ImageView GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+      <ImageView GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+      <ImageView GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+      <ImageView GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+      <ImageView GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+      <ImageView GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+      <ImageView GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+      <ImageView GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+      <ImageView GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+      <ImageView GridPane.columnIndex="2" GridPane.rowIndex="2"/>
+      <ImageView GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+      <ImageView GridPane.columnIndex="2" GridPane.rowIndex="4"/>
+      <ImageView GridPane.columnIndex="2" GridPane.rowIndex="5"/>
+      <ImageView GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+      <ImageView GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+      <ImageView GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+      <ImageView GridPane.columnIndex="3" GridPane.rowIndex="3"/>
+      <ImageView GridPane.columnIndex="3" GridPane.rowIndex="4"/>
+      <ImageView GridPane.columnIndex="3" GridPane.rowIndex="5"/>
+      <ImageView GridPane.columnIndex="4" GridPane.rowIndex="0"/>
+      <ImageView GridPane.columnIndex="4" GridPane.rowIndex="1"/>
+      <ImageView GridPane.columnIndex="4" GridPane.rowIndex="2"/>
+      <ImageView GridPane.columnIndex="4" GridPane.rowIndex="3"/>
+      <ImageView GridPane.columnIndex="4" GridPane.rowIndex="4"/>
+      <ImageView GridPane.columnIndex="4" GridPane.rowIndex="5"/>
+
+
+
+   </GridPane>
 </AnchorPane>
 
 
