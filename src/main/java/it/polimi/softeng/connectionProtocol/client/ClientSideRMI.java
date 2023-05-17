@@ -1,5 +1,7 @@
 package it.polimi.softeng.connectionProtocol.client;
 
+import it.polimi.softeng.client.view.CLI.CLI;
+import it.polimi.softeng.client.view.CLI.CLITest;
 import it.polimi.softeng.connectionProtocol.server.ServerRemoteInterface;
 
 import java.rmi.AlreadyBoundException;
@@ -13,8 +15,8 @@ public class ClientSideRMI {
 
     private ServerRemoteInterface stub = null;
 
-    public ClientSideRMI() {
-        ClientSideMethods obj = new ClientSideMethods();
+    public ClientSideRMI(CLI cli ) {
+        ClientSideMethods obj = new ClientSideMethods(cli);
         ClientRemoteInterface stub  = null;
         try {
             stub = (ClientRemoteInterface) UnicastRemoteObject.exportObject(obj,0);
@@ -23,7 +25,7 @@ public class ClientSideRMI {
         }
         Registry clientRegistry = null;
         try {
-            clientRegistry = LocateRegistry.createRegistry(1100);
+            clientRegistry = LocateRegistry.createRegistry(1099);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -38,8 +40,8 @@ public class ClientSideRMI {
         connect();
     }
     // TODO connection to server
-    public ClientSideRMI(String serverIP) {
-        ClientSideMethods obj = new ClientSideMethods();
+    public ClientSideRMI(String serverIP, CLI cli) {
+        ClientSideMethods obj = new ClientSideMethods(cli);
         ClientRemoteInterface stub  = null;
         try {
             stub = (ClientRemoteInterface) UnicastRemoteObject.exportObject(obj,0);
@@ -73,7 +75,6 @@ public class ClientSideRMI {
             e.printStackTrace();
         }
 
-
         try {
             stub = (ServerRemoteInterface) registry.lookup("ServerRemoteInterface");
         } catch (RemoteException | NotBoundException e) {
@@ -104,8 +105,10 @@ public class ClientSideRMI {
         return stub;
     }
 
-    public ClientSideRMI(int port) {
-        ClientSideMethods obj = new ClientSideMethods();
+
+    // version used solely for local testing or rmi
+    public ClientSideRMI(int port,CLI cli) {
+        ClientSideMethods obj = new ClientSideMethods(cli);
         ClientRemoteInterface stub  = null;
         try {
             stub = (ClientRemoteInterface) UnicastRemoteObject.exportObject(obj,port);

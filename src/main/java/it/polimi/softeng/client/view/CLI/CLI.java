@@ -200,7 +200,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
                     //TODO to be removed
                     String GameModeStringifed = GameMode == 1 ? "e" : "n";
-                    this.RemoteMethods = new ClientSideRMI(ServerAddress);
+                    this.RemoteMethods = new ClientSideRMI(ServerAddress,this);
                     RMIInvoker("@LOGN", GameModeStringifed);
                 }
                 default -> System.out.println("Unrecognized connection method, please digit 1 or 2...");

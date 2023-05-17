@@ -8,6 +8,14 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public interface ServerRemoteInterface extends Remote {
+    /**
+     *
+     * @param name
+     * @param playerNumber
+     * @param mode use "easy" for eady mode, "normal" for normal mode; else will not be accepted and it will return false
+     * @return
+     * @throws RemoteException
+     */
     Boolean login(String name, int playerNumber,String mode) throws RemoteException;
     Boolean login(String name) throws RemoteException;
     Boolean login(String name,int port) throws RemoteException;

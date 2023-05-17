@@ -2,6 +2,7 @@ package it.polimi.softeng.connectionProtocol.server;
 
 import it.polimi.softeng.connectionProtocol.client.ClientRemoteInterface;
 import it.polimi.softeng.controller.ChatController;
+import it.polimi.softeng.controller.Controller;
 import it.polimi.softeng.model.Player;
 import it.polimi.softeng.model.Tile;
 
@@ -37,8 +38,9 @@ public class ServerSideMethods implements ServerRemoteInterface {
             switch (loginManager.getStatus()) {
                 case ("gameLobby") -> {
                     loginManager.addNickName(name);
-                    ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);
+                    ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);//TODO same
                     serverSideRMI.addRMIClient(name,stub);
+                    loginManager.addStub(name,stub);
                     loginManager.setPlayerNumber(playerNumber);
                     //TODO add gestione modalità semplificata
                     return true;
@@ -46,8 +48,9 @@ public class ServerSideMethods implements ServerRemoteInterface {
                 case ("gameStarted") -> {
                     if (loginManager.getDisconnectedPlayerList().contains(name)) {
                         loginManager.addNickName(name);
-                        ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);
+                        ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);//TODO same
                         serverSideRMI.addRMIClient(name,stub);
+                        loginManager.addStub(name,stub);
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");
@@ -73,15 +76,17 @@ public class ServerSideMethods implements ServerRemoteInterface {
             switch (loginManager.getStatus()) {
                 case ("gameLobby") -> {
                     loginManager.addNickName(name);
-                    ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);
+                    ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);//TODO da riscrivere perchè errato
                     serverSideRMI.addRMIClient(name,stub);
+                    loginManager.addStub(name,stub);
                     return true;
                 }
                 case ("gameStarted") -> {
                     if (loginManager.getDisconnectedPlayerList().contains(name)) {
                         loginManager.addNickName(name);
-                        ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);
+                        ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);//TODO da riscrivere perchè errato
                         serverSideRMI.addRMIClient(name,stub);
+                        loginManager.addStub(name,stub);
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");
@@ -114,6 +119,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
                         e.printStackTrace();
                     }
                     serverSideRMI.addRMIClient(name,stub);
+                    loginManager.addStub(name,stub);
                     return true;
                 }
                 case ("gameStarted") -> {
@@ -126,6 +132,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
                             e.printStackTrace();
                         }
                         serverSideRMI.addRMIClient(name,stub);
+                        loginManager.addStub(name,stub);
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");
@@ -140,7 +147,50 @@ public class ServerSideMethods implements ServerRemoteInterface {
 
     @Override
     public Boolean login(String name, int playerNumber, String mode, int port) throws RemoteException {
-        return null;
+        if(!loginManager.getNickNameList().contains(name)) {
+            String host;
+            try {
+                host = RemoteServer.getClientHost();
+            } catch (ServerNotActiveException e) {
+                throw new RuntimeException(e);
+            }
+
+            switch (loginManager.getStatus()) {
+                case ("gameLobby") -> {
+                    loginManager.addNickName(name);
+                    ClientRemoteInterface stub = null;
+                    try {
+                        stub = (ClientRemoteInterface) LocateRegistry.getRegistry("127.0.0.1", port).lookup("ClientRemoteInterface");
+                    } catch (NotBoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    serverSideRMI.addRMIClient(name,stub);
+                    loginManager.addStub(name,stub);
+                    loginManager.setPlayerNumber(playerNumber);
+                    //TODO add gestione modalità semplificata
+                    return true;
+                }
+                case ("gameStarted") -> {
+                    if (loginManager.getDisconnectedPlayerList().contains(name)) {
+                        loginManager.addNickName(name);
+                        ClientRemoteInterface stub = null;
+                        try {
+                            stub = (ClientRemoteInterface) LocateRegistry.getRegistry("127.0.0.1", port).lookup("ClientRemoteInterface");
+                        } catch (NotBoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                        serverSideRMI.addRMIClient(name,stub);
+                        loginManager.addStub(name,stub);
+                        return true;
+                    } else {
+                        System.out.println("name not present in disconnected names list");
+                        return false;
+                    }
+                }
+            }
+        }
+        System.out.println("name already in use !");
+        return false;
     }
 
     @Override

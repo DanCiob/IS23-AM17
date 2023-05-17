@@ -23,7 +23,7 @@ public class Controller {
         this.messageHandler = new ServerMessageHandler(this);
         this.gameController = new GameController(this);
         this.chatController = new ChatController();
-        this.serverSide = new ServerSide(this.messageHandler);
+        this.serverSide = new ServerSide(this.messageHandler,this);
     }
 
     /**

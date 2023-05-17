@@ -1,6 +1,9 @@
 package it.polimi.softeng.connectionProtocol.server;
 
 import it.polimi.softeng.JSONParser.RequestParser;
+import it.polimi.softeng.connectionProtocol.client.ClientRemoteInterface;
+import it.polimi.softeng.connectionProtocol.client.ClientSideMethods;
+import it.polimi.softeng.controller.Controller;
 import it.polimi.softeng.controller.ServerMessageHandler;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -8,6 +11,7 @@ import org.json.simple.parser.ParseException;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class ServerSide {
@@ -21,7 +25,8 @@ public class ServerSide {
     private String gameLobby = "gameLobby";
     private String gameStarted = "gameStarted";
 
-    public ServerSide(ServerMessageHandler serverMessageHandler) {
+
+    public ServerSide(ServerMessageHandler serverMessageHandler, Controller controller) {
         this.serverMessageHandler = serverMessageHandler;
         loginManager = new LoginManagerV2(serverMessageHandler);
         serverSideTCP = new ServerSideTCP(loginManager, serverMessageHandler);
@@ -30,7 +35,7 @@ public class ServerSide {
 
     public void sendMessageToAll(String message){
         serverSideTCP.sendMessageToAll(message);
-        //this doesnt need rmi because this should never be used for chat messages
+        //this doesn't need rmi because this should never be used for chat messages
     }
 
     public void sendMessage(String message, String nickName){
@@ -118,6 +123,10 @@ public class ServerSide {
 
     public ArrayList<String> getNickNameList() {
         return loginManager.getNickNameList();
+    }
+
+    public Map<String, ClientRemoteInterface> getPlayerStubs(){
+        return serverSideRMI.getNameToStub();
     }
     //////// methods for testing
 

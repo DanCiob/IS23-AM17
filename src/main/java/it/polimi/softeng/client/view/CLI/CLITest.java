@@ -92,6 +92,7 @@ public class CLITest extends CLI implements UI, Runnable {
         this.input = new Scanner(System.in);
     }
 
+
     /**
      * CLI initialization, connection to server, choose of gameMode
      * After setup CLI is ready to be used
@@ -163,6 +164,9 @@ public class CLITest extends CLI implements UI, Runnable {
                     System.out.println("Digit server IP");
                     System.out.println(">");
                     ServerAddress = input.nextLine();
+                    System.out.println("Digit server Port");
+                    System.out.println(">");
+                    Port = Integer.parseInt(input.nextLine());
                     System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");
                     System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
                     System.out.println(">");
@@ -199,7 +203,7 @@ public class CLITest extends CLI implements UI, Runnable {
 
                     //TODO to be removed
                     String GameModeStringifed = GameMode == 1 ? "e" : "n";
-                    this.RemoteMethods = new ClientSideRMI(ServerAddress);
+                    this.RemoteMethods = new ClientSideRMI(Port,this);
                     RMIInvoker("@LOGN", GameModeStringifed);
                 }
                 default -> System.out.println("Unrecognized connection method, please digit 1 or 2...");
@@ -624,16 +628,16 @@ public class CLITest extends CLI implements UI, Runnable {
                     }
                 }
 
-                    if (op.equals("@CHAT")) {
-                        if (!isOkCommand(command, 2)) {
-                            System.out.println("Please, check chat syntax");
-                            return;
-                        }
+                if (op.equals("@CHAT")) {
+                    if (!isOkCommand(command, 2)) {
+                        System.out.println("Please, check chat syntax");
+                        return;
                     }
-                RMIInvoker(op, action);
                 }
+                RMIInvoker(op, action);
             }
         }
+    }
 
 
     /**

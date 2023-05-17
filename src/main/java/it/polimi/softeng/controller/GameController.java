@@ -34,7 +34,7 @@ public class GameController {
             System.out.println("Received gameMove request by " + requester + " but it's " + game.getCurrentPlayer().getNickname() + " turn");
             return false;
         }
-
+        //TODO add command for rmi users to show shelfie
         //Turn routine update
         int result = game.turn(tilesToBeRemoved, column);
 
@@ -125,6 +125,7 @@ public class GameController {
             PersonalCards pc = actualPlayer.getPersonalCard();
             //Send personal card to player view
             controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(PersonalCardWriter.writePersonalCard(pc), "@VPCA", s).toJSONString(), s);
+            //TODO add command for rmi users to show shelfie
         }
 
         //Send Common Cards to everyone
