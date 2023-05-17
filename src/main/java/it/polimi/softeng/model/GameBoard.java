@@ -268,7 +268,7 @@ public class GameBoard implements Serializable {
             cell3 = positionsToBeRemoved.get(1);
             cell4 = positionsToBeRemoved.get(2);
             if(cell2.getRow() == cell3.getRow() && cell2.getRow() == cell4.getRow()){
-                int c2 = cell2.getColumn(), c3 = cell2.getColumn(), c4 = cell4.getColumn();
+                int c2 = cell2.getColumn(), c3 = cell3.getColumn(), c4 = cell4.getColumn();
                 if(c2==c3-1 && c3==c4-1)
                     return true;
                 if(c2==c4-1 && c4==c3-1)
@@ -283,7 +283,7 @@ public class GameBoard implements Serializable {
                     return true;
             }
             if(cell2.getColumn() == cell3.getColumn() && cell2.getColumn() == cell4.getColumn()){
-                int r2 = cell2.getRow(), r3 = cell2.getRow(), r4 = cell4.getRow();
+                int r2 = cell2.getRow(), r3 = cell3.getRow(), r4 = cell4.getRow();
                 if(r2==r3-1 && r3==r4-1)
                     return true;
                 if(r2==r4-1 && r4==r3-1)
@@ -333,11 +333,9 @@ public class GameBoard implements Serializable {
      * this method is used when a player try to insert more tiles than the free places of a row, so we need to reinsert the tiles in the board
      */
     public void reinsertTiles(ArrayList<Tile> tiles, ArrayList<Cell> cells){
-        int i = 0;
-        for(Cell cell: cells){
+        for(int i=0;i< cells.size();i++){
             //if(board[cell.getRow()][cell.getColumn()] == null)
-            setBoard(cell.getRow(), cell.getColumn(),  tiles.get(i));
-            i++;
+            setBoard(cells.get(i).getRow(), cells.get(i).getColumn(),  tiles.get(i));
         }
     }
 }

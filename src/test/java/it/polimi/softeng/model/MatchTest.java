@@ -15,8 +15,8 @@ import static junit.framework.Assert.*;
 public class MatchTest {
     Game game = new Game();
 
-    public void fullMatch(){
-        ArrayList<String>nameList = new ArrayList<>();
+    public void fullMatch() {
+        ArrayList<String> nameList = new ArrayList<>();
         nameList.add("Alice");
         nameList.add("Andrea");
         nameList.add("Daniel");
@@ -27,7 +27,7 @@ public class MatchTest {
 
         game.beginGame(nameList);
 
-        while(!(game.checkEndGame())){
+        while (!(game.checkEndGame())) {
             //TODO: modifica column
             //TODO: modifica positionsToBeRemoved
             //TODO: modifica tilesToInsert
@@ -37,8 +37,7 @@ public class MatchTest {
         //TODO modify lastturn call
     }
 
-    @Test
-    public void match1(){
+    public void match1() {
         fullMatch();
         CLI cli = new CLI();
         cli.scoreVisualizer(game.getPlayers());
@@ -46,7 +45,7 @@ public class MatchTest {
     }
 
     @Test
-    public void partialTest(){
+    public void partialTest() {
         ArrayList<String> nameList = new ArrayList<>();
         nameList.add("Alice");
         nameList.add("Andrea");
@@ -71,12 +70,12 @@ public class MatchTest {
         Tile tile1 = new Tile(1, game.getGameBoard().getBoard()[0][4].getColor());
         tiles.add(tile);
         tiles.add(tile1);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
-                if(game.getCurrentPlayer().getShelfie().checkLegalInsert(tiles, 0))
+            try {
+                if (game.getCurrentPlayer().getShelfie().checkLegalInsert(tiles, 0))
                     game.getCurrentPlayer().getShelfie().insertTile(tiles, 0);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -107,11 +106,11 @@ public class MatchTest {
         tiles.add(tile);
         tiles.add(tile1);
         tiles.add(tile2);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 0);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -128,11 +127,11 @@ public class MatchTest {
         tiles.clear();
         tile = new Tile(5, game.getGameBoard().getBoard()[5][0].getColor());
         tiles.add(tile);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 0);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -149,11 +148,11 @@ public class MatchTest {
         tiles.clear();
         tile = new Tile(5, game.getGameBoard().getBoard()[8][5].getColor());
         tiles.add(tile);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 0);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -170,11 +169,11 @@ public class MatchTest {
         tiles.clear();
         tile = new Tile(7, game.getGameBoard().getBoard()[4][8].getColor());
         tiles.add(tile);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 0);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -204,11 +203,11 @@ public class MatchTest {
         tiles.add(tile);
         tiles.add(tile1);
         tiles.add(tile2);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 0);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -231,11 +230,11 @@ public class MatchTest {
         tile1 = new Tile(12, game.getGameBoard().getBoard()[2][6].getColor());
         tiles.add(tile);
         tiles.add(tile1);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -258,11 +257,11 @@ public class MatchTest {
         tile1 = new Tile(14, game.getGameBoard().getBoard()[3][2].getColor());
         tiles.add(tile);
         tiles.add(tile1);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -285,11 +284,11 @@ public class MatchTest {
         tile1 = new Tile(12, game.getGameBoard().getBoard()[3][4].getColor());
         tiles.add(tile);
         tiles.add(tile1);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -318,11 +317,11 @@ public class MatchTest {
         tiles.add(tile);
         tiles.add(tile1);
         tiles.add(tile2);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -351,11 +350,11 @@ public class MatchTest {
         tiles.add(tile);
         tiles.add(tile1);
         tiles.add(tile2);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -378,11 +377,11 @@ public class MatchTest {
         tile1 = new Tile(12, game.getGameBoard().getBoard()[4][4].getColor());
         tiles.add(tile);
         tiles.add(tile1);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -405,11 +404,11 @@ public class MatchTest {
         tile1 = new Tile(12, game.getGameBoard().getBoard()[4][6].getColor());
         tiles.add(tile);
         tiles.add(tile1);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -433,11 +432,11 @@ public class MatchTest {
         tile1 = new Tile(12, game.getGameBoard().getBoard()[5][2].getColor());
         tiles.add(tile);
         tiles.add(tile1);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -460,21 +459,21 @@ public class MatchTest {
         tile1 = new Tile(12, game.getGameBoard().getBoard()[5][4].getColor());
         tiles.add(tile);
         tiles.add(tile1);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
                 visualizers();
                 game.turn();
                 game.setNextPlayer();
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 game.getGameBoard().reinsertTiles(tiles, move);
-                for(Cell cell3 : move){
-                    if(game.getGameBoard().getBoard()[cell3.getRow()][cell3.getColumn()] == null)
+                for (Cell cell3 : move) {
+                    if (game.getGameBoard().getBoard()[cell3.getRow()][cell3.getColumn()] == null)
                         System.out.println("ERROREE");
                 }
             }
-            if(game.getCurrentPlayer().getShelfie().getGrid()[5][1] != null)
+            if (game.getCurrentPlayer().getShelfie().getGrid()[5][1] != null)
                 System.out.println("ERRORE SHELFIE");
             tiles.clear();
             move.clear();
@@ -496,10 +495,11 @@ public class MatchTest {
     }
 
     @Test
-    public void endOgGameTest(){
+    public void endOgGameTest() {
         partialTest();
         ArrayList<Cell> move = new ArrayList<>();
         ArrayList<Tile> tiles = new ArrayList<>();
+        game.beginGame();
 
         game.setCurrentPlayer(game.getFirstPlayer());
         game.setCurrentPlayer(game.getNextPlayer());
@@ -575,12 +575,12 @@ public class MatchTest {
 
         game.turn();
 
-        if(game.checkEndGame()){
+        if (game.checkEndGame()) {
             game.getCurrentPlayer().updateScore(game.getEndGameBadge().getScore());
             //game.lastTurn();
-            if(!(game.getCurrentPlayer().isFirst()))//current player is the one that has a full shelfie
+            if (!(game.getCurrentPlayer().isFirst()))//current player is the one that has a full shelfie
                 game.setCurrentPlayer(game.getNextPlayer());
-            if(!(game.getCurrentPlayer().isFirst())){
+            if (!(game.getCurrentPlayer().isFirst())) {
                 tile = new Tile(22, game.getGameBoard().getBoard()[4][7].getColor());
                 tiles.clear();
                 tiles.add(tile);
@@ -590,17 +590,17 @@ public class MatchTest {
                 move = new ArrayList<>();
                 move.add(cell);
                 game.getGameBoard().updateBoard(move);
-                try{
-                    if(game.getGameBoard().checkLegalChoice(move))
+                try {
+                    if (game.getGameBoard().checkLegalChoice(move))
                         game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
-                }catch (IllegalInsertException e){
+                } catch (IllegalInsertException e) {
                     throw new RuntimeException(e);
                 }
                 game.turn();
             }
             visualizers();
             game.setCurrentPlayer(game.getNextPlayer());
-            if(!(game.getCurrentPlayer().isFirst())){
+            if (!(game.getCurrentPlayer().isFirst())) {
                 tile = new Tile(23, game.getGameBoard().getBoard()[5][7].getColor());
                 tiles.clear();
                 tiles.add(tile);
@@ -610,12 +610,13 @@ public class MatchTest {
                 move = new ArrayList<>();
                 move.add(cell);
                 game.getGameBoard().updateBoard(move);
-                try{
-                    if(game.getGameBoard().checkLegalChoice(move))
+                try {
+                    if (game.getGameBoard().checkLegalChoice(move))
                         game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
-                }catch (IllegalInsertException e){
+                } catch (IllegalInsertException e) {
                     throw new RuntimeException(e);
-                }                game.turn();
+                }
+                game.turn();
             }
             visualizers();
             game.calculateScore();
@@ -662,6 +663,7 @@ public class MatchTest {
         }
         System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━━━━━━━━━━━━━" + ANSI_RESET);
     }
+
     private void shelfieVisualizer(Tile[][] shelfie) {
         Tile.TileColor tileColor;
         if (shelfie != null) {
@@ -684,17 +686,20 @@ public class MatchTest {
 
         }
     }
-    private void visualizers(){
+
+    private void visualizers() {
         boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         shelfieVisualizer(game.getPlayers().get(0).getShelfie().getGrid());
         shelfieVisualizer(game.getPlayers().get(1).getShelfie().getGrid());
-        shelfieVisualizer(game.getPlayers().get(2).getShelfie().getGrid());
-        shelfieVisualizer(game.getPlayers().get(3).getShelfie().getGrid());
+        if(game.getPlayers().size()>2)
+            shelfieVisualizer(game.getPlayers().get(2).getShelfie().getGrid());
+        if(game.getPlayers().size()>3)
+            shelfieVisualizer(game.getPlayers().get(3).getShelfie().getGrid());
     }
 
 
     @Test
-    public void twoPlayersTest(){
+    public void twoPlayersTest() {
         Game game = new Game();
         ArrayList<String> nameList = new ArrayList<>();
         ArrayList<Cell> move = new ArrayList<>();
@@ -720,11 +725,11 @@ public class MatchTest {
         Tile tile1 = new Tile(2, game.getGameBoard().getBoard()[1][4].getColor());
         tiles.add(tile);
         tiles.add(tile1);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 3);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -754,11 +759,11 @@ public class MatchTest {
         tiles.add(tile);
         tiles.add(tile1);
         tiles.add(tile2);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 3);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -788,11 +793,11 @@ public class MatchTest {
         tiles.add(tile);
         tiles.add(tile1);
         tiles.add(tile2);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -822,11 +827,11 @@ public class MatchTest {
         tiles.add(tile);
         tiles.add(tile1);
         tiles.add(tile2);
-        if(game.getGameBoard().checkLegalChoice(move)){
+        if (game.getGameBoard().checkLegalChoice(move)) {
             game.getGameBoard().updateBoard(move);
-            try{
+            try {
                 game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
-            }catch (IllegalInsertException e){
+            } catch (IllegalInsertException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -856,11 +861,11 @@ public class MatchTest {
         tiles.add(tile);
         tiles.add(tile1);
         tiles.add(tile2);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
-           fail();
-        try{
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+            fail();
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
-        }catch (IllegalInsertException e){
+        } catch (IllegalInsertException e) {
             game.getGameBoard().reinsertTiles(tiles, move);
         }
         System.out.println(game.getCurrentPlayer());
@@ -868,7 +873,6 @@ public class MatchTest {
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
         game.setNextPlayer();
-
 
 
         cell = new Cell();
@@ -891,14 +895,14 @@ public class MatchTest {
         tiles.add(tile);
         tiles.add(tile1);
         tiles.add(tile2);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -931,14 +935,14 @@ public class MatchTest {
         tiles.add(tile);
         tiles.add(tile1);
         tiles.add(tile2);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 0);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -964,14 +968,14 @@ public class MatchTest {
         tile1 = new Tile(18, game.getGameBoard().getBoard()[5][4].getColor());
         tiles.add(tile);
         tiles.add(tile1);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 0);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -997,14 +1001,14 @@ public class MatchTest {
         tile1 = new Tile(20, game.getGameBoard().getBoard()[5][6].getColor());
         tiles.add(tile);
         tiles.add(tile1);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 0);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1036,14 +1040,14 @@ public class MatchTest {
         tiles.add(tile);
         tiles.add(tile1);
         tiles.add(tile2);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 0);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1063,14 +1067,14 @@ public class MatchTest {
         tiles.clear();
         tile = new Tile(23, game.getGameBoard().getBoard()[7][4].getColor());
         tiles.add(tile);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1096,14 +1100,14 @@ public class MatchTest {
         tile1 = new Tile(25, game.getGameBoard().getBoard()[1][4].getColor());
         tiles.add(tile);
         tiles.add(tile1);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 4);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1123,14 +1127,14 @@ public class MatchTest {
         tiles.clear();
         tile = new Tile(25, game.getGameBoard().getBoard()[2][3].getColor());
         tiles.add(tile);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 4);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1150,14 +1154,14 @@ public class MatchTest {
         tiles.clear();
         tile = new Tile(21, game.getGameBoard().getBoard()[2][4].getColor());
         tiles.add(tile);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 0);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1189,14 +1193,14 @@ public class MatchTest {
         tiles.add(tile);
         tiles.add(tile1);
         tiles.add(tile2);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 4);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1216,14 +1220,14 @@ public class MatchTest {
         tiles.clear();
         tile = new Tile(21, game.getGameBoard().getBoard()[2][5].getColor());
         tiles.add(tile);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1255,14 +1259,14 @@ public class MatchTest {
         tiles.add(tile);
         tiles.add(tile1);
         tiles.add(tile2);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1273,7 +1277,6 @@ public class MatchTest {
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
         game.setNextPlayer();
-
 
 
         cell = new Cell();
@@ -1289,14 +1292,14 @@ public class MatchTest {
         tile1 = new Tile(22, game.getGameBoard().getBoard()[6][4].getColor());
         tiles.add(tile);
         tiles.add(tile1);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1321,14 +1324,14 @@ public class MatchTest {
         tile1 = new Tile(22, game.getGameBoard().getBoard()[5][1].getColor());
         tiles.add(tile);
         tiles.add(tile1);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1360,14 +1363,14 @@ public class MatchTest {
         tiles.add(tile);
         tiles.add(tile1);
         tiles.add(tile2);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 3);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1387,14 +1390,14 @@ public class MatchTest {
         tiles.clear();
         tile = new Tile(21, game.getGameBoard().getBoard()[7][5].getColor());
         tiles.add(tile);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 0);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1426,14 +1429,14 @@ public class MatchTest {
         tiles.add(tile);
         tiles.add(tile1);
         tiles.add(tile2);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 4);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1453,14 +1456,14 @@ public class MatchTest {
         tiles.clear();
         tile = new Tile(21, game.getGameBoard().getBoard()[5][1].getColor());
         tiles.add(tile);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1480,14 +1483,14 @@ public class MatchTest {
         tiles.clear();
         tile = new Tile(21, game.getGameBoard().getBoard()[5][2].getColor());
         tiles.add(tile);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 0);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1507,14 +1510,14 @@ public class MatchTest {
         tiles.clear();
         tile = new Tile(21, game.getGameBoard().getBoard()[4][2].getColor());
         tiles.add(tile);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 4);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1534,14 +1537,14 @@ public class MatchTest {
         tiles.clear();
         tile = new Tile(21, game.getGameBoard().getBoard()[4][3].getColor());
         tiles.add(tile);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 4);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1561,14 +1564,14 @@ public class MatchTest {
         tiles.clear();
         tile = new Tile(21, game.getGameBoard().getBoard()[4][4].getColor());
         tiles.add(tile);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1588,14 +1591,14 @@ public class MatchTest {
         tiles.clear();
         tile = new Tile(21, game.getGameBoard().getBoard()[5][1].getColor());
         tiles.add(tile);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 1);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1615,14 +1618,14 @@ public class MatchTest {
         tiles.clear();
         tile = new Tile(21, game.getGameBoard().getBoard()[5][2].getColor());
         tiles.add(tile);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 3);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1648,14 +1651,14 @@ public class MatchTest {
         tile1 = new Tile(21, game.getGameBoard().getBoard()[5][6].getColor());
         tiles.add(tile);
         tiles.add(tile1);
-        if(game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
+        if (game.getGameBoard().updateBoard(move) == false)//it controls if the choice il legal and if so it removes them
             fail();
-        try{
+        try {
             game.getCurrentPlayer().getShelfie().insertTile(tiles, 2);
-        }catch (IllegalInsertException e){
-            for(Cell temp : move){
+        } catch (IllegalInsertException e) {
+            for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow()+ " "+ temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
+                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
@@ -1665,11 +1668,11 @@ public class MatchTest {
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
-        if(game.checkEndGame()){
+        if (game.checkEndGame()) {
             game.getCurrentPlayer().updateScore(game.getEndGameBadge().getScore());
-            if(!(game.getNextPlayer().isFirst())){//current player is the one that has a full shelfie
+            if (!(game.getNextPlayer().isFirst())) {//current player is the one that has a full shelfie
                 game.setCurrentPlayer(game.getNextPlayer());
-            }else{
+            } else {
                 game.calculateScore();
                 game.selectWinner();
                 System.out.println("Il vincitore è " + game.getWinner() + " con punti " + game.getWinner().getCurrentScore() + " vs " + game.getNextPlayer().getCurrentScore());
@@ -1678,20 +1681,20 @@ public class MatchTest {
                 cli.personalCardVisualizer(game.getPlayers().get(0).getPersonalCard());
                 System.out.println(game.getPlayers().get(1));
                 cli.personalCardVisualizer(game.getPlayers().get(1).getPersonalCard());
-                for(CommonCards c : game.getCommonCards()){
+                for (CommonCards c : game.getCommonCards()) {
                     cli.commonCardsVisualizer(c.getName());
                 }
             }
         }
 
-        for(Player p : game.getPlayers()){
+        for (Player p : game.getPlayers()) {
             System.out.println(p.getNickname());
         }
     }
 
 
     @Test
-    public void test(){
+    public void test() {
         Game game = new Game();
         ArrayList<String> nameList = new ArrayList<>();
         ArrayList<Cell> cells = new ArrayList<>();
@@ -1713,11 +1716,11 @@ public class MatchTest {
         cell1.setColumn(4);
         cells.add(cell1);
         int i = game.turn(cells, 0);
-        if(i == -1)
+        if (i == -1)
             fail();
-        if(i==1){
+        if (i == 1) {
             System.out.println(" Fine ");
-            assertTrue(i==1);
+            assertTrue(i == 1);
         }
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getNextPlayer().getShelfie().getGrid());
@@ -1737,15 +1740,14 @@ public class MatchTest {
         cell2.setColumn(5);
         cells.add(cell2);
         i = game.turn(cells, 0);
-        if(i == -1)
+        if (i == -1)
             fail();
-        if(i==1){
+        if (i == 1) {
             System.out.println(" Fine ");
-            assertTrue(i==1);
+            assertTrue(i == 1);
         }
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getNextPlayer().getShelfie().getGrid());
-
 
 
         cells.clear();
@@ -1762,11 +1764,11 @@ public class MatchTest {
         cell2.setColumn(4);
         cells.add(cell2);
         i = game.turn(cells, 0);
-        if(i == -1)
+        if (i == -1)
             fail();
-        if(i==1){
+        if (i == 1) {
             System.out.println(" Fine ");
-            assertTrue(i==1);
+            assertTrue(i == 1);
         }
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getNextPlayer().getShelfie().getGrid());
@@ -1786,11 +1788,11 @@ public class MatchTest {
         cell2.setColumn(7);
         cells.add(cell2);
         i = game.turn(cells, 0);
-        if(i == -1)
+        if (i == -1)
             fail();
-        if(i==1){
+        if (i == 1) {
             System.out.println(" Fine ");
-            assertTrue(i==1);
+            assertTrue(i == 1);
         }
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getNextPlayer().getShelfie().getGrid());
@@ -1810,11 +1812,11 @@ public class MatchTest {
         cell2.setColumn(3);
         cells.add(cell2);
         i = game.turn(cells, 0);
-        if(i==1){
+        if (i == 1) {
             System.out.println(" Fine ");
-            assertTrue(i==1);
+            assertTrue(i == 1);
         }
-        if(i == -1){
+        if (i == -1) {
             System.out.println("Errore");
             assertNull(game.getCurrentPlayer().getShelfie().getGrid()[5][0]);
 
@@ -1826,13 +1828,178 @@ public class MatchTest {
             cell.setColumn(1);
             cells.add(cell);
             i = game.turn(cells, 0);
-            if(i == -1)
+            if (i == -1)
                 fail();
             cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
             cli.shelfieVisualizer(game.getNextPlayer().getShelfie().getGrid());
         }
 
 
+    }
+
+
+    @Test
+    public void test2() {
+        Game game = new Game();
+        ArrayList<String> nameList = new ArrayList<>();
+        ArrayList<Cell> cells = new ArrayList<>();
+        ArrayList<Tile> tiles = new ArrayList<>();
+        nameList.add("Alice");
+        nameList.add("Andrea");
+        game.beginGame(nameList);
+        CLI cli = new CLI();
+
+        cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+
+
+        Cell cell = new Cell();
+        cell.setRow(1);
+        cell.setColumn(3);
+        cells.add(cell);
+        Cell cell1 = new Cell();
+        cell1.setRow(1);
+        cell1.setColumn(4);
+        cells.add(cell1);
+        int i = game.turn(cells, 0);
+        if (i == -1)
+            fail();
+        if (i == 1) {
+            fail();
+        }
+        cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+        cli.shelfieVisualizer(game.getNextPlayer().getShelfie().getGrid());
+
+        cells.clear();
+        cell = new Cell();
+        cell.setRow(2);
+        cell.setColumn(3);
+        cells.add(cell);
+        cell1 = new Cell();
+        cell1.setRow(2);
+        cell1.setColumn(4);
+        cells.add(cell1);
+        Cell cell2 = new Cell();
+        cell2.setRow(2);
+        cell2.setColumn(5);
+        cells.add(cell2);
+        i = game.turn(cells, 0);
+        if (i == -1)
+            fail();
+        if (i == 1) {
+            fail();
+        }
+        cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
+        cli.shelfieVisualizer(game.getNextPlayer().getShelfie().getGrid());
+
+    }
+
+    @Test
+    public void overflowTest(){
+        ArrayList<String> nameList = new ArrayList<>();
+        nameList.add("Alice");
+        nameList.add("Andrea");
+        ArrayList<Cell> cells = new ArrayList<>();
+        game.beginGame(nameList);
+        visualizers();
+
+        Cell cell1 = new Cell();
+        cell1.setRow(1);
+        cell1.setColumn(3);
+        Cell cell2 = new Cell();
+        cell2.setRow(1);
+        cell2.setColumn(4);
+        cells.add(cell1);
+        cells.add(cell2);
+        if(game.turn(cells,0) != 0){
+            fail();
+        }
+        visualizers();
+        cells.clear();
+
+        cell1.setRow(2);
+        cell1.setColumn(3);
+        cell2.setRow(2);
+        cell2.setColumn(4);
+        Cell cell3 = new Cell();
+        cell3.setRow(2);
+        cell3.setColumn(5);
+        cells.add(cell1);
+        cells.add(cell2);
+        cells.add(cell3);
+        if(game.turn(cells,0) != 0){
+            fail();
+        }
+        visualizers();
+        cells.clear();
+
+        cell1.setRow(3);
+        cell1.setColumn(2);
+        cell2.setRow(3);
+        cell2.setColumn(3);
+        cell3.setRow(3);
+        cell3.setColumn(4);
+        cells.add(cell1);
+        cells.add(cell2);
+        cells.add(cell3);
+        if(game.turn(cells,0) != 0){
+            fail();
+        }
+        visualizers();
+        cells.clear();
+
+        cell1.setRow(4);
+        cell1.setColumn(1);
+        cells.add(cell1);
+        if(game.turn(cells,0) != 0){
+            fail();
+        }
+        visualizers();
+        cells.clear();
+
+        cell1.setRow(3);
+        cell1.setColumn(5);
+        cell2.setRow(3);
+        cell2.setColumn(6);
+        cell3.setRow(3);
+        cell3.setColumn(7);
+        cells.add(cell1);
+        cells.add(cell2);
+        cells.add(cell3);
+        if(game.turn(cells,0) != -1){
+            fail();
+        }
+        assertTrue(game.getGameBoard().getBoard()[3][5] != null);
+        assertTrue(game.getGameBoard().getBoard()[3][6] != null);
+        assertTrue(game.getGameBoard().getBoard()[3][7] != null);
+        assertTrue(game.getNextPlayer().getShelfie().getGrid()[5][0] == null);
+
+        cells.clear();
+
+        cell1.setRow(3);
+        cell1.setColumn(5);
+        cells.add(cell1);
+        if(game.turn(cells,0) != 0){
+            fail();
+        }
+        visualizers();
+
+        cells.clear();
+        cell1.setRow(3);
+        cell1.setColumn(6);
+        cells.add(cell1);
+        if(game.turn(cells,1) != 0){
+            fail();
+        }
+        visualizers();
+
+        cells.clear();
+        cell1.setRow(3);
+        cell1.setColumn(7);
+        cells.add(cell1);
+        if(game.turn(cells,1) != 0){
+            fail();
+        }
+        visualizers();
 
     }
 }
