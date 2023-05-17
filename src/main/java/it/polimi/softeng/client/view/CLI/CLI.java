@@ -9,7 +9,6 @@ import it.polimi.softeng.JSONWriter.LoginWriter;
 import it.polimi.softeng.client.view.MessageHandler;
 import it.polimi.softeng.connectionProtocol.client.ClientSide;
 import it.polimi.softeng.connectionProtocol.client.ClientSideRMI;
-import it.polimi.softeng.connectionProtocol.server.ServerSideMethods;
 import it.polimi.softeng.model.*;
 import it.polimi.softeng.client.view.CommonOperationsFramework;
 import it.polimi.softeng.client.view.UI;
@@ -709,7 +708,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         TimeUnit.MILLISECONDS.sleep(500);
         if (GameIsOn) return;
         System.out.println("[==========]");
-        if (GameIsOn) return;
+        if (GameIsOn);
     }
 
     /**
@@ -885,6 +884,39 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             case (ERROR_IN_GAMEMOVE) -> System.out.println((ERROR_IN_GAMEMOVE));
 
             default -> System.out.println("Unrecognized event!");
+        }
+    }
+
+    /**
+     * Called when game is end, show player scoreboard and winner
+     */
+    public void endGame (boolean winner)
+    {
+        //End game
+        GameIsOn = false;
+        System.out.println("Game is ended!");
+
+        if (winner)
+        {
+            System.out.println(ANSI_GREEN + "██    ██  ██████  ██    ██     ██     ██  ██████  ███    ██     ██      ██ \n" +
+                    " ██  ██  ██    ██ ██    ██     ██     ██ ██    ██ ████   ██      ██     ██ \n" +
+                    "  ████   ██    ██ ██    ██     ██  █  ██ ██    ██ ██ ██  ██      ██     ██ \n" +
+                    "   ██    ██    ██ ██    ██     ██ ███ ██ ██    ██ ██  ██ ██      ██        \n" +
+                    "   ██     ██████   ██████       ███ ███   ██████  ██   ████     ██      ██ \n" +
+                    "                                                                           \n" +
+                    "                                                                           \n" +
+                    "\n" + ANSI_RESET);
+        }
+        else
+        {
+            System.out.println(ANSI_RED + "██    ██  ██████  ██    ██     ██       ██████  ███████ ████████      ██     ██ \n" +
+                    " ██  ██  ██    ██ ██    ██     ██      ██    ██ ██         ██        ██      ██ \n" +
+                    "  ████   ██    ██ ██    ██     ██      ██    ██ ███████    ██        ██      ██ \n" +
+                    "   ██    ██    ██ ██    ██     ██      ██    ██      ██    ██        ██         \n" +
+                    "   ██     ██████   ██████      ███████  ██████  ███████    ██         ██     ██ \n" +
+                    "                                                                                \n" +
+                    "                                                                                \n" +
+                    "\n" + ANSI_RESET);
         }
     }
 

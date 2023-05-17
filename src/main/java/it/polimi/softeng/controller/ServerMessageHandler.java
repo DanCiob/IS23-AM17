@@ -15,7 +15,7 @@ import static it.polimi.softeng.JSONWriter.ErrorWriter.writeError;
 import static it.polimi.softeng.JSONWriter.ServerSignatureWriter.serverSignObject;
 
 public class ServerMessageHandler {
-    private Controller controller;
+    private final Controller controller;
     private ServerSide serverSide;
 
     public ServerMessageHandler(Controller controller) {
@@ -89,11 +89,6 @@ public class ServerMessageHandler {
             case ("@VPLA") -> {
                 //Get players and their score
                 controller.SocketPlayerScoreRequest(requester);
-            }
-
-            //TODO -> now client responds directly check if this case is necessary
-            case ("@VCCA") -> {
-                //Get commoncards
             }
 
             default -> System.out.println("Unrecognized request");

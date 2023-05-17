@@ -1,7 +1,5 @@
 package it.polimi.softeng.model;
 
-import it.polimi.softeng.model.interfaces.BoardInterface;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;

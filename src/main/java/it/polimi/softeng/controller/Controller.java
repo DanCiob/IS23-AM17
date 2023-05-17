@@ -2,7 +2,6 @@ package it.polimi.softeng.controller;
 
 import it.polimi.softeng.connectionProtocol.server.ServerSide;
 import it.polimi.softeng.model.Cell;
-import it.polimi.softeng.model.Tile;
 
 import java.util.ArrayList;
 
@@ -50,8 +49,7 @@ public class Controller {
     public boolean SocketGameMoveRequest(ArrayList<Cell> positionsToBeRemoved, int column, String requester) {
         if (gameController.getCurrentGame().getCurrentPlayer().getNickname().equals(requester)) {
             try {
-                boolean confirm = gameController.sendGameMove(positionsToBeRemoved, column, requester);
-                return confirm;
+                return gameController.sendGameMove(positionsToBeRemoved, column, requester);
             }catch (RuntimeException e)
             {
                 return false;
@@ -89,29 +87,6 @@ public class Controller {
     public boolean SocketPlayerScoreRequest (String requester)
     {
         serverSide.sendMessage(serverSignObject(playerAndScoreWriter(gameController.getCurrentGame().getPlayers()), "@VPLA", requester).toJSONString(), requester);
-        return true;
-    }
-
-    /**
-     * Server-side legal move checker
-     * @param positionsToBeRemoved contains tile positions that will be removed from board
-     * @param column is shelfie column of insertion
-     * @param requester is game move requester
-     * @return true if move is legal
-     */
-    public boolean checkLegalGameMove (ArrayList<Cell> positionsToBeRemoved, int column, String requester)
-    {
-        if (gameController.getCurrentGame().getGameBoard().checkLegalChoice(positionsToBeRemoved))
-            return false;
-
-        //Create an arrayList of tile from arrayList of cell
-        ArrayList<Tile> tilesToBeRemoved = new ArrayList<>();
-        for (Cell c : positionsToBeRemoved)
-            tilesToBeRemoved.add(gameController.getCurrentGame().getGameBoard().getBoard()[c.getRow()][c.getColumn()]);
-
-        if (gameController.getCurrentGame().getCurrentPlayer().getShelfie().checkLegalInsert(tilesToBeRemoved, column))
-            return false;
-
         return true;
     }
 

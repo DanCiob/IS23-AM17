@@ -95,6 +95,12 @@ public class ClientSideMethods implements ClientRemoteInterface {
     }
 
     @Override
+    public void endGame(boolean winner) throws RemoteException {
+        cli.endGame(winner);
+    }
+
+
+    @Override
     public Boolean ping() throws RemoteException {
         return true;
     }
