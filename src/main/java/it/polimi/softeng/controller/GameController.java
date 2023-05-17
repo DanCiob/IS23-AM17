@@ -108,12 +108,37 @@ public class GameController {
     {
         game = new Game();
         game.beginGame(nameList);
-        //Send board to everybody
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //Send board to everybody -> RMI
+        for (String s : controller.getServerSide().getServerSideRMI().getNameToStub().keySet()) {
+            ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
+            try {
+                temp.gameBoardUpdate(game.getGameBoard());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //Send board to everybody -> TCP
         controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(BoardWriter.boardChangeNotifier(game.getGameBoard()), "@BORD", "all").toJSONString());
 
-        //Send empty shelfie to everybody
-        for (String s : nameList)
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //Send empty shelfie to everybody -> RMI
+        for (String s : controller.getServerSide().getServerSideRMI().getNameToStub().keySet()) {
+            ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
+            try {
+                temp.shelfieUpdate(game.getCurrentPlayer().getShelfie());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //Send empty shelfie to everybody -> TCP
+        for (String s : controller.getServerSide().getServerSideTCP().getNickNameToClientHandler().keySet())
             controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(game.getCurrentPlayer().getShelfie()), "@SHEL", s).toJSONString(), s);
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Send personal card to everybody
         ArrayList <Player> players = new ArrayList<>();
@@ -123,18 +148,42 @@ public class GameController {
             //Get personal card related to player
             Player actualPlayer = players.stream().filter(p -> p.getNickname().equals(s)).findAny().get();
             PersonalCards pc = actualPlayer.getPersonalCard();
-            //Send personal card to player view
-            controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(PersonalCardWriter.writePersonalCard(pc), "@VPCA", s).toJSONString(), s);
+            //If it's an RMI user
+            if (controller.getServerSide().getServerSideRMI().getNameToStub().keySet().contains(actualPlayer.getNickname())) {
+                ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
+                try {
+                    temp.sendPersonalCard(pc);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            //If it's a TCP  user
+            else
+                controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(PersonalCardWriter.writePersonalCard(pc), "@VPCA", s).toJSONString(), s);
             //TODO add command for rmi users to show shelfie
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Send Common Cards to everyone
         ArrayList <CommonCards> cc = game.getCommonCards();
 
+        //Send to RMI users
+        for (String s : controller.getServerSide().getServerSideRMI().getNameToStub().keySet()) {
+            ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
+            try {
+                temp.sendCommonCard(cc);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //Send to all TCP user
         if (cc.size() == 1)
             controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(CommonCardWriter.writeCommonCard(cc.get(0).getName(), null), "@VCCA", "all").toJSONString());
         else
             controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(CommonCardWriter.writeCommonCard(cc.get(0).getName(), cc.get(1).getName()), "@VCCA", "all").toJSONString());
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //Ended setup
         //Notify first player

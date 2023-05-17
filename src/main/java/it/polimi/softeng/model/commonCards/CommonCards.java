@@ -2,9 +2,10 @@ package it.polimi.softeng.model.commonCards;
 import it.polimi.softeng.model.BadgeScore;
 import it.polimi.softeng.model.Shelfie;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class CommonCards {
+public abstract class CommonCards implements Serializable {
     public boolean verifyShape(Shelfie s) {
         return true;
     }

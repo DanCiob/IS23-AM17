@@ -1,6 +1,8 @@
 package it.polimi.softeng.model;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
     private final String Nickname;
     private int CurrentScore;
     private boolean isFirst;

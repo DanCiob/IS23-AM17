@@ -2,13 +2,14 @@ package it.polimi.softeng.model;
 
 import it.polimi.softeng.model.interfaces.BoardInterface;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
 import static it.polimi.softeng.Constants.*;
 
 
-public class GameBoard implements BoardInterface {
+public class GameBoard implements Serializable {
     /**
      * matrix that represents the board;
      * column numbering : goes from left to right
