@@ -123,7 +123,7 @@ public class Shelfie implements Serializable {
                 i++;
             }
             // loop for tiles insertion
-            for(int j = i; j < i + tilesToBeInserted.size(); j++) {
+            for(int j = i; j < tilesToBeInserted.size(); j++) {
                 grid[j][column] = tilesToBeInserted.get(k);
                 k++;
             }

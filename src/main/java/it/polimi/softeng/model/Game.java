@@ -247,8 +247,11 @@ public class Game{
             tilesToInsert.add(getGameBoard().getBoard()[position.getRow()][position.getColumn()]);
         }
 
-        if(!gameBoard.updateBoard(positionsToBeRemoved))//it controls if the choice il legal and if so it removes them
+        if(!gameBoard.updateBoard(positionsToBeRemoved)){
+            //it controls if the choice is legal and if so it removes them
             return -1;
+        }
+
 
         try{
            currentPlayer.getShelfie().insertTile(tilesToInsert, column);
@@ -258,13 +261,11 @@ public class Game{
                 currentPlayer.getShelfie().setGridAtNull(cell.getRow(), cell.getColumn());
                 System.out.println("Tile in pos " + cell.getRow()+ " "+ cell.getColumn() + " is " + currentPlayer.getShelfie().getGrid()[cell.getRow()][cell.getColumn()]);
             }*/
+            gameBoard.reinsertTiles(tilesToInsert, positionsToBeRemoved);
             for(int i=0; i< tilesToInsert.size()  && firstFree<shelfieRows; i++){
-                currentPlayer.getShelfie().setGrid(firstFree, column, tilesToInsert.get(i).getId(), getGameBoard().getBoard()[positionsToBeRemoved.get(i).getRow()][positionsToBeRemoved.get(i).getColumn()].getColor());
+                currentPlayer.getShelfie().setGridAtNull(firstFree, column);
                 firstFree ++;
             }
-
-
-            gameBoard.reinsertTiles(tilesToInsert, positionsToBeRemoved);
             tilesToInsert.clear();
             positionsToBeRemoved.clear();
 
