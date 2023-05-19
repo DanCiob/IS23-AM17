@@ -14,7 +14,7 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="it.polimi.softeng.client.view.GUI.GUIGameController">
-   <GridPane fx:id="gridPane" gridLinesVisible="true">
+   <GridPane fx:id="shelfieGridPane" gridLinesVisible="true">
       <ImageView GridPane.columnIndex="0" GridPane.rowIndex="0"/>
       <ImageView GridPane.columnIndex="0" GridPane.rowIndex="1"/>
       <ImageView GridPane.columnIndex="0" GridPane.rowIndex="2"/>

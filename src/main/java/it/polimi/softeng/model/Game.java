@@ -256,7 +256,6 @@ public class Game{
         try{
            currentPlayer.getShelfie().insertTile(tilesToInsert, column);
         }catch (IllegalInsertException e){
-            //TODO reposition tiles in board
             /*for(Cell cell : positionsToBeRemoved){
                 currentPlayer.getShelfie().setGridAtNull(cell.getRow(), cell.getColumn());
                 System.out.println("Tile in pos " + cell.getRow()+ " "+ cell.getColumn() + " is " + currentPlayer.getShelfie().getGrid()[cell.getRow()][cell.getColumn()]);

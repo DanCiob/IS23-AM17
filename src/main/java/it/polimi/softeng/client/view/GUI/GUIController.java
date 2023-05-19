@@ -96,7 +96,7 @@ public class GUIController{
     }
 
     public void switchToGame(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/gamescreen.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/gameScreenScheletroConImmaginiGIUSTO.fxml"));
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);

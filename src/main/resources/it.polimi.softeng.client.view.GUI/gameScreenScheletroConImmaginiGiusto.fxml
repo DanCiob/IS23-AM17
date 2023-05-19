@@ -13,7 +13,8 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="441.0" prefWidth="712.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.control.Button?>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="441.0" prefWidth="712.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="it.polimi.softeng.client.view.GUI.GUIGameController">
    <children>
       <VBox prefHeight="440.0" prefWidth="110.0">
          <children>
@@ -201,7 +202,7 @@
                                     <Image url="/images/bookshelf_orth.png" />
                                  </image>
                               </ImageView>
-                              <GridPane hgap="3.0" layoutX="19.0" layoutY="2.0" prefHeight="79.0" prefWidth="72.0" vgap="0.8">
+                              <GridPane fx:id="shelfie1" hgap="3.0" layoutX="19.0" layoutY="2.0" prefHeight="79.0" prefWidth="72.0" vgap="0.8" onMouseClicked="#insertInShelfie">
                                  <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -289,8 +290,9 @@
                   <ImageView fitHeight="36.0" fitWidth="36.0" layoutX="274.0" layoutY="235.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="/images/BadgeEndGame.jpg" />
-                     </image></ImageView>
-                  <GridPane layoutX="14.0" layoutY="15.0" prefHeight="310.0" prefWidth="310.0">
+                     </image>
+                  </ImageView>
+                  <GridPane layoutX="14.0" layoutY="15.0" prefHeight="310.0" prefWidth="310.0" fx:id="boardGrid" onMouseClicked="#removeTileFromBoard">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -379,6 +381,7 @@
                         <ImageView fitHeight="33.0" fitWidth="33.0" layoutX="10.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5" GridPane.rowIndex="8" />
                      </children>
                   </GridPane>
+                  <Button fx:id="sendBoardMovesButton" text="Send your moves" onAction="#sendBoardMoves"/>
                </children>
             </AnchorPane>
             <AnchorPane>
