@@ -55,6 +55,11 @@ public class GUIGameController{
       }
     }
 
+    /**
+     * This method creates the message with the chosen tiles and column, which will be sent to the clientSide
+     * @param row
+     * @param column
+     */
     public void createBoardMoves(int row, int column){
         Cell cell = new Cell();
         cell.setRow(row);
@@ -77,32 +82,38 @@ public class GUIGameController{
     @FXML
     GridPane shelfie1;
     @FXML
-    protected void insertInShelfie(javafx.scene.input.MouseEvent event){
+    protected void insertInShelfie(javafx.scene.input.MouseEvent event) {
         Node clickedNode = event.getPickResult().getIntersectedNode();
-        int column = shelfie1.getColumnIndex(clickedNode);
         int row = firstFree(clickedNode);
         Image img = new Image("/images/Tile_B3.png");
-        ImageView imageView = new ImageView(img);
-        imageView.maxHeight(30);
-        imageView.maxWidth(33);
-        imageView.setFitHeight(30.0);
-        imageView.setFitWidth(33.0);
-        shelfie1.add(imageView, column, row);
+        for (Node node : shelfie1.getChildren()) {
+            if ((GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode)) && row==GridPane.getRowIndex(node)) {
+                ImageView tileImageView = (ImageView) node;
+                tileImageView.setImage(img);
+            }
 
+        }
     }
 
-    public int firstFree(Node clickedNode){
+    /**
+     *
+     * @param clickedNode
+     * @return the first row of the shelfie which isn't full
+     */
+    private int firstFree(Node clickedNode){
+        int row =0;
         for (int i=0; i < shelfieRows; i++){
             for(Node node: shelfie1.getChildren()){
-                if(GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode)){
+                if(GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode) && i==GridPane.getRowIndex(node)){
                     ImageView tileImageView = (ImageView) node;
                     if (tileImageView.getImage() == null){
-                        return GridPane.getRowIndex(node);
+                        if(i > row)
+                             row = GridPane.getRowIndex(node);
                     }
                 }
             }
         }
-        return 0;
+        return row;
     }
 
 
