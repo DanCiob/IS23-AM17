@@ -1,35 +1,145 @@
 package it.polimi.softeng.client.view.GUI;
 
+import it.polimi.softeng.client.view.CLI.CLI;
+import it.polimi.softeng.client.view.MessageHandler;
+import it.polimi.softeng.connectionProtocol.client.ClientSide;
 import it.polimi.softeng.customExceptions.IllegalInsertException;
+import it.polimi.softeng.model.Cell;
 import it.polimi.softeng.model.Tile;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.GridPane;
+import org.json.simple.JSONObject;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import static it.polimi.softeng.Constants.*;
+import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
 
-public class GUIGameController implements Initializable{
-    @FXML GridPane gridPane;
-    @FXML ImageView[][] imageViews;
+public class GUIGameController{
 
-    @Override
+    ArrayList<Cell> boardMoves = new ArrayList<>();
+    int columnShelfie = -1;
+
+    @FXML GridPane shelfieGridPane;
+
+
+    @FXML
+    GridPane boardGrid;
+
+
+    @FXML
+    protected void removeTileFromBoard(javafx.scene.input.MouseEvent event){
+        Node clickedNode = event.getPickResult().getIntersectedNode();
+        Image img = new Image("/images/Tile_B3.png");
+        /*ImageView imageView = new ImageView(img);
+        imageView.maxHeight(30);
+        imageView.maxWidth(33);
+        imageView.setFitHeight(30.0);
+        imageView.setFitWidth(33.0);
+        boardGrid.add(imageView, GridPane.getColumnIndex(clickedNode), GridPane.getRowIndex(clickedNode));*/
+
+      for(Node node: boardGrid.getChildren()){
+          if((GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode))&&(GridPane.getRowIndex(node) == GridPane.getRowIndex(clickedNode))){
+              createBoardMoves(GridPane.getRowIndex(clickedNode), GridPane.getColumnIndex(clickedNode));
+              ImageView i = (ImageView) node;
+              i.setImage(null);
+          }
+      }
+    }
+
+    /**
+     * This method creates the message with the chosen tiles and column, which will be sent to the clientSide
+     * @param row
+     * @param column
+     */
+    public void createBoardMoves(int row, int column){
+        //TODO: save the image of the tile to insert it in the shelfie and their positions  in case it's not allowed to do the move
+        Cell cell = new Cell();
+        cell.setRow(row);
+        cell.setColumn(column);
+        boardMoves.add(cell);
+    }
+
+    /**
+     * this method sends the message with the chosen tiles and column to the ClientSide
+     */
+    @FXML
+    protected void sendBoardMoves(){
+        String nickname = GUIClientSide.getCli().getNickname();
+        String action = "";
+        for(Cell cell : boardMoves){
+             action = action + "(" + cell.getRow() + "," + cell.getColumn() + ")" + ",";
+        }
+        action = action + columnShelfie;
+        System.out.println(action);
+        JSONObject toBeSent = GUIClientSide.getCli().actionToJSON("@GAME", action);
+
+        //Send message to server
+        if (toBeSent != null)
+            GUIClientSide.getClientSide().sendMessage(clientSignObject(toBeSent, "@GAME", nickname).toJSONString());
+        //TODO: add the checklegalmoves control and put the tiles again on the board if it's not
+        boardMoves.clear();
+        columnShelfie = -1;
+    }
+
+    @FXML
+    GridPane shelfie1;
+    @FXML
+    protected void insertInShelfie(javafx.scene.input.MouseEvent event) {
+        Node clickedNode = event.getPickResult().getIntersectedNode();
+        int row = firstFree(clickedNode);
+        Image img = new Image("/images/Tile_B3.png");
+        for (Node node : shelfie1.getChildren()) {
+            if ((GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode)) && row==GridPane.getRowIndex(node)) {
+                ImageView tileImageView = (ImageView) node;
+                tileImageView.setImage(img);
+                columnShelfie = GridPane.getColumnIndex(node);
+            }
+
+        }
+    }
+
+    /**
+     *
+     * @param clickedNode
+     * @return the first row of the shelfie which isn't full
+     */
+    private int firstFree(Node clickedNode){
+        int row =0;
+        for (int i=0; i < shelfieRows; i++){
+            for(Node node: shelfie1.getChildren()){
+                if(GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode) && i==GridPane.getRowIndex(node)){
+                    ImageView tileImageView = (ImageView) node;
+                    if (tileImageView.getImage() == null){
+                        if(i > row)
+                             row = GridPane.getRowIndex(node);
+                    }
+                }
+            }
+        }
+        return row;
+    }
+
+
+  /* @Override
     public void initialize(URL url, ResourceBundle rb) {
         //we create a correspondence between imageViews[][] matrix and gridPane
         for (int i=0; i < shelfieColumns; i++){
             for (int j=0; j < shelfieRows; j++){
                 //indexes of gridPane start from top-left, while indexes of imageViews start from bottom-left as Shelfie
-                gridPane.add(imageViews[shelfieRows-j-1][i], i, j);
+                //shelfieGridPane.add();//gridPane.add(imageViews[shelfieRows-j-1][i], i, j);
             }
         }
-    }
+    }*/
 
     /**
      * This method update the Shelfie showing the images of the tiles inserted
@@ -39,7 +149,7 @@ public class GUIGameController implements Initializable{
      */
 
     //TODO Column select by clicking on it
-    public void updateShelfie(ArrayList<Tile> tiles, int column) throws IllegalInsertException {
+   /* public void updateShelfie(ArrayList<Tile> tiles, int column) throws IllegalInsertException {
         if (tiles.isEmpty()){
             throw new IllegalInsertException("Illegal insertion caused by empty array");
         } else if(tiles.size() > maxTilesForMove){
@@ -56,21 +166,21 @@ public class GUIGameController implements Initializable{
                 }
             }
         }
-    }
+    }*/
 
     /**
      * This method is used by upadateShelfie to find the first row available of a specific column
      * @param column is the column we analyze
      * @return the first empty row or shelfieRows costant if the column is full
      */
-    private int firstEmptyRow(int column) {
+   /* private int firstEmptyRow(int column) {
         for (int i=0; i < shelfieRows; i++){
             if (imageViews[i][column].getImage() != null){
                 return i;
             }
         }
         return shelfieRows; //so that
-    }
+    }*/
 
 
 }

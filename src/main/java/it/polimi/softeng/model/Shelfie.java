@@ -55,7 +55,12 @@ public class Shelfie implements Serializable {
                 throw new IllegalInsertException("illegal insert caused by overflow of column " + column + " because array size is " + tilesToBeInserted.size() + " but first free cell is in position "+ i);
             }
         }
-
+        /*for(int r=shelfieRows;r>=0;r--){
+            for(int c=0;c<shelfieColumns;c++){
+                System.out.print("  " + grid[r][c] + "  " );
+            }
+            System.out.println(" ");
+        }*/
         //notify changes
         shelfieChangeNotifier();
     }

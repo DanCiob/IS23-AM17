@@ -987,4 +987,28 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     public void setConnectionMode(int connectionMode) {
         ConnectionMode = connectionMode;
     }
+
+    public void setNickname(String nickname) {
+        Nickname = nickname;
+    }
+
+    public String getNickname() {
+        return Nickname;
+    }
+
+    public int getConnectionMode() {
+        return ConnectionMode;
+    }
+
+    public void setNumOfPlayer(int numOfPlayer) {
+        NumOfPlayer = numOfPlayer;
+    }
+
+    public void setStartGame(int startGame) {
+        StartGame = startGame;
+    }
+
+    public void setGameMode(int gameMode) {
+        GameMode = gameMode;
+    }
 }

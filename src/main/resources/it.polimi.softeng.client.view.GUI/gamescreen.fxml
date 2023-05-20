@@ -10,7 +10,8 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="it.polimi.softeng.client.view.GUI.GUIGameController"
             prefHeight="400.0" prefWidth="600.0">
-            <fx:include source="board.fxml" maxHeight="50" maxWidth="50" layoutX="50" layoutY="50" prefHeight="50.0" prefWidth="50.0"/>
-           <!-- <fx:include source="Shelfie.fxml" maxHeight="50" maxWidth="50" layoutX="200" layoutY="50" prefHeight="50.0" prefWidth="50.0"/>
+           <!-- <fx:include source="board.fxml" maxHeight="100" maxWidth="100" layoutX="50" layoutY="50" prefHeight="100.0" prefWidth="100.0"/>
+       -->  <!--   <fx:include source="Shelfie.fxml" maxHeight="50" maxWidth="50" layoutX="200" layoutY="50" prefHeight="50.0" prefWidth="50.0"/>
 -->
+    <fx:include source="gameScreenScheletro.fxml"/>
 </AnchorPane>

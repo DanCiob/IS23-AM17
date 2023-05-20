@@ -24,7 +24,7 @@
                             <Image url="/images/board.png" />
                         </image>
                     </ImageView>
-                    <GridPane gridLinesVisible="false" prefHeight="275.0" prefWidth="291.0">
+                    <GridPane gridLinesVisible="false" prefHeight="275.0" prefWidth="291.0" fx:id="boardGrid" onMouseClicked="#addTile">
                         <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
@@ -48,10 +48,10 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         </rowConstraints>
                         <children>
-                            <ImageView fitHeight="30.0" fitWidth="33.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
-                                <image>
+                            <ImageView fx:id="image52" fitHeight="30.0" fitWidth="33.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                                <!--<image>
                                     <Image url="/images/Tile_G2.png" />
-                                </image>
+                                </image>-->
                             </ImageView>
                         </children>
                         <StackPane.margin>

@@ -37,11 +37,12 @@ public class MatchTest {
         //TODO modify lastturn call
     }
 
-    public void match1() {
+    public String match1() {
         fullMatch();
         CLI cli = new CLI();
         cli.scoreVisualizer(game.getPlayers());
-        System.out.println("Il vincitore è " + game.getWinner().getNickname());
+        String vincitore = game.getWinner().getNickname();
+        return vincitore;
     }
 
     @Test
@@ -470,11 +471,11 @@ public class MatchTest {
                 game.getGameBoard().reinsertTiles(tiles, move);
                 for (Cell cell3 : move) {
                     if (game.getGameBoard().getBoard()[cell3.getRow()][cell3.getColumn()] == null)
-                        System.out.println("ERROREE");
+                        fail();
                 }
             }
             if (game.getCurrentPlayer().getShelfie().getGrid()[5][1] != null)
-                System.out.println("ERRORE SHELFIE");
+                fail();
             tiles.clear();
             move.clear();
             cell = new Cell();
@@ -570,7 +571,6 @@ public class MatchTest {
         tiles.add(tile5);
         //game.getGameBoard().updateBoard(move);
         game.getCurrentPlayer().getShelfie().insertTileForTesting(tiles, 4);
-        System.out.println(game.getCurrentPlayer().getNickname());
         shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
 
         game.turn();
@@ -622,10 +622,6 @@ public class MatchTest {
             game.calculateScore();
             game.selectWinner();
             //end of lastTurn
-
-
-            System.out.println("Il vincitore è " + game.getWinner().getNickname());
-
         }
 
     }
@@ -635,11 +631,7 @@ public class MatchTest {
         Tile.TileColor tileColor;
         boolean notAv;
 
-        System.out.println(ANSI_RESET + "BOARD:");
-        System.out.println(ANSI_GREY + "     0  1  2  3  4  5  6  7  8"); //print column index
-        System.out.println("    ━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         for (int i = 0; i < boardRows; i++) { //loop for rows
-            System.out.print(i + "  ┃"); //print row index
             for (int j = 0; j < boardColumns; j++) {
                 notAv = false;
                 for (Cell cell1 : notAvailable) { //if not Available
@@ -649,40 +641,30 @@ public class MatchTest {
                     }
                 }
                 if (notAv) {
-                    System.out.print(ANSI_GREY + " ▇ ");
+
                 } else {
                     if (board[i][j] != null) {
                         tileColor = board[i][j].getColor();
-                        System.out.print(" " + tileColor.coloredText() + tileColor.colorLetter() + " ");
+                        assertTrue(tileColor != null);
                     } else {
-                        System.out.print(ANSI_GREY + " ░ ");
                     }
                 }
             }
-            System.out.print(ANSI_GREY + "┃\n");
         }
-        System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━━━━━━━━━━━━━" + ANSI_RESET);
     }
 
     private void shelfieVisualizer(Tile[][] shelfie) {
         Tile.TileColor tileColor;
         if (shelfie != null) {
-            System.out.println(ANSI_RESET + "SHELFIE:");
-            System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━");
             for (int i = shelfieRows - 1; i >= 0; i--) {
-                System.out.print(ANSI_GREY + i + "  ┃");
                 for (int j = 0; j < shelfieColumns; j++) {
                     if (shelfie[i][j] != null) {
                         tileColor = shelfie[i][j].getColor();
-                        System.out.print(tileColor.coloredText() + " " + tileColor.colorLetter() + " ");
+                        assertTrue(tileColor != null);
                     } else {
-                        System.out.print(ANSI_GREY + " ░ ");
                     }
                 }
-                System.out.println(ANSI_GREY + "┃");
             }
-            System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━");
-            System.out.println(ANSI_GREY + "     0  1  2  3  4" + Tile.TileColor.WHITE.coloredText());
 
         }
     }
@@ -733,7 +715,6 @@ public class MatchTest {
                 throw new RuntimeException(e);
             }
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -767,7 +748,6 @@ public class MatchTest {
                 throw new RuntimeException(e);
             }
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -801,7 +781,6 @@ public class MatchTest {
                 throw new RuntimeException(e);
             }
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -835,7 +814,6 @@ public class MatchTest {
                 throw new RuntimeException(e);
             }
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -868,7 +846,6 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             game.getGameBoard().reinsertTiles(tiles, move);
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -902,13 +879,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -942,13 +917,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -975,13 +948,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1008,13 +979,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1047,13 +1016,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1074,13 +1041,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1107,13 +1072,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1134,13 +1097,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1161,13 +1122,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1200,13 +1159,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1227,13 +1184,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1266,13 +1221,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1299,13 +1252,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1331,13 +1282,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1370,13 +1319,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1397,13 +1344,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1436,13 +1381,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1463,13 +1406,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1490,13 +1431,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1517,13 +1456,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1544,13 +1481,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1571,13 +1506,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1598,13 +1531,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1625,13 +1556,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1658,13 +1587,11 @@ public class MatchTest {
         } catch (IllegalInsertException e) {
             for (Cell temp : move) {
                 game.getCurrentPlayer().getShelfie().setGridAtNull(temp.getRow(), temp.getColumn());
-                System.out.println("Tile in pos " + temp.getRow() + " " + temp.getColumn() + " is " + game.getCurrentPlayer().getShelfie().getGrid()[temp.getRow()][temp.getColumn()]);
             }
             game.getGameBoard().reinsertTiles(tiles, move);
             tiles.clear();
             move.clear();
         }
-        System.out.println(game.getCurrentPlayer());
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
         cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
         game.turn();
@@ -1675,11 +1602,8 @@ public class MatchTest {
             } else {
                 game.calculateScore();
                 game.selectWinner();
-                System.out.println("Il vincitore è " + game.getWinner() + " con punti " + game.getWinner().getCurrentScore() + " vs " + game.getNextPlayer().getCurrentScore());
                 cli.scoreVisualizer(game.getPlayers());
-                System.out.println(game.getPlayers().get(0));
                 cli.personalCardVisualizer(game.getPlayers().get(0).getPersonalCard());
-                System.out.println(game.getPlayers().get(1));
                 cli.personalCardVisualizer(game.getPlayers().get(1).getPersonalCard());
                 for (CommonCards c : game.getCommonCards()) {
                     cli.commonCardsVisualizer(c.getName());
@@ -1687,9 +1611,6 @@ public class MatchTest {
             }
         }
 
-        for (Player p : game.getPlayers()) {
-            System.out.println(p.getNickname());
-        }
     }
 
 
@@ -1719,7 +1640,6 @@ public class MatchTest {
         if (i == -1)
             fail();
         if (i == 1) {
-            System.out.println(" Fine ");
             assertTrue(i == 1);
         }
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
@@ -1743,7 +1663,6 @@ public class MatchTest {
         if (i == -1)
             fail();
         if (i == 1) {
-            System.out.println(" Fine ");
             assertTrue(i == 1);
         }
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
@@ -1767,7 +1686,6 @@ public class MatchTest {
         if (i == -1)
             fail();
         if (i == 1) {
-            System.out.println(" Fine ");
             assertTrue(i == 1);
         }
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
@@ -1791,7 +1709,6 @@ public class MatchTest {
         if (i == -1)
             fail();
         if (i == 1) {
-            System.out.println(" Fine ");
             assertTrue(i == 1);
         }
         cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
@@ -1813,11 +1730,9 @@ public class MatchTest {
         cells.add(cell2);
         i = game.turn(cells, 0);
         if (i == 1) {
-            System.out.println(" Fine ");
             assertTrue(i == 1);
         }
         if (i == -1) {
-            System.out.println("Errore");
             assertNull(game.getCurrentPlayer().getShelfie().getGrid()[5][0]);
 
             cli.shelfieVisualizer(game.getCurrentPlayer().getShelfie().getGrid());
@@ -1833,8 +1748,6 @@ public class MatchTest {
             cli.boardVisualizer(game.getGameBoard().getBoard(), game.getGameBoard().getNotAvailable());
             cli.shelfieVisualizer(game.getNextPlayer().getShelfie().getGrid());
         }
-
-
     }
 
 

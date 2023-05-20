@@ -1,5 +1,7 @@
 package it.polimi.softeng.client.view.GUI;
 
+import it.polimi.softeng.client.view.MessageHandler;
+import it.polimi.softeng.connectionProtocol.client.ClientSide;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -21,8 +23,11 @@ public class GUIAppl extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(GUIAppl.class.getResource("/it.polimi.softeng.client.view.GUI/login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 640, 480);
 
+        GUIClientSide guiClientSide = new GUIClientSide();
         primaryStage.setTitle("My Shelfie");
         primaryStage.setScene(scene);
         primaryStage.show();
+
     }
+
 }

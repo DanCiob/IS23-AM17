@@ -21,7 +21,6 @@ import java.io.IOException;
 
 
 public class GUIController{
-    CLI cli = new CLI();
     @FXML
     private Label welcomeText;
 
@@ -90,13 +89,18 @@ public class GUIController{
 
     @FXML
     protected void onLoginButtonClick(ActionEvent event) throws IOException{
-        welcomeText.setText(nickname.getText());
-        loginNotifier();
-        switchToGame(event);
+        GUIClientSide.getCli().setNickname(nickname.getText());
+        if(GUIClientSide.getCli().isOkNickname() == false){
+            nickname.setText("");
+        }else{
+            GUIClientSide.setupCliForGui(socketOrRmi.getSelectionModel().getSelectedIndex()+1, serverIP.getText(), Integer.parseInt(serverPort.getText()), game.getSelectionModel().getSelectedIndex() +1,numberOfPlayer.getSelectionModel().getSelectedIndex()+2, mode.getSelectionModel().getSelectedIndex()+1);
+            loginNotifier();
+            switchToGame(event);
+        }
     }
 
     public void switchToGame(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/gamescreen.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/gameScreenScheletroConImmaginiGIUSTO.fxml"));
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -108,12 +112,7 @@ public class GUIController{
         int startgame;
         int gamemode = 0;
         int numPlayers = 0;
-        cli.setConnectionMode(socketOrRmi.getSelectionModel().getSelectedIndex() + 1);
-        System.out.println(socketOrRmi.getSelectionModel().getSelectedIndex() + 1);
-        cli.setServerAddress(serverIP.getText());
-        int port = Integer.parseInt(serverPort.getText());
-        cli.setPort(port);
-        System.out.println(port);
+
         if(game.getSelectionModel().getSelectedIndex() == 0)
             startgame = 1;
         else {
@@ -132,9 +131,6 @@ public class GUIController{
                 gamemode = 2;
         String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(nickname.getText(), gamemode, startgame, numPlayers), "@LOGN", nickname.getText()).toJSONString();
         System.out.println(login);
-        MessageHandler messageHandler = new MessageHandler(this);
-        ClientSide clientSide = new ClientSide(messageHandler);
-        clientSide.sendMessage(login);
-
+        GUIClientSide.getClientSide().sendMessage(login);
     }
 }
