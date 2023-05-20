@@ -27,6 +27,7 @@ import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObjec
 public class GUIGameController{
 
     ArrayList<Cell> boardMoves = new ArrayList<>();
+    int columnShelfie = -1;
 
     @FXML GridPane shelfieGridPane;
 
@@ -39,18 +40,18 @@ public class GUIGameController{
     protected void removeTileFromBoard(javafx.scene.input.MouseEvent event){
         Node clickedNode = event.getPickResult().getIntersectedNode();
         Image img = new Image("/images/Tile_B3.png");
-        ImageView imageView = new ImageView(img);
+        /*ImageView imageView = new ImageView(img);
         imageView.maxHeight(30);
         imageView.maxWidth(33);
         imageView.setFitHeight(30.0);
         imageView.setFitWidth(33.0);
-        boardGrid.add(imageView, GridPane.getColumnIndex(clickedNode), GridPane.getRowIndex(clickedNode));
+        boardGrid.add(imageView, GridPane.getColumnIndex(clickedNode), GridPane.getRowIndex(clickedNode));*/
 
       for(Node node: boardGrid.getChildren()){
           if((GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode))&&(GridPane.getRowIndex(node) == GridPane.getRowIndex(clickedNode))){
+              createBoardMoves(GridPane.getRowIndex(clickedNode), GridPane.getColumnIndex(clickedNode));
               ImageView i = (ImageView) node;
               i.setImage(null);
-              createBoardMoves(GridPane.getRowIndex(clickedNode), GridPane.getColumnIndex(clickedNode));
           }
       }
     }
@@ -61,22 +62,33 @@ public class GUIGameController{
      * @param column
      */
     public void createBoardMoves(int row, int column){
+        //TODO: save the image of the tile to insert it in the shelfie and their positions  in case it's not allowed to do the move
         Cell cell = new Cell();
         cell.setRow(row);
         cell.setColumn(column);
         boardMoves.add(cell);
     }
 
+    /**
+     * this method sends the message with the chosen tiles and column to the ClientSide
+     */
     @FXML
     protected void sendBoardMoves(){
-        CLI cli = new CLI();
-        /*JSONObject toBeSent = cli.actionToJSON("@GAME", action);
+        String nickname = GUIClientSide.getCli().getNickname();
+        String action = "";
+        for(Cell cell : boardMoves){
+             action = action + "(" + cell.getRow() + "," + cell.getColumn() + ")" + ",";
+        }
+        action = action + columnShelfie;
+        System.out.println(action);
+        JSONObject toBeSent = GUIClientSide.getCli().actionToJSON("@GAME", action);
 
         //Send message to server
         if (toBeSent != null)
-            clientSide.sendMessage(clientSignObject(toBeSent, "@GAME", Nickname).toJSONString());
-        //manda messaggio mossa, anche con colonna shelfie e verifica che ritorni ok (o aggiungere controllo?)
-        boardMoves.clear();*/
+            GUIClientSide.getClientSide().sendMessage(clientSignObject(toBeSent, "@GAME", nickname).toJSONString());
+        //TODO: add the checklegalmoves control and put the tiles again on the board if it's not
+        boardMoves.clear();
+        columnShelfie = -1;
     }
 
     @FXML
@@ -90,6 +102,7 @@ public class GUIGameController{
             if ((GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode)) && row==GridPane.getRowIndex(node)) {
                 ImageView tileImageView = (ImageView) node;
                 tileImageView.setImage(img);
+                columnShelfie = GridPane.getColumnIndex(node);
             }
 
         }
