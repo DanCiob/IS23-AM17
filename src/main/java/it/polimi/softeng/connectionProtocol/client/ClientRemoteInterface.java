@@ -19,5 +19,6 @@ public interface ClientRemoteInterface extends Remote {
     void playerListUpdate(ArrayList<Player> playerList) throws RemoteException;
     void startGame() throws RemoteException;
     void endGame(boolean winner) throws RemoteException;
+    void notifyTurn() throws RemoteException;
     Boolean ping() throws RemoteException;
 }

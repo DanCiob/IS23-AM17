@@ -1,10 +1,14 @@
 package it.polimi.softeng.connectionProtocol.server;
 
+import it.polimi.softeng.JSONWriter.ClientSignatureWriter;
 import it.polimi.softeng.connectionProtocol.client.ClientRemoteInterface;
 import it.polimi.softeng.controller.ChatController;
 import it.polimi.softeng.controller.Controller;
 import it.polimi.softeng.model.Player;
 import it.polimi.softeng.model.Tile;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -27,6 +31,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
 
     @Override
     public Boolean login(String name, int playerNumber, String mode) throws RemoteException {
+        System.out.println("login request from " + name);
         if(!loginManager.getNickNameList().contains(name)) {
             String host;
             try {
@@ -39,8 +44,8 @@ public class ServerSideMethods implements ServerRemoteInterface {
                 case ("gameLobby") -> {
                     loginManager.addNickName(name);
                     ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);//TODO same
-                    serverSideRMI.addRMIClient(name,stub);
                     loginManager.addStub(name,stub);
+                    serverSideRMI.addRMIClient(name,stub);
                     loginManager.setPlayerNumber(playerNumber);
                     //TODO add gestione modalità semplificata
                     return true;
@@ -49,8 +54,8 @@ public class ServerSideMethods implements ServerRemoteInterface {
                     if (loginManager.getDisconnectedPlayerList().contains(name)) {
                         loginManager.addNickName(name);
                         ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);//TODO same
-                        serverSideRMI.addRMIClient(name,stub);
                         loginManager.addStub(name,stub);
+                        serverSideRMI.addRMIClient(name,stub);
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");
@@ -65,6 +70,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
 
     @Override
     public Boolean login(String name) throws RemoteException {
+        System.out.println("login request from " + name);
         if(!loginManager.getNickNameList().contains(name)) {
             String host;
             try {
@@ -77,16 +83,16 @@ public class ServerSideMethods implements ServerRemoteInterface {
                 case ("gameLobby") -> {
                     loginManager.addNickName(name);
                     ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);//TODO da riscrivere perchè errato
-                    serverSideRMI.addRMIClient(name,stub);
                     loginManager.addStub(name,stub);
+                    serverSideRMI.addRMIClient(name,stub);
                     return true;
                 }
                 case ("gameStarted") -> {
                     if (loginManager.getDisconnectedPlayerList().contains(name)) {
                         loginManager.addNickName(name);
-                        ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);//TODO da riscrivere perchè errato
-                        serverSideRMI.addRMIClient(name,stub);
+                        ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);//TODO da riscrivere perchè errato                        loginManager.addStub(name,stub);
                         loginManager.addStub(name,stub);
+                        serverSideRMI.addRMIClient(name,stub);
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");
@@ -101,6 +107,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
 
     @Override
     public Boolean login(String name, int port) throws RemoteException {
+        System.out.println("login request from " + name);
         if(!loginManager.getNickNameList().contains(name)) {
             String host;
             try {
@@ -118,8 +125,8 @@ public class ServerSideMethods implements ServerRemoteInterface {
                     } catch (NotBoundException e) {
                         e.printStackTrace();
                     }
-                    serverSideRMI.addRMIClient(name,stub);
                     loginManager.addStub(name,stub);
+                    serverSideRMI.addRMIClient(name,stub);
                     return true;
                 }
                 case ("gameStarted") -> {
@@ -131,8 +138,8 @@ public class ServerSideMethods implements ServerRemoteInterface {
                         } catch (NotBoundException e) {
                             e.printStackTrace();
                         }
-                        serverSideRMI.addRMIClient(name,stub);
                         loginManager.addStub(name,stub);
+                        serverSideRMI.addRMIClient(name,stub);
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");
@@ -147,6 +154,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
 
     @Override
     public Boolean login(String name, int playerNumber, String mode, int port) throws RemoteException {
+        System.out.println("login request from " + name);
         if(!loginManager.getNickNameList().contains(name)) {
             String host;
             try {
@@ -157,16 +165,19 @@ public class ServerSideMethods implements ServerRemoteInterface {
 
             switch (loginManager.getStatus()) {
                 case ("gameLobby") -> {
-                    loginManager.addNickName(name);
+
                     ClientRemoteInterface stub = null;
+                    System.out.println("i got here in serversideMethods");
                     try {
                         stub = (ClientRemoteInterface) LocateRegistry.getRegistry("127.0.0.1", port).lookup("ClientRemoteInterface");
                     } catch (NotBoundException e) {
-                        throw new RuntimeException(e);
+                        e.printStackTrace();
                     }
-                    serverSideRMI.addRMIClient(name,stub);
                     loginManager.addStub(name,stub);
+                    System.out.println("added " + name + " stub !");
+                    serverSideRMI.addRMIClient(name,stub);
                     loginManager.setPlayerNumber(playerNumber);
+                    loginManager.addNickName(name);
                     //TODO add gestione modalità semplificata
                     return true;
                 }
@@ -179,8 +190,8 @@ public class ServerSideMethods implements ServerRemoteInterface {
                         } catch (NotBoundException e) {
                             throw new RuntimeException(e);
                         }
-                        serverSideRMI.addRMIClient(name,stub);
                         loginManager.addStub(name,stub);
+                        serverSideRMI.addRMIClient(name,stub);
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");
@@ -206,8 +217,11 @@ public class ServerSideMethods implements ServerRemoteInterface {
 
     @Override
     public void sendMessageToAll(String message, String sender) throws RemoteException {
-        chatController.sendChatMessage("all", message, serverSide,sender);
-
+        System.out.println("from serverMethods : " + message);
+        String messageOut = addInfo(message,sender);
+        System.out.println("from serverMethods : " + messageOut);
+        chatController.sendChatMessage("all", messageOut, serverSide,sender);
+        //this part risks sending the message two times
         for(String player : loginManager.getNickNameList()){
             if(serverSideRMI.getNameToStub().containsKey(player) && !sender.equals(player)){
                 serverSideRMI.getNameToStub().get(player).displayChatMessage(message,sender);
@@ -219,10 +233,24 @@ public class ServerSideMethods implements ServerRemoteInterface {
     public void sendMessage(String message, String nickName, String sender) throws RemoteException {
         chatController.sendChatMessage(nickName, message, serverSide, sender);
 
+        //this part risks sending the message two times
         for(String player : loginManager.getNickNameList()){
             if(serverSideRMI.getNameToStub().containsKey(player) && nickName.equals(player)){
                 serverSideRMI.getNameToStub().get(player).displayChatMessage(message,sender);
             }
         }
+    }
+
+    private String addInfo(String message, String requester){
+        JSONParser parser = new JSONParser();
+        JSONObject obj = null;
+        try {
+            obj = (JSONObject) parser.parse(message);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        ClientSignatureWriter.clientSignObject(obj,"@CHAT", requester);
+
+        return obj.toString();
     }
 }

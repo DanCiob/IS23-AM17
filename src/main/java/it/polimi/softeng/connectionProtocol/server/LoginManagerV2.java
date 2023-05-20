@@ -31,14 +31,16 @@ public class LoginManagerV2 {
         System.out.println("Reached desired number of player");
         for (String player : nickNameList){
             finalNickNameList.add(player);
+            System.out.println(player);
         }
         serverMessageHandler.getController().startGame();
         for(String player : nickNameList){
             if(nameToStub.containsKey(player)){
                 try {
                     nameToStub.get(player).startGame();
+                    System.out.println("sendind to " + player + " command to start");
                 } catch (RemoteException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             }
         }
@@ -70,16 +72,19 @@ public class LoginManagerV2 {
 
     public void addNickName(String nickName) {
         nickNameList.add(nickName);
-        if(nickNameList.size() == playerNumber) startGame();
         System.out.println(nickName + " entered the game");
+        if(nickNameList.size() == playerNumber) startGame();
+
     }
 
     public void setPlayerNumber(int playerNumber) {
         if(numberOfPlayersNotConfirmed){
             this.playerNumber = playerNumber;
+            System.out.println("number of players is: " + this.playerNumber + " from comand:" + playerNumber);
             numberOfPlayersNotConfirmed = false;
         }
     }
+
     public void addStub(String nickName, ClientRemoteInterface stub){
         nameToStub.put(nickName,stub);
     }

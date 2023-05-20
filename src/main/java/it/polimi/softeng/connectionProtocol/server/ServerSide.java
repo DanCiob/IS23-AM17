@@ -40,22 +40,26 @@ public class ServerSide {
 
     public void sendMessage(String message, String nickName){
         serverSideTCP.sendMessage(message,nickName);
+        System.out.println(message);
 
         if(interceptChatMessage(message)){
+            System.out.println("message intercepted");
             sendChatMessageRMI(message);
         }
     }
 
     public void sendMessageExcept(String message, String nickName){
         serverSideTCP.sendMessageExcept(message,nickName);
+        System.out.println(message);
 
         if(interceptChatMessage(message)){
+            System.out.println("message intercepted");
             sendChatMessageRMI(message);
         }
     }
 
     private Boolean interceptChatMessage(String message){
-        RequestParser requestParser = new RequestParser();
+        System.out.println("got into intercepting");
         JSONParser parser = new JSONParser();
         JSONObject obj = null;
         try {
@@ -66,6 +70,7 @@ public class ServerSide {
         String requestType = obj.get("request").toString();
 
         if(requestType.equals("@CHAT")){
+            System.out.println("its trueeee");
             return true;
         }
         return false;

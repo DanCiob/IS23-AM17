@@ -52,10 +52,8 @@ public class ServerSideRMI extends ServerSideMethods {      //maybe we can delet
         t.start();
     }
 
-    //TODO ping rmi users
     public void addRMIClient(String nickName, ClientRemoteInterface stub){
         nameToStub.put(nickName,stub);
-        loginManager.addStub(nickName, stub);
     }
 
     public void removeRMIClient(String nickName){

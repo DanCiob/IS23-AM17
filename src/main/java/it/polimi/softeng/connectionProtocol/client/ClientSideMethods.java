@@ -56,10 +56,10 @@ public class ClientSideMethods implements ClientRemoteInterface {
 
     @Override
     public void displayChatMessage(String message, String sender) throws RemoteException {
-        int found = 0;
+
         String receiver = null;
 
-        receiver = message.substring(message.indexOf("'" + 1));
+        /*receiver = message.substring(message.indexOf("'" + 1));
         receiver = receiver.substring(0, message.indexOf("'"));
 
         message = message.replace("'"+receiver+"' ", "");
@@ -79,8 +79,11 @@ public class ClientSideMethods implements ClientRemoteInterface {
             obj.put("requester", sender);
             obj.put("message", message);
             cli.chatVisualizer(obj);
-        }
-
+        }*/
+        JSONObject obj = new JSONObject();
+        obj.put("requester", sender);
+        obj.put("message", message);
+        cli.chatVisualizer(obj);
     }
 
     @Override
@@ -97,6 +100,11 @@ public class ClientSideMethods implements ClientRemoteInterface {
     @Override
     public void endGame(boolean winner) throws RemoteException {
         cli.endGame(winner);
+    }
+
+    @Override
+    public void notifyTurn() throws RemoteException {
+        cli.eventManager("myTurn");
     }
 
 

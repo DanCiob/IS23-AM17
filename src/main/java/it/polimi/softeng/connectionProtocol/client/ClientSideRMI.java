@@ -112,6 +112,7 @@ public class ClientSideRMI {
         ClientRemoteInterface stub  = null;
         try {
             stub = (ClientRemoteInterface) UnicastRemoteObject.exportObject(obj,port);
+            System.out.println("stub created !");
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -123,6 +124,7 @@ public class ClientSideRMI {
         }
         try {
             clientRegistry.bind("ClientRemoteInterface", stub);
+            System.out.println("stub binded !");
         } catch (RemoteException | AlreadyBoundException e) {
             throw new RuntimeException(e);
         }

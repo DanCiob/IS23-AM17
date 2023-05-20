@@ -71,7 +71,7 @@ public class CLITest extends CLI implements UI, Runnable {
      */
     private int ConnectionMode = 0;
 
-    private boolean GameIsOn;
+    private boolean GameIsOn = false;
     private final Scanner input;
 
     private final MessageHandler messageHandler;
@@ -204,6 +204,7 @@ public class CLITest extends CLI implements UI, Runnable {
                     //TODO to be removed
                     String GameModeStringifed = GameMode == 1 ? "e" : "n";
                     this.RemoteMethods = new ClientSideRMI(Port,this);
+                    System.out.println(GameModeStringifed);
                     RMIInvoker("@LOGN", GameModeStringifed);
                 }
                 default -> System.out.println("Unrecognized connection method, please digit 1 or 2...");
@@ -483,6 +484,7 @@ public class CLITest extends CLI implements UI, Runnable {
      */
     public void beginGame(boolean value) {
         this.GameIsOn = value;
+        System.out.println("i changed the value to : " + this.GameIsOn);
     }
 
     /**
@@ -492,11 +494,12 @@ public class CLITest extends CLI implements UI, Runnable {
     public void run() {
         boolean firstRun = true;
         setupCLI();
-        GameIsOn = false;
+        //GameIsOn = false;   questo assegnamento va fatto a costruzione
 
         System.out.println("Waiting for other players to join...");
         //Waiting for beginning of game
         while (!GameIsOn) {
+            System.out.println("value of gameIsOn: " + this.GameIsOn);
             try {
                 loadingScreen();
                 System.out.println("Waiting for other players to join...");
@@ -507,6 +510,7 @@ public class CLITest extends CLI implements UI, Runnable {
 
         while (GameIsOn) {
             try {
+                System.out.println("i'm starting the game");
                 //Wait for errors
                 TimeUnit.SECONDS.sleep(1);
                 game(firstRun);
@@ -791,6 +795,7 @@ public class CLITest extends CLI implements UI, Runnable {
      * @return true if action is correctly executed
      */
     public boolean RMIInvoker(String op, String action)  {
+        System.out.println("action in rmiInvoker: " + action);
         switch (op) {
             case ("@CHAT"): {
                 if (!ChatWriter.chatMessageRegex(action)) {
@@ -800,7 +805,6 @@ public class CLITest extends CLI implements UI, Runnable {
 
                 JSONObject obj = new JSONObject();
                 obj = ChatWriter.writeChatMessage(action);
-
 
                 if (obj.get("receiver").toString().equals("all")) {
                     try {
@@ -817,6 +821,7 @@ public class CLITest extends CLI implements UI, Runnable {
                     }
                 }
             }
+
             case ("@GAME"): {
                 if (!GameMoveWriter.gameMoveRegex(action)) {
                     System.out.println("Error in Game Move syntax, try again!");
@@ -842,6 +847,7 @@ public class CLITest extends CLI implements UI, Runnable {
                 //TODO Right now we don't receive GameMode, StartGame, NumOfPlayer...
                 try {
                     RemoteMethods.getStub().login(Nickname, NumOfPlayer, action, Port);
+                    System.out.println("exectuted login for: " + Nickname);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }

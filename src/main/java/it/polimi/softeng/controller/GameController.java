@@ -207,6 +207,15 @@ public class GameController {
         //Ended setup
         //Notify first player
         controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ConfirmWriter.writeConfirm(), "@CONF", game.getCurrentPlayer().getNickname()).toJSONString(), game.getCurrentPlayer().getNickname());
+        for(String player : controller.getServerSide().getServerSideRMI().getNameToStub().keySet()){
+            if(player.equals(game.getCurrentPlayer().getNickname())){
+                try {
+                    controller.getServerSide().getServerSideRMI().getNameToStub().get(player).notifyTurn();
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 
     public Game getCurrentGame() {
