@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -28,6 +29,7 @@ public class GUIGameController{
 
     ArrayList<Cell> boardMoves = new ArrayList<>();
     int columnShelfie = -1;
+    int firstFreeRowBeforeMoves = -1;
 
     @FXML GridPane shelfieGridPane;
 
@@ -39,21 +41,15 @@ public class GUIGameController{
     @FXML
     protected void removeTileFromBoard(javafx.scene.input.MouseEvent event){
         Node clickedNode = event.getPickResult().getIntersectedNode();
-        Image img = new Image("/images/Tile_B3.png");
-        /*ImageView imageView = new ImageView(img);
-        imageView.maxHeight(30);
-        imageView.maxWidth(33);
-        imageView.setFitHeight(30.0);
-        imageView.setFitWidth(33.0);
-        boardGrid.add(imageView, GridPane.getColumnIndex(clickedNode), GridPane.getRowIndex(clickedNode));*/
 
-      for(Node node: boardGrid.getChildren()){
-          if((GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode))&&(GridPane.getRowIndex(node) == GridPane.getRowIndex(clickedNode))){
-              createBoardMoves(GridPane.getRowIndex(clickedNode), GridPane.getColumnIndex(clickedNode));
-              ImageView i = (ImageView) node;
-              i.setImage(null);
-          }
-      }
+        for(Node node: boardGrid.getChildren()){
+            if((GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode))&&(GridPane.getRowIndex(node) == GridPane.getRowIndex(clickedNode))){
+                createBoardMoves(GridPane.getRowIndex(clickedNode), GridPane.getColumnIndex(clickedNode));
+                ImageView i = (ImageView) node;
+                i.setOpacity(0.3);
+                //i.setImage(null);
+            }
+        }
     }
 
     /**
@@ -62,7 +58,6 @@ public class GUIGameController{
      * @param column
      */
     public void createBoardMoves(int row, int column){
-        //TODO: save the image of the tile to insert it in the shelfie and their positions  in case it's not allowed to do the move
         Cell cell = new Cell();
         cell.setRow(row);
         cell.setColumn(column);
@@ -86,9 +81,8 @@ public class GUIGameController{
         //Send message to server
         if (toBeSent != null)
             GUIClientSide.getClientSide().sendMessage(clientSignObject(toBeSent, "@GAME", nickname).toJSONString());
-        //TODO: add the checklegalmoves control and put the tiles again on the board if it's not
-        boardMoves.clear();
-        columnShelfie = -1;
+        //TODO: add the checklegalmoves control, if it's right take off the images from the board and if it's not take off the images from the shelfie
+        resetMoves();
     }
 
     @FXML
@@ -97,15 +91,58 @@ public class GUIGameController{
     protected void insertInShelfie(javafx.scene.input.MouseEvent event) {
         Node clickedNode = event.getPickResult().getIntersectedNode();
         int row = firstFree(clickedNode);
-        Image img = new Image("/images/Tile_B3.png");
+        Image img;
         for (Node node : shelfie1.getChildren()) {
             if ((GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode)) && row==GridPane.getRowIndex(node)) {
-                ImageView tileImageView = (ImageView) node;
-                tileImageView.setImage(img);
-                columnShelfie = GridPane.getColumnIndex(node);
+                if((columnShelfie!=-1 && GridPane.getColumnIndex(clickedNode) == columnShelfie)||columnShelfie==-1){
+                    if(columnShelfie == -1) { //it's the first tile and we also need to save the column to check if the other tiles are put in the same column
+                        columnShelfie = GridPane.getColumnIndex(node);
+                        firstFreeRowBeforeMoves = row;
+                    }
+                    ImageView tileImageView = (ImageView) node;
+                    img = getImageInBoard(boardMoves.get(boardMoves.size()-1).getRow(), boardMoves.get(boardMoves.size()-1).getColumn());
+                    tileImageView.setImage(img);
+                }
             }
 
         }
+    }
+
+    protected Image getImageInBoard(int row, int column) {
+        for (Node node : boardGrid.getChildren()) {
+            if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column){
+                ImageView imageView =(ImageView) node;
+                return imageView.getImage();
+            }
+        }
+        return null;
+    }
+
+    @FXML
+    Button resetButton;
+
+    @FXML
+    protected void resetMoves() {
+        ImageView imageView;
+        for (Cell cell : boardMoves) {
+            for (Node node : boardGrid.getChildren()) {
+                if ((GridPane.getColumnIndex(node) == cell.getColumn()) && (GridPane.getRowIndex(node) == cell.getRow())) {
+                    ImageView i = (ImageView) node;
+                    i.setOpacity(1);
+                }
+            }
+            if (columnShelfie != -1) {
+                for (Node node : shelfie1.getChildren()) {
+                    if (GridPane.getColumnIndex(node) == columnShelfie && GridPane.getRowIndex(node) <= firstFreeRowBeforeMoves) {
+                        imageView = (ImageView) node;
+                        imageView.setImage(null);
+                    }
+                }
+            }
+        }
+        boardMoves.clear();
+        columnShelfie = -1;
+        firstFreeRowBeforeMoves = -1;
     }
 
     /**
