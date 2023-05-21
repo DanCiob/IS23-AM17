@@ -231,6 +231,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
 
     @Override
     public void sendMessage(String message, String nickName, String sender) throws RemoteException {
+        String messageOut = addInfo(message,sender);
         chatController.sendChatMessage(nickName, message, serverSide, sender);
 
         //this part risks sending the message two times

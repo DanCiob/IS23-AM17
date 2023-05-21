@@ -22,10 +22,10 @@ public class CommunicationProtocolParser{
         //sets up the file to be picked up for setup
         switch (mode){
             case "server" ->{
-                directory = "src/main/java/it/polimi/softeng/connectionProtocol/serverConfig.json";
+                directory = "src/main/java/it/polimi/softeng/connectionProtocol/server/serverConfig.json";
             }
             case "client" ->{
-                directory = "src/main/java/it/polimi/softeng/connectionProtocol/clientConfig.json";
+                directory = "src/main/java/it/polimi/softeng/connectionProtocol/client/clientConfig.json";
             }
             default -> {
                 directory = null;           //should not happen

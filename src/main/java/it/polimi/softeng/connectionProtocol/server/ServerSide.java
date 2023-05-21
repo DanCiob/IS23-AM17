@@ -90,7 +90,7 @@ public class ServerSide {
         String receiver = (String) jsonObject.get("receiver");
         String message = (String) jsonObject.get("message");
 
-        switch (requester){
+        switch (receiver){
             case("all") -> {
                 for(String player : loginManager.getNickNameList()){
                     if(serverSideRMI.getNameToStub().containsKey(player) && !requester.equals(player)){
