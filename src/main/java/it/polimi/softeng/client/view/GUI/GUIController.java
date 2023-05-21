@@ -2,9 +2,6 @@ package it.polimi.softeng.client.view.GUI;
 
 import it.polimi.softeng.JSONWriter.ClientSignatureWriter;
 import it.polimi.softeng.JSONWriter.LoginWriter;
-import it.polimi.softeng.client.view.MessageHandler;
-import it.polimi.softeng.client.view.CLI.CLI;
-import it.polimi.softeng.connectionProtocol.client.ClientSide;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -100,11 +97,12 @@ public class GUIController{
     }
 
     public void switchToGame(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/gameScreenScheletroConImmaginiGIUSTO.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/gamescreen.fxml"));
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+        //GUIClientSide.run();
     }
 
 

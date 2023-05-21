@@ -6,6 +6,7 @@ import it.polimi.softeng.JSONWriter.ChatWriter;
 import it.polimi.softeng.JSONWriter.ClientSignatureWriter;
 import it.polimi.softeng.JSONWriter.GameMoveWriter;
 import it.polimi.softeng.JSONWriter.LoginWriter;
+import it.polimi.softeng.client.view.GUI.GUIClientSide;
 import it.polimi.softeng.client.view.MessageHandler;
 import it.polimi.softeng.connectionProtocol.client.ClientSide;
 import it.polimi.softeng.connectionProtocol.client.ClientSideRMI;
@@ -84,6 +85,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      * Manage connection -> RMI
      */
     private ClientSideRMI RemoteMethods;
+
+    private GUIClientSide guiClientSide = null;
 
 
     public CLI() {
@@ -870,7 +873,12 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             case ("personalCardEvent") -> System.out.println("Your personal card for this game");
             case ("commonCardEvent") -> System.out.println("Common cards for this game");
             case ("playerEvent") -> System.out.println("List of connected players with score");
-            case ("myTurn") -> System.out.println("It's your turn!");
+            case ("myTurn") -> {
+                System.out.println("It's your turn!");
+                if(guiClientSide!=null){
+                    guiClientSide.notifyPlayer();
+                }
+            }
 
             //Servers-side errors
             case (NICKNAME_NOT_UNIQUE) -> System.out.println(NICKNAME_NOT_UNIQUE);
@@ -1010,5 +1018,17 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     public void setGameMode(int gameMode) {
         GameMode = gameMode;
+    }
+
+    public Scanner getInput(){
+        return input;
+    }
+
+    public GameBoard getUserGameBoard() {
+        return UserGameBoard;
+    }
+
+    public void setGuiClientSide(GUIClientSide guiClientSide) {
+        this.guiClientSide = guiClientSide;
     }
 }

@@ -5,6 +5,7 @@ import it.polimi.softeng.client.view.MessageHandler;
 import it.polimi.softeng.connectionProtocol.client.ClientSide;
 import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Cell;
+import it.polimi.softeng.model.GameBoard;
 import it.polimi.softeng.model.Tile;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,7 +26,7 @@ import java.util.ResourceBundle;
 import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
 
-public class GUIGameController{
+public class GUIGameController implements Initializable{
 
     ArrayList<Cell> boardMoves = new ArrayList<>();
     int columnShelfie = -1;
@@ -36,6 +37,10 @@ public class GUIGameController{
 
     @FXML
     GridPane boardGrid;
+
+    public void initialize(URL url, ResourceBundle rb) {
+        updateBoard();
+    }
 
 
     @FXML
@@ -76,11 +81,16 @@ public class GUIGameController{
         }
         action = action + columnShelfie;
         System.out.println(action);
-        JSONObject toBeSent = GUIClientSide.getCli().actionToJSON("@GAME", action);
+        if(GUIClientSide.getCli().getConnectionMode() == 1){ //socket
+            JSONObject toBeSent = GUIClientSide.getCli().actionToJSON("@GAME", action);
 
-        //Send message to server
-        if (toBeSent != null)
-            GUIClientSide.getClientSide().sendMessage(clientSignObject(toBeSent, "@GAME", nickname).toJSONString());
+            //Send message to server
+            if (toBeSent != null)
+                GUIClientSide.getClientSide().sendMessage(clientSignObject(toBeSent, "@GAME", nickname).toJSONString());
+        }else{//RMI
+
+        }
+
         //TODO: add the checklegalmoves control, if it's right take off the images from the board and if it's not take off the images from the shelfie
         resetMoves();
     }
@@ -100,7 +110,7 @@ public class GUIGameController{
                         firstFreeRowBeforeMoves = row;
                     }
                     ImageView tileImageView = (ImageView) node;
-                    img = getImageInBoard(boardMoves.get(boardMoves.size()-1).getRow(), boardMoves.get(boardMoves.size()-1).getColumn());
+                    img = getImageInBoard(boardMoves.get(boardMoves.size()-1).getRow(), boardMoves.get(boardMoves.size()-1).getColumn()).getImage();
                     tileImageView.setImage(img);
                 }
             }
@@ -108,11 +118,11 @@ public class GUIGameController{
         }
     }
 
-    protected Image getImageInBoard(int row, int column) {
+    protected ImageView getImageInBoard(int row, int column) {
         for (Node node : boardGrid.getChildren()) {
             if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column){
                 ImageView imageView =(ImageView) node;
-                return imageView.getImage();
+                return imageView;
             }
         }
         return null;
@@ -164,6 +174,27 @@ public class GUIGameController{
             }
         }
         return row;
+    }
+
+    public void updateBoard(){
+        GameBoard gameBoard = GUIClientSide.getCli().getUserGameBoard();
+        ImageView imageView;
+        Image image;
+        for(int i=0;i<boardRows;i++){
+            for(int j=0;j<boardColumns;j++){
+                if(gameBoard.getBoard()[i][j] != null){
+                    imageView = getImageInBoard(i, j);
+                    if(imageView.getImage() == null){
+                        image = new Image("/images/Tile_" + gameBoard.getBoard()[i][j].getColor().colorLetter() + "1.png"); //TODO: change the object in the image
+                        imageView.setImage(image);
+                    }
+                }
+            }
+        }
+    }
+
+    public void notifyPlayerTurn(){
+        callUpdateBoard();
     }
 
 
