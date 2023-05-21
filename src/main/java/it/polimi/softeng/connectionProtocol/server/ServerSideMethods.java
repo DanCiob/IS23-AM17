@@ -4,6 +4,7 @@ import it.polimi.softeng.JSONWriter.ClientSignatureWriter;
 import it.polimi.softeng.connectionProtocol.client.ClientRemoteInterface;
 import it.polimi.softeng.controller.ChatController;
 import it.polimi.softeng.controller.Controller;
+import it.polimi.softeng.model.Cell;
 import it.polimi.softeng.model.Player;
 import it.polimi.softeng.model.Tile;
 import org.json.simple.JSONObject;
@@ -22,11 +23,13 @@ public class ServerSideMethods implements ServerRemoteInterface {
     private ServerSideRMI serverSideRMI;
     private ServerSide serverSide;
     private ChatController chatController = new ChatController();
+    private Controller controller;
 
-    public ServerSideMethods(LoginManagerV2 loginManager,ServerSideRMI serverSideRMI,ServerSide serverSide){
+    public ServerSideMethods(LoginManagerV2 loginManager,ServerSideRMI serverSideRMI,ServerSide serverSide,Controller controller){
         this.loginManager = loginManager;
         this.serverSideRMI = serverSideRMI;
         this.serverSide = serverSide;
+        this.controller = controller;
     }
 
     @Override
@@ -205,8 +208,8 @@ public class ServerSideMethods implements ServerRemoteInterface {
     }
 
     @Override
-    public void sendMove(ArrayList<Tile> tiles, int column) throws RemoteException {
-
+    public Boolean sendMove(ArrayList<Cell> cells, int column, String nickName) throws RemoteException {
+        return controller.SocketGameMoveRequest(cells,column,nickName);
     }
 
     @Override
@@ -217,11 +220,9 @@ public class ServerSideMethods implements ServerRemoteInterface {
 
     @Override
     public void sendMessageToAll(String message, String sender) throws RemoteException {
-        System.out.println("from serverMethods : " + message);
         String messageOut = addInfo(message,sender);
-        System.out.println("from serverMethods : " + messageOut);
         chatController.sendChatMessage("all", messageOut, serverSide,sender);
-        //this part risks sending the message two times
+
         for(String player : loginManager.getNickNameList()){
             if(serverSideRMI.getNameToStub().containsKey(player) && !sender.equals(player)){
                 serverSideRMI.getNameToStub().get(player).displayChatMessage(message,sender);
@@ -234,7 +235,6 @@ public class ServerSideMethods implements ServerRemoteInterface {
         String messageOut = addInfo(message,sender);
         chatController.sendChatMessage(nickName, message, serverSide, sender);
 
-        //this part risks sending the message two times
         for(String player : loginManager.getNickNameList()){
             if(serverSideRMI.getNameToStub().containsKey(player) && nickName.equals(player)){
                 serverSideRMI.getNameToStub().get(player).displayChatMessage(message,sender);

@@ -821,14 +821,16 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 GameMoveParser gmp = new GameMoveParser();
                 gmp.gameMoveParser(GameMoveWriter.writeGameMove(action).toJSONString());
 
-                ArrayList<Tile> tiles = new ArrayList<>();
+                /*ArrayList<Tile> tiles = new ArrayList<>();
                 for (Cell c : gmp.getTilesToBeRemoved()) {
                     Tile newTile = UserGameBoard.getBoard()[c.getRow()][c.getColumn()];
                     tiles.add(newTile);
-                }
+                }*/
 
+                ArrayList<Cell> cells = gmp.getTilesToBeRemoved();
+                int column = gmp.getColumn();
                 try {
-                    RemoteMethods.getStub().sendMove(tiles, gmp.getColumn());
+                    RemoteMethods.getStub().sendMove(cells,column,Nickname);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }

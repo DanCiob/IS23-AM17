@@ -1,5 +1,6 @@
 package it.polimi.softeng.connectionProtocol.server;
 
+import it.polimi.softeng.model.Cell;
 import it.polimi.softeng.model.Player;
 import it.polimi.softeng.model.Tile;
 
@@ -20,7 +21,7 @@ public interface ServerRemoteInterface extends Remote {
     Boolean login(String name) throws RemoteException;
     Boolean login(String name,int port) throws RemoteException;
     Boolean login(String name, int playerNumber,String mode ,int port) throws RemoteException;
-    void sendMove(ArrayList<Tile> tiles, int column) throws RemoteException;
+    Boolean sendMove(ArrayList<Cell> cells, int column, String nickName) throws RemoteException;
     ArrayList<Player> getPlayersAndScore () throws RemoteException;
 
     /**

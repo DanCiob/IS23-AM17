@@ -30,7 +30,7 @@ public class ServerSide {
         this.serverMessageHandler = serverMessageHandler;
         loginManager = new LoginManagerV2(serverMessageHandler);
         serverSideTCP = new ServerSideTCP(loginManager, serverMessageHandler);
-        serverSideRMI = new ServerSideRMI(loginManager,this);
+        serverSideRMI = new ServerSideRMI(loginManager,this,controller);
     }
 
     public void sendMessageToAll(String message){
