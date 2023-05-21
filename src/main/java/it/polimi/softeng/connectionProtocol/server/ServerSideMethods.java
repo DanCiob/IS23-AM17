@@ -233,7 +233,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
     @Override
     public void sendMessage(String message, String nickName, String sender) throws RemoteException {
         String messageOut = addInfo(message,sender);
-        chatController.sendChatMessage(nickName, message, serverSide, sender);
+        chatController.sendChatMessage(nickName, messageOut, serverSide, sender);
 
         for(String player : loginManager.getNickNameList()){
             if(serverSideRMI.getNameToStub().containsKey(player) && nickName.equals(player)){
