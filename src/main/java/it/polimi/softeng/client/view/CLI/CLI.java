@@ -91,6 +91,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         this.input = new Scanner(System.in);
     }
 
+    ////////////////
+    //SETUP METHOD//
+    ////////////////
 
     /**
      * CLI initialization, connection to server, choose of gameMode
@@ -145,8 +148,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed)");
                         System.out.println(">");
                         Nickname = input.nextLine();
-
-                        //TODO LoginWriter...
                     } while (!isOkNickname());
 
                     //TODO Now connect to 127.0.0.1
@@ -207,6 +208,390 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         } while (ConnectionMode != 1 && ConnectionMode != 2);
     }
 
+    ////////////////
+    //GAME METHODS//
+    ////////////////
+
+    /**
+     * Notify CLI when game begins
+     * @param value is boolean
+     */
+    public void beginGame(boolean value) {
+        this.GameIsOn = value;
+    }
+
+    /**
+     * Main class of CLI, continuously run from begin of game to the end
+     */
+    @Override
+    public void run() {
+        boolean firstRun = true;
+        setupCLI();
+        GameIsOn = false;
+
+        System.out.println("Waiting for other players to join...");
+        //Waiting for beginning of game
+        while (!GameIsOn) {
+            try {
+                loadingScreen();
+                System.out.println("Waiting for other players to join...");
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        while (GameIsOn) {
+            try {
+                //Wait for errors
+                TimeUnit.SECONDS.sleep(1);
+                game(firstRun);
+            } catch (InterruptedException | RemoteException e) {
+                throw new RuntimeException(e);
+            }
+            firstRun = false;
+        }
+
+        input.close();
+    }
+
+    /**
+     * Game routine that wait for commands, check syntax and send JSON/invoke method to server if needed
+     * @param firstRun is true if it's the first call of game
+     */
+    public void game(boolean firstRun) throws RemoteException {
+        //POSSIBLE COMMANDS
+        commands(firstRun);
+
+        String command = input.nextLine();
+
+        //Check empty command
+        if (command == null) {
+            System.out.println("Empty command!");
+            return;
+        }
+        //Check if player inserted a command that is not on the table
+        if (!isOkCommand(command, 1)) {
+            System.out.println("Please write a command that you can see in the table");
+            return;
+        }
+
+        if (command.equalsIgnoreCase("@CMND") || command.equalsIgnoreCase("@VBOR") || command.equalsIgnoreCase("@VSHE") || command.equalsIgnoreCase("@VPCA") || command.equalsIgnoreCase("@VPLA") || command.equalsIgnoreCase("@VCCA")) {
+            switch (command.toUpperCase()) {
+                case ("@CMND") -> {
+                    return;
+                }
+                case ("@VBOR") -> {
+                    boardVisualizer(UserGameBoard.getBoard(), UserGameBoard.getNotAvailable());
+                    return;
+                }
+                case ("@VSHE") -> {
+                    shelfieVisualizer(UserShelfie.getGrid());
+                    return;
+                }
+                case ("@VPCA") -> {
+                    personalCardVisualizer(PersonalCard);
+                    return;
+                }
+                case ("@VCCA") -> {
+                    commonCardsVisualizer(CommonCard1);
+                    if (CommonCard2 != null) commonCardsVisualizer(CommonCard2);
+                    return;
+                }
+                case ("@VPLA") -> {
+                    switch (ConnectionMode) {
+                        //Socket
+                        case 1 -> {
+                            JSONObject dummy = new JSONObject();
+                            clientSide.sendMessage(clientSignObject(dummy, "@VPLA", Nickname).toJSONString());
+                            return;
+                        }
+                        //RMI
+                        case 2 -> {
+                            eventManager("playerEvent");
+                            scoreVisualizer(RemoteMethods.getStub().getPlayersAndScore());
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!isOkCommand(command, 2) && !isOkCommand(command, 3)){
+            System.out.println("Please write a command that you can see in the table");
+            return;
+        }
+
+        //Command is in @CMND format (every command is 4 letters), uppercase avoid case sensitivity
+        String op = command.substring(0, 5).toUpperCase();
+        String action = command.substring(6);
+
+        if (!op.equals("@GAME") && !op.equals("@CHAT") && !op.equals("@VPLA")) {
+            System.out.println("Please write a command that you can see in the table");
+            return;
+        }
+
+        switch (ConnectionMode) {
+            //Socket
+            case 1 -> {
+                //Block illegal move
+                if (op.equals("@GAME")) {
+                    if (!isOkCommand(command, 3)) {
+                        System.out.println("Please, check gameMove syntax");
+                        return;
+                    }
+                }
+                //Block badly formatted messages
+                if (op.equals("@CHAT")) {
+                    if (!isOkCommand(command, 2)) {
+                        System.out.println("Please, check chat syntax");
+                        return;
+                    }
+                }
+
+                //Create JSON messages containing request
+                JSONObject toBeSent = actionToJSON(op, action);
+
+                //Send message to server
+                if (toBeSent != null)
+                    clientSide.sendMessage(clientSignObject(toBeSent, op, Nickname).toJSONString());
+            }
+
+
+            case 2 -> {
+                if (op.equals("@GAME")) {
+                    if (!isOkCommand(command, 3)) {
+                        System.out.println("Please, check gameMove syntax");
+                        return;
+                    }
+                }
+
+                if (op.equals("@CHAT")) {
+                    if (!isOkCommand(command, 2)) {
+                        System.out.println("Please, check chat syntax");
+                        return;
+                    }
+                }
+                RMIInvoker(op, action);
+            }
+        }
+    }
+
+    /////////////////
+    //REGEX MATCHER//
+    /////////////////
+
+    /**
+     * Verify that inserted nickname follows regex standard defined for nicknames
+     *
+     * @return true if Nickname follow regex standard defined for nicknames
+     */
+    public boolean isOkNickname() {
+        Pattern pattern = Pattern.compile(nicknameREGEX);
+        Matcher matcher = pattern.matcher(this.Nickname);
+        return matcher.matches();
+    }
+
+    /**
+     * Verify that inserted command follows regex standard defined for commands
+     *
+     * @param command       is command defined by user in console
+     * @param typeOfCommand 1 for generic command, 2 for chatCheck, 3 for gameCheck
+     * @return true if command follows regex standard
+     */
+    public boolean isOkCommand(String command, int typeOfCommand) {
+        switch (typeOfCommand) {
+            case 1 -> {
+                Pattern pattern = Pattern.compile(commandREGEX);
+                Matcher matcher = pattern.matcher(command);
+                return matcher.lookingAt();
+            }
+            case 2 -> {
+                Pattern pattern = Pattern.compile(chatCommandREGEX);
+                Matcher matcher = pattern.matcher(command);
+                return matcher.lookingAt();
+            }
+            case 3 -> {
+                Pattern pattern = Pattern.compile(gameCommandREGEX);
+                Matcher matcher = pattern.matcher(command);
+                return matcher.lookingAt();
+            }
+        }
+        return false;
+    }
+
+    ////////////////////////
+    //CLIENT-SERVER SENDER//
+    ////////////////////////
+
+    /**
+     * @param op     is command
+     * @param action is command text sent by UI
+     * @return a JSONObject containing encoded action
+     */
+    public JSONObject actionToJSON(String op, String action) {
+        switch (op) {
+            case ("@CHAT") -> {
+                if (!ChatWriter.chatMessageRegex(action) || ChatWriter.writeChatMessage(action) == null) {
+                    eventManager("chatError");
+                    return null;
+                } else
+                    return ChatWriter.writeChatMessage(action);
+            }
+            case ("@GAME") -> {
+                if (!GameMoveWriter.gameMoveRegex(action) || GameMoveWriter.writeGameMove(action) == null) {
+                    eventManager("gameMoveError");
+                    return null;
+                } else
+                    return GameMoveWriter.writeGameMove(action);
+            }
+
+            //TODO check login dynamic
+            case ("@LOGN") -> {
+
+            }
+            default -> System.out.println("Unrecognized operation!");
+        }
+        return null;
+    }
+
+    /**
+     * @param op     is command
+     * @param action is command text sent by UI
+     * @return true if action is correctly executed
+     */
+    public boolean RMIInvoker(String op, String action)  {
+        switch (op) {
+            case ("@CHAT") -> {
+                if (!ChatWriter.chatMessageRegex(action)) {
+                    System.out.println("Error in Chat message syntax, try again!");
+                    return false;
+                }
+
+                JSONObject obj;
+                obj = ChatWriter.writeChatMessage(action);
+
+                if (obj.get("receiver").toString().equals("all")) {
+                    try {
+                        RemoteMethods.getStub().sendMessageToAll(obj.toJSONString(), Nickname);
+                    } catch (RemoteException e) {
+                        System.out.println("Please, reinsert your message!");
+                    }
+                }
+                else {
+                    try {
+                        RemoteMethods.getStub().sendMessage(obj.toJSONString(), (String) obj.get("receiver"), Nickname);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            case ("@GAME") -> {
+                if (!GameMoveWriter.gameMoveRegex(action)) {
+                    System.out.println("Error in Game Move syntax, try again!");
+                    return false;
+                }
+                GameMoveParser gmp = new GameMoveParser();
+                gmp.gameMoveParser(GameMoveWriter.writeGameMove(action).toJSONString());
+
+                ArrayList<Cell> cells = gmp.getTilesToBeRemoved();
+                int column = gmp.getColumn();
+                try {
+                    RemoteMethods.getStub().sendMove(cells,column,Nickname);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            case ("@LOGN") -> {
+                //TODO Right now we don't receive GameMode, StartGame, NumOfPlayer...
+                try {
+                    RemoteMethods.getStub().login(Nickname, NumOfPlayer, action);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            default ->
+                    System.out.println("Unrecognized operation!");
+        }
+        return true;
+    }
+
+    ////////////
+    //GRAPHICS//
+    ////////////
+
+    /**
+     * @param firstRun Print all possible commands doable by user eventually with MyShelfie logo (only at CLI first start)
+     */
+    public void commands(boolean firstRun) {
+        if (firstRun)
+            logo();
+
+        CommandLineTable scoreTable = new CommandLineTable();
+        scoreTable.setShowVerticalLines(true);
+        scoreTable.setHeaders("Command", "Effect", "Example of command");
+
+        System.out.println(ANSI_RESET);
+        System.out.println("+--------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+");
+        System.out.println("| Command                        | Effect                                                                            | Example                                                                                            |");
+        System.out.println("+--------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+");
+
+        System.out.println("| " + ANSI_GREEN + "@CMND                          " + ANSI_RESET + "| To show command table again                                                       | @CMND                                                                                              |");
+        System.out.println("| " + ANSI_GREEN + "@VBOR                          " + ANSI_RESET + "| Visualize board status                                                            | @VBOR                                                                                              |");
+        System.out.println("| " + ANSI_GREEN + "@VSHE                          " + ANSI_RESET + "| Visualize shelfie status                                                          | @VSHE                                                                                              |");
+        System.out.println("| " + ANSI_GREEN + "@VPLA                          " + ANSI_RESET + "| Visualize currently connected players and score                                   | @VPLA                                                                                              |");
+        System.out.println("| " + ANSI_GREEN + "@VCCA                          " + ANSI_RESET + "| Visualize common objectives                                                       | @VCCA                                                                                              |");
+        System.out.println("| " + ANSI_GREEN + "@VPCA                          " + ANSI_RESET + "| Visualize personal objectives                                                     | @VPCA                                                                                              |");
+        System.out.println("| " + ANSI_GREEN + "@GAME gameMoveFormat           " + ANSI_RESET + "| Do a game move                                                                    | @GAME (rowTile1,columnTil1),(rowTile2,columnTil2),(rowTile3,columnTil3),numColumnOfInsertion       |");
+        System.out.println("| " + ANSI_GREEN + "--------------------           " + ANSI_RESET + "| --------------                                                                    | EX: (5,5),(5,6),2                                                                                  |");
+        System.out.println("| " + ANSI_GREEN + "--------------------           " + ANSI_RESET + "| --------------                                                                    | You must select at least 1 but less than 3 (included), picking order is inserting order in shelfie |");
+        System.out.println("| " + ANSI_GREEN + "@CHAT 'nameOfReceiver' message " + ANSI_RESET + "| Send a chat message (to send a message to everybody type 'all' in nameOfReceiver) | @CHAT 'userRec' HI!                                                                                |");
+
+        System.out.println("+--------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+");
+    }
+
+    /**
+     * Print MyShelfie logo
+     */
+    public void logo() {
+        System.out.println(ANSI_GREEN + "  .___  ___. ____    ____         _______. __    __   _______  __       _______  __   _______    \n" +
+                "  |   \\/   | \\   \\  /   /        /       ||  |  |  | |   ____||  |     |   ____||  | |   ____|   \n" +
+                "  |  \\  /  |  \\   \\/   /        |   (----`|  |__|  | |  |__   |  |     |  |__   |  | |  |__      \n" +
+                "  |  |\\/|  |   \\_    _/          \\   \\    |   __   | |   __|  |  |     |   __|  |  | |   __|     \n" +
+                "  |  |  |  |     |  |        .----)   |   |  |  |  | |  |____ |  `----.|  |     |  | |  |____    \n" +
+                "  |__|  |__|     |__|        |_______/    |__|  |__| |_______||_______||__|     |__| |_______|   \n" +
+                "                                                                                                 " +
+                "" + ANSI_RESET);
+    }
+
+    /**
+     * Print loading animation
+     */
+    public void loadingScreen() throws InterruptedException {
+        TimeUnit.MILLISECONDS.sleep(500);
+        if (GameIsOn) return;
+        System.out.println("[          ]");
+        if (GameIsOn) return;
+
+        TimeUnit.MILLISECONDS.sleep(500);
+        if (GameIsOn) return;
+        System.out.println("[===       ]");
+        if (GameIsOn) return;
+
+        TimeUnit.MILLISECONDS.sleep(500);
+        if (GameIsOn) return;
+        System.out.println("[=====     ]");
+        if (GameIsOn) return;
+
+        TimeUnit.MILLISECONDS.sleep(500);
+        if (GameIsOn) return;
+        System.out.println("[=======   ]");
+        if (GameIsOn) return;
+
+        TimeUnit.MILLISECONDS.sleep(500);
+        if (GameIsOn) return;
+        System.out.println("[==========]");
+    }
 
     /**
      * Visualize player's board
@@ -473,385 +858,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         scoreTable.print();
     }
 
-    /**
-     * Notify CLI when game begins
-     * @param value is boolean
-     */
-    public void beginGame(boolean value) {
-        this.GameIsOn = value;
-    }
-
-    /**
-     * Main class of CLI, continuously run from begin of game to the end
-     */
-    @Override
-    public void run() {
-        boolean firstRun = true;
-        setupCLI();
-        GameIsOn = false;
-
-        System.out.println("Waiting for other players to join...");
-        //Waiting for beginning of game
-        while (!GameIsOn) {
-            try {
-                loadingScreen();
-                System.out.println("Waiting for other players to join...");
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        while (GameIsOn) {
-            try {
-                //Wait for errors
-                TimeUnit.SECONDS.sleep(1);
-                game(firstRun);
-            } catch (InterruptedException | RemoteException e) {
-                throw new RuntimeException(e);
-            }
-            firstRun = false;
-        }
-
-        input.close();
-    }
-
-    /**
-     * Game routine that wait for commands, check syntax and send JSON/invoke method to server if needed
-     * @param firstRun is true if it's the first call of game
-     */
-    public void game(boolean firstRun) throws RemoteException {
-        //POSSIBLE COMMANDS
-        commands(firstRun);
-
-        String command = input.nextLine();
-
-        //Check empty command
-        if (command == null) {
-            System.out.println("Empty command!");
-            return;
-        }
-        //Check if player inserted a command that is not on the table
-        if (!isOkCommand(command, 1)) {
-            System.out.println("Please write a command that you can see in the table");
-            return;
-        }
-
-        if (command.equalsIgnoreCase("@CMND") || command.equalsIgnoreCase("@VBOR") || command.equalsIgnoreCase("@VSHE") || command.equalsIgnoreCase("@VPCA") || command.equalsIgnoreCase("@VPLA") || command.equalsIgnoreCase("@VCCA")) {
-            switch (command.toUpperCase()) {
-                case ("@CMND") -> {
-                    return;
-                }
-                case ("@VBOR") -> {
-                    boardVisualizer(UserGameBoard.getBoard(), UserGameBoard.getNotAvailable());
-                    return;
-                }
-                case ("@VSHE") -> {
-                    shelfieVisualizer(UserShelfie.getGrid());
-                    return;
-                }
-                case ("@VPCA") -> {
-                    personalCardVisualizer(PersonalCard);
-                    return;
-                }
-                case ("@VCCA") -> {
-                    commonCardsVisualizer(CommonCard1);
-                    if (CommonCard2 != null) commonCardsVisualizer(CommonCard2);
-                    return;
-                }
-                case ("@VPLA") -> {
-                    switch (ConnectionMode) {
-                        //Socket
-                        case 1 -> {
-                            JSONObject dummy = new JSONObject();
-                            clientSide.sendMessage(clientSignObject(dummy, "@VPLA", Nickname).toJSONString());
-                            return;
-                        }
-                        //RMI
-                        case 2 -> {
-                            eventManager("playerEvent");
-                            scoreVisualizer(RemoteMethods.getStub().getPlayersAndScore());
-                            return;
-                        }
-                    }
-                }
-
-                //TODO RMIInvoker for players and their score
-                //TODO return;
-            }
-        }
-
-        //Command is in @CMND format (every command is 4 letters), uppercase avoid case sensitivity
-        String op = command.substring(0, 5).toUpperCase();
-        String action = command.substring(6);
-
-        if (!op.equals("@GAME") && !op.equals("@CHAT") && !op.equals("@VPLA")) {
-            System.out.println("Please write a command that you can see in the table");
-            return;
-        }
-
-        switch (ConnectionMode) {
-            //Socket
-            case 1 -> {
-                //Block illegal move
-                if (op.equals("@GAME")) {
-                    if (!isOkCommand(command, 3)) {
-                        System.out.println("Please, check gameMove syntax");
-                        return;
-                    }
-                }
-                //Block badly formatted messages
-                if (op.equals("@CHAT")) {
-                    if (!isOkCommand(command, 2)) {
-                        System.out.println("Please, check chat syntax");
-                        return;
-                    }
-                }
-
-                //Create JSON messages containing request
-                JSONObject toBeSent = actionToJSON(op, action);
-
-                //Send message to server
-                if (toBeSent != null)
-                    clientSide.sendMessage(clientSignObject(toBeSent, op, Nickname).toJSONString());
-            }
-
-
-            case 2 -> {
-                if (op.equals("@GAME")) {
-                    if (!isOkCommand(command, 3)) {
-                        System.out.println("Please, check gameMove syntax");
-                        return;
-                    }
-                }
-
-                    if (op.equals("@CHAT")) {
-                        if (!isOkCommand(command, 2)) {
-                            System.out.println("Please, check chat syntax");
-                            return;
-                        }
-                    }
-                RMIInvoker(op, action);
-                }
-            }
-        }
-
-
-    /**
-     * @param firstRun Print all possible commands doable by user eventually with MyShelfie logo (only at CLI first start)
-     */
-    public void commands(boolean firstRun) {
-        if (firstRun)
-            logo();
-
-        CommandLineTable scoreTable = new CommandLineTable();
-        scoreTable.setShowVerticalLines(true);
-        scoreTable.setHeaders("Command", "Effect", "Example of command");
-
-        System.out.println(ANSI_RESET);
-        System.out.println("+--------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+");
-        System.out.println("| Command                        | Effect                                                                            | Example                                                                                            |");
-        System.out.println("+--------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+");
-
-        System.out.println("| " + ANSI_GREEN + "@CMND                          " + ANSI_RESET + "| To show command table again                                                       | @CMND                                                                                              |");
-        System.out.println("| " + ANSI_GREEN + "@VBOR                          " + ANSI_RESET + "| Visualize board status                                                            | @VBOR                                                                                              |");
-        System.out.println("| " + ANSI_GREEN + "@VSHE                          " + ANSI_RESET + "| Visualize shelfie status                                                          | @VSHE                                                                                              |");
-        System.out.println("| " + ANSI_GREEN + "@VPLA                          " + ANSI_RESET + "| Visualize currently connected players and score                                   | @VPLA                                                                                              |");
-        System.out.println("| " + ANSI_GREEN + "@VCCA                          " + ANSI_RESET + "| Visualize common objectives                                                       | @VCCA                                                                                              |");
-        System.out.println("| " + ANSI_GREEN + "@VPCA                          " + ANSI_RESET + "| Visualize personal objectives                                                     | @VPCA                                                                                              |");
-        System.out.println("| " + ANSI_GREEN + "@GAME gameMoveFormat           " + ANSI_RESET + "| Do a game move                                                                    | @GAME (rowTile1,columnTil1),(rowTile2,columnTil2),(rowTile3,columnTil3),numColumnOfInsertion       |");
-        System.out.println("| " + ANSI_GREEN + "--------------------           " + ANSI_RESET + "| --------------                                                                    | EX: (5,5),(5,6),2                                                                                  |");
-        System.out.println("| " + ANSI_GREEN + "--------------------           " + ANSI_RESET + "| --------------                                                                    | You must select at least 1 but less than 3 (included), picking order is inserting order in shelfie |");
-        System.out.println("| " + ANSI_GREEN + "@CHAT 'nameOfReceiver' message " + ANSI_RESET + "| Send a chat message (to send a message to everybody type 'all' in nameOfReceiver) | @CHAT 'userRec' HI!                                                                                |");
-
-        System.out.println("+--------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+");
-    }
-
-    /**
-     * Print MyShelfie logo
-     */
-    public void logo() {
-        System.out.println(ANSI_GREEN + "  .___  ___. ____    ____         _______. __    __   _______  __       _______  __   _______    \n" +
-                "  |   \\/   | \\   \\  /   /        /       ||  |  |  | |   ____||  |     |   ____||  | |   ____|   \n" +
-                "  |  \\  /  |  \\   \\/   /        |   (----`|  |__|  | |  |__   |  |     |  |__   |  | |  |__      \n" +
-                "  |  |\\/|  |   \\_    _/          \\   \\    |   __   | |   __|  |  |     |   __|  |  | |   __|     \n" +
-                "  |  |  |  |     |  |        .----)   |   |  |  |  | |  |____ |  `----.|  |     |  | |  |____    \n" +
-                "  |__|  |__|     |__|        |_______/    |__|  |__| |_______||_______||__|     |__| |_______|   \n" +
-                "                                                                                                 " +
-                "" + ANSI_RESET);
-    }
-
-    /**
-     * Print loading animation
-     * @throws InterruptedException
-     */
-    public void loadingScreen() throws InterruptedException {
-        TimeUnit.MILLISECONDS.sleep(500);
-        if (GameIsOn) return;
-        System.out.println("[          ]");
-        if (GameIsOn) return;
-
-        TimeUnit.MILLISECONDS.sleep(500);
-        if (GameIsOn) return;
-        System.out.println("[===       ]");
-        if (GameIsOn) return;
-
-        TimeUnit.MILLISECONDS.sleep(500);
-        if (GameIsOn) return;
-        System.out.println("[=====     ]");
-        if (GameIsOn) return;
-
-        TimeUnit.MILLISECONDS.sleep(500);
-        if (GameIsOn) return;
-        System.out.println("[=======   ]");
-        if (GameIsOn) return;
-
-        TimeUnit.MILLISECONDS.sleep(500);
-        if (GameIsOn) return;
-        System.out.println("[==========]");
-        if (GameIsOn);
-    }
-
-    /**
-     * Verify that inserted nickname follows regex standard defined for nicknames
-     *
-     * @return true if Nickname follow regex standard defined for nicknames
-     */
-    public boolean isOkNickname() {
-        Pattern pattern = Pattern.compile(nicknameREGEX);
-        Matcher matcher = pattern.matcher(this.Nickname);
-        return matcher.matches();
-    }
-
-    /**
-     * Verify that inserted command follows regex standard defined for commands
-     *
-     * @param command       is command defined by user in console
-     * @param typeOfCommand 1 for generic command, 2 for chatCheck, 3 for gameCheck
-     * @return true if command follows regex standard
-     */
-    public boolean isOkCommand(String command, int typeOfCommand) {
-        switch (typeOfCommand) {
-            case 1 -> {
-                Pattern pattern = Pattern.compile(commandREGEX);
-                Matcher matcher = pattern.matcher(command);
-                return matcher.lookingAt();
-            }
-            case 2 -> {
-                Pattern pattern = Pattern.compile(chatCommandREGEX);
-                Matcher matcher = pattern.matcher(command);
-                return matcher.lookingAt();
-            }
-            case 3 -> {
-                Pattern pattern = Pattern.compile(gameCommandREGEX);
-                Matcher matcher = pattern.matcher(command);
-                return matcher.lookingAt();
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param op     is command
-     * @param action is command text sent by UI
-     * @return a JSONObject containing encoded action
-     */
-    public JSONObject actionToJSON(String op, String action) {
-        switch (op) {
-            case ("@CHAT") -> {
-                if (!ChatWriter.chatMessageRegex(action) || ChatWriter.writeChatMessage(action) == null) {
-                    eventManager("chatError");
-                    return null;
-                } else
-                    return ChatWriter.writeChatMessage(action);
-            }
-            case ("@GAME") -> {
-                if (!GameMoveWriter.gameMoveRegex(action) || GameMoveWriter.writeGameMove(action) == null) {
-                    eventManager("gameMoveError");
-                    return null;
-                } else
-                    return GameMoveWriter.writeGameMove(action);
-            }
-
-            //TODO check login dynamic
-            case ("@LOGN") -> {
-
-            }
-            default -> System.out.println("Unrecognized operation!");
-        }
-        return null;
-    }
-
-    /**
-     * @param op     is command
-     * @param action is command text sent by UI
-     * @return true if action is correctly executed
-     */
-    public boolean RMIInvoker(String op, String action)  {
-        switch (op) {
-            case ("@CHAT"): {
-                if (!ChatWriter.chatMessageRegex(action)) {
-                    System.out.println("Error in Chat message syntax, try again!");
-                    return false;
-                }
-
-                JSONObject obj = new JSONObject();
-                obj = ChatWriter.writeChatMessage(action);
-
-
-                if (obj.get("receiver").toString().equals("all")) {
-                    try {
-                        RemoteMethods.getStub().sendMessageToAll(obj.toJSONString(), Nickname);
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                else {
-                    try {
-                        RemoteMethods.getStub().sendMessage(obj.toJSONString(), (String) obj.get("receiver"), Nickname);
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-            case ("@GAME"): {
-                if (!GameMoveWriter.gameMoveRegex(action)) {
-                    System.out.println("Error in Game Move syntax, try again!");
-                    return false;
-                }
-                GameMoveParser gmp = new GameMoveParser();
-                gmp.gameMoveParser(GameMoveWriter.writeGameMove(action).toJSONString());
-
-                /*ArrayList<Tile> tiles = new ArrayList<>();
-                for (Cell c : gmp.getTilesToBeRemoved()) {
-                    Tile newTile = UserGameBoard.getBoard()[c.getRow()][c.getColumn()];
-                    tiles.add(newTile);
-                }*/
-
-                ArrayList<Cell> cells = gmp.getTilesToBeRemoved();
-                int column = gmp.getColumn();
-                try {
-                    RemoteMethods.getStub().sendMove(cells,column,Nickname);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            case ("@LOGN"): {
-                //TODO Right now we don't receive GameMode, StartGame, NumOfPlayer...
-                try {
-                    RemoteMethods.getStub().login(Nickname, NumOfPlayer, action);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            break;
-            default:
-                System.out.println("Unrecognized operation!");
-        }
-
-        System.out.println("Test");
-        return true;
-    }
 
     /**
      * Called by messageHandler or actionToJSON with various event
@@ -865,14 +871,62 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             case ("gameMoveError") -> System.out.println("Error in game move syntax, try again!");
 
             //Events
-            case ("chatEvent") -> System.out.println("Received chat message");
-            case ("globalChatEvent") -> System.out.println("Received global chat message");
-            case ("boardEvent") -> System.out.println("Received board update");
-            case ("shelfieEvent") -> System.out.println("Received shelfie update");
-            case ("personalCardEvent") -> System.out.println("Your personal card for this game");
-            case ("commonCardEvent") -> System.out.println("Common cards for this game");
-            case ("playerEvent") -> System.out.println("List of connected players with score");
-            case ("myTurn") -> System.out.println("It's your turn!");
+            case ("chatEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+-----------------------+");
+                System.out.println("| Received chat message |");
+                System.out.println("+-----------------------+");
+                System.out.println(ANSI_RESET);
+            }
+            case ("globalChatEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+------------------------------+");
+                System.out.println("| Received global chat message |");
+                System.out.println("+------------------------------+");
+                System.out.println(ANSI_RESET);
+            }
+            case ("boardEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+-----------------------+");
+                System.out.println("| Received board update |");
+                System.out.println("+-----------------------+");
+                System.out.println(ANSI_RESET);
+            }
+            case ("shelfieEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+-------------------------+");
+                System.out.println("| Received shelfie update |");
+                System.out.println("+-------------------------+");
+                System.out.println(ANSI_RESET);
+            }
+            case ("personalCardEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+----------------------------------+");
+                System.out.println("| Your personal card for this game |");
+                System.out.println("+----------------------------------+");
+                System.out.println(ANSI_RESET);
+            }
+            case ("commonCardEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+----------------------------+");
+                System.out.println("| Common cards for this game |");
+                System.out.println("+----------------------------+");
+                System.out.println(ANSI_RESET);
+            }
+            case ("playerEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+--------------------------------------+");
+                System.out.println("| List of connected players with score |");
+                System.out.println("+--------------------------------------+");
+                System.out.println(ANSI_RESET);
+            }
+            case ("myTurn") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+-----------------+");
+                System.out.println("| It's your turn! |");
+                System.out.println("+-----------------+");
+                System.out.println(ANSI_RESET);
+            }
 
             //Servers-side errors
             case (NICKNAME_NOT_UNIQUE) -> System.out.println(NICKNAME_NOT_UNIQUE);
@@ -921,6 +975,10 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     "\n" + ANSI_RESET);
         }
     }
+
+     ///////////////////
+     //UPDATER METHODS//
+     ///////////////////
 
     /**
      * Called by RMI or Socket for board update
