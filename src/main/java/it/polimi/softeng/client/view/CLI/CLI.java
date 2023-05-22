@@ -277,7 +277,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      * @param firstRun is true if it's the first call of game
      */
     public void game(boolean firstRun) throws RemoteException {
-        //POSSIBLE COMMANDS
+        //Print of the available commands (only at the first run), that the user can digit
         commands(firstRun);
 
         String command = input.nextLine();
@@ -541,7 +541,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     ////////////
 
     /**
-     * @param firstRun Print all possible commands doable by user eventually with MyShelfie logo (only at CLI first start)
+     * Print all possible commands doable by user, eventually with MyShelfie logo only at CLI if param is true
+     * @param firstRun if it is true, it means it's the first run
      */
     public void commands(boolean firstRun) {
         if (firstRun)

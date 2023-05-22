@@ -194,6 +194,11 @@ public class GameBoard implements Serializable {
 
     }
 
+    /**
+     * This method positions the tiles contained in the bag, in the available cells of the board
+     * @param bag contains the tiles of the game
+     */
+
     public void positionTiles(ArrayList<Tile> bag){
         Random random = new Random();
         boolean posNotUsable; //position in which we cannot position Tiles

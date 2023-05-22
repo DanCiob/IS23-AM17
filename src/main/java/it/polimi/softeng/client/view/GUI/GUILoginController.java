@@ -52,12 +52,12 @@ public class GUIController{
 
     @FXML
     protected void onNewGame(){
-        if(game.getSelectionModel().getSelectedIndex() == 0){
+        if(game.getSelectionModel().getSelectedIndex() == 0){ //option create new game
             np.setText("Select the number of players: ");
             hboxNumPlayers.setVisible(true);
             hboxMode.setVisible(true);
         }
-        if(game.getSelectionModel().getSelectedIndex() == 1){
+        if(game.getSelectionModel().getSelectedIndex() == 1){ //option join a new game
             np.setText("Select the number of players: ");
             hboxNumPlayers.setVisible(false);
             hboxMode.setVisible(false);
@@ -75,7 +75,9 @@ public class GUIController{
         if(!GUIClientSide.getCli().isOkNickname()){
             nickname.setText("");
         }else{
-            GUIClientSide.setupCliForGui(socketOrRmi.getSelectionModel().getSelectedIndex()+1, serverIP.getText(), Integer.parseInt(serverPort.getText()), game.getSelectionModel().getSelectedIndex() +1,numberOfPlayer.getSelectionModel().getSelectedIndex()+2, mode.getSelectionModel().getSelectedIndex()+1);
+            GUIClientSide.setupCliForGui(socketOrRmi.getSelectionModel().getSelectedIndex()+1,
+                    serverIP.getText(), Integer.parseInt(serverPort.getText()), game.getSelectionModel().getSelectedIndex() +1,
+                    numberOfPlayer.getSelectionModel().getSelectedIndex()+2, mode.getSelectionModel().getSelectedIndex()+1);
             loginNotifier();
             switchToGame(event);
         }

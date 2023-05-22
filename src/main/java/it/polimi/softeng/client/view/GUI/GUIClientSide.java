@@ -26,7 +26,7 @@ public class GUIClientSide {
                 cli.setServerAddress(serverAddress);
                 cli.setPort(port);
                 cli.setStartGame(startGame);
-                if(startGame == 1){
+                if(startGame == 1){ //create new game
                     cli.setNumOfPlayer(numPlayers);
                     cli.setGameMode(mode);
                 }
