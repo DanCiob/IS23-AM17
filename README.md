@@ -6,7 +6,7 @@
 | UML |🟢| 
 | Basic rules |🟢|
 | Complete rules |🟢|
-| RMI |🟡|
+| RMI |🟢|
 | Socket |🟢|
 | CLI |🟢|
 | GUI |🟡|
