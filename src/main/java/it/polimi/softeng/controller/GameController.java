@@ -34,6 +34,7 @@ public class GameController {
             return false;
         }
         //Turn routine update
+        Player currentPlayer = game.getCurrentPlayer(); //reference used to send the shelfie of the player who made a move
         int result = game.turn(tilesToBeRemoved, column);
 
         switch (result) {
@@ -68,7 +69,7 @@ public class GameController {
                 if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(requester)) {
                     ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(requester);
                     try {
-                        temp.gameBoardUpdate(game.getGameBoard());
+                        temp.shelfieUpdate(currentPlayer.getShelfie());
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }
@@ -80,8 +81,8 @@ public class GameController {
 
                 //Notify next player
                 //Is an RMI user
-                if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(requester)) {
-                    ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(requester);
+                if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(game.getCurrentPlayer().getNickname())) {
+                    ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(game.getCurrentPlayer().getNickname());
                     try {
                         temp.displayChatMessage("It's your turn!", "System");
                     } catch (RemoteException e) {

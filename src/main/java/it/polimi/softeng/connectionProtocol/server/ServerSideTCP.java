@@ -130,7 +130,6 @@ public class ServerSideTCP {
         for(ClientHandler client : clientList){
             client.sendMessage(message);
         }
-
     }
 
     public void sendMessage(String message, String nickName){

@@ -164,7 +164,7 @@ public class CLITest extends CLI implements UI, Runnable {
                     System.out.println("Digit server IP");
                     System.out.println(">");
                     ServerAddress = input.nextLine();
-                    System.out.println("Digit server Port");
+                    System.out.println("Digit client Port");
                     System.out.println(">");
                     Port = Integer.parseInt(input.nextLine());
                     System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");
