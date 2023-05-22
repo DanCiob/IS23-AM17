@@ -9,12 +9,14 @@ import static it.polimi.softeng.JSONWriter.PlayerWriter.playerAndScoreWriter;
 import static it.polimi.softeng.JSONWriter.ServerSignatureWriter.serverSignObject;
 
 /**
- * General controller managing game, gameController, boardController, shelfieController, chatController and communicating using serverSide
+ * General controller with functions of:
+ * - managing gameController, boardController, shelfieController, chatController;
+ * - communicating using serverSide.
  */
 public class Controller {
     private final GameController gameController;
-
     private final ChatController chatController;
+
     private final ServerSide serverSide;
     private final ServerMessageHandler messageHandler;
 
@@ -26,10 +28,12 @@ public class Controller {
     }
 
     /**
-     * Process chat request decoded from JSON by ServerMessageHandler
+     * Process chat request decoded from JSON by ServerMessageHandler:
+     *  it makes some checks on the receiver and sender, then send the chat message
      *
      * @param receiver is receiver of chat message
      * @param message is JSON message encoded
+     * @param sender is the sender of the message
      */
     public boolean SocketChatRequest(String receiver, String message, String sender) {
             if((!serverSide.getNickNameList().contains(receiver) || receiver.equals(sender)) && !receiver.equals("all"))
@@ -39,7 +43,8 @@ public class Controller {
     }
 
     /**
-     * Process game move request decoded from JSON by ServerMessageHandler
+     * Process game move request decoded from JSON by ServerMessageHandler:
+     *  it makes some checks on the requester of the move, then send it
      *
      * @param positionsToBeRemoved is positions to be removed from board
      * @param column is column of insertion in shelfie

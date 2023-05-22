@@ -20,7 +20,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-public class GUIController implements Initializable {
+public class GUILoginController implements Initializable {
     @FXML
     private Label welcomeText;
 
@@ -43,7 +43,6 @@ public class GUIController implements Initializable {
 
     @FXML
     ImageView TitleView;
-
 
 
     @FXML
@@ -73,12 +72,12 @@ public class GUIController implements Initializable {
 
     @FXML
     protected void onNewGame(){
-        if(game.getSelectionModel().getSelectedIndex() == 0){
+        if(game.getSelectionModel().getSelectedIndex() == 0){ //option create new game
             np.setText("Select the number of players: ");
             hboxNumPlayers.setVisible(true);
             hboxMode.setVisible(true);
         }
-        if(game.getSelectionModel().getSelectedIndex() == 1){
+        if(game.getSelectionModel().getSelectedIndex() == 1){ //option join a new game
             np.setText("Select the number of players: ");
             hboxNumPlayers.setVisible(false);
             hboxMode.setVisible(false);
@@ -90,10 +89,12 @@ public class GUIController implements Initializable {
     @FXML
     protected void onLoginButtonClick(ActionEvent event) throws IOException{
         GUIClientSide.getCli().setNickname(nickname.getText());
-        if(GUIClientSide.getCli().isOkNickname() == false){
+        if(!GUIClientSide.getCli().isOkNickname()){
             nickname.setText("");
         }else{
-            GUIClientSide.setupCliForGui(socketOrRmi.getSelectionModel().getSelectedIndex()+1, serverIP.getText(), Integer.parseInt(serverPort.getText()), game.getSelectionModel().getSelectedIndex() +1,numberOfPlayer.getSelectionModel().getSelectedIndex()+2, mode.getSelectionModel().getSelectedIndex()+1);
+            GUIClientSide.setupCliForGui(socketOrRmi.getSelectionModel().getSelectedIndex()+1,
+                    serverIP.getText(), Integer.parseInt(serverPort.getText()), game.getSelectionModel().getSelectedIndex() +1,
+                    numberOfPlayer.getSelectionModel().getSelectedIndex()+2, mode.getSelectionModel().getSelectedIndex()+1);
             loginNotifier();
             switchToGame(event);
         }

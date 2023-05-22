@@ -20,7 +20,6 @@ public class ServerMessageHandler {
 
     public ServerMessageHandler(Controller controller) {
         this.controller = controller;
-
     }
 
     public Controller getController() {

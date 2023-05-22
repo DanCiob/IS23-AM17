@@ -2,9 +2,6 @@ package it.polimi.softeng.client.view;
 
 import it.polimi.softeng.JSONParser.*;
 import it.polimi.softeng.client.view.CLI.CLI;
-import it.polimi.softeng.client.view.GUI.GUIAppl;
-import it.polimi.softeng.client.view.GUI.GUIClientSide;
-import it.polimi.softeng.client.view.GUI.GUIController;
 import it.polimi.softeng.model.GameBoard;
 import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.Shelfie;

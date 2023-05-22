@@ -27,7 +27,7 @@ public class Game{
     private Player firstPlayer;     //should it be final?
 
     //maybe finished
-    //dovremmo controllare che non parta con meno del numero di giocatori scelto
+    //TODO dovremmo controllare che non parta con meno del numero di giocatori scelto
     public void beginGame(ArrayList<String> nameList){
         //vedi cosa serve
         for(String name : nameList){
@@ -54,15 +54,6 @@ public class Game{
     }
 
     /**
-     * method used to place the tiles on the board
-     */
-    public void initializeBoard(){
-        gameBoard.resetBoard(players.size());
-        gameBoard.positionTiles(tileBag);
-    }
-
-
-    /**
      * this method creates all the tiles and places them in the tileBag
      */
     public void initializeTile(){
@@ -78,6 +69,15 @@ public class Game{
             }
         }
     }
+
+    /**
+     * method used to place the tiles on the board
+     */
+    public void initializeBoard(){
+        gameBoard.resetBoard(players.size());
+        gameBoard.positionTiles(tileBag);
+    }
+
 
     /**
      * this method gets the reference to the singleton object BadgeEndGame
@@ -227,32 +227,35 @@ public class Game{
 
 
     /**
-     * It's turn version used in controller
-     * @param positionsToBeRemoved contains coordinates of tiles to be removed
-     * @param column is column of insertion in shelfie
+     * It's turn version used in controller: it receives the move of the current player, updating board and shelfie.
+     * It also checks if the move is legal, if there are only islands, if a CommonCard is completed, if the
+     *  shelfie is full and it's necessary to call last turn routine
+     * @param positionsToBeRemoved contains coordinates of tiles to be removed from the board
+     * @param column is column of insertion in shelfie, in which the player wants to insert the tiles in
      * @return 1 the game is ended, 0 if not, -1 if there's an error
      */
-
     public int turn(ArrayList<Cell> positionsToBeRemoved, int column){
-        //receive the action of current player
-        //updates the board and the shelfie (checking if it's possible to do that)
-
+        //find the first available row of the @param column
         int firstFree = 0;
         while(firstFree<shelfieRows && currentPlayer.getShelfie().getGrid()[firstFree][column] != null){
             firstFree++;
         }
 
+        //create my array of tiles to insert from @param positionsToBeRemoved
         ArrayList<Tile> tilesToInsert = new ArrayList<>();
         for(Cell position : positionsToBeRemoved){
             tilesToInsert.add(getGameBoard().getBoard()[position.getRow()][position.getColumn()]);
         }
 
+        //check if it is possible to remove the tiles from the board, then remove them if it is legal
         if(!gameBoard.updateBoard(positionsToBeRemoved)){
-            //it controls if the choice is legal and if so it removes them
             return -1;
         }
 
-
+        /*
+        Try to insert the tiles in the current player shelfie; if it is not possible we reinsert the tiles in
+         the board and set at null positions in the shelfie.
+        */
         try{
            currentPlayer.getShelfie().insertTile(tilesToInsert, column);
         }catch (IllegalInsertException e){
@@ -261,7 +264,7 @@ public class Game{
                 System.out.println("Tile in pos " + cell.getRow()+ " "+ cell.getColumn() + " is " + currentPlayer.getShelfie().getGrid()[cell.getRow()][cell.getColumn()]);
             }*/
             gameBoard.reinsertTiles(tilesToInsert, positionsToBeRemoved);
-            for(int i=0; i< tilesToInsert.size()  && firstFree<shelfieRows; i++){
+            for(int i=0; i<tilesToInsert.size() && firstFree<shelfieRows; i++){
                 currentPlayer.getShelfie().setGridAtNull(firstFree, column);
                 firstFree ++;
             }
@@ -305,7 +308,6 @@ public class Game{
 
 
 
-
     /**
      * this method is used by MatchTest
      */
@@ -322,7 +324,7 @@ public class Game{
                 //current player has completed a common card, so he receives the badge. The badge is removed from the arrayList
                 BadgeScore badgeScore = card.getBadge();
                 if(badgeScore != null)
-                    currentPlayer.updateScore(badgeScore.getScore());
+                    currentPlayer.updateScore(card.getBadge().getScore());
             }
         }
     }
