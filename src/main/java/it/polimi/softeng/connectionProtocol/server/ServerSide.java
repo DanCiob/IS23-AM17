@@ -30,7 +30,7 @@ public class ServerSide {
         this.serverMessageHandler = serverMessageHandler;
         loginManager = new LoginManagerV2(serverMessageHandler);
         serverSideTCP = new ServerSideTCP(loginManager, serverMessageHandler);
-        serverSideRMI = new ServerSideRMI(loginManager,this);
+        serverSideRMI = new ServerSideRMI(loginManager,this,controller);
     }
 
     public void sendMessageToAll(String message){
@@ -90,7 +90,7 @@ public class ServerSide {
         String receiver = (String) jsonObject.get("receiver");
         String message = (String) jsonObject.get("message");
 
-        switch (requester){
+        switch (receiver){
             case("all") -> {
                 for(String player : loginManager.getNickNameList()){
                     if(serverSideRMI.getNameToStub().containsKey(player) && !requester.equals(player)){

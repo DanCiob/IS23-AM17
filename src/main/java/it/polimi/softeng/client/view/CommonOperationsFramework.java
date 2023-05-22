@@ -8,13 +8,6 @@ import org.json.simple.JSONObject;
 
 public abstract class CommonOperationsFramework {
 
-    /**
-     * Write JSON file containing translation of command
-     *
-     * @param op     is command
-     * @param action is command text sent by UI
-     * @return JSONObject containing message that will be sent to server
-     */
     public abstract JSONObject actionToJSON(String op, String action) throws IllegalInsertException;
 
     public abstract boolean RMIInvoker(String op, String action);

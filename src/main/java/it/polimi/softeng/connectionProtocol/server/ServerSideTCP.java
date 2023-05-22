@@ -1,9 +1,9 @@
 package it.polimi.softeng.connectionProtocol.server;
 
-import it.polimi.softeng.connectionProtocol.server.ClientHandler;
-import it.polimi.softeng.connectionProtocol.server.LoginManagerV2;
-import it.polimi.softeng.connectionProtocol.server.ServerSide;
+
+import it.polimi.softeng.connectionProtocol.CommunicationProtocolParser;
 import it.polimi.softeng.controller.ServerMessageHandler;
+import it.polimi.softeng.model.commonCards.CommonCards;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -16,8 +16,9 @@ import java.util.concurrent.Executors;
 //TODO controlla se viene killato se si chiudono tutti i socket tcp
 
 public class ServerSideTCP {
+    CommunicationProtocolParser communicationProtocolParser = new CommunicationProtocolParser();
     private ServerSocket serverSocket = null;
-    private int portNumber = 1234;
+    private int portNumber;
 
     private ServerSide serverSide;
     private ArrayList<ClientHandler> clientList = new ArrayList<>();
@@ -26,6 +27,8 @@ public class ServerSideTCP {
     private LoginManagerV2 loginManager;
 
     public ServerSideTCP(LoginManagerV2 loginManager, ServerMessageHandler serverMessageHandler){
+        communicationProtocolParser.parser("server");
+        portNumber = communicationProtocolParser.getPortNumber();
         this.loginManager = loginManager;
         this.serverMessageHandler = serverMessageHandler;
         this.serverSide = serverSide;
