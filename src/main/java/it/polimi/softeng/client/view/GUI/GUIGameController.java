@@ -39,6 +39,7 @@ public class GUIGameController implements Initializable{
     GridPane boardGrid;
 
     public void initialize(URL url, ResourceBundle rb) {
+        GUIClientSide.getCli().setGuiGameController(this);
         updateBoard();
     }
 
@@ -92,7 +93,8 @@ public class GUIGameController implements Initializable{
         }
 
         //TODO: add the checklegalmoves control, if it's right take off the images from the board and if it's not take off the images from the shelfie
-        resetMoves();
+
+        resetMoves1();
     }
 
     @FXML
@@ -155,6 +157,60 @@ public class GUIGameController implements Initializable{
         firstFreeRowBeforeMoves = -1;
     }
 
+    protected void resetMoves1() {
+        ImageView imageView;
+        Boolean legalChoiceBoard, legalChoiceShelfie;
+        legalChoiceBoard = checkLegalChoiceBoard();
+        legalChoiceShelfie = checkLegalChoiceShelfie();
+        for (Cell cell : boardMoves) {
+            for (Node node : boardGrid.getChildren()) {
+                if ((GridPane.getColumnIndex(node) == cell.getColumn()) && (GridPane.getRowIndex(node) == cell.getRow())) {
+                    ImageView i = (ImageView) node;
+                    if (columnShelfie != -1){
+                        if(legalChoiceBoard && legalChoiceShelfie){
+                            i.setImage(null);
+                        }else{
+                            i.setOpacity(1);
+                        }
+                    }else{
+                        i.setOpacity(1);
+                    }
+                }
+            }
+            if (columnShelfie != -1) {
+                for (Node node : shelfie1.getChildren()) {
+                    if (GridPane.getColumnIndex(node) == columnShelfie && GridPane.getRowIndex(node) <= firstFreeRowBeforeMoves) {
+                        imageView = (ImageView) node;
+                        if(!legalChoiceShelfie)
+                            imageView.setImage(null);
+                    }
+                }
+            }
+        }
+        boardMoves.clear();
+        columnShelfie = -1;
+        firstFreeRowBeforeMoves = -1;
+        if(legalChoiceBoard && legalChoiceShelfie){
+            boardGrid.setOpacity(0.3);
+            GUIClientSide.getCli().setYourTurn(false);
+            /*while(!GUIClientSide.getCli().isYourTurn()){
+                //TODO: this and end game
+            }
+            boardGrid.setOpacity(1);
+            updateBoard();*/
+        }
+    }
+
+    public void startTurn(){
+        boardGrid.setOpacity(1);
+        updateBoard();
+    }
+
+    public boolean checkLegalChoiceShelfie(){
+        int i = firstFreeRowBeforeMoves;
+        return boardMoves.size() + i <= shelfieRows;
+    }
+
     /**
      *
      * @param clickedNode
@@ -182,19 +238,19 @@ public class GUIGameController implements Initializable{
         Image image;
         for(int i=0;i<boardRows;i++){
             for(int j=0;j<boardColumns;j++){
+                imageView = getImageInBoard(i, j);
                 if(gameBoard.getBoard()[i][j] != null){
-                    imageView = getImageInBoard(i, j);
                     if(imageView.getImage() == null){
                         image = new Image("/images/Tile_" + gameBoard.getBoard()[i][j].getColor().colorLetter() + "1.png"); //TODO: change the object in the image
                         imageView.setImage(image);
                     }
+                }else{
+                    if(imageView != null && imageView.getImage() != null){
+                        imageView.setImage(null);
+                    }
                 }
             }
         }
-    }
-
-    public void notifyPlayerTurn(){
-        callUpdateBoard();
     }
 
 
@@ -209,7 +265,7 @@ public class GUIGameController implements Initializable{
         }
     }*/
 
-    /**
+   /* /**
      * This method update the Shelfie showing the images of the tiles inserted
      * @param tiles tiles to insert in the shelfie (must be already in the right order)
      * @param column column in which you want to insert the tiles
@@ -236,7 +292,7 @@ public class GUIGameController implements Initializable{
         }
     }*/
 
-    /**
+    /*/**
      * This method is used by upadateShelfie to find the first row available of a specific column
      * @param column is the column we analyze
      * @return the first empty row or shelfieRows costant if the column is full
@@ -251,4 +307,79 @@ public class GUIGameController implements Initializable{
     }*/
 
 
+    public boolean checkLegalChoiceBoard() {
+        int i, j;
+        Cell cell2, cell3, cell4;
+        if(boardMoves.isEmpty())
+            return false;
+
+        for (Cell cell : boardMoves) {
+            i = cell.getRow();
+            j = cell.getColumn();
+
+            if((i!=0 && i!=8 && j!=0 && j!=8)) {
+                if((getImageInBoard(i+1, j) != null) && (getImageInBoard(i, j+1) != null) && (getImageInBoard(i-1, j) != null) && (getImageInBoard(i, j-1) != null))
+                    if((getImageInBoard(i+1, j).getImage() != null) && (getImageInBoard(i, j+1).getImage() != null) && (getImageInBoard(i-1, j).getImage() != null) && (getImageInBoard(i, j-1).getImage() != null))
+                        return false; /*false if the tile is completely surrounded by other tiles (up, down, left and right)*/
+            }
+
+        }
+        if(boardMoves.size() == 1){
+            return true; //if the move takes one single tile, we don't need to verify it is aligned with others
+        }
+        if(boardMoves.size() == 2){
+            cell2 = boardMoves.get(0);
+            cell3 = boardMoves.get(1);
+            if(cell2.getRow() == cell3.getRow()) {
+                if(cell2.getColumn() == cell3.getColumn() + 1)
+                    return true;
+                if(cell2.getColumn() == cell3.getColumn() - 1)
+                    return true;
+            }
+            if(cell2.getColumn() == cell3.getColumn()){
+                if(cell2.getRow() == cell3.getRow() + 1)
+                    return true;
+                if(cell2.getRow() == cell3.getRow() - 1)
+                    return true;
+
+            }
+        }
+        if(boardMoves.size() == 3){
+            cell2 = boardMoves.get(0);
+            cell3 = boardMoves.get(1);
+            cell4 = boardMoves.get(2);
+            if(cell2.getRow() == cell3.getRow() && cell2.getRow() == cell4.getRow()){
+                int c2 = cell2.getColumn(), c3 = cell3.getColumn(), c4 = cell4.getColumn();
+                if(c2==c3-1 && c3==c4-1)
+                    return true;
+                if(c2==c4-1 && c4==c3-1)
+                    return true;
+                if(c3==c2-1 && c2==c4-1)
+                    return true;
+                if(c3==c4-1 && c4==c2-1)
+                    return true;
+                if(c4==c2-1 && c2==c3-1)
+                    return true;
+                if(c4==c3-1 && c3==c2-1)
+                    return true;
+            }
+            if(cell2.getColumn() == cell3.getColumn() && cell2.getColumn() == cell4.getColumn()){
+                int r2 = cell2.getRow(), r3 = cell3.getRow(), r4 = cell4.getRow();
+                if(r2==r3-1 && r3==r4-1)
+                    return true;
+                if(r2==r4-1 && r4==r3-1)
+                    return true;
+                if(r3==r2-1 && r2==r4-1)
+                    return true;
+                if(r3==r4-1 && r4==r2-1)
+                    return true;
+                if(r4==r2-1 && r2==r3-1)
+                    return true;
+                if(r4==r3-1 && r3==r2-1)
+                    return true;
+            }
+        }
+
+        return false;
+    }
 }

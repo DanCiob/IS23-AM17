@@ -12,8 +12,6 @@ public class GUIClientSide {
     static CLI cli;
     static ClientSide clientSide;
 
-    GUIGameController guiGameController;
-
     public GUIClientSide() {
         cli = new CLI();
         messageHandler = new MessageHandler(cli);
@@ -70,12 +68,5 @@ public class GUIClientSide {
         cli.getInput().close();
     }
 
-    public GUIGameController getGuiGameController() {
-        return guiGameController;
-    }
-
-    public void notifyPlayer(){
-        notifyPlayerTurn();
-    }
 
 }

@@ -7,6 +7,7 @@ import it.polimi.softeng.JSONWriter.ClientSignatureWriter;
 import it.polimi.softeng.JSONWriter.GameMoveWriter;
 import it.polimi.softeng.JSONWriter.LoginWriter;
 import it.polimi.softeng.client.view.GUI.GUIClientSide;
+import it.polimi.softeng.client.view.GUI.GUIGameController;
 import it.polimi.softeng.client.view.MessageHandler;
 import it.polimi.softeng.connectionProtocol.client.ClientSide;
 import it.polimi.softeng.connectionProtocol.client.ClientSideRMI;
@@ -87,7 +88,21 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     private ClientSideRMI RemoteMethods;
 
     private GUIClientSide guiClientSide = null;
+    private GUIGameController guiGameController;
 
+    private boolean isYourTurn = false;
+
+    public boolean isYourTurn() {
+        return isYourTurn;
+    }
+
+    public void setYourTurn(boolean yourTurn) {
+        isYourTurn = yourTurn;
+    }
+
+    public void setGuiGameController(GUIGameController guiGameController) {
+        this.guiGameController = guiGameController;
+    }
 
     public CLI() {
         this.messageHandler = new MessageHandler(this);
@@ -357,6 +372,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 //Send message to server
                 if (toBeSent != null)
                     clientSide.sendMessage(clientSignObject(toBeSent, op, Nickname).toJSONString());
+                isYourTurn = false;
             }
 
 
@@ -374,6 +390,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         return;
                     }
                 }
+                isYourTurn = false;
                 RMIInvoker(op, action);
             }
         }
@@ -929,9 +946,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 System.out.println("| It's your turn! |");
                 System.out.println("+-----------------+");
                 System.out.println(ANSI_RESET);
-                if(guiClientSide!=null){
-                    guiClientSide.notifyPlayer();
-                }
+                isYourTurn = true;
+                if(guiGameController!=null)
+                    guiGameController.startTurn();
             }
 
             //Servers-side errors

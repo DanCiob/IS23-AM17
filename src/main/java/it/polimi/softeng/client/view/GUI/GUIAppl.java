@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class GUIAppl extends Application {
+    GUIClientSide guiClientSide;
 
     public static void main(String[] args) {
         launch(args);
@@ -23,7 +24,7 @@ public class GUIAppl extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(GUIAppl.class.getResource("/it.polimi.softeng.client.view.GUI/login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 640, 480);
 
-        GUIClientSide guiClientSide = new GUIClientSide();
+        guiClientSide = new GUIClientSide();
         primaryStage.setTitle("My Shelfie");
         primaryStage.setScene(scene);
         primaryStage.show();
