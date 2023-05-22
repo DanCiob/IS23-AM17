@@ -334,7 +334,6 @@ public class GameBoard implements Serializable {
      */
     public void reinsertTiles(ArrayList<Tile> tiles, ArrayList<Cell> cells){
         for(int i=0;i< cells.size();i++){
-            //if(board[cell.getRow()][cell.getColumn()] == null)
             setBoard(cells.get(i).getRow(), cells.get(i).getColumn(),  tiles.get(i));
         }
     }

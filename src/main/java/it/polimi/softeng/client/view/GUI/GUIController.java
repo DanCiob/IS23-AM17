@@ -5,24 +5,17 @@ import it.polimi.softeng.JSONWriter.LoginWriter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 
-public class GUIController implements Initializable {
-    @FXML
-    private Label welcomeText;
+public class GUIController{
 
     @FXML
     Label np;
@@ -38,20 +31,6 @@ public class GUIController implements Initializable {
     @FXML
     TextField serverPort;
 
-    @FXML
-    TextField newGame;
-
-    @FXML
-    ImageView TitleView;
-
-
-
-    @FXML
-    protected void TitleView(){
-        Image titleImage = new Image("/images/Title.png");
-        this.TitleView = new ImageView();
-        this.TitleView.setImage(titleImage);
-    }
 
     @FXML
     ChoiceBox<String> game;
@@ -85,12 +64,15 @@ public class GUIController implements Initializable {
         }
     }
 
-
-
+    /**
+     * This method sends the login message to the server
+     * @param event which is when the user press the login button
+     * @throws IOException called by load in switchToGame
+     */
     @FXML
     protected void onLoginButtonClick(ActionEvent event) throws IOException{
         GUIClientSide.getCli().setNickname(nickname.getText());
-        if(GUIClientSide.getCli().isOkNickname() == false){
+        if(!GUIClientSide.getCli().isOkNickname()){
             nickname.setText("");
         }else{
             GUIClientSide.setupCliForGui(socketOrRmi.getSelectionModel().getSelectedIndex()+1, serverIP.getText(), Integer.parseInt(serverPort.getText()), game.getSelectionModel().getSelectedIndex() +1,numberOfPlayer.getSelectionModel().getSelectedIndex()+2, mode.getSelectionModel().getSelectedIndex()+1);
@@ -99,16 +81,22 @@ public class GUIController implements Initializable {
         }
     }
 
+    /**
+     * This method change the scene from login to gamescreen
+     * @param event which is the event of onLoginButtonClick
+     * @throws IOException called by load
+     */
     public void switchToGame(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/gamescreen.fxml"));
         Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-        //GUIClientSide.run();
     }
 
-
+    /**
+     * This method sends the login message to the server
+     */
     public void loginNotifier(){
         int startgame;
         int gamemode = 0;
@@ -135,8 +123,4 @@ public class GUIController implements Initializable {
         GUIClientSide.getClientSide().sendMessage(login);
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
 }

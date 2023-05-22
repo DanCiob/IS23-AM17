@@ -208,7 +208,7 @@ public class Game{
         firstPlayer.setIsFirst();
     }
 
-    /**
+    /*
      * it handles the last turns after that one player has a full shelfie
      * this method is called after checkEndGame
      */

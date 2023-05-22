@@ -12,8 +12,7 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
-<?import javafx.scene.control.ComboBox?>
-<?import com.sun.javafx.scene.control.IntegerField?>
+
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="it.polimi.softeng.client.view.GUI.GUIController">
     <padding>
@@ -27,8 +26,7 @@
                 layoutX="61.0"
                 layoutY="83.0"
                 pickOnBounds="true"
-                preserveRatio="true"
-        >
+                preserveRatio="true">
                 <Image
                         url="/images/banner.png"
                         backgroundLoading="true"
@@ -41,8 +39,7 @@
                 layoutX="61.0"
                 layoutY="83.0"
                 pickOnBounds="true"
-                preserveRatio="true"
-        >
+                preserveRatio="true">
                 <Image
                         url="/images/Title.png"
                         backgroundLoading="false"
@@ -115,5 +112,4 @@
 
 
     <Button fx:id="loginButton" text="Login" onAction="#onLoginButtonClick"/>
-    <Label fx:id="welcomeText"/>
 </VBox>

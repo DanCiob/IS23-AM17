@@ -1,28 +1,18 @@
 package it.polimi.softeng.client.view.GUI;
 
-import it.polimi.softeng.client.view.CLI.CLI;
-import it.polimi.softeng.client.view.MessageHandler;
-import it.polimi.softeng.connectionProtocol.client.ClientSide;
-import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Cell;
 import it.polimi.softeng.model.GameBoard;
-import it.polimi.softeng.model.Tile;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.GridPane;
 import org.json.simple.JSONObject;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
 import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
 
@@ -30,10 +20,10 @@ public class GUIGameController implements Initializable{
 
     ArrayList<Cell> boardMoves = new ArrayList<>();
     int columnShelfie = -1;
+
     int firstFreeRowBeforeMoves = -1;
 
     @FXML GridPane shelfieGridPane;
-
 
     @FXML
     GridPane boardGrid;
@@ -43,7 +33,10 @@ public class GUIGameController implements Initializable{
         updateBoard();
     }
 
-
+    /**
+     * this method saves the clicked tile in boardMoves and set the opacity of that tile at 0.3 to make visible that it's selected
+     * @param event which is when the user select a tile from the board
+     */
     @FXML
     protected void removeTileFromBoard(javafx.scene.input.MouseEvent event){
         Node clickedNode = event.getPickResult().getIntersectedNode();
@@ -53,15 +46,14 @@ public class GUIGameController implements Initializable{
                 createBoardMoves(GridPane.getRowIndex(clickedNode), GridPane.getColumnIndex(clickedNode));
                 ImageView i = (ImageView) node;
                 i.setOpacity(0.3);
-                //i.setImage(null);
             }
         }
     }
 
     /**
      * This method creates the message with the chosen tiles and column, which will be sent to the clientSide
-     * @param row
-     * @param column
+     * @param row of the board
+     * @param column of the board
      */
     public void createBoardMoves(int row, int column){
         Cell cell = new Cell();
@@ -83,30 +75,39 @@ public class GUIGameController implements Initializable{
         action = action + columnShelfie;
         System.out.println(action);
         if(GUIClientSide.getCli().getConnectionMode() == 1){ //socket
-            JSONObject toBeSent = GUIClientSide.getCli().actionToJSON("@GAME", action);
 
-            //Send message to server
-            if (toBeSent != null)
-                GUIClientSide.getClientSide().sendMessage(clientSignObject(toBeSent, "@GAME", nickname).toJSONString());
-        }else{//RMI
+           if(resetAfterMove()){
+               JSONObject toBeSent = GUIClientSide.getCli().actionToJSON("@GAME", action);
+
+               //Send message to server
+               if (toBeSent != null)
+                   GUIClientSide.getClientSide().sendMessage(clientSignObject(toBeSent, "@GAME", nickname).toJSONString());
+           }
+
+        }else{
+            //TODO:RMI
+            resetAfterMove();
 
         }
 
-        //TODO: add the checklegalmoves control, if it's right take off the images from the board and if it's not take off the images from the shelfie
-
-        resetMoves1();
     }
 
     @FXML
     GridPane shelfie1;
+
+    /**
+     * this method insert the last selected tile from the board in the shelfie
+     * @param event which is when the user select a column of the shelfie
+     */
     @FXML
     protected void insertInShelfie(javafx.scene.input.MouseEvent event) {
         Node clickedNode = event.getPickResult().getIntersectedNode();
         int row = firstFree(clickedNode);
         Image img;
+        //TODO: insert all the selected tiles (more than 1)?
         for (Node node : shelfie1.getChildren()) {
             if ((GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode)) && row==GridPane.getRowIndex(node)) {
-                if((columnShelfie!=-1 && GridPane.getColumnIndex(clickedNode) == columnShelfie)||columnShelfie==-1){
+                if(columnShelfie == -1 || GridPane.getColumnIndex(clickedNode) == columnShelfie){
                     if(columnShelfie == -1) { //it's the first tile and we also need to save the column to check if the other tiles are put in the same column
                         columnShelfie = GridPane.getColumnIndex(node);
                         firstFreeRowBeforeMoves = row;
@@ -120,11 +121,16 @@ public class GUIGameController implements Initializable{
         }
     }
 
+    /**
+     *
+     * @param row of the board
+     * @param column of the board
+     * @return the ImageView at the position (i,j) of the board
+     */
     protected ImageView getImageInBoard(int row, int column) {
         for (Node node : boardGrid.getChildren()) {
             if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column){
-                ImageView imageView =(ImageView) node;
-                return imageView;
+                return (ImageView) node;
             }
         }
         return null;
@@ -133,6 +139,9 @@ public class GUIGameController implements Initializable{
     @FXML
     Button resetButton;
 
+    /**
+     * This method is called when the user press the "Reset your move" button and put the tiles again in the board
+     */
     @FXML
     protected void resetMoves() {
         ImageView imageView;
@@ -157,8 +166,11 @@ public class GUIGameController implements Initializable{
         firstFreeRowBeforeMoves = -1;
     }
 
-    protected void resetMoves1() {
-        ImageView imageView;
+    /**
+     * this method is called by sendBoardMoves when the user press the Send Your Moves button. It checks the move and if it is it removes the tile from the board
+     * @return true if the move is legal, false otherwise
+     **/
+    protected boolean resetAfterMove() {
         Boolean legalChoiceBoard, legalChoiceShelfie;
         legalChoiceBoard = checkLegalChoiceBoard();
         legalChoiceShelfie = checkLegalChoiceShelfie();
@@ -171,13 +183,15 @@ public class GUIGameController implements Initializable{
                             i.setImage(null);
                         }else{
                             i.setOpacity(1);
+                            boardMoves.clear();
                         }
                     }else{
                         i.setOpacity(1);
+                        boardMoves.clear();
                     }
                 }
             }
-            if (columnShelfie != -1) {
+            /*if (columnShelfie != -1) {
                 for (Node node : shelfie1.getChildren()) {
                     if (GridPane.getColumnIndex(node) == columnShelfie && GridPane.getRowIndex(node) <= firstFreeRowBeforeMoves) {
                         imageView = (ImageView) node;
@@ -185,7 +199,7 @@ public class GUIGameController implements Initializable{
                             imageView.setImage(null);
                     }
                 }
-            }
+            }*/
         }
         boardMoves.clear();
         columnShelfie = -1;
@@ -193,27 +207,23 @@ public class GUIGameController implements Initializable{
         if(legalChoiceBoard && legalChoiceShelfie){
             boardGrid.setOpacity(0.3);
             GUIClientSide.getCli().setYourTurn(false);
-            /*while(!GUIClientSide.getCli().isYourTurn()){
-                //TODO: this and end game
-            }
-            boardGrid.setOpacity(1);
-            updateBoard();*/
+            //TODO: this and end game
+            return true;
         }
+        return false;
     }
 
+    /**
+     * this method is called by the CLI when it's the turn of this player
+     */
     public void startTurn(){
         boardGrid.setOpacity(1);
         updateBoard();
     }
 
-    public boolean checkLegalChoiceShelfie(){
-        int i = firstFreeRowBeforeMoves;
-        return boardMoves.size() + i <= shelfieRows;
-    }
-
     /**
      *
-     * @param clickedNode
+     * @param clickedNode which is the selected tile
      * @return the first row of the shelfie which isn't full
      */
     private int firstFree(Node clickedNode){
@@ -232,6 +242,9 @@ public class GUIGameController implements Initializable{
         return row;
     }
 
+    /**
+     * this method is called at the beginning of the game and at the beginning of every turn, to update the gui board according to the game board
+     */
     public void updateBoard(){
         GameBoard gameBoard = GUIClientSide.getCli().getUserGameBoard();
         ImageView imageView;
@@ -253,60 +266,9 @@ public class GUIGameController implements Initializable{
         }
     }
 
-
-  /* @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        //we create a correspondence between imageViews[][] matrix and gridPane
-        for (int i=0; i < shelfieColumns; i++){
-            for (int j=0; j < shelfieRows; j++){
-                //indexes of gridPane start from top-left, while indexes of imageViews start from bottom-left as Shelfie
-                //shelfieGridPane.add();//gridPane.add(imageViews[shelfieRows-j-1][i], i, j);
-            }
-        }
-    }*/
-
-   /* /**
-     * This method update the Shelfie showing the images of the tiles inserted
-     * @param tiles tiles to insert in the shelfie (must be already in the right order)
-     * @param column column in which you want to insert the tiles
-     * @throws IllegalInsertException in case of a move which is not possible
+    /**
+     * @return true if the move is legal, false otherwise
      */
-
-    //TODO Column select by clicking on it
-   /* public void updateShelfie(ArrayList<Tile> tiles, int column) throws IllegalInsertException {
-        if (tiles.isEmpty()){
-            throw new IllegalInsertException("Illegal insertion caused by empty array");
-        } else if(tiles.size() > maxTilesForMove){
-            throw new IllegalInsertException("Illegal insertion caused by oversized array");
-        } else if ((column < 0) || (column >= shelfieColumns)) {
-            throw new IllegalInsertException("Illegal insertion caused by not valid column");
-        } else {
-            int firstEmptyRow = firstEmptyRow(column);
-            if (firstEmptyRow + tiles.size() <= shelfieRows) {
-                while (!tiles.isEmpty()) {
-                    Image image = new Image("/images/Tile_" + tiles.get(0).getColor().colorLetter() + (totalTiles % tiles.get(0).getId()));
-                    imageViews[firstEmptyRow][column].setImage(image);
-                    tiles.remove(0);
-                }
-            }
-        }
-    }*/
-
-    /*/**
-     * This method is used by upadateShelfie to find the first row available of a specific column
-     * @param column is the column we analyze
-     * @return the first empty row or shelfieRows costant if the column is full
-     */
-   /* private int firstEmptyRow(int column) {
-        for (int i=0; i < shelfieRows; i++){
-            if (imageViews[i][column].getImage() != null){
-                return i;
-            }
-        }
-        return shelfieRows; //so that
-    }*/
-
-
     public boolean checkLegalChoiceBoard() {
         int i, j;
         Cell cell2, cell3, cell4;
@@ -381,5 +343,13 @@ public class GUIGameController implements Initializable{
         }
 
         return false;
+    }
+
+    /**
+     * @return true if the move is legal, false otherwise
+     */
+    public boolean checkLegalChoiceShelfie(){
+        int i = firstFreeRowBeforeMoves;
+        return boardMoves.size() + i <= shelfieRows;
     }
 }
