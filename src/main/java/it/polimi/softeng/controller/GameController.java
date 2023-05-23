@@ -5,8 +5,11 @@ import it.polimi.softeng.connectionProtocol.client.ClientRemoteInterface;
 import it.polimi.softeng.model.*;
 import it.polimi.softeng.model.commonCards.CommonCards;
 
+import java.lang.reflect.Array;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Communicate gameMoves to model, communicate via interfaces
@@ -27,12 +30,22 @@ public class GameController {
      * @param requester        is receiver of updates
      */
     public boolean sendGameMove(ArrayList<Cell> tilesToBeRemoved, int column, String requester) {
+
+        ////////////////////////////////
+        //CHECK IF IT'S REQUESTER TURN//
+        ////////////////////////////////
+
         //Reject request if it's not player's turn
         System.out.println("Current player: " + game.getCurrentPlayer().getNickname());
         if (!requester.equals(game.getCurrentPlayer().getNickname())) {
             System.out.println("Received gameMove request by " + requester + " but it's " + game.getCurrentPlayer().getNickname() + " turn");
             return false;
         }
+
+        /////////////////////////////
+        //BEGINNING OF TURN ROUTINE//
+        /////////////////////////////
+
         //Turn routine update
         Player currentPlayer = game.getCurrentPlayer(); //reference used to send the shelfie of the player who made a move
         int result = game.turn(tilesToBeRemoved, column);
@@ -48,7 +61,10 @@ public class GameController {
                 System.out.println("Board updated");
                 System.out.println("Shelfie updated");
 
-                //Update board
+                ////////////////
+                //BOARD UPDATE//
+                ////////////////
+
                 //Notifies every RMI User -> gameBoard notifications
                 for (String s : controller.getServerSide().getServerSideRMI().getNameToStub().keySet()) {
                     ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
@@ -62,24 +78,43 @@ public class GameController {
                 controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(BoardWriter.boardChangeNotifier(game.getGameBoard()), "@BORD", "all").toJSONString());
                 System.out.println("Updated board sent");
 
-                //Update shelfie
-                //TODO make shelfies visible by everybody
-                //TODO if meanwhile player disconnects ?
-                //Is a RMI user
-                if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(requester)) {
-                    ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(requester);
-                    try {
-                        temp.shelfieUpdate(currentPlayer.getShelfie());
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
+                //////////////////
+                //SHELFIE UPDATE//
+                //////////////////
+
+                Map<Shelfie, Player> shelfiesToSend = new HashMap<>();
+                //Collect all shelfies
+                for (Player p: game.getPlayers())
+                    shelfiesToSend.put(p.getShelfie(), p);
+
+                //Send shelfies to everybody
+                for (Player p: game.getPlayers()) {
+                    for (Shelfie s : shelfiesToSend.keySet()) {
+                        //Is a RMI user
+                        if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(p.getNickname())) {
+                            ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(p.getNickname());
+                            try {
+                                if (shelfiesToSend.get(s).getNickname().equals(p.getNickname()))
+                                    temp.shelfieUpdate(s);
+                                else
+                                    temp.playerUpdate(shelfiesToSend.get(s), s);
+                            } catch (RemoteException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                        //Is TCP user
+                        else
+                            if (shelfiesToSend.get(s).equals(p.getNickname()))
+                                controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(s), "@SHEL", p.getNickname()).toJSONString(), p.getNickname());
+                            else
+                                controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(s, shelfiesToSend.get(s).getNickname()), "@OSHE", p.getNickname()).toJSONString(), p.getNickname());
+                        System.out.println("Player " + p.getNickname() + "updated shelfie sent");
                     }
                 }
-                //Is TCP user
-                else
-                    controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(game.getPlayers().stream().filter(p -> p.getNickname().equals(requester)).findFirst().get().getShelfie()), "@SHEL", requester).toJSONString(), requester);
-                System.out.println("Updated shelfie sent");
+                ////////////////////////////
+                //NEXT PLAYER NOTIFICATION//
+                ////////////////////////////
 
-                //Notify next player
                 //it doesnt really work
                 //here goes the code to skip players in case of disconnection
                 //TODO control because this may break if disconnectedPlayerList is updated in the meantime
@@ -189,7 +224,6 @@ public class GameController {
             //If it's a TCP  user
             else
                 controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(PersonalCardWriter.writePersonalCard(pc), "@VPCA", s).toJSONString(), s);
-            //TODO add command for rmi users to show shelfie
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

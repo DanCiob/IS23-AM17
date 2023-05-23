@@ -16,8 +16,13 @@ public class ClientSideMethods implements ClientRemoteInterface {
         this.cli = cli;
     }
     @Override
-    public void playerUpdate(Player player) throws RemoteException {
-        //TODO what does this function do?
+    public void playerUpdate(Player player, Shelfie s) throws RemoteException {
+        cli.eventManager("systemEvent");
+        JSONObject obj = new JSONObject();
+        obj.put("requester", "System");
+        obj.put("message", "Received " + player.getNickname() + "'s shelfie");
+        cli.chatVisualizer(obj);
+        cli.shelfieVisualizer(s.getGrid());
     }
 
     @Override

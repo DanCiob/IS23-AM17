@@ -905,6 +905,13 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 System.out.println("+------------------------------+");
                 System.out.println(ANSI_RESET);
             }
+            case ("systemEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+-------------------------+");
+                System.out.println("| Received system message |");
+                System.out.println("+-------------------------+");
+                System.out.println(ANSI_RESET);
+            }
             case ("boardEvent") -> {
                 System.out.println(ANSI_CYAN);
                 System.out.println("+-----------------------+");

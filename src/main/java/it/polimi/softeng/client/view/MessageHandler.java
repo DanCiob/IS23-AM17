@@ -82,6 +82,25 @@ public class MessageHandler {
                 cli.shelfieUpdater(newShelfie);
             }
 
+            //Invoke shelfie visualizer for other player
+            case ("@OSHE") -> {
+                JSONParser p1 = new JSONParser();
+                JSONObject objShelfie = (JSONObject) p1.parse(message);
+                Shelfie newShelfie;
+                ShelfieParser sp = new ShelfieParser();
+                String owner = (String) objShelfie.get("owner");
+
+                //Create updated Shelfie from JSONMessage
+                newShelfie = sp.shelfieParserClientSide(objShelfie.toJSONString());
+                //Visualize new Shelfie
+                cli.eventManager("systemEvent");
+
+                JSONObject objMess = new JSONObject();
+                objMess.put("requester", "System");
+                objMess.put("message", "Received " + owner + "'s shelfie");
+                cli.chatVisualizer(objMess);
+                cli.shelfieVisualizer(newShelfie.getGrid());
+            }
             case ("@VCCA") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objCC = (JSONObject) p1.parse(message);

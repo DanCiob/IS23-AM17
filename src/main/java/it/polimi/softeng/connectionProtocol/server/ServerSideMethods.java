@@ -216,7 +216,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
 
     @Override
     public ArrayList<Player> getPlayersAndScore() throws RemoteException {
-        return null;
+        return controller.getGameController().getCurrentGame().getPlayers();
     }
 
 

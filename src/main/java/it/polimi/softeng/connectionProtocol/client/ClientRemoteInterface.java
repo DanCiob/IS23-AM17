@@ -9,7 +9,7 @@ import java.rmi.registry.Registry;
 import java.util.ArrayList;
 
 public interface ClientRemoteInterface extends Remote {
-    void playerUpdate(Player player) throws RemoteException;
+    void playerUpdate(Player player, Shelfie s) throws RemoteException;
     void shelfieUpdate(Shelfie shelfie)throws RemoteException;
     void gameBoardUpdate(GameBoard board) throws RemoteException;
     void sendPersonalCard(PersonalCards personalCards) throws RemoteException;

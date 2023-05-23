@@ -115,6 +115,10 @@ public class Controller {
     public ServerSide getServerSide() {
         return this.serverSide;
     }
+
+    public GameController getGameController() {
+        return gameController;
+    }
 }
 
 
