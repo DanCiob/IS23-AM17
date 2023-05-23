@@ -75,21 +75,16 @@ public class GUIGameController implements Initializable{
         action = action + columnShelfie;
         System.out.println(action);
         if(GUIClientSide.getCli().getConnectionMode() == 1){ //socket
+            JSONObject toBeSent = GUIClientSide.getCli().actionToJSON("@GAME", action);
 
-           if(resetAfterMove()){
-               JSONObject toBeSent = GUIClientSide.getCli().actionToJSON("@GAME", action);
-
-               //Send message to server
-               if (toBeSent != null)
-                   GUIClientSide.getClientSide().sendMessage(clientSignObject(toBeSent, "@GAME", nickname).toJSONString());
-           }
-
+            //Send message to server
+            if (toBeSent != null)
+                GUIClientSide.getClientSide().sendMessage(clientSignObject(toBeSent, "@GAME", nickname).toJSONString());
         }else{
             //TODO:RMI
-            resetAfterMove();
-
         }
 
+        resetAfterMove();
     }
 
     @FXML
@@ -168,12 +163,14 @@ public class GUIGameController implements Initializable{
 
     /**
      * this method is called by sendBoardMoves when the user press the Send Your Moves button. It checks the move and if it is it removes the tile from the board
-     * @return true if the move is legal, false otherwise
-     **/
-    protected boolean resetAfterMove() {
+     */
+    protected void resetAfterMove() {
+        ImageView imageView;
         Boolean legalChoiceBoard, legalChoiceShelfie;
         legalChoiceBoard = checkLegalChoiceBoard();
         legalChoiceShelfie = checkLegalChoiceShelfie();
+        if(!(legalChoiceBoard && legalChoiceShelfie))
+            resetMoves();
         for (Cell cell : boardMoves) {
             for (Node node : boardGrid.getChildren()) {
                 if ((GridPane.getColumnIndex(node) == cell.getColumn()) && (GridPane.getRowIndex(node) == cell.getRow())) {
@@ -183,15 +180,13 @@ public class GUIGameController implements Initializable{
                             i.setImage(null);
                         }else{
                             i.setOpacity(1);
-                            boardMoves.clear();
                         }
                     }else{
                         i.setOpacity(1);
-                        boardMoves.clear();
                     }
                 }
             }
-            /*if (columnShelfie != -1) {
+            if (columnShelfie != -1) {
                 for (Node node : shelfie1.getChildren()) {
                     if (GridPane.getColumnIndex(node) == columnShelfie && GridPane.getRowIndex(node) <= firstFreeRowBeforeMoves) {
                         imageView = (ImageView) node;
@@ -199,7 +194,7 @@ public class GUIGameController implements Initializable{
                             imageView.setImage(null);
                     }
                 }
-            }*/
+            }
         }
         boardMoves.clear();
         columnShelfie = -1;
@@ -208,9 +203,7 @@ public class GUIGameController implements Initializable{
             boardGrid.setOpacity(0.3);
             GUIClientSide.getCli().setYourTurn(false);
             //TODO: this and end game
-            return true;
         }
-        return false;
     }
 
     /**
