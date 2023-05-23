@@ -324,7 +324,7 @@ public class Game{
                 //current player has completed a common card, so he receives the badge. The badge is removed from the arrayList
                 BadgeScore badgeScore = card.getBadge();
                 if(badgeScore != null)
-                    currentPlayer.updateScore(card.getBadge().getScore());
+                    currentPlayer.updateScore(badgeScore.getScore());
             }
         }
     }
