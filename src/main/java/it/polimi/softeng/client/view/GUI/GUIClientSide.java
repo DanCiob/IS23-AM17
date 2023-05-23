@@ -31,7 +31,7 @@ public class GUIClientSide {
                     cli.setGameMode(mode);
                 }
             }
-            case 2 -> {//TODO: RMI
+            case 2 -> { //TODO: RMI
             }
         }
     }
@@ -67,6 +67,4 @@ public class GUIClientSide {
 
         cli.getInput().close();
     }
-
-
 }
