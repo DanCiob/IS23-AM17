@@ -13,7 +13,6 @@ import java.util.Map;
 public class LoginManagerV2 {
     private ArrayList<String> nickNameList = new ArrayList<>();
     private ArrayList<String> disconnectedPlayerList = new ArrayList<>();
-    private ArrayList<String> finalNickNameList = new ArrayList<>();
     private int playerNumber = 4;
     private Boolean numberOfPlayersNotConfirmed = true;
     private ServerMessageHandler serverMessageHandler = null;
@@ -29,10 +28,7 @@ public class LoginManagerV2 {
 
     public void startGame(){
         System.out.println("Reached desired number of player");
-        for (String player : nickNameList){
-            finalNickNameList.add(player);
-            System.out.println(player);
-        }
+
         serverMessageHandler.getController().startGame();
         for(String player : nickNameList){
             if(nameToStub.containsKey(player)){
@@ -73,14 +69,16 @@ public class LoginManagerV2 {
     public void addNickName(String nickName) {
         nickNameList.add(nickName);
         System.out.println(nickName + " entered the game");
-        if(nickNameList.size() == playerNumber) startGame();
+        if(nickNameList.size() == playerNumber && !status.equals(gameStarted)) {
+            startGame();
+        }
 
     }
 
     public void setPlayerNumber(int playerNumber) {
         if(numberOfPlayersNotConfirmed){
             this.playerNumber = playerNumber;
-            System.out.println("number of players is: " + this.playerNumber + " from comand:" + playerNumber);
+            System.out.println("number of players is: " + this.playerNumber + " from command:" + playerNumber);
             numberOfPlayersNotConfirmed = false;
         }
     }
@@ -97,10 +95,6 @@ public class LoginManagerV2 {
 
     public ArrayList<String> getDisconnectedPlayerList() {
         return disconnectedPlayerList;
-    }
-
-    public ArrayList<String> getFinalNickNameList() {
-        return finalNickNameList;
     }
 
     public int getPlayerNumber() {

@@ -55,10 +55,10 @@ public class ServerSideMethods implements ServerRemoteInterface {
                 }
                 case ("gameStarted") -> {
                     if (loginManager.getDisconnectedPlayerList().contains(name)) {
-                        loginManager.addNickName(name);
                         ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);//TODO same
                         loginManager.addStub(name,stub);
                         serverSideRMI.addRMIClient(name,stub);
+                        loginManager.addNickName(name);
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");
@@ -92,10 +92,10 @@ public class ServerSideMethods implements ServerRemoteInterface {
                 }
                 case ("gameStarted") -> {
                     if (loginManager.getDisconnectedPlayerList().contains(name)) {
-                        loginManager.addNickName(name);
                         ClientRemoteInterface stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099);//TODO da riscrivere perchè errato                        loginManager.addStub(name,stub);
                         loginManager.addStub(name,stub);
                         serverSideRMI.addRMIClient(name,stub);
+                        loginManager.addNickName(name);
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");
@@ -134,7 +134,6 @@ public class ServerSideMethods implements ServerRemoteInterface {
                 }
                 case ("gameStarted") -> {
                     if (loginManager.getDisconnectedPlayerList().contains(name)) {
-                        loginManager.addNickName(name);
                         ClientRemoteInterface stub = null;
                         try {
                             stub = (ClientRemoteInterface) LocateRegistry.getRegistry("127.0.0.1", port).lookup("ClientRemoteInterface");
@@ -143,6 +142,8 @@ public class ServerSideMethods implements ServerRemoteInterface {
                         }
                         loginManager.addStub(name,stub);
                         serverSideRMI.addRMIClient(name,stub);
+                        loginManager.addNickName(name);
+                        stub.startGame();
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");
@@ -170,7 +171,6 @@ public class ServerSideMethods implements ServerRemoteInterface {
                 case ("gameLobby") -> {
 
                     ClientRemoteInterface stub = null;
-                    System.out.println("i got here in serversideMethods");
                     try {
                         stub = (ClientRemoteInterface) LocateRegistry.getRegistry("127.0.0.1", port).lookup("ClientRemoteInterface");
                     } catch (NotBoundException e) {
@@ -186,7 +186,6 @@ public class ServerSideMethods implements ServerRemoteInterface {
                 }
                 case ("gameStarted") -> {
                     if (loginManager.getDisconnectedPlayerList().contains(name)) {
-                        loginManager.addNickName(name);
                         ClientRemoteInterface stub = null;
                         try {
                             stub = (ClientRemoteInterface) LocateRegistry.getRegistry("127.0.0.1", port).lookup("ClientRemoteInterface");
@@ -195,6 +194,9 @@ public class ServerSideMethods implements ServerRemoteInterface {
                         }
                         loginManager.addStub(name,stub);
                         serverSideRMI.addRMIClient(name,stub);
+                        loginManager.addNickName(name);
+                        System.out.println(name + " reconnected !");
+                        stub.startGame();
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");

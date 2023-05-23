@@ -31,61 +31,61 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     /**
      * Local representation of GameBoard
      */
-    private GameBoard UserGameBoard;
+    protected GameBoard UserGameBoard;
 
     /**
      * Local representation of Shelfie
      */
-    private Shelfie UserShelfie;
+    protected Shelfie UserShelfie;
 
     /**
      * Player information
      */
-    private int UserScore;
-    private PersonalCards PersonalCard;
-    private String Nickname;
-    private String CommonCard1 = null;
-    private String CommonCard2 = null;
-    private String ServerAddress;
-    private int Port;
+    protected int UserScore;
+    protected PersonalCards PersonalCard;
+    protected String Nickname;
+    protected String CommonCard1 = null;
+    protected String CommonCard2 = null;
+    protected String ServerAddress;
+    protected int Port;
 
     /**
      * 1 -> player want to create new game (FA: multi-game management)
      * 2 -> player want to join (if present) a game which is already started
      */
-    private int StartGame;
+    protected int StartGame;
 
     /**
      * 1 -> Easy Mode (only one Common Card is used the game)
      * 2 -> Normal Mode (two Common Cards are used during the game)
      */
-    private int GameMode;
+    protected int GameMode;
 
     /**
      * NumOfPlayer for current game
      */
-    private int NumOfPlayer;
+    protected int NumOfPlayer;
 
     /**
      * 1 -> Connected with Socket
      * 2 -> Connected with RMI
      */
-    private int ConnectionMode = 0;
+    protected int ConnectionMode = 0;
 
-    private boolean GameIsOn;
-    private final Scanner input;
+    protected boolean GameIsOn = false;
+    protected final Scanner input;
 
-    private final MessageHandler messageHandler;
+    protected final MessageHandler messageHandler;
 
     /**
      * Manage connection -> Socket
      */
-    private ClientSide clientSide;
+    protected ClientSide clientSide;
 
     /**
      * Manage connection -> RMI
      */
-    private ClientSideRMI RemoteMethods;
+    protected ClientSideRMI RemoteMethods;
 
     private GUIClientSide guiClientSide = null;
     private GUIGameController guiGameController;
@@ -245,7 +245,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     public void run() {
         boolean firstRun = true;
         setupCLI();
-        GameIsOn = false;
 
         System.out.println("Waiting for other players to join...");
         //Waiting for beginning of game

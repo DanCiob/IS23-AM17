@@ -95,6 +95,7 @@ public class ClientSideMethods implements ClientRemoteInterface {
     @Override
     public void startGame() throws RemoteException {
         cli.beginGame(true);
+        System.out.println("starting the game for : " + cli.getNickname());
     }
 
     @Override

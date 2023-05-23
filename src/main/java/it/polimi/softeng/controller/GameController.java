@@ -80,6 +80,15 @@ public class GameController {
                 System.out.println("Updated shelfie sent");
 
                 //Notify next player
+                //it doesnt really work
+                //here goes the code to skip players in case of disconnection
+                //TODO control because this may break if disconnectedPlayerList is updated in the meantime
+                Boolean connectedPlayerNotFound = true;
+                while(connectedPlayerNotFound){
+                    if(controller.getServerSide().getLoginManager().getDisconnectedPlayerList().contains(game.getCurrentPlayer().getNickname())){
+                        game.setNextPlayer();
+                    }else connectedPlayerNotFound = false;
+                }
                 //Is an RMI user
                 if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(game.getCurrentPlayer().getNickname())) {
                     ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(game.getCurrentPlayer().getNickname());

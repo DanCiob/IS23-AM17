@@ -133,6 +133,8 @@ public class ServerSide {
     public Map<String, ClientRemoteInterface> getPlayerStubs(){
         return serverSideRMI.getNameToStub();
     }
-    //////// methods for testing
 
+    public LoginManagerV2 getLoginManager() {
+        return loginManager;
+    }
 }
