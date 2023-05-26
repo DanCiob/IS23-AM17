@@ -3,6 +3,7 @@ package it.polimi.softeng.client.view.GUI;
 import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Cell;
 import it.polimi.softeng.model.GameBoard;
+import it.polimi.softeng.model.PersonalCards;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -30,6 +31,15 @@ public class GUIGameController implements Initializable{
     @FXML
     GridPane boardGrid;
 
+    @FXML
+    ImageView personalCard;
+
+    @FXML
+    ImageView commoncard1;
+
+    @FXML
+    ImageView commoncard2;
+
     public GUIGameController (GUIClientSide guiClientSide) {
         this.guiClientSide = guiClientSide;
     }
@@ -42,6 +52,32 @@ public class GUIGameController implements Initializable{
         guiClientSide.setGameController(this);
         GUIRegistry.numberOfGUI++;
         updateBoard();
+        commoncard1.setImage(new Image("/images/CommonCard_" + guiClientSide.getCommonCard1() + ".jpg"));
+        if(guiClientSide.getCommonCard2()!=null)
+            commoncard2.setImage(new Image("/images/CommonCard_" + guiClientSide.getCommonCard2() + ".jpg"));
+        int numPC = getNumberPersonalCard();
+        System.out.println("/images/PC" + numPC + ".jpg");
+        //personalCard.setImage(new Image("/images/PC" + numPC + ".jpg")); TODO: sistema getNumberPersonalCard
+        //TODO: set personal card and common cards
+    }
+
+    protected int getNumberPersonalCard(){
+        int i = 0;
+        PersonalCards pc = guiClientSide.getPersonalCard();
+        for(PersonalCards pctemp : PersonalCards.FillPersonalCardsBag()){
+            PersonalCards.ObjectiveCell[] pcCell = pc.getObjective();
+            int j=0;
+            boolean equal = true;
+            for(PersonalCards.ObjectiveCell cell: pctemp.getObjective()){
+                if(!(cell.getColor() == pcCell[j].getColor() && cell.getColumn() == pcCell[j].getColumn() && cell.getRow() == pcCell[j].getRow()))
+                    equal = false;
+                j++;
+            }
+            if(equal)
+                return i + 1;
+            i++;
+        }
+        return -1;
     }
 
     /**
@@ -165,7 +201,7 @@ public class GUIGameController implements Initializable{
             }
             if (columnShelfie != -1) {
                 for (Node node : shelfie1.getChildren()) {
-                    if (GridPane.getColumnIndex(node) == columnShelfie && GridPane.getRowIndex(node) <= firstFreeRowBeforeMoves) {
+                    if (GridPane.getColumnIndex(node) == columnShelfie && GridPane.getRowIndex(node) <= firstFreeRowBeforeMoves) { //TODO: controlla se è giusto il minore
                         imageView = (ImageView) node;
                         imageView.setImage(null);
                     }
@@ -249,6 +285,7 @@ public class GUIGameController implements Initializable{
             }
         }
         return row;
+        //TODO: if the column is full
     }
 
     /**
@@ -273,6 +310,38 @@ public class GUIGameController implements Initializable{
                 }
             }
         }
+        if(!guiClientSide.isYourTurn)
+            boardGrid.setOpacity(0.3);
+    }
+
+    @FXML
+    GridPane shelfie2;
+
+   /* public void updateShelfies(){
+        String nickname = (String) GUIClientSide.getCli().getShelfies().get(0); //TODO: aggiungere nickname sulla schermata gamescreen e far vedere nella shelfie giusta
+        Shelfie shelfie = (Shelfie) GUIClientSide.getCli().getShelfies().get(1);
+        ImageView imageView;
+        Image image;
+
+        for(int i=0;i<shelfieRows;i++){
+            for(int j=0;j<shelfieColumns;j++){
+                if(shelfie.getGrid()[i][j] != null){
+                    image = new Image("/images/Tile_" + shelfie.getGrid()[i][j].getColor().colorLetter() + "1.png"); //TODO: change the object in the image
+                    imageView = getImageViewInShelfie(nickname, i, j);
+                    imageView.setImage(image);
+                    shelfie2.add(imageView, j, i);
+                }
+            }
+        }
+    }*/
+
+    public ImageView getImageViewInShelfie(String id, int row, int column){
+        for (Node node : shelfie2.getChildren()) { //TODO:change shelfie2
+            if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column){
+                return (ImageView) node;
+            }
+        }
+        return null;
     }
 
     /**
@@ -358,7 +427,8 @@ public class GUIGameController implements Initializable{
      * @return true if the move is legal, false otherwise
      */
     public boolean checkLegalChoiceShelfie(){
-        int i = firstFreeRowBeforeMoves;
+        int i = shelfieRows - firstFreeRowBeforeMoves;
+        System.out.println("ChecklegalchoiceShelfie first = " + firstFreeRowBeforeMoves);
         return boardMoves.size() + i <= shelfieRows;
     }
 }

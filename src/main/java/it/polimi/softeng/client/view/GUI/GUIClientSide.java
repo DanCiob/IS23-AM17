@@ -89,7 +89,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     GUIGameController gameController;
     GUILoginController loginController;
 
-
     public GUIClientSide() {
         messageHandler = new MessageHandler(this);
         clientSide = new ClientSide(messageHandler);

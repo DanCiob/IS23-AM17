@@ -1,5 +1,8 @@
 package it.polimi.softeng.client.view.GUI;
 
+import it.polimi.softeng.client.view.CLI.CLI;
+import it.polimi.softeng.client.view.MessageHandler;
+import it.polimi.softeng.connectionProtocol.client.ClientSide;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

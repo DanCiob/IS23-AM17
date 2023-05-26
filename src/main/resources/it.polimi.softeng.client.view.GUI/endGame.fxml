@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="it.polimi.softeng.client.view.GUI.EndGameController"
+      prefHeight="400.0" prefWidth="600.0" alignment="CENTER" spacing="30.0">
+
+    <padding>
+        <Insets bottom="20.0" left="40.0" right="40.0" top="20.0"/>
+    </padding>
+
+    <HBox spacing="20" alignment="CENTER">
+        <Label text="Il vincitore è :" />
+        <Label fx:id="winner" />
+    </HBox>
+
+    <HBox spacing="20" alignment="CENTER">
+        <Label text="Nickname" />
+        <Label text="Total points" />
+    </HBox>
+
+    <HBox spacing="60" alignment="CENTER">
+        <Label fx:id="player1" />
+        <Label fx:id="pointsPlayer1" />
+    </HBox>
+
+    <HBox spacing="60" alignment="CENTER">
+        <Label fx:id="player2" />
+        <Label fx:id="pointsPlayer2" />
+    </HBox>
+
+    <HBox spacing="60" alignment="CENTER">
+        <Label fx:id="player3" />
+        <Label fx:id="pointsPlayer3" />
+    </HBox>
+
+    <HBox spacing="60" alignment="CENTER">
+        <Label fx:id="player4" />
+        <Label fx:id="pointsPlayer4" />
+    </HBox>
+
+
+</VBox>
