@@ -1,5 +1,6 @@
 package it.polimi.softeng.client.view.GUI;
 
+import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.Cell;
 import it.polimi.softeng.model.GameBoard;
 import javafx.fxml.FXML;
@@ -18,6 +19,7 @@ import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObjec
 
 public class GUIGameController implements Initializable{
 
+    GUIClientSide guiClientSide;
     ArrayList<Cell> boardMoves = new ArrayList<>();
     int columnShelfie = -1;
 
@@ -28,8 +30,17 @@ public class GUIGameController implements Initializable{
     @FXML
     GridPane boardGrid;
 
+    public GUIGameController (GUIClientSide guiClientSide) {
+        this.guiClientSide = guiClientSide;
+    }
+
+    public GUIGameController () {
+    }
+
     public void initialize(URL url, ResourceBundle rb) {
-        GUIClientSide.getCli().setGuiGameController(this);
+        guiClientSide = GUIRegistry.guiList.get(GUIRegistry.numberOfGUI);
+        guiClientSide.setGameController(this);
+        GUIRegistry.numberOfGUI++;
         updateBoard();
     }
 
@@ -67,19 +78,24 @@ public class GUIGameController implements Initializable{
      */
     @FXML
     protected void sendBoardMoves(){
-        String nickname = GUIClientSide.getCli().getNickname();
+        String nickname = guiClientSide.getNickname();
         String action = "";
         for(Cell cell : boardMoves){
              action = action + "(" + cell.getRow() + "," + cell.getColumn() + ")" + ",";
         }
         action = action + columnShelfie;
         System.out.println(action);
-        if(GUIClientSide.getCli().getConnectionMode() == 1){ //socket
-            JSONObject toBeSent = GUIClientSide.getCli().actionToJSON("@GAME", action);
+        if(guiClientSide.getConnectionMode() == 1){ //socket
+            JSONObject toBeSent = null;
+            try {
+                toBeSent = guiClientSide.actionToJSON("@GAME", action);
+            } catch (IllegalInsertException e) {
+                throw new RuntimeException(e);
+            }
 
             //Send message to server
             if (toBeSent != null)
-                GUIClientSide.getClientSide().sendMessage(clientSignObject(toBeSent, "@GAME", nickname).toJSONString());
+                guiClientSide.getClientSide().sendMessage(clientSignObject(toBeSent, "@GAME", nickname).toJSONString());
         }else{
             //TODO:RMI
         }
@@ -201,7 +217,7 @@ public class GUIGameController implements Initializable{
         firstFreeRowBeforeMoves = -1;
         if(legalChoiceBoard && legalChoiceShelfie){
             boardGrid.setOpacity(0.3);
-            GUIClientSide.getCli().setYourTurn(false);
+            guiClientSide.setYourTurn(false);
             //TODO: this and end game
         }
     }
@@ -239,7 +255,7 @@ public class GUIGameController implements Initializable{
      * this method is called at the beginning of the game and at the beginning of every turn, to update the gui board according to the game board
      */
     public void updateBoard(){
-        GameBoard gameBoard = GUIClientSide.getCli().getUserGameBoard();
+        GameBoard gameBoard = guiClientSide.getUserGameBoard();
         ImageView imageView;
         Image image;
         for(int i=0;i<boardRows;i++){

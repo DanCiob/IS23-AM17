@@ -137,19 +137,22 @@ public class CLITest extends CLI implements UI, Runnable {
                         } while (GameMode != 1 && GameMode != 2);
                     }
 
+                    boolean confirm;
                     do {
                         System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed)");
                         System.out.println(">");
                         Nickname = input.nextLine();
                         System.out.println(Nickname);
-                        //TODO Nickname uniqueness
-                    } while (!isOkNickname());
 
-                    //TODO to be removed
-                    String GameModeStringifed = GameMode == 1 ? "e" : "n";
-                    this.RemoteMethods = new ClientSideRMI(Port,this);
-                    System.out.println(GameModeStringifed);
-                    RMIInvoker("@LOGN", GameModeStringifed);
+                        //TODO to be removed
+                        String GameModeStringifed = GameMode == 1 ? "e" : "n";
+                        this.RemoteMethods = new ClientSideRMI(Port,this);
+                        System.out.println(GameModeStringifed);
+                        confirm = RMIInvoker("@LOGN", GameModeStringifed);
+
+                        if (!confirm)
+                            System.out.println("Nickname already used, choose another one!");
+                    } while (!isOkNickname() || !confirm);
                 }
                 default -> System.out.println("Unrecognized connection method, please digit 1 or 2...");
             }
@@ -210,7 +213,7 @@ public class CLITest extends CLI implements UI, Runnable {
     public boolean RMIInvoker(String op, String action)  {
         System.out.println("action in rmiInvoker: " + action);
         switch (op) {
-            case ("@CHAT"): {
+            case ("@CHAT") -> {
                 if (!ChatWriter.chatMessageRegex(action)) {
                     System.out.println("Error in Chat message syntax, try again!");
                     return false;
@@ -225,8 +228,7 @@ public class CLITest extends CLI implements UI, Runnable {
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }
-                }
-                else {
+                } else {
                     try {
                         RemoteMethods.getStub().sendMessage(obj.toJSONString(), (String) obj.get("receiver"), Nickname);
                     } catch (RemoteException e) {
@@ -235,8 +237,7 @@ public class CLITest extends CLI implements UI, Runnable {
                 }
                 break;
             }
-
-            case ("@GAME"): {
+            case ("@GAME") -> {
                 if (!GameMoveWriter.gameMoveRegex(action)) {
                     System.out.println("Error in Game Move syntax, try again!");
                     return false;
@@ -253,26 +254,22 @@ public class CLITest extends CLI implements UI, Runnable {
                 ArrayList<Cell> cells = gmp.getTilesToBeRemoved();
                 int column = gmp.getColumn();
                 try {
-                    RemoteMethods.getStub().sendMove(cells,column,Nickname);
+                    RemoteMethods.getStub().sendMove(cells, column, Nickname);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
                 break;
             }
-
-            case ("@LOGN"): {
+            case ("@LOGN") -> {
                 //TODO Right now we don't receive GameMode, StartGame, NumOfPlayer...
                 try {
-                    RemoteMethods.getStub().login(Nickname, NumOfPlayer, action, Port);
-                    System.out.println("exectuted login for: " + Nickname);
+                    System.out.println("Doing login for: " + Nickname);
+                    return RemoteMethods.getStub().login(Nickname, NumOfPlayer, action, Port);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
-                break;
             }
-
-            default:
-                System.out.println("Unrecognized operation!");
+            default -> System.out.println("Unrecognized operation!");
         }
 
         System.out.println("Test");

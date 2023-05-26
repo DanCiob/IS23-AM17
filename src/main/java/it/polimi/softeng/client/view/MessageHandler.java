@@ -18,15 +18,13 @@ import static it.polimi.softeng.JSONParser.PersonalCardsParser.personalCardsPars
  */
 public class MessageHandler {
     /**
-     * Assigned CLI and assigned SocketListener
+     * Assigned CLI or GUI (implementing generic UI)
      */
-    CLI cli;
+    UI ui;
 
-
-    public MessageHandler(CLI cli) {
-        this.cli = cli;
+    public MessageHandler(UI ui) {
+        this.ui = ui;
     }
-
 
     /**
      * @param message containing JSON message in form of string with request
@@ -45,10 +43,10 @@ public class MessageHandler {
                     JSONParser p1 = new JSONParser();
                     JSONObject objChat = (JSONObject) p1.parse(message);
                     if (receiver.equals("all"))
-                        cli.eventManager("globalChatEvent");
+                        ui.eventManager("globalChatEvent");
                     else
-                        cli.eventManager("chatEvent");
-                    cli.chatVisualizer(objChat);
+                        ui.eventManager("chatEvent");
+                    ui.chatVisualizer(objChat);
                     }
 
             //Invoke board visualizer
@@ -59,10 +57,10 @@ public class MessageHandler {
 
                     GameBoard newBoard = bParser.gameBoardFullParser(objBoard.toJSONString());
                     //First receiving of board begins game
-                    cli.beginGame(true);
-                    cli.eventManager("boardEvent");
-                    cli.boardVisualizer(newBoard.getBoard(), newBoard.getNotAvailable());
-                    cli.boardUpdater(newBoard);
+                    ui.beginGame(true);
+                    ui.eventManager("boardEvent");
+                    ui.boardVisualizer(newBoard.getBoard(), newBoard.getNotAvailable());
+                    ui.boardUpdater(newBoard);
                 }
 
             //Invoke shelfie visualizer
@@ -75,11 +73,11 @@ public class MessageHandler {
                 //Create updated Shelfie from JSONMessage
                 newShelfie = sp.shelfieParserClientSide(objShelfie.toJSONString());
                 //Set new shelfie
-                cli.shelfieUpdater(newShelfie);
+                ui.shelfieUpdater(newShelfie);
                 //Visualize new Shelfie
-                cli.eventManager("shelfieEvent");
-                cli.shelfieVisualizer(newShelfie.getGrid());
-                cli.shelfieUpdater(newShelfie);
+                ui.eventManager("shelfieEvent");
+                ui.shelfieVisualizer(newShelfie.getGrid());
+                ui.shelfieUpdater(newShelfie);
             }
 
             //Invoke shelfie visualizer for other player
@@ -93,13 +91,13 @@ public class MessageHandler {
                 //Create updated Shelfie from JSONMessage
                 newShelfie = sp.shelfieParserClientSide(objShelfie.toJSONString());
                 //Visualize new Shelfie
-                cli.eventManager("systemEvent");
+                ui.eventManager("systemEvent");
 
                 JSONObject objMess = new JSONObject();
                 objMess.put("requester", "System");
                 objMess.put("message", "Received " + owner + "'s shelfie");
-                cli.chatVisualizer(objMess);
-                cli.shelfieVisualizer(newShelfie.getGrid());
+                ui.chatVisualizer(objMess);
+                ui.shelfieVisualizer(newShelfie.getGrid());
             }
             case ("@VCCA") -> {
                 JSONParser p1 = new JSONParser();
@@ -110,23 +108,23 @@ public class MessageHandler {
                 switch((int) (long) objCC.get("numOfCommonCards"))
                 {
                     case 1 -> {
-                        cli.eventManager("commonCardEvent");
+                        ui.eventManager("commonCardEvent");
 
                         JSONObject cc1 = (JSONObject) arrayCC.get(0);
 
-                        cli.commonCardsVisualizer(cc1.get("name").toString());
-                        cli.commonCardUpdater(cc1.get("name").toString(), 1);
+                        ui.commonCardsVisualizer(cc1.get("name").toString());
+                        ui.commonCardUpdater(cc1.get("name").toString(), 1);
                     }
                     case 2 -> {
-                        cli.eventManager("commonCardEvent");
+                        ui.eventManager("commonCardEvent");
 
                         JSONObject cc1 = (JSONObject) arrayCC.get(0);
                         JSONObject cc2 = (JSONObject) arrayCC.get(1);
 
-                        cli.commonCardsVisualizer(cc1.get("name").toString());
-                        cli.commonCardsVisualizer(cc2.get("name").toString());
-                        cli.commonCardUpdater(cc1.get("name").toString(), 1);
-                        cli.commonCardUpdater(cc2.get("name").toString(), 2);
+                        ui.commonCardsVisualizer(cc1.get("name").toString());
+                        ui.commonCardsVisualizer(cc2.get("name").toString());
+                        ui.commonCardUpdater(cc1.get("name").toString(), 1);
+                        ui.commonCardUpdater(cc2.get("name").toString(), 2);
                     }
                 }
             }
@@ -138,17 +136,17 @@ public class MessageHandler {
                 PersonalCards newPC = null;
                 newPC = personalCardsParser(objPC.toJSONString());
 
-                cli.eventManager("personalCardEvent");
-                cli.personalCardVisualizer(newPC);
-                cli.personalCardUpdater(newPC);
+                ui.eventManager("personalCardEvent");
+                ui.personalCardVisualizer(newPC);
+                ui.personalCardUpdater(newPC);
             }
 
             case ("@VPLA") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objPC = (JSONObject) p1.parse(message);
 
-                cli.eventManager("playerEvent");
-                cli.scoreVisualizer(PlayerParser.PlayerAndScoreParser(message));
+                ui.eventManager("playerEvent");
+                ui.scoreVisualizer(PlayerParser.PlayerAndScoreParser(message));
             }
 
             case ("@ERRO") -> {
@@ -156,7 +154,7 @@ public class MessageHandler {
                 JSONObject objError = (JSONObject) p1.parse(message);
 
                 String error = (String) objError.get("errorType");
-                cli.eventManager(error);
+                ui.eventManager(error);
             }
 
             case ("@CONF") -> {
@@ -164,7 +162,7 @@ public class MessageHandler {
                 JSONObject objMess = (JSONObject) p1.parse(message);
 
                 String mess = (String) objMess.get("confirm");
-                cli.eventManager("myTurn");
+                ui.eventManager("myTurn");
             }
 
             case ("@ENDG") -> {
@@ -172,7 +170,7 @@ public class MessageHandler {
                 JSONObject objMess = (JSONObject) p1.parse(message);
 
                 boolean winner = (boolean) objMess.get("result");
-                cli.endGame(winner);
+                ui.endGame(winner);
             }
             default -> System.out.println("Unrecognized request");
         }

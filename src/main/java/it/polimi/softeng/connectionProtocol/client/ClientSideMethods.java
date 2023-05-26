@@ -49,7 +49,10 @@ public class ClientSideMethods implements ClientRemoteInterface {
     @Override
     public void sendCommonCard(ArrayList<CommonCards> commonCards) throws RemoteException {
         cli.eventManager("commonCardEvent");
+        int i = 1;
         for (CommonCards commonCard : commonCards) {
+            cli.commonCardUpdater(commonCard.getName(), i);
+            i++;
             cli.commonCardsVisualizer(commonCard.getName());
         }
     }
@@ -64,27 +67,6 @@ public class ClientSideMethods implements ClientRemoteInterface {
 
         String receiver = null;
 
-        /*receiver = message.substring(message.indexOf("'" + 1));
-        receiver = receiver.substring(0, message.indexOf("'"));
-
-        message = message.replace("'"+receiver+"' ", "");
-
-        if (receiver.equals("all"))
-        {
-            cli.eventManager("globalChatEvent");
-            JSONObject obj = new JSONObject();
-            obj.put("requester", sender);
-            obj.put("message", message);
-            cli.chatVisualizer(obj);
-        }
-        else
-        {
-            cli.eventManager("chatEvent");
-            JSONObject obj = new JSONObject();
-            obj.put("requester", sender);
-            obj.put("message", message);
-            cli.chatVisualizer(obj);
-        }*/
         JSONObject obj = new JSONObject();
         obj.put("requester", sender);
         obj.put("message", message);

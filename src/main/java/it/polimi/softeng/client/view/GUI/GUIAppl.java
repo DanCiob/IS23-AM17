@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class GUIAppl extends Application {
     GUIClientSide guiClientSide;
@@ -23,6 +24,7 @@ public class GUIAppl extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 640, 480);
 
         guiClientSide = new GUIClientSide();
+        GUIRegistry.guiList.add(guiClientSide);
         primaryStage.setTitle("My Shelfie");
         primaryStage.setScene(scene);
         primaryStage.show();

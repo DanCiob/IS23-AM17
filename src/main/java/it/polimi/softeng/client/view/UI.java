@@ -1,9 +1,6 @@
 package it.polimi.softeng.client.view;
 
-import it.polimi.softeng.model.Cell;
-import it.polimi.softeng.model.PersonalCards;
-import it.polimi.softeng.model.Player;
-import it.polimi.softeng.model.Tile;
+import it.polimi.softeng.model.*;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
@@ -12,40 +9,70 @@ import java.util.ArrayList;
  * UI interfaces shows method that CLI and GUI implements to show information about game
  */
 public interface UI {
+
+    ///////////////
+    //VISUALIZERS//
+    ///////////////
+
     /**
      * Visualizer of GameBoard state
      */
-    public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable);
+    void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable);
 
     /**
      * Visualizer of Shelfie state
      */
-    public void shelfieVisualizer(Tile[][] shelfie);
+     void shelfieVisualizer(Tile[][] shelfie);
 
     /**
      * Visualizer of CommonCards used in game
      */
-    public void commonCardsVisualizer(String commonCard);
+     void commonCardsVisualizer(String commonCard);
 
     /**
      * Visualizer of PersonalCard
      */
-    public void personalCardVisualizer(PersonalCards personalCard);
+     void personalCardVisualizer(PersonalCards personalCard);
 
     /**
      * Visualizer of Chat
      */
-    public void chatVisualizer(JSONObject jsonMessage);
+     void chatVisualizer(JSONObject jsonMessage);
 
     /**
      * Visualizer of current connected players
      */
-    public void scoreVisualizer(ArrayList<Player> players);
+     void scoreVisualizer(ArrayList<Player> players);
 
-    //public void loginListener(String nickname);
+    /**
+     * Manage event received from server
+     * @param event is string containing event
+     */
+    void eventManager(String event);
 
-    public void setServerAddress(String serverAddress);
+    ////////////
+    //UPDATERS//
+    ////////////
 
-    public void setPort(int port);
+    void boardUpdater(GameBoard b);
+
+    void shelfieUpdater(Shelfie s);
+
+    void scoreUpdater(int s);
+
+    void personalCardUpdater (PersonalCards pc);
+
+    void commonCardUpdater (String nameOfCommonCard, int whatCommonCard);
+
+    void setServerAddress(String serverAddress);
+
+    void setPort(int port);
+
+    //////////////
+    //GAME PHASE//
+    //////////////
+    void endGame(boolean winner);
+
+    void beginGame(boolean b);
 }
 

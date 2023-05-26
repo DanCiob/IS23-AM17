@@ -13,10 +13,11 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class GUILoginController{
-
+    GUIClientSide guiClientSide;
     @FXML
     Label np;
     @FXML
@@ -49,7 +50,6 @@ public class GUILoginController{
     @FXML
     Button loginButton;
 
-
     @FXML
     protected void onNewGame(){
         if(game.getSelectionModel().getSelectedIndex() == 0){ //option create new game
@@ -71,11 +71,14 @@ public class GUILoginController{
      */
     @FXML
     protected void onLoginButtonClick(ActionEvent event) throws IOException{
-        GUIClientSide.getCli().setNickname(nickname.getText());
-        if(!GUIClientSide.getCli().isOkNickname()){
+        guiClientSide = GUIRegistry.guiList.get(GUIRegistry.numberOfGUI);
+        GUIRegistry.guiList.get(GUIRegistry.numberOfGUI).setLoginController(this);
+
+        guiClientSide.setNickname(nickname.getText());
+        if(!guiClientSide.isOkNickname()){
             nickname.setText("");
         }else{
-            GUIClientSide.setupCliForGui(socketOrRmi.getSelectionModel().getSelectedIndex()+1,
+            guiClientSide.setupGUI(socketOrRmi.getSelectionModel().getSelectedIndex()+1,
                     serverIP.getText(), Integer.parseInt(serverPort.getText()), game.getSelectionModel().getSelectedIndex() +1,
                     numberOfPlayer.getSelectionModel().getSelectedIndex()+2, mode.getSelectionModel().getSelectedIndex()+1);
             loginNotifier();
@@ -122,7 +125,7 @@ public class GUILoginController{
                 gamemode = 2;
         String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(nickname.getText(), gamemode, startgame, numPlayers), "@LOGN", nickname.getText()).toJSONString();
         System.out.println(login);
-        GUIClientSide.getClientSide().sendMessage(login);
+        guiClientSide.getClientSide().sendMessage(login);
     }
 
 }

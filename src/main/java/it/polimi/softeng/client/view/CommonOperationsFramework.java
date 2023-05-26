@@ -12,17 +12,4 @@ public abstract class CommonOperationsFramework {
 
     public abstract boolean RMIInvoker(String op, String action);
 
-    public abstract void boardUpdater(GameBoard b);
-
-    public abstract void shelfieUpdater(Shelfie s);
-
-    public abstract void scoreUpdater(int s);
-
-    public abstract void personalCardUpdater (PersonalCards pc);
-
-    public abstract void commonCardUpdater (String nameOfCommonCard, int whatCommonCard);
-
-    public abstract void setServerAddress(String serverAddress);
-
-    public abstract void setPort(int port);
 }

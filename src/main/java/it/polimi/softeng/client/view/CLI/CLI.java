@@ -73,6 +73,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     protected int ConnectionMode = 0;
 
     protected boolean GameIsOn = false;
+
+    private boolean okNickname;
     protected final Scanner input;
 
     protected final MessageHandler messageHandler;
@@ -160,19 +162,20 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         } while (GameMode != 1 && GameMode != 2);
                     }
 
+                    boolean confirm = true;
+                    this.clientSide = new ClientSide(messageHandler);
                     //TODO nicknameUniqueness
                     //do {
                     do {
                         System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed)");
                         System.out.println(">");
                         Nickname = input.nextLine();
-                    } while (!isOkNickname());
 
-                    //TODO Now connect to 127.0.0.1
-                    String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(Nickname, GameMode, StartGame, NumOfPlayer), "@LOGN", Nickname).toJSONString();
-                    System.out.println(login);
-                    this.clientSide = new ClientSide(messageHandler);
-                    clientSide.sendMessage(login);
+                        //TODO Now connect to 127.0.0.1
+                        String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(Nickname, GameMode, StartGame, NumOfPlayer), "@LOGN", Nickname).toJSONString();
+                        System.out.println(login);
+                        clientSide.sendMessage(login);
+                    } while (!isOkNickname() || !confirm);
                 }
 
 
@@ -213,13 +216,11 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         System.out.println(">");
                         Nickname = input.nextLine();
 
-                        //TODO Nickname uniqueness
-                    } while (!isOkNickname());
-
-                    //TODO to be removed
-                    String GameModeStringifed = GameMode == 1 ? "e" : "n";
-                    this.RemoteMethods = new ClientSideRMI(ServerAddress,this);
-                    RMIInvoker("@LOGN", GameModeStringifed);
+                        //TODO to be removed
+                        String GameModeStringifed = GameMode == 1 ? "e" : "n";
+                        this.RemoteMethods = new ClientSideRMI(ServerAddress, this);
+                        okNickname = RMIInvoker("@LOGN", GameModeStringifed);
+                    } while (!isOkNickname() || !okNickname);
                 }
                 default -> System.out.println("Unrecognized connection method, please digit 1 or 2...");
             }
@@ -464,10 +465,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     return GameMoveWriter.writeGameMove(action);
             }
 
-            //TODO check login dynamic
-            case ("@LOGN") -> {
-
-            }
             default -> System.out.println("Unrecognized operation!");
         }
         return null;
@@ -959,7 +956,10 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             }
 
             //Servers-side errors
-            case (NICKNAME_NOT_UNIQUE) -> System.out.println(NICKNAME_NOT_UNIQUE);
+            case (NICKNAME_NOT_UNIQUE) -> {
+                System.out.println(NICKNAME_NOT_UNIQUE);
+                okNickname = false;
+            }
             case (PLAYER_DISCONNECTED) -> System.out.println(PLAYER_DISCONNECTED);
             case (INVALID_NUMBER_OF_PLAYERS) -> System.out.println(INVALID_NUMBER_OF_PLAYERS);
             case (INVALID_CHOICE_OF_TILES) -> System.out.println(INVALID_CHOICE_OF_TILES);
