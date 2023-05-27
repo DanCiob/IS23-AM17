@@ -10,8 +10,8 @@ import static it.polimi.softeng.JSONWriter.ServerSignatureWriter.serverSignObjec
 
 /**
  * General controller with functions of:
- * - managing gameController, boardController, shelfieController, chatController;
- * - communicating using serverSide.
+ * - managing {@link ChatController} and {@link GameController} (which also controls the shelfie and the board);
+ * - communicating using {@link ServerMessageHandler}
  */
 public class Controller {
     private final GameController gameController;
@@ -28,8 +28,8 @@ public class Controller {
     }
 
     /**
-     * Process chat request decoded from JSON by ServerMessageHandler:
-     *  it makes some checks on the receiver and sender, then send the chat message
+     * This method processes chat requests sent by {@link ServerMessageHandler}.
+     * It also makes some checks on the receiver and sender, then forward to {@link ChatController}.
      *
      * @param receiver is receiver of chat message
      * @param message is JSON message encoded
@@ -43,8 +43,8 @@ public class Controller {
     }
 
     /**
-     * Process game move request decoded from JSON by ServerMessageHandler:
-     *  it makes some checks on the requester of the move, then send it
+     * This method processes move requests sent by {@link ServerMessageHandler}, only if the requester is the current player.
+     * Then it forwards the move request to {@link GameController}.
      *
      * @param positionsToBeRemoved is positions to be removed from board
      * @param column is column of insertion in shelfie
@@ -66,7 +66,8 @@ public class Controller {
     }
 
     /**
-     * Process login request from client
+     * This method processes login requests sent from {@link ServerMessageHandler}r.
+     * It verifies if the nickname is unique and ensures a reconnection for disconnected players.
      * @param nickname is nickname of player
      * @param gameMode is easy or normal mode
      * @param numOfPlayer is number of player (2-4)
@@ -85,7 +86,8 @@ public class Controller {
     }
 
     /**
-     * Send a JSONObject containing player-score info
+     * This method receives Socket PlayerScore Requests from {@link ServerMessageHandler}
+     *  and forwards them to {@link ServerSide}
      * @param requester is requester
      * @return true if everything went correctly
      */
@@ -105,7 +107,8 @@ public class Controller {
     }
 
     /**
-     * Start game by creating model
+     * This method manage the requests of start of a game sent by {@link it.polimi.softeng.connectionProtocol.server.LoginManagerV2}
+     *  invoking the corresponding method of {@link GameController}
      */
     public void startGame ()
     {

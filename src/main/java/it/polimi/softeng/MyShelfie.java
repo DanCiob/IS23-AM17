@@ -8,11 +8,16 @@ import it.polimi.softeng.controller.Controller;
 
 import java.io.*;
 
+/**
+ * This class with its main method, is used to run MyShelfie Application.
+ * It allows to select among operating modes of server, client GUI and CLI
+ */
+
 public class MyShelfie {
     static int mode = 20;
 
     public static void main(String[] args) throws IOException {
-        System.out.println("This is myShelfie. decide operating mode between:");
+        System.out.println("This is myShelfie. decide operating mode among:");
         System.out.println("0) server");
         System.out.println("1) client CLI");
         System.out.println("2) client GUI");
@@ -36,7 +41,7 @@ public class MyShelfie {
         }
 
         switch (mode){
-            case 0 ->{
+            case 0 ->{ //SERVER MODE
                 System.out.println("You've chosen : server mode");
 
                 //Creates controller
@@ -52,7 +57,7 @@ public class MyShelfie {
                 }*/
             }
 
-            case 1 ->{
+            case 1 ->{ //CLIENT CLI MODE
                 System.out.println("You've chosen : client CLI");
 
                 //creates the client CLI
@@ -65,7 +70,7 @@ public class MyShelfie {
                 }*/
 
             }
-            case 2 ->{
+            case 2 ->{ //CLIENT GUI MODE
                 System.out.println("You've chosen : client GUI");
                 GUIAppl guiApplication = new GUIAppl();
                 guiApplication.main(args);
