@@ -14,6 +14,11 @@ import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.JSONWriter.ErrorWriter.writeError;
 import static it.polimi.softeng.JSONWriter.ServerSignatureWriter.serverSignObject;
 
+/**
+ * This class decodes JSON messages received from {@link it.polimi.softeng.connectionProtocol.server.ClientHandler}
+ *  using JSON Parsers. Then the requests are sent to {@link Controller}
+ */
+
 public class ServerMessageHandler {
     private final Controller controller;
     private ServerSide serverSide;
@@ -27,7 +32,8 @@ public class ServerMessageHandler {
     }
 
     /**
-     *
+     * This method decodes JSON messages received from {@link it.polimi.softeng.connectionProtocol.server.ClientHandler}
+     *  using JSON Parsers. Then the requests are sent to {@link Controller}
      * @param message containing JSON message in form of string with request
      */
     public void parsingMessage(String message) throws ParseException {

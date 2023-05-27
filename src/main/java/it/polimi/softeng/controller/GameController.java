@@ -12,7 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Communicate gameMoves to model, communicate via interfaces
+ * This class allows to communicate gameMoves and the start of a game to the Model.
+ * ??? communicate via interfaces
+ *
  */
 public class GameController {
     private Game game;
@@ -23,7 +25,7 @@ public class GameController {
     }
 
     /**
-     * Call model update with information collected by client
+     * This method calls model update with information collected by client
      *
      * @param tilesToBeRemoved is positions of cell to be removed
      * @param column           is column of insertion
@@ -168,7 +170,9 @@ public class GameController {
     }
 
     /**
-     * Manage setup of model and notifications of all setup items to clients
+     * This method manages the game-start setup of the Model (preparation of board, shelfie, PC, CC...) and sends the
+     *  information to Clients. It also notifies the first player for the beginning of its turn.
+     * @param nameList of the players
      */
     public void startGame(ArrayList<String> nameList) {
         game = new Game();
