@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import org.json.simple.JSONObject;
 import java.net.URL;
 import java.util.ArrayList;
@@ -40,6 +41,12 @@ public class GUIGameController implements Initializable{
     @FXML
     ImageView commoncard2;
 
+    @FXML
+    Pane panePlayer3;
+
+    @FXML
+    Pane panePlayer4;
+
     public GUIGameController (GUIClientSide guiClientSide) {
         this.guiClientSide = guiClientSide;
     }
@@ -55,10 +62,21 @@ public class GUIGameController implements Initializable{
         commoncard1.setImage(new Image("/images/CommonCard_" + guiClientSide.getCommonCard1() + ".jpg"));
         if(guiClientSide.getCommonCard2()!=null)
             commoncard2.setImage(new Image("/images/CommonCard_" + guiClientSide.getCommonCard2() + ".jpg"));
-        int numPC = getNumberPersonalCard();
-        System.out.println("/images/PC" + numPC + ".jpg");
-        //personalCard.setImage(new Image("/images/PC" + numPC + ".jpg")); TODO: sistema getNumberPersonalCard
-        //TODO: set personal card and common cards
+        if(getNumberPersonalCard() == -1){
+            //TODO: send error
+        }else{
+            personalCard.setImage(new Image("/images/PC" + getNumberPersonalCard() + ".jpg"));
+        }
+        initializeShelfies();
+    }
+
+    protected void initializeShelfies(){
+        if(guiClientSide.getNumOfPlayer() >= 3){
+            panePlayer3.setVisible(true);
+            panePlayer4.setVisible(true);
+        }
+
+        //TODO:set nicknames
     }
 
     protected int getNumberPersonalCard(){
@@ -74,7 +92,7 @@ public class GUIGameController implements Initializable{
                 j++;
             }
             if(equal)
-                return i + 1;
+                return i+1;
             i++;
         }
         return -1;

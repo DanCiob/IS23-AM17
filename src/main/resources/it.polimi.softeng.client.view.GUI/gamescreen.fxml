@@ -83,15 +83,9 @@
                         </Pane>
                         <HBox layoutX="5.0" prefHeight="100.0" prefWidth="200.0" spacing="3.0">
                            <children>
-                              <ImageView fx:id="player2badge1" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="/images/BadgeScore2.jpg" />
-                                 </image></ImageView>
-                              <ImageView fx:id="player2badge2" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="/images/BadgeScore4.jpg" />
-                                 </image></ImageView>
-                              <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="player2badge1" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true"/>
+                              <ImageView fx:id="player2badge2" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true"/>
+                              <ImageView fx:id="player2badge3" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                            <opaqueInsets>
                               <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -104,7 +98,7 @@
                   </VBox>
                </children>
             </Pane>
-            <Pane prefHeight="146.0" prefWidth="200.0">
+            <Pane prefHeight="146.0" prefWidth="200.0" fx:id="panePlayer3" visible="false">
                <children>
                   <VBox prefHeight="146.0" prefWidth="110.0">
                      <children>
@@ -169,15 +163,9 @@
                         </Pane>
                         <HBox layoutX="5.0" prefHeight="100.0" prefWidth="200.0" spacing="3.0">
                            <children>
-                              <ImageView fx:id="player3badge1" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="/images/BadgeScore8.jpg" />
-                                 </image></ImageView>
-                              <ImageView fx:id="player3badge2" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="/images/BadgeScore6.jpg" />
-                                 </image></ImageView>
-                              <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="player3badge1" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true"/>
+                              <ImageView fx:id="player3badge2" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true"/>
+                              <ImageView fx:id="player3badge3" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true" />
                            </children>
                            <padding>
                               <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
@@ -187,7 +175,7 @@
                   </VBox>
                </children>
             </Pane>
-            <Pane prefHeight="146.0" prefWidth="200.0">
+            <Pane prefHeight="146.0" prefWidth="200.0" fx:id="panePlayer4" visible="false">
                <children>
                   <VBox prefHeight="146.0" prefWidth="110.0">
                      <children>
@@ -252,18 +240,9 @@
                         </Pane>
                         <HBox layoutX="5.0" prefHeight="100.0" prefWidth="200.0" spacing="2.0">
                            <children>
-                              <ImageView fx:id="player4badge1" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="/images/BadgeScore8.jpg" />
-                                 </image></ImageView>
-                              <ImageView fx:id="player4badge2" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="/images/BadgeScore2.jpg" />
-                                 </image></ImageView>
-                              <ImageView fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="/images/firstplayertoken.png" />
-                                 </image></ImageView>
+                              <ImageView fx:id="player4badge1" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true"/>
+                              <ImageView fx:id="player4badge2" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true"/>
+                              <ImageView fx:id="player4badge3" fitHeight="36.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true"/>
                            </children>
                            <padding>
                               <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
@@ -384,21 +363,9 @@
                               <ImageView fx:id="personalCard" fitHeight="166.0" fitWidth="128.0" layoutX="14.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true"/>
                            </children>
                         </AnchorPane>
-                        <ImageView fitHeight="54.0" fitWidth="54.0" layoutX="133.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="/images/BadgeScore6.jpg" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="57.0" fitWidth="54.0" layoutX="192.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="/images/BadgeScore4.jpg" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="48.0" fitWidth="54.0" layoutX="160.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="/images/firstplayertoken.png" />
-                           </image>
-                        </ImageView>
+                        <ImageView fx:id="player1badge1" fitHeight="54.0" fitWidth="54.0" layoutX="133.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true"/>
+                        <ImageView fx:id="player1badge2" fitHeight="57.0" fitWidth="54.0" layoutX="192.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true"/>
+                        <ImageView fx:id="player1badge3" fitHeight="48.0" fitWidth="54.0" layoutX="160.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true"/>
                         <AnchorPane layoutX="7.0" layoutY="181.0">
                            <children>
                               <ImageView fx:id="commoncard1" fitHeight="75.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true">
@@ -406,12 +373,9 @@
                                     <Image url="/images/CommonCard_ColumnsOfMaxDiffTypes.jpg" />
                                  </image>-->
                               </ImageView>
-                              <ImageView fitHeight="29.0" fitWidth="30.0" layoutX="67.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fitHeight="29.0" fitWidth="30.0" layoutX="67.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fitHeight="29.0" fitWidth="30.0" layoutX="67.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fitHeight="29.0" fitWidth="30.0" layoutX="67.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="badgeCommonCard1" fitHeight="29.0" fitWidth="30.0" layoutX="67.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="/images/BadgeScore2.jpg" />
+                                    <Image url="/images/BadgeScore8.jpg" />
                                  </image>
                               </ImageView>
                            </children>
@@ -421,10 +385,7 @@
                               <ImageView fx:id="commoncard2" fitHeight="75.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true">
 
                               </ImageView>
-                              <ImageView fitHeight="29.0" fitWidth="30.0" layoutX="67.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fitHeight="29.0" fitWidth="30.0" layoutX="67.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fitHeight="29.0" fitWidth="30.0" layoutX="67.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" />
-                              <ImageView fitHeight="29.0" fitWidth="30.0" layoutX="67.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="badgeCommonCard2"  fitHeight="29.0" fitWidth="30.0" layoutX="67.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="/images/BadgeScore8.jpg" />
                                  </image>
