@@ -356,6 +356,95 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public void eventManager(String event) {
+        switch (event) {
+            //Client-side errors
+            case ("chatError") -> System.out.println("Error in chat message syntax, try again!");
+            case ("gameMoveError") -> System.out.println("Error in game move syntax, try again!");
+
+            //Events
+            case ("chatEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+-----------------------+");
+                System.out.println("| Received chat message |");
+                System.out.println("+-----------------------+");
+                System.out.println(ANSI_RESET);
+            }
+            case ("globalChatEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+------------------------------+");
+                System.out.println("| Received global chat message |");
+                System.out.println("+------------------------------+");
+                System.out.println(ANSI_RESET);
+            }
+            case ("systemEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+-------------------------+");
+                System.out.println("| Received system message |");
+                System.out.println("+-------------------------+");
+                System.out.println(ANSI_RESET);
+            }
+            case ("boardEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+-----------------------+");
+                System.out.println("| Received board update |");
+                System.out.println("+-----------------------+");
+                System.out.println(ANSI_RESET);
+            }
+            case ("shelfieEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+-------------------------+");
+                System.out.println("| Received shelfie update |");
+                System.out.println("+-------------------------+");
+                System.out.println(ANSI_RESET);
+            }
+            case ("personalCardEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+----------------------------------+");
+                System.out.println("| Your personal card for this game |");
+                System.out.println("+----------------------------------+");
+                System.out.println(ANSI_RESET);
+            }
+            case ("commonCardEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+----------------------------+");
+                System.out.println("| Common cards for this game |");
+                System.out.println("+----------------------------+");
+                System.out.println(ANSI_RESET);
+            }
+            case ("playerEvent") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+--------------------------------------+");
+                System.out.println("| List of connected players with score |");
+                System.out.println("+--------------------------------------+");
+                System.out.println(ANSI_RESET);
+            }
+            case ("myTurn") -> {
+                System.out.println(ANSI_CYAN);
+                System.out.println("+-----------------+");
+                System.out.println("| It's your turn! |");
+                System.out.println("+-----------------+");
+                System.out.println(ANSI_RESET);
+                isYourTurn = true;
+                if(gameController != null)
+                    gameController.startTurn();
+            }
+
+            //Servers-side errors
+            case (NICKNAME_NOT_UNIQUE) -> {
+                System.out.println(NICKNAME_NOT_UNIQUE);
+                okNickname = false;
+            }
+            case (PLAYER_DISCONNECTED) -> System.out.println(PLAYER_DISCONNECTED);
+            case (INVALID_NUMBER_OF_PLAYERS) -> System.out.println(INVALID_NUMBER_OF_PLAYERS);
+            case (INVALID_CHOICE_OF_TILES) -> System.out.println(INVALID_CHOICE_OF_TILES);
+            case (INVALID_COLUMN) -> System.out.println(INVALID_COLUMN);
+            case (INVALID_RECEIVER) -> System.out.println(INVALID_RECEIVER);
+            case (ALREADY_LOGGED_IN) -> System.out.println(ALREADY_LOGGED_IN);
+            case (YOU_ARE_RECEIVER) -> System.out.println(YOU_ARE_RECEIVER);
+            case (ERROR_IN_GAMEMOVE) -> System.out.println((ERROR_IN_GAMEMOVE));
+
+            default -> System.out.println("Unrecognized event!");
+        }
 
     }
 

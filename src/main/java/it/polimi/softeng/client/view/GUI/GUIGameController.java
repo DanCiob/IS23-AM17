@@ -330,6 +330,8 @@ public class GUIGameController implements Initializable{
         }
         if(!guiClientSide.isYourTurn)
             boardGrid.setOpacity(0.3);
+        else
+            boardGrid.setOpacity(1);
     }
 
     @FXML
