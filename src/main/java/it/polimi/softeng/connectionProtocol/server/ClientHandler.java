@@ -12,6 +12,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Objects;
 
+import static it.polimi.softeng.Constants.ALREADY_LOGGED_IN;
+import static it.polimi.softeng.Constants.NICKNAME_NOT_UNIQUE;
+import static it.polimi.softeng.JSONWriter.ErrorWriter.writeError;
+import static it.polimi.softeng.JSONWriter.ServerSignatureWriter.serverSignObject;
+
 public class ClientHandler implements Runnable{
     private BufferedReader in = null;
     private PrintWriter out = null;
@@ -103,11 +108,12 @@ public class ClientHandler implements Runnable{
                 }
                 if(!flag){
                     System.out.println("nickname is not acceptable ");
-                    //codice per tirare errore di login non accettato
                     //TODO popolare con send di messaggio di errore
+                    out.println(serverSignObject(writeError(NICKNAME_NOT_UNIQUE), "@ERRO", nickname).toJSONString());
                 }
             } else{
                 //TODO aggiungere messaggio di errore da inviare al client
+                out.println(serverSignObject(writeError(NICKNAME_NOT_UNIQUE), "@ERRO", nickname).toJSONString());
                 System.out.println("nickName già usato");
             }
         }

@@ -1,8 +1,7 @@
 package it.polimi.softeng.connectionProtocol.client;
 
-import it.polimi.softeng.client.view.CLI.CLI;
-import it.polimi.softeng.client.view.CLI.CLITest;
 import it.polimi.softeng.client.view.UI;
+import it.polimi.softeng.connectionProtocol.CommunicationProtocolParser;
 import it.polimi.softeng.connectionProtocol.server.ServerRemoteInterface;
 
 import java.rmi.AlreadyBoundException;
@@ -15,76 +14,95 @@ import java.rmi.server.UnicastRemoteObject;
 public class ClientSideRMI {
 
     private ServerRemoteInterface stub = null;
+    int port = 1099;
 
-    public ClientSideRMI(UI ui ) {
+    /**
+     * constructor method; this one is to be called when you use the base server IP (ie the JSON file called clientConfig in the same package as this file)
+     * @param ui the ui which creates the clientSide object
+     */
+    public ClientSideRMI(UI ui) {
+        //opening the registry with clients methods
         ClientSideMethods obj = new ClientSideMethods(ui);
-        ClientRemoteInterface stub  = null;
-        try {
-            stub = (ClientRemoteInterface) UnicastRemoteObject.exportObject(obj,0);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        Registry clientRegistry = null;
-        try {
-            clientRegistry = LocateRegistry.createRegistry(1100);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            clientRegistry.bind("ClientRemoteInterface", stub);
-        } catch (RemoteException | AlreadyBoundException e) {
-            throw new RuntimeException(e);
-        }
+        openRegistry(obj);
         System.out.println("client up !");
 
         //connection to server
         connect();
     }
-    // TODO connection to server
-    public ClientSideRMI(String serverIP, CLI cli) {
-        ClientSideMethods obj = new ClientSideMethods(cli);
-        ClientRemoteInterface stub  = null;
-        try {
-            stub = (ClientRemoteInterface) UnicastRemoteObject.exportObject(obj,0);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        Registry clientRegistry = null;
-        try {
-            clientRegistry = LocateRegistry.createRegistry(1100);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            clientRegistry.bind("ClientRemoteInterface", stub);
-        } catch (RemoteException | AlreadyBoundException e) {
-            throw new RuntimeException(e);
-        }
+
+    /**
+     * constructor method; this one is to be called when you use the user-chosen server IP
+     * @param serverIP string representing the server ip (of form "xxx.xxx.xxx.xxx")
+     * @param ui the ui which creates the clientside object
+     */
+    public ClientSideRMI(String serverIP, UI ui) {
+        //opening the registry with clients methods
+        ClientSideMethods obj = new ClientSideMethods(ui);
+        openRegistry(obj);
         System.out.println("client up !");
 
         //connection to server
         connect(serverIP);
     }
 
-    public void connect(){
-        Registry registry = null;
-        try {
-            //needs changing
-            registry = LocateRegistry.getRegistry("127.0.0.1",1099);
-            System.out.println("connected to server");
-        } catch (RemoteException e) {
-            e.printStackTrace();
+    /**
+     * method used to connect to server and get its stub when the server IP is the one in the json files
+     */
+    private void connect(){
+        //getting the base server ip from the config files
+        CommunicationProtocolParser communicationProtocolParser = new CommunicationProtocolParser();
+        communicationProtocolParser.parser("client");
+        String serverIP = communicationProtocolParser.getHostName() ;
+
+        getServerStub(serverIP);
+    }
+
+    /**
+     * method used to connect to server and get its stub when the server IP is user selected
+     * @param serverIP the server ip address
+     */
+    private void connect(String serverIP){
+        getServerStub(serverIP);
+    }
+
+
+    /**
+     * this methods creates and uploads the client methods registry
+     * @param obj this is the ClientSideMethods obj with the clients methods
+     */
+    private void openRegistry(ClientSideMethods obj){
+        Registry clientRegistry = null;
+        boolean portNotFound = true;
+        while(portNotFound){
+            try {
+                clientRegistry = LocateRegistry.createRegistry(port);
+                System.out.println("opened on port " + port + " successfully !");
+                portNotFound = false;
+            } catch (RemoteException e) {
+                System.out.println("opening on port " + port + " failed !");
+                port++;
+            }
         }
 
+        ClientRemoteInterface stub;
         try {
-            stub = (ServerRemoteInterface) registry.lookup("ServerRemoteInterface");
-        } catch (RemoteException | NotBoundException e) {
+            stub = (ClientRemoteInterface) UnicastRemoteObject.exportObject(obj,port);
+        } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
 
+        try {
+            clientRegistry.bind("ClientRemoteInterface", stub);
+        } catch (RemoteException | AlreadyBoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void connect(String serverIP){
+    /**
+     * this method creates gets the server stub
+     * @param serverIP string containing the server ip
+     */
+    private void getServerStub(String serverIP){
         Registry registry = null;
         try {
             //needs changing
@@ -99,39 +117,21 @@ public class ClientSideRMI {
         } catch (RemoteException | NotBoundException e) {
             throw new RuntimeException(e);
         }
-        //TODO chiamare comando di login
     }
 
+    /**
+     * getter method
+     * @return server stub
+     */
     public ServerRemoteInterface getStub() {
         return stub;
     }
 
-
-    // version used solely for local testing or rmi
-    public ClientSideRMI(int port,CLI cli) {
-        ClientSideMethods obj = new ClientSideMethods(cli);
-        ClientRemoteInterface stub  = null;
-        try {
-            stub = (ClientRemoteInterface) UnicastRemoteObject.exportObject(obj,port);
-            System.out.println("stub created !");
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        Registry clientRegistry = null;
-        try {
-            clientRegistry = LocateRegistry.createRegistry(port);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            clientRegistry.bind("ClientRemoteInterface", stub);
-            System.out.println("stub binded !");
-        } catch (RemoteException | AlreadyBoundException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("client up !");
-
-        //connection to server
-        connect();
+    /**
+     * getter method
+     * @return the port on which the client object is placed
+     */
+    public int getPort() {
+        return port;
     }
 }

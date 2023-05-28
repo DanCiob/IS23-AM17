@@ -85,7 +85,7 @@ public class ServerMessageHandler {
                 //TODO Multiple games -> startGame
 
                 if (!confirm)
-                    serverSide.sendMessage(serverSignObject(writeError(ALREADY_LOGGED_IN), "@ERRO", requester).toJSONString(), requester);
+                    //controller.sendErrorMessage(serverSignObject(writeError(ALREADY_LOGGED_IN), "@ERRO", requester).toJSONString(),requester);
 
                 //Descriptive output
                 System.out.println("Received login request from " + requester);

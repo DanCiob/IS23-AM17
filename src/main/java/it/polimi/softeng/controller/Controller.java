@@ -75,14 +75,7 @@ public class Controller {
      * @return true if request is successful
      */
     public boolean SocketLoginRequest(String nickname, int gameMode, int numOfPlayer, int startGame) {
-        //TODO check uniqueness
-        /*if (gameController.getCurrentGame().getPlayers().contains(nickname))
-            return false;*/
-        /*TODO else if (currentGame.getDisconnectedPlayers().contains(nickname)) {
-            //reconnect
-        }*/
-        //TODO startGame for multiple games
-        return true;
+        return !serverSide.getNickNameList().contains(nickname);
     }
 
     /**

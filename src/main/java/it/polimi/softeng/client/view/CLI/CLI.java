@@ -121,13 +121,15 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      */
     public void setupCLI() {
         int mode;
+        String PortString;
 
         System.out.println("Initializing CLI...");
-        System.out.println("Do you want to connect using Socket(1) or RMI(2)?");
+        System.out.println("Do you want to connect using Socket(1),RMI(2) or local RMI(3)?");
         System.out.println(">");
         do {
             ConnectionMode = Integer.parseInt(input.nextLine());
 
+            //TODO local rmi mode
             switch (ConnectionMode) {
                 case 1 -> { //socket
                     System.out.println("Connection with Socket...");
@@ -136,8 +138,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     ServerAddress = input.nextLine();
                     System.out.println("Digit server Port");
                     System.out.println(">");
-                    Port = input.nextInt();
-                    input.nextLine();
+                    PortString = input.nextLine();
                     System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");
                     System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
                     System.out.println(">");
@@ -163,7 +164,14 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     }
 
                     boolean confirm = true;
-                    this.clientSide = new ClientSide(messageHandler);
+                    //this is so that if you press enter it connects to the server specified in the json file
+                    if(!ServerAddress.equals("") && !PortString.equals("")){
+                        Port = Integer.parseInt(PortString);
+                        this.clientSide = new ClientSide(ServerAddress,Port,messageHandler);
+                    }else {
+                        this.clientSide = new ClientSide(messageHandler);
+                    }
+
                     //TODO nicknameUniqueness
                     //do {
                     do {
@@ -216,15 +224,65 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         System.out.println(">");
                         Nickname = input.nextLine();
 
-                        //TODO to be removed
                         String GameModeStringifed = GameMode == 1 ? "e" : "n";
-                        this.RemoteMethods = new ClientSideRMI(ServerAddress, this);
+
+                        //if the user pressed enter it connects to the server specified in the json file
+                        if(!ServerAddress.equals("")){
+                            this.RemoteMethods = new ClientSideRMI(ServerAddress, this);
+                        }else this.RemoteMethods = new ClientSideRMI(this);
+
                         okNickname = RMIInvoker("@LOGN", GameModeStringifed);
                     } while (!isOkNickname() || !okNickname);
                 }
-                default -> System.out.println("Unrecognized connection method, please digit 1 or 2...");
+
+                case 3 ->{ //case of local use of RMI
+                    System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");
+                    System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
+                    System.out.println(">");
+                    do {
+                        StartGame = input.nextInt();
+                        input.nextLine();
+                    } while (StartGame != 1 && StartGame != 2);
+                    if (StartGame == 1) {
+                        System.out.println("Insert the number of players(2-4)?");
+                        System.out.println(">");
+                        do {
+                            NumOfPlayer = input.nextInt();
+                            input.nextLine();
+
+                            if (NumOfPlayer > 4 || NumOfPlayer < 2)
+                                eventManager(INVALID_NUMBER_OF_PLAYERS);
+                        } while (NumOfPlayer > 4 || NumOfPlayer < 2);
+
+                        System.out.println("Do you want to play with Easy mode(1) or Normal mode(2)?");
+                        System.out.println(">");
+                        do {
+                            GameMode = input.nextInt();
+                            input.nextLine();
+                        } while (GameMode != 1 && GameMode != 2);
+                    }
+
+                    do {
+                        System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed)");
+                        System.out.println(">");
+                        Nickname = input.nextLine();
+
+                        String GameModeStringifed = GameMode == 1 ? "e" : "n";
+                        //in case of malfunction check the json client file to see if the server address is "127.0.0.1"
+                        this.RemoteMethods = new ClientSideRMI(this);
+                        //does the login here as it's basically just for testing
+                        try {
+                            okNickname = RemoteMethods.getStub().login(Nickname,NumOfPlayer,GameModeStringifed,RemoteMethods.getPort());
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } while (!isOkNickname() || !okNickname);
+                    //this way I'm routing the commands as a non-local rmi cli (the cli sends the messages based on the value of the attribute Connection mode (see game method to get it))
+                    ConnectionMode = 2;
+                }
+                default -> System.out.println("Unrecognized connection method, please digit 1,2 or 3...");
             }
-        } while (ConnectionMode != 1 && ConnectionMode != 2);
+        } while (ConnectionMode != 1 && ConnectionMode != 2 && ConnectionMode != 3);
     }
 
     ////////////////
