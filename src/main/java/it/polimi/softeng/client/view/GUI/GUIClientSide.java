@@ -1,5 +1,6 @@
 package it.polimi.softeng.client.view.GUI;
 
+import it.polimi.softeng.JSONParser.GameMoveParser;
 import it.polimi.softeng.JSONWriter.ChatWriter;
 import it.polimi.softeng.JSONWriter.GameMoveWriter;
 import it.polimi.softeng.client.view.CLI.CLI;
@@ -72,7 +73,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     private boolean okNickname;
 
-    protected final MessageHandler messageHandler;
+    protected MessageHandler messageHandler;
 
     /**
      * Manage connection -> Socket
@@ -90,24 +91,16 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     GUILoginController loginController;
 
     public GUIClientSide() {
-        messageHandler = new MessageHandler(this);
-        clientSide = new ClientSide(messageHandler);
     }
 
-    public void setupGUI(int connectionMode, String serverAddress, int port, int startGame, int numPlayers, int mode){
+    public void setupGUI(int connectionMode, String serverAddress, int port, int startGame, int numPlayers, int mode) {
         setConnectionMode(connectionMode);
-        switch (getConnectionMode()) {
-            case 1 -> { //socket
-                setServerAddress(serverAddress);
-                setPort(port);
-                setStartGame(startGame);
-                if(startGame == 1){ //create new game
-                    setNumOfPlayer(numPlayers);
-                    setGameMode(mode);
-                }
-            }
-            case 2 -> { //TODO: RMI
-            }
+        setServerAddress(serverAddress);
+        setPort(port);
+        setStartGame(startGame);
+        if (startGame == 1) { //create new game
+            setNumOfPlayer(numPlayers);
+            setGameMode(mode);
         }
     }
 
@@ -193,7 +186,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
             }
         }
 
-        if (!isOkCommand(command, 2) && !isOkCommand(command, 3)){
+        if (!isOkCommand(command, 2) && !isOkCommand(command, 3)) {
             System.out.println("Please write a command that you can see in the table");
             return;
         }
@@ -425,7 +418,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                 System.out.println("+-----------------+");
                 System.out.println(ANSI_RESET);
                 isYourTurn = true;
-                if(gameController != null)
+                if (gameController != null)
                     gameController.startTurn();
             }
 
@@ -540,6 +533,10 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         isYourTurn = yourTurn;
     }
 
+    public void setMessageHandler(MessageHandler messageHandler) {
+        this.messageHandler = messageHandler;
+    }
+
     ///////////
     //GETTERS//
     ///////////
@@ -646,6 +643,57 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public boolean RMIInvoker(String op, String action) {
-        return false;
+        switch (op) {
+            case ("@CHAT") -> {
+                if (!ChatWriter.chatMessageRegex(action)) {
+                    System.out.println("Error in Chat message syntax, try again!");
+                    return false;
+                }
+
+                JSONObject obj;
+                obj = ChatWriter.writeChatMessage(action);
+
+                if (obj.get("receiver").toString().equals("all")) {
+                    try {
+                        RemoteMethods.getStub().sendMessageToAll(obj.toJSONString(), Nickname);
+                    } catch (RemoteException e) {
+                        System.out.println("Please, reinsert your message!");
+                    }
+                } else {
+                    try {
+                        RemoteMethods.getStub().sendMessage(obj.toJSONString(), (String) obj.get("receiver"), Nickname);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            case ("@GAME") -> {
+                if (!GameMoveWriter.gameMoveRegex(action)) {
+                    System.out.println("Error in Game Move syntax, try again!");
+                    return false;
+                }
+                GameMoveParser gmp = new GameMoveParser();
+                gmp.gameMoveParser(GameMoveWriter.writeGameMove(action).toJSONString());
+
+                ArrayList<Cell> cells = gmp.getTilesToBeRemoved();
+                int column = gmp.getColumn();
+                try {
+                    RemoteMethods.getStub().sendMove(cells, column, Nickname);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            case ("@LOGN") -> {
+                //TODO Right now we don't receive GameMode, StartGame, NumOfPlayer...
+                try {
+                    RemoteMethods.getStub().login(Nickname, NumOfPlayer, action, Port);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            default -> System.out.println("Unrecognized operation!");
+        }
+        return true;
     }
 }

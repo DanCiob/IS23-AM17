@@ -151,7 +151,7 @@ public class GUIGameController implements Initializable{
             if (toBeSent != null)
                 guiClientSide.getClientSide().sendMessage(clientSignObject(toBeSent, "@GAME", nickname).toJSONString());
         }else{
-            //TODO:RMI
+            guiClientSide.RMIInvoker("@GAME",action);
         }
 
         resetAfterMove();

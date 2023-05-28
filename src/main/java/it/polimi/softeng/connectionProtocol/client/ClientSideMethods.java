@@ -1,7 +1,6 @@
 package it.polimi.softeng.connectionProtocol.client;
 
-import it.polimi.softeng.client.view.CLI.CLI;
-import it.polimi.softeng.connectionProtocol.client.ClientRemoteInterface;
+import it.polimi.softeng.client.view.UI;
 import it.polimi.softeng.model.*;
 import it.polimi.softeng.model.commonCards.CommonCards;
 import org.json.simple.JSONObject;
@@ -10,56 +9,56 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class ClientSideMethods implements ClientRemoteInterface {
-    private CLI cli;
+    private UI ui;
 
-    public ClientSideMethods(CLI cli){
-        this.cli = cli;
+    public ClientSideMethods(UI ui){
+        this.ui = ui;
     }
     @Override
     public void playerUpdate(Player player, Shelfie s) throws RemoteException {
-        cli.eventManager("systemEvent");
+        ui.eventManager("systemEvent");
         JSONObject obj = new JSONObject();
         obj.put("requester", "System");
         obj.put("message", "Received " + player.getNickname() + "'s shelfie");
-        cli.chatVisualizer(obj);
-        cli.shelfieVisualizer(s.getGrid());
+        ui.chatVisualizer(obj);
+        ui.shelfieVisualizer(s.getGrid());
     }
 
     @Override
     public void shelfieUpdate(Shelfie shelfie) throws RemoteException {
-        cli.eventManager("shelfieEvent");
-        cli.shelfieUpdater(shelfie);
-        cli.shelfieVisualizer(shelfie.getGrid());
+        ui.eventManager("shelfieEvent");
+        ui.shelfieUpdater(shelfie);
+        ui.shelfieVisualizer(shelfie.getGrid());
     }
 
     @Override
     public void gameBoardUpdate(GameBoard board) throws RemoteException {
-        cli.eventManager("boardEvent");
-        cli.boardUpdater(board);
-        cli.boardVisualizer(board.getBoard(), board.getNotAvailable());
+        ui.eventManager("boardEvent");
+        ui.boardUpdater(board);
+        ui.boardVisualizer(board.getBoard(), board.getNotAvailable());
     }
 
     @Override
     public void sendPersonalCard(PersonalCards personalCards) throws RemoteException {
-        cli.eventManager("personalCardEvent");
-        cli.personalCardUpdater(personalCards);
-        cli.personalCardVisualizer(personalCards);
+        ui.eventManager("personalCardEvent");
+        ui.personalCardUpdater(personalCards);
+        ui.personalCardVisualizer(personalCards);
     }
 
     @Override
     public void sendCommonCard(ArrayList<CommonCards> commonCards) throws RemoteException {
-        cli.eventManager("commonCardEvent");
+        ui.eventManager("commonCardEvent");
         int i = 1;
         for (CommonCards commonCard : commonCards) {
-            cli.commonCardUpdater(commonCard.getName(), i);
+            ui.commonCardUpdater(commonCard.getName(), i);
             i++;
-            cli.commonCardsVisualizer(commonCard.getName());
+            ui.commonCardsVisualizer(commonCard.getName());
         }
     }
 
     @Override
     public void sendBadge(Badge badge) throws RemoteException {
-        cli.scoreUpdater(badge.getScore());
+        ui.scoreUpdater(badge.getScore());
     }
 
     @Override
@@ -70,29 +69,28 @@ public class ClientSideMethods implements ClientRemoteInterface {
         JSONObject obj = new JSONObject();
         obj.put("requester", sender);
         obj.put("message", message);
-        cli.chatVisualizer(obj);
+        ui.chatVisualizer(obj);
     }
 
     @Override
     public void playerListUpdate(ArrayList<Player> playerList) throws RemoteException {
-        cli.eventManager("playerEvent");
-        cli.scoreVisualizer(playerList);
+        ui.eventManager("playerEvent");
+        ui.scoreVisualizer(playerList);
     }
 
     @Override
     public void startGame() throws RemoteException {
-        cli.beginGame(true);
-        System.out.println("starting the game for : " + cli.getNickname());
+        ui.beginGame(true);
     }
 
     @Override
     public void endGame(boolean winner) throws RemoteException {
-        cli.endGame(winner);
+        ui.endGame(winner);
     }
 
     @Override
     public void notifyTurn() throws RemoteException {
-        cli.eventManager("myTurn");
+        ui.eventManager("myTurn");
     }
 
 

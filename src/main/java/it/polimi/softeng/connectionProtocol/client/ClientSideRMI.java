@@ -2,6 +2,7 @@ package it.polimi.softeng.connectionProtocol.client;
 
 import it.polimi.softeng.client.view.CLI.CLI;
 import it.polimi.softeng.client.view.CLI.CLITest;
+import it.polimi.softeng.client.view.UI;
 import it.polimi.softeng.connectionProtocol.server.ServerRemoteInterface;
 
 import java.rmi.AlreadyBoundException;
@@ -15,8 +16,8 @@ public class ClientSideRMI {
 
     private ServerRemoteInterface stub = null;
 
-    public ClientSideRMI(CLI cli ) {
-        ClientSideMethods obj = new ClientSideMethods(cli);
+    public ClientSideRMI(UI ui ) {
+        ClientSideMethods obj = new ClientSideMethods(ui);
         ClientRemoteInterface stub  = null;
         try {
             stub = (ClientRemoteInterface) UnicastRemoteObject.exportObject(obj,0);
@@ -25,7 +26,7 @@ public class ClientSideRMI {
         }
         Registry clientRegistry = null;
         try {
-            clientRegistry = LocateRegistry.createRegistry(1099);
+            clientRegistry = LocateRegistry.createRegistry(1100);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -50,7 +51,7 @@ public class ClientSideRMI {
         }
         Registry clientRegistry = null;
         try {
-            clientRegistry = LocateRegistry.createRegistry(1099);
+            clientRegistry = LocateRegistry.createRegistry(1100);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
