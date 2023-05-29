@@ -16,7 +16,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ServerSideRMI extends ServerSideMethods {      //maybe we can delete this extends  ?
+public class ServerSideRMI extends ServerSideMethods {
+    /**
+     *
+     */
     private LoginManagerV2 loginManager;
     private Map<String, ClientRemoteInterface> nameToStub = new HashMap<>();
     private ServerSideMethods obj;

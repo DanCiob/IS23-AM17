@@ -18,12 +18,34 @@ import java.rmi.server.ServerNotActiveException;
 import java.util.ArrayList;
 
 public class ServerSideMethods implements ServerRemoteInterface {
+    /**
+     * login manager needed to manage the game
+     */
     private LoginManagerV2 loginManager;
+    /**
+     * needed to add the clients
+     */
     private ServerSideRMI serverSideRMI;
+    /**
+     * needed to send the chat messages from rmi to tcp users
+     */
     private ServerSide serverSide;
+    /**
+     * needed to prepare chat messages for tcp users
+     */
     private ChatController chatController = new ChatController();
+    /**
+     * needed to change the model with the moves received
+     */
     private Controller controller;
 
+    /**
+     * constructor method for serverSideMethods
+     * @param loginManager the login manager of the match
+     * @param serverSideRMI the serverside handling rmi connection
+     * @param serverSide general serverside of the match
+     * @param controller general controller of the match
+     */
     public ServerSideMethods(LoginManagerV2 loginManager,ServerSideRMI serverSideRMI,ServerSide serverSide,Controller controller){
         this.loginManager = loginManager;
         this.serverSideRMI = serverSideRMI;
@@ -31,6 +53,15 @@ public class ServerSideMethods implements ServerRemoteInterface {
         this.controller = controller;
     }
 
+    /**
+     * login method for rmi users which intend to create a new match
+     * @param name player's nickname
+     * @param playerNumber decided player number for the match
+     * @param mode use "easy" for easy mode, "normal" for normal mode; else will not be accepted and it will return false
+     * @param port the port used to open the client registry
+     * @return boolean value indicating whether the login was successful or not
+     * @throws RemoteException remote exception
+     */
     @Override
     public Boolean login(String name, int playerNumber, String mode,int port) throws RemoteException {
         System.out.println("login request from " + name);
@@ -82,7 +113,13 @@ public class ServerSideMethods implements ServerRemoteInterface {
         System.out.println("name already in use !");
         return false;
     }
-    //technically useless
+    /**
+     * login method for rmi users which intend to join an existing match
+     * @param name player's nickname
+     * @param port the port used to open the client registry
+     * @return boolean value indicating whether the login was successful or not
+     * @throws RemoteException remote exception
+     */
     @Override
     public Boolean login(String name, int port) throws RemoteException {
         System.out.println("login request from " + name);
@@ -131,7 +168,13 @@ public class ServerSideMethods implements ServerRemoteInterface {
         System.out.println("name already in use !");
         return false;
     }
-    //useless
+    /**
+     * login method for rmi users which intend to join an existing match (local use only)
+     * @param name player's nickname
+     * @param port the port used to open the client registry
+     * @return boolean value indicating whether the login was successful or not
+     * @throws RemoteException remote exception
+     */
     @Override
     public Boolean localLogin(String name, int port) throws RemoteException {
         System.out.println("login request from " + name);
@@ -179,7 +222,15 @@ public class ServerSideMethods implements ServerRemoteInterface {
         System.out.println("name already in use !");
         return false;
     }
-
+    /**
+     * login method for rmi users which intend to create a new match (local use only)
+     * @param name player's nickname
+     * @param playerNumber decided player number for the match
+     * @param mode use "easy" for easy mode, "normal" for normal mode; else will not be accepted and it will return false
+     * @param port the port used to open the client registry
+     * @return boolean value indicating whether the login was successful or not
+     * @throws RemoteException remote exception
+     */
     public Boolean localLogin(String name, int playerNumber, String mode, int port) throws RemoteException {
         System.out.println("login request from " + name);
         if(!loginManager.getNickNameList().contains(name)) {
@@ -231,17 +282,35 @@ public class ServerSideMethods implements ServerRemoteInterface {
         return false;
     }
 
+    /**
+     * method used to send a game move
+     * @param cells
+     * @param column
+     * @param nickName
+     * @return
+     * @throws RemoteException
+     */
     @Override
     public Boolean sendMove(ArrayList<Cell> cells, int column, String nickName) throws RemoteException {
         return controller.SocketGameMoveRequest(cells,column,nickName);
     }
 
+    /**
+     * method used to get players refernces
+     * @return arraylist of players
+     * @throws RemoteException remote exception
+     */
     @Override
     public ArrayList<Player> getPlayersAndScore() throws RemoteException {
         return controller.getGameController().getCurrentGame().getPlayers();
     }
 
-
+    /**
+     * method used to send a chat message to all
+     * @param message the message to be displayed by the clients
+     * @param sender the sender of the message
+     * @throws RemoteException
+     */
     @Override
     public void sendMessageToAll(String message, String sender) throws RemoteException {
         String messageOut = addInfo(message,sender);
@@ -254,6 +323,13 @@ public class ServerSideMethods implements ServerRemoteInterface {
         }
     }
 
+    /**
+     * method used to send a chat message to a specified client
+     * @param message the message to be displayed by the clients
+     * @param nickName the nickname of the receiver
+     * @param sender the sender of the message
+     * @throws RemoteException
+     */
     @Override
     public void sendMessage(String message, String nickName, String sender) throws RemoteException {
         String messageOut = addInfo(message,sender);
@@ -266,6 +342,12 @@ public class ServerSideMethods implements ServerRemoteInterface {
         }
     }
 
+    /**
+     * private method used by the chat methods that adds the required infos to the json messages for tcp users
+     * @param message
+     * @param requester
+     * @return
+     */
     private String addInfo(String message, String requester){
         JSONParser parser = new JSONParser();
         JSONObject obj = null;
