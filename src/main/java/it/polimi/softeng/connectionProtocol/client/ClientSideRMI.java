@@ -14,6 +14,7 @@ import java.rmi.server.UnicastRemoteObject;
 public class ClientSideRMI {
 
     private ServerRemoteInterface stub = null;
+    ClientSideMethods obj;
     int port = 1099;
 
     /**
@@ -22,7 +23,7 @@ public class ClientSideRMI {
      */
     public ClientSideRMI(UI ui) {
         //opening the registry with clients methods
-        ClientSideMethods obj = new ClientSideMethods(ui);
+        obj = new ClientSideMethods(ui);
         openRegistry(obj);
         System.out.println("client up !");
 
@@ -37,7 +38,7 @@ public class ClientSideRMI {
      */
     public ClientSideRMI(String serverIP, UI ui) {
         //opening the registry with clients methods
-        ClientSideMethods obj = new ClientSideMethods(ui);
+        obj = new ClientSideMethods(ui);
         openRegistry(obj);
         System.out.println("client up !");
 

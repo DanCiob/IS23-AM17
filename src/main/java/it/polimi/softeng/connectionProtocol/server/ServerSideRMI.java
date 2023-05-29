@@ -19,12 +19,13 @@ import java.util.Map;
 public class ServerSideRMI extends ServerSideMethods {      //maybe we can delete this extends  ?
     private LoginManagerV2 loginManager;
     private Map<String, ClientRemoteInterface> nameToStub = new HashMap<>();
+    private ServerSideMethods obj;
 
     public ServerSideRMI(LoginManagerV2 loginManager, ServerSide serverSide, Controller controller)  {
 
         super(loginManager,null,null, controller);   //horrendous, should work
         this.loginManager = loginManager;
-        ServerSideMethods obj = new ServerSideMethods(loginManager,this,serverSide,controller);
+        obj = new ServerSideMethods(loginManager,this,serverSide,controller);
         ServerRemoteInterface stub  = null;
         try {
             stub = (ServerRemoteInterface) UnicastRemoteObject.exportObject(obj,0);
@@ -36,7 +37,7 @@ public class ServerSideRMI extends ServerSideMethods {      //maybe we can delet
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-        Registry registry = null;                   //TODO this could be useless
+        Registry registry = null;
         try {
             registry = LocateRegistry.getRegistry("127.0.0.1");
         } catch (RemoteException e) {
