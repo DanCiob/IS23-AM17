@@ -8,12 +8,15 @@ import static it.polimi.softeng.model.scoreCount.Score.PersonalCardsScore;
 
 
 /**
- * Class that represents Personal Objective
+ * Class that represents Personal Achievement of the cards
  */
 public class PersonalCards implements Serializable {
     ObjectiveCell[] objective = new ObjectiveCell[6];
 
 
+    /**
+     * This class represents a specific colored cell (row, column) of the shelfie, that composes the PersonalCard
+     */
     public static class ObjectiveCell implements Serializable{
         int row;
         int column;
@@ -76,7 +79,7 @@ public class PersonalCards implements Serializable {
     }
 
     /**
-     *
+     * This method inizializes the ArrayList of Personal Cards with its JSON file
      * @return list of all PersonalCards
      */
     public static ArrayList<PersonalCards> FillPersonalCardsBag ()

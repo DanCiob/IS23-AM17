@@ -17,6 +17,10 @@ import static it.polimi.softeng.Constants.NICKNAME_NOT_UNIQUE;
 import static it.polimi.softeng.JSONWriter.ErrorWriter.writeError;
 import static it.polimi.softeng.JSONWriter.ServerSignatureWriter.serverSignObject;
 
+/**
+ * This class manages the communication between Controller and ClientSide for a single Client
+ */
+
 public class ClientHandler implements Runnable{
     private BufferedReader in = null;
     private PrintWriter out = null;
@@ -25,7 +29,7 @@ public class ClientHandler implements Runnable{
     private Boolean nickNameNotConfirmed = true;
     private ServerMessageHandler serverMessageHandler;
     private ServerSideTCP serverSideTCP;
-    private int playerNumber ;
+    private int playerNumber;
     private LoginManagerV2 loginManager;
     String nickname;
 

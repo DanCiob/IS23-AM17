@@ -33,11 +33,23 @@ public class ServerSide {
         serverSideRMI = new ServerSideRMI(loginManager,this,controller);
     }
 
+    /**
+     * This method is used to sent Move messages, the requests come from {@link it.polimi.softeng.controller.GameController}
+     *  and are forwarded to {@link ServerSideTCP}.
+     *  N.B. Chat messages are not processed by this method.
+     * @param message move to do
+     */
+    //this doesn't need rmi because this should never be used for chat messages
     public void sendMessageToAll(String message){
         serverSideTCP.sendMessageToAll(message);
-        //this doesn't need rmi because this should never be used for chat messages
     }
 
+    /**
+     * This method is used to send a Chat message to a specific player, the requests come from {@link it.polimi.softeng.controller.ChatController}
+     *  and are forwarded to {@link ServerSideTCP} and {@link ClientRemoteInterface}.
+     * @param message chat message
+     * @param nickName receiver
+     */
     public void sendMessage(String message, String nickName){
         serverSideTCP.sendMessage(message,nickName);
         System.out.println(message);
@@ -48,6 +60,12 @@ public class ServerSide {
         }
     }
 
+    /**
+     * This method is used to send a Chat message to all players, the requests come from {@link it.polimi.softeng.controller.ChatController}
+     *  and are forwarded to {@link ServerSideTCP} and {@link ClientRemoteInterface}.
+     * @param message chat message
+     * @param nickName sender
+     */
     public void sendMessageExcept(String message, String nickName){
         serverSideTCP.sendMessageExcept(message,nickName);
         System.out.println(message);

@@ -42,14 +42,27 @@ public class ServerSideTCP {
         accept(loginManager.getStatus());
     }
 
+    /**
+     * This method process the acceptance of a player, starting a thread
+     * @param mode gameLobby or gameStarted
+     */
     public void accept(String mode){
         Thread t = new Thread(() -> clientAcceptor(serverSocket,clientList, serverMessageHandler,mode));
         t.start();
     }
+
+    //????????????????????????????
     public void restartAccepting(){
         accept(loginManager.getStatus());
     }
 
+    /**
+     * This method process the acceptance of a player, invoking two possible different methods depending on @param mode
+     * @param serverSocket
+     * @param clientList list of ClientHandler
+     * @param serverMessageHandler reference to SMH
+     * @param mode gameLobby or gameStarted
+     */
     public void clientAcceptor(ServerSocket serverSocket, ArrayList<ClientHandler> clientList, ServerMessageHandler serverMessageHandler, String mode){
         switch(mode){
             case "gameLobby" ->{
@@ -63,6 +76,12 @@ public class ServerSideTCP {
         }
     }
 
+    /**
+     * This method process the acceptance of a player who wants to participate a game which is not started yet
+     * @param serverSocket
+     * @param clientList list of ClientHandler
+     * @param serverMessageHandler reference to SMH
+     */
     public void gameLobbyClientAcceptor(ServerSocket serverSocket, ArrayList<ClientHandler> clientList, ServerMessageHandler serverMessageHandler){
         Socket clientSocket = null;
         ExecutorService executor = Executors.newCachedThreadPool();
@@ -80,6 +99,12 @@ public class ServerSideTCP {
         }
     }
 
+    /**
+     * This method process the acceptance of a player who wants to participate a game which is already started
+     * @param serverSocket
+     * @param clientList list of ClientHandler
+     * @param serverMessageHandler reference to SMH
+     */
     public void gameStartedClientAcceptor(ServerSocket serverSocket, ArrayList<ClientHandler> clientList, ServerMessageHandler serverMessageHandler){
         Socket clientSocket = null;
         ExecutorService executor = Executors.newCachedThreadPool();
@@ -100,6 +125,11 @@ public class ServerSideTCP {
             //todo dopo una riconessione non vengono esposti i comandi di myshelfie
         }
     }
+
+    /**
+     * This method manage the disconnection of a specific player
+     * @param player who disconnected
+     */
     public void addDisconnectedPlayer(String player) {
         loginManager.addDisconnectedPlayer(player);
         //deleting the client with such nickname from the list of clientHandlers
@@ -120,24 +150,45 @@ public class ServerSideTCP {
         accept(loginManager.getStatus());
     }
 
+    /**
+     * This method manages the log-in of a player adding its ClientHandler in nickNameToClientHandler
+     *  and nickname in {@link LoginManagerV2}
+     * @param client ClientHandler of the player
+     * @param nickName of the player
+     */
     public void addUser(ClientHandler client, String nickName){
         nickNameToClientHandler.put(nickName,client);
         loginManager.addNickName(nickName);
     }
 
     ///////////section with message send functions
+
+    /**
+     * This method sends a Move message using {@link ClientHandler}
+     * @param message
+     */
     public void sendMessageToAll(String message){
         for(ClientHandler client : clientList){
             client.sendMessage(message);
         }
     }
 
+    /**
+     * This method send a Chat message to a specific player using {@link ClientHandler}
+     * @param message
+     * @param nickName receiver
+     */
     public void sendMessage(String message, String nickName){
         if(nickNameToClientHandler.containsKey(nickName)){
             nickNameToClientHandler.get(nickName).sendMessage(message);
         }
     }
 
+    /**
+     * This method send a Chat message to all players using {@link ClientHandler}
+     * @param message
+     * @param nickName sender
+     */
     public void sendMessageExcept(String message, String nickName){
         for(ClientHandler client : clientList){
             if(nickNameToClientHandler.get(nickName) != client){

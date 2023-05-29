@@ -21,7 +21,7 @@
                   <Image url="/images/sfondo_parquet.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="42.0" fitWidth="44.0" layoutX="101.0" layoutY="177.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="loadingicon" fitHeight="42.0" fitWidth="44.0" layoutX="101.0" layoutY="177.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="/images/loading.png" />
                </image>
