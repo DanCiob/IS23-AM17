@@ -1,0 +1,14 @@
+the game proposes 3 different connection modes:
+
+1) socket
+    when using socket you can input the server ip and port OR press enter both times to use the default server and port combination
+    found in the json configuration file
+    warning : if you enter only the server ip/port it will use the default json file config
+
+2) RMI
+    when using this rmi mode you can either input a server ip or press enter and use the default server ip found in the config json
+    files
+    warning : do not use this mode for local testing as it tries to both servers and clients on port 1099
+
+3) RMI for local testing
+    this mode automatically opens connection on the server ip 127.0.0.1 and the first port from 1099 that it finds free
