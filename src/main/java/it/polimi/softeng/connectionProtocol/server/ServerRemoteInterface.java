@@ -17,10 +17,10 @@ public interface ServerRemoteInterface extends Remote {
      * @return
      * @throws RemoteException
      */
-    Boolean login(String name, int playerNumber,String mode) throws RemoteException;
-    Boolean login(String name) throws RemoteException;
+    Boolean login(String name, int playerNumber,String mode,int port) throws RemoteException;
     Boolean login(String name,int port) throws RemoteException;
-    Boolean login(String name, int playerNumber,String mode ,int port) throws RemoteException;
+    Boolean localLogin(String name,int port) throws RemoteException;
+    Boolean localLogin(String name, int playerNumber,String mode ,int port) throws RemoteException;
     Boolean sendMove(ArrayList<Cell> cells, int column, String nickName) throws RemoteException;
     ArrayList<Player> getPlayersAndScore () throws RemoteException;
 

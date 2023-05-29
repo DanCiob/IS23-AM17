@@ -272,7 +272,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         this.RemoteMethods = new ClientSideRMI(this);
                         //does the login here as it's basically just for testing
                         try {
-                            okNickname = RemoteMethods.getStub().login(Nickname,NumOfPlayer,GameModeStringifed,RemoteMethods.getPort());
+                            okNickname = RemoteMethods.getStub().localLogin(Nickname,NumOfPlayer,GameModeStringifed,RemoteMethods.getPort());
                         } catch (RemoteException e) {
                             throw new RuntimeException(e);
                         }
@@ -579,7 +579,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             case ("@LOGN") -> {
                 //TODO Right now we don't receive GameMode, StartGame, NumOfPlayer...
                 try {
-                    RemoteMethods.getStub().login(Nickname, NumOfPlayer, action);
+                    RemoteMethods.getStub().login(Nickname, NumOfPlayer, action,RemoteMethods.getPort());
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }

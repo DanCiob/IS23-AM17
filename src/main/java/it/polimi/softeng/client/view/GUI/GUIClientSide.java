@@ -687,7 +687,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
             case ("@LOGN") -> {
                 //TODO Right now we don't receive GameMode, StartGame, NumOfPlayer...
                 try {
-                    RemoteMethods.getStub().login(Nickname, NumOfPlayer, action, Port);
+                    RemoteMethods.getStub().login(Nickname, NumOfPlayer, action,RemoteMethods.getPort());   //dan: modified this as I changed some rmi methods, should work still
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }

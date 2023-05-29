@@ -6,7 +6,6 @@ import it.polimi.softeng.controller.ChatController;
 import it.polimi.softeng.controller.Controller;
 import it.polimi.softeng.model.Cell;
 import it.polimi.softeng.model.Player;
-import it.polimi.softeng.model.Tile;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -33,12 +32,13 @@ public class ServerSideMethods implements ServerRemoteInterface {
     }
 
     @Override
-    public Boolean login(String name, int playerNumber, String mode) throws RemoteException {
+    public Boolean login(String name, int playerNumber, String mode,int port) throws RemoteException {
         System.out.println("login request from " + name);
         if(!loginManager.getNickNameList().contains(name)) {
             String host;
             try {
                 host = RemoteServer.getClientHost();
+                System.out.println(host);
             } catch (ServerNotActiveException e) {
                 throw new RuntimeException(e);
             }
@@ -47,7 +47,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
                 case ("gameLobby") -> {
                     ClientRemoteInterface stub = null;
                     try {
-                        stub =(ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099).lookup("ClientRemoteInterface");
+                        stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host, port).lookup("ClientRemoteInterface");
                     } catch (NotBoundException e) {
                         e.printStackTrace();
                     }
@@ -62,7 +62,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
                     if (loginManager.getDisconnectedPlayerList().contains(name)) {
                         ClientRemoteInterface stub = null;
                         try {
-                            stub =(ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099).lookup("ClientRemoteInterface");
+                            stub =(ClientRemoteInterface) LocateRegistry.getRegistry(host,port).lookup("ClientRemoteInterface");
                         } catch (NotBoundException e) {
                             e.printStackTrace();
                         }
@@ -82,9 +82,9 @@ public class ServerSideMethods implements ServerRemoteInterface {
         System.out.println("name already in use !");
         return false;
     }
-
+    //technically useless
     @Override
-    public Boolean login(String name) throws RemoteException {
+    public Boolean login(String name, int port) throws RemoteException {
         System.out.println("login request from " + name);
         if(!loginManager.getNickNameList().contains(name)) {
             String host;
@@ -98,7 +98,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
                 case ("gameLobby") -> {
                     ClientRemoteInterface stub = null;
                     try {
-                        stub =(ClientRemoteInterface) LocateRegistry.getRegistry(host, 1099).lookup("ClientRemoteInterface");
+                        stub =(ClientRemoteInterface) LocateRegistry.getRegistry(host, port).lookup("ClientRemoteInterface");
                     } catch (NotBoundException e) {
                         e.printStackTrace();
                     }
@@ -111,7 +111,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
                     if (loginManager.getDisconnectedPlayerList().contains(name)) {
                         ClientRemoteInterface stub = null;
                         try {
-                            stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host,1099).lookup("ClientRemoteInterface");
+                            stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host,port).lookup("ClientRemoteInterface");
                         } catch (NotBoundException e) {
                             throw new RuntimeException(e);
                         }
@@ -131,9 +131,9 @@ public class ServerSideMethods implements ServerRemoteInterface {
         System.out.println("name already in use !");
         return false;
     }
-
+    //useless
     @Override
-    public Boolean login(String name, int port) throws RemoteException {
+    public Boolean localLogin(String name, int port) throws RemoteException {
         System.out.println("login request from " + name);
         if(!loginManager.getNickNameList().contains(name)) {
             String host;
@@ -180,8 +180,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
         return false;
     }
 
-    @Override
-    public Boolean login(String name, int playerNumber, String mode, int port) throws RemoteException {
+    public Boolean localLogin(String name, int playerNumber, String mode, int port) throws RemoteException {
         System.out.println("login request from " + name);
         if(!loginManager.getNickNameList().contains(name)) {
             String host;

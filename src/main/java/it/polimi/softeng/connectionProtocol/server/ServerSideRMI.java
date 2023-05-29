@@ -57,6 +57,12 @@ public class ServerSideRMI extends ServerSideMethods {      //maybe we can delet
 
     public void addRMIClient(String nickName, ClientRemoteInterface stub){
         nameToStub.put(nickName,stub);
+        System.out.println(stub);
+        try {
+            System.out.println(stub.ping());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     public void removeRMIClient(String nickName){
@@ -73,6 +79,7 @@ public class ServerSideRMI extends ServerSideMethods {      //maybe we can delet
                         nameToStub.get(player).ping();
                     }
                 } catch (RemoteException e) {
+                    e.printStackTrace();
                     playerToBeDeleted = player;
                     flag = true;
                 }
