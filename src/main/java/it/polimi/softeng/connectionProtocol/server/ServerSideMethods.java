@@ -51,9 +51,9 @@ public class ServerSideMethods implements ServerRemoteInterface {
                     } catch (NotBoundException e) {
                         e.printStackTrace();
                     }
+                    loginManager.setPlayerNumber(playerNumber);
                     loginManager.addStub(name,stub);
                     serverSideRMI.addRMIClient(name,stub);
-                    loginManager.setPlayerNumber(playerNumber);
                     loginManager.addNickName(name);
                     //TODO add gestione modalità semplificata
                     return true;

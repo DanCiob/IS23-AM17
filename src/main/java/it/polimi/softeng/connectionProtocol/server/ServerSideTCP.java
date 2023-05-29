@@ -31,7 +31,6 @@ public class ServerSideTCP {
         portNumber = communicationProtocolParser.getPortNumber();
         this.loginManager = loginManager;
         this.serverMessageHandler = serverMessageHandler;
-        this.serverSide = serverSide;
         try {
             serverSocket = new ServerSocket(portNumber);
             System.out.println("server socket up");
