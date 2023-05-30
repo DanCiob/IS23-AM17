@@ -91,8 +91,9 @@ public class GUIGameController implements Initializable{
         GUIRegistry.numberOfGUI++;
         if(guiClientSide.isYourTurn){
             player1badge1.setImage(new Image("/images/firstplayertoken.png"));
+        }else{
+            boardGrid.setDisable(true);
         }
-        //TODO: aggiungere firstplayertoken al giocatore giusto
         updateBoard();
         if(guiClientSide.getCommonCard1() == null) {
             //todo.send error
@@ -133,10 +134,6 @@ public class GUIGameController implements Initializable{
                 i++;
             }
         }
-
-
-
-        //TODO:set nicknames
     }
 
     protected int getNumberPersonalCard(){
@@ -240,8 +237,10 @@ public class GUIGameController implements Initializable{
                         firstFreeRowBeforeMoves = row;
                     }
                     ImageView tileImageView = (ImageView) node;
-                    img = getImageInBoard(boardMoves.get(boardMoves.size()-1).getRow(), boardMoves.get(boardMoves.size()-1).getColumn()).getImage();
-                    tileImageView.setImage(img);
+                    if(boardMoves.size() > 0) {
+                        img = getImageInBoard(boardMoves.get(boardMoves.size() - 1).getRow(), boardMoves.get(boardMoves.size() - 1).getColumn()).getImage();
+                        tileImageView.setImage(img);
+                    }
                 }
             }
 
@@ -334,6 +333,7 @@ public class GUIGameController implements Initializable{
         if(legalChoiceBoard && legalChoiceShelfie){
             boardGrid.setOpacity(0.3);
             guiClientSide.setYourTurn(false);
+            boardGrid.setDisable(true);
             //TODO: this and end game
         }
     }
@@ -412,8 +412,10 @@ public class GUIGameController implements Initializable{
         }
         if(!guiClientSide.isYourTurn)
             boardGrid.setOpacity(0.3);
-        else
+        else{
             boardGrid.setOpacity(1);
+            boardGrid.setDisable(false);
+        }
     }
 
     @FXML
@@ -437,7 +439,7 @@ public class GUIGameController implements Initializable{
                     for(int j=0;j<shelfieColumns;j++){
                         if(guiClientSide.nicknameShelfie.get(s).getGrid()[i][j] != null){
                             image = new Image("/images/Tile_" + guiClientSide.nicknameShelfie.get(s).getGrid()[i][j].getColor().colorLetter() + "1.png"); //TODO: change the object in the image
-                            imageView = getImageViewInShelfie(s, shelfieRows - 1 - i, j); //TODO: change nickname
+                            imageView = getImageViewInShelfie(s, shelfieRows - 1 - i, j);
                             if(imageView!=null)
                                 imageView.setImage(image);
                             //shelfie2.add(imageView, j, shelfieRows-i);
@@ -448,42 +450,23 @@ public class GUIGameController implements Initializable{
         }
     }
 
-   /* public void updateShelfies(){
-        String nickname = (String) GUIClientSide.getCli().getShelfies().get(0); //TODO: aggiungere nickname sulla schermata gamescreen e far vedere nella shelfie giusta
-        Shelfie shelfie = (Shelfie) GUIClientSide.getCli().getShelfies().get(1);
-        ImageView imageView;
-        Image image;
-
-        for(int i=0;i<shelfieRows;i++){
-            for(int j=0;j<shelfieColumns;j++){
-                if(shelfie.getGrid()[i][j] != null){
-                    image = new Image("/images/Tile_" + shelfie.getGrid()[i][j].getColor().colorLetter() + "1.png"); //TODO: change the object in the image
-                    imageView = getImageViewInShelfie(nickname, i, j);
-                    imageView.setImage(image);
-                    shelfie2.add(imageView, j, i);
-                }
-            }
-        }
-    }*/
-
     public ImageView getImageViewInShelfie(String nickname, int row, int column){
         if(nickname == nickname2.getText()){
-            for (Node node : shelfie2.getChildren()) { //TODO:change shelfie2
+            for (Node node : shelfie2.getChildren()) {
                 if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column){
                     return (ImageView) node;
                 }
             }
         }
         if(nickname == nickname3.getText()) {
-            for (Node node : shelfie3.getChildren()) { //TODO:change shelfie2
+            for (Node node : shelfie3.getChildren()) {
                 if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column){
                     return (ImageView) node;
                 }
             }
         }
         if(nickname == nickname4.getText()) {
-            for (Node node : shelfie4.getChildren()) { //TODO:change shelfie2
-                System.out.println("test");
+            for (Node node : shelfie4.getChildren()) {
                 if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column){
                     return (ImageView) node;
                 }
