@@ -27,6 +27,7 @@ public class MessageHandler {
     }
 
     /**
+     * Parse message receiving from server with socket communication
      * @param message containing JSON message in form of string with request
      */
     public void parsingMessage(String message) throws ParseException {

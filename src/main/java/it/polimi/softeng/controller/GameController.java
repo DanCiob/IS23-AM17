@@ -109,69 +109,94 @@ public class GameController {
                         }
                         //Is TCP user
                         else
-                            if (shelfiesToSend.get(s).equals(p.getNickname()))
-                                controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(s), "@SHEL", p.getNickname()).toJSONString(), p.getNickname());
-                            else
-                                controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(s, shelfiesToSend.get(s).getNickname()), "@OSHE", p.getNickname()).toJSONString(), p.getNickname());
+                        if (shelfiesToSend.get(s).equals(p.getNickname()))
+                            controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(s), "@SHEL", p.getNickname()).toJSONString(), p.getNickname());
+                        else
+                            controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(s, shelfiesToSend.get(s).getNickname()), "@OSHE", p.getNickname()).toJSONString(), p.getNickname());
                         System.out.println("Player " + p.getNickname() + "updated shelfie sent");
                     }
                 }
-                ////////////////////////////
-                //NEXT PLAYER NOTIFICATION//
-                ////////////////////////////
 
-                //it doesnt really work
-                //here goes the code to skip players in case of disconnection
-                //TODO control because this may break if disconnectedPlayerList is updated in the meantime
-                Boolean connectedPlayerNotFound = true;
-                while(connectedPlayerNotFound){
-                    if(controller.getServerSide().getLoginManager().getDisconnectedPlayerList().contains(game.getCurrentPlayer().getNickname())){
-                        game.setNextPlayer();
-                    }else connectedPlayerNotFound = false;
-                }
-                //Is an RMI user
-                if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(game.getCurrentPlayer().getNickname())) {
-                    ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(game.getCurrentPlayer().getNickname());
-                    try {
-                        //temp.displayChatMessage("It's your turn!", "System");
-                        temp.notifyTurn();
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
+                //////////////////////
+                //BADGE COMMON CARDS//
+                //////////////////////
+                ArrayList <CommonCards> cc = game.getCommonCards();
+
+                for (Player p: game.getPlayers()) {
+                    //Is a RMI user
+                    if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(p.getNickname())) {
+                        ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(p.getNickname());
+                        try {
+                            temp.sendCommonCard(cc, false);
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
+                    //Is TCP user
+                    else {
+                        if (cc.size() == 1)
+                            controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(CommonCardWriter.writeCommonCard(cc.get(0).getName(), null), "@VCCA", "all").toJSONString());
+                        else
+                            controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(CommonCardWriter.writeCommonCard(cc.get(0).getName(), cc.get(1).getName()), "@VCCA", "all").toJSONString());
                 }
-                //Is TCP user
-                else
-                    controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ConfirmWriter.writeConfirm(), "@CONF", game.getCurrentPlayer().getNickname()).toJSONString(), game.getCurrentPlayer().getNickname());
-
-                return true;
-
             }
 
-            //Win phase
-            case 1 -> {
-                String winner = game.getWinner().getNickname();
+            ////////////////////////////
+            //NEXT PLAYER NOTIFICATION//
+            ////////////////////////////
 
-                //Notify RMI users
-                for (String s : controller.getServerSide().getServerSideRMI().getNameToStub().keySet()) {
-                    ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
-                    try {
-                        temp.endGame(s.equals(winner));
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
+            //it doesnt really work
+            //here goes the code to skip players in case of disconnection
+            //TODO control because this may break if disconnectedPlayerList is updated in the meantime
+            boolean connectedPlayerNotFound = true;
+            while(connectedPlayerNotFound){
+                if(controller.getServerSide().getLoginManager().getDisconnectedPlayerList().contains(game.getCurrentPlayer().getNickname())){
+                    game.setNextPlayer();
+                }else connectedPlayerNotFound = false;
+            }
+            //Is an RMI user
+            if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(game.getCurrentPlayer().getNickname())) {
+                ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(game.getCurrentPlayer().getNickname());
+                try {
+                    //temp.displayChatMessage("It's your turn!", "System");
+                    temp.notifyTurn();
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
                 }
+            }
+            //Is TCP user
+            else
+                controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ConfirmWriter.writeConfirm(), "@CONF", game.getCurrentPlayer().getNickname()).toJSONString(), game.getCurrentPlayer().getNickname());
 
-                //Notify TCP users
-                for (String s : controller.getServerSide().getServerSideTCP().getNickNameToClientHandler().keySet()) {
-                    if (s.equals(winner))
-                        controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(EndGameWriter.writeEndGame(true), "@ENDG", "System").toJSONString(), s);
-                    else
-                        controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(EndGameWriter.writeEndGame(false), "@ENDG", "System").toJSONString(), s);
+            return true;
+
+        }
+
+        //Win phase
+        case 1 -> {
+            String winner = game.getWinner().getNickname();
+
+            //Notify RMI users
+            for (String s : controller.getServerSide().getServerSideRMI().getNameToStub().keySet()) {
+                ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
+                try {
+                    temp.endGame(s.equals(winner));
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
                 }
+            }
+
+            //Notify TCP users
+            for (String s : controller.getServerSide().getServerSideTCP().getNickNameToClientHandler().keySet()) {
+                if (s.equals(winner))
+                    controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(EndGameWriter.writeEndGame(true), "@ENDG", "System").toJSONString(), s);
+                else
+                    controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(EndGameWriter.writeEndGame(false), "@ENDG", "System").toJSONString(), s);
             }
         }
-        return true;
     }
+        return true;
+}
 
     /**
      * This method manages the game-start setup of the Model (preparation of board, shelfie, PC, CC...) and sends the
@@ -243,7 +268,7 @@ public class GameController {
         for (String s : controller.getServerSide().getServerSideRMI().getNameToStub().keySet()) {
             ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
             try {
-                temp.sendCommonCard(cc);
+                temp.sendCommonCard(cc, true);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }

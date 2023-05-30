@@ -16,6 +16,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.server.RemoteServer;
 import java.rmi.server.ServerNotActiveException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * class that implements the methods exposed to the rmi users
@@ -324,6 +325,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
                 serverSideRMI.getNameToStub().get(player).displayChatMessage(message,sender);
             }
         }
+
     }
 
     /**
@@ -335,12 +337,22 @@ public class ServerSideMethods implements ServerRemoteInterface {
      */
     @Override
     public void sendMessage(String message, String nickName, String sender) throws RemoteException {
+        //Avoid sending message to himself
+        if (nickName.equals(sender)) {
+            for (String player : loginManager.getNickNameList()) {
+                if (serverSideRMI.getNameToStub().containsKey(player) && nickName.equals(player)) {
+                    serverSideRMI.getNameToStub().get(player).displayChatMessage("You can't send a message to yourself!", "System");
+                    return;
+                }
+            }
+        }
         String messageOut = addInfo(message,sender);
         chatController.sendChatMessage(nickName, messageOut, serverSide, sender);
 
         for(String player : loginManager.getNickNameList()){
             if(serverSideRMI.getNameToStub().containsKey(player) && nickName.equals(player)){
                 serverSideRMI.getNameToStub().get(player).displayChatMessage(message,sender);
+                return;
             }
         }
     }

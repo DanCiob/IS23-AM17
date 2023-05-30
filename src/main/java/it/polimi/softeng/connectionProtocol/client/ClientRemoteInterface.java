@@ -40,9 +40,10 @@ public interface ClientRemoteInterface extends Remote {
     /**
      * show common card to player
      * @param commonCards common card object
+     * @param show it's true if common card will be shown to user
      * @throws RemoteException remote exception
      */
-    void sendCommonCard (ArrayList<CommonCards> commonCards) throws RemoteException;
+    void sendCommonCard (ArrayList<CommonCards> commonCards, boolean show) throws RemoteException;
     /**
      * shows badge to player
      * @param badge badge to be shown

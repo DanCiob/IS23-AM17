@@ -81,17 +81,25 @@ public class ClientSideMethods implements ClientRemoteInterface {
     /**
      * show common card to player
      * @param commonCards common card object
+     * @param show it's true if commoncards will be show to user
      * @throws RemoteException remote exception
      */
     @Override
-    public void sendCommonCard(ArrayList<CommonCards> commonCards) throws RemoteException {
+    public void sendCommonCard(ArrayList<CommonCards> commonCards, boolean show) throws RemoteException {
         ui.eventManager("commonCardEvent");
         int i = 1;
-        for (CommonCards commonCard : commonCards) {
-            ui.commonCardUpdater(commonCard.getName(), i);
-            i++;
-            ui.commonCardsVisualizer(commonCard.getName());
+        if (show) {
+            for (CommonCards commonCard : commonCards) {
+                ui.commonCardUpdater(commonCard.getName(), i);
+                i++;
+                ui.commonCardsVisualizer(commonCard.getName());
+            }
         }
+        else
+            for (CommonCards commonCard : commonCards) {
+                ui.commonCardUpdater(commonCard.getName(), i);
+                i++;
+            }
     }
 
     /**

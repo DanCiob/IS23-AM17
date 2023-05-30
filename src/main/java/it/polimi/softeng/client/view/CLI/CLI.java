@@ -6,8 +6,6 @@ import it.polimi.softeng.JSONWriter.ChatWriter;
 import it.polimi.softeng.JSONWriter.ClientSignatureWriter;
 import it.polimi.softeng.JSONWriter.GameMoveWriter;
 import it.polimi.softeng.JSONWriter.LoginWriter;
-import it.polimi.softeng.client.view.GUI.GUIClientSide;
-import it.polimi.softeng.client.view.GUI.GUIGameController;
 import it.polimi.softeng.client.view.MessageHandler;
 import it.polimi.softeng.connectionProtocol.client.ClientSide;
 import it.polimi.softeng.connectionProtocol.client.ClientSideRMI;
@@ -89,22 +87,10 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      */
     protected ClientSideRMI RemoteMethods;
 
-    private GUIClientSide guiClientSide = null;
-    private GUIGameController guiGameController;
-
+    /**
+     * True if it's player turn
+     */
     private boolean isYourTurn = false;
-
-    public boolean isYourTurn() {
-        return isYourTurn;
-    }
-
-    public void setYourTurn(boolean yourTurn) {
-        isYourTurn = yourTurn;
-    }
-
-    public void setGuiGameController(GUIGameController guiGameController) {
-        this.guiGameController = guiGameController;
-    }
 
     public CLI() {
         this.messageHandler = new MessageHandler(this);
@@ -120,7 +106,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      * After setup CLI is ready to be used
      */
     public void setupCLI() {
-        int mode;
         String PortString;
 
         System.out.println("Initializing CLI...");
@@ -175,7 +160,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     //TODO nicknameUniqueness
                     //do {
                     do {
-                        System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed)");
+                        System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed, nickname: System/system isn't allowed)");
                         System.out.println(">");
                         Nickname = input.nextLine();
 
@@ -183,7 +168,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(Nickname, GameMode, StartGame, NumOfPlayer), "@LOGN", Nickname).toJSONString();
                         System.out.println(login);
                         clientSide.sendMessage(login);
-                    } while (!isOkNickname() || !confirm);
+                    } while (!isOkNickname() || !confirm || Nickname.equalsIgnoreCase("system"));
                 }
 
 
@@ -220,7 +205,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     }
 
                     do {
-                        System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed)");
+                        System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed, nickname: System/system isn't allowed)");
                         System.out.println(">");
                         Nickname = input.nextLine();
 
@@ -232,7 +217,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         }else this.RemoteMethods = new ClientSideRMI(this);
 
                         okNickname = RMIInvoker("@LOGN", GameModeStringifed);
-                    } while (!isOkNickname() || !okNickname);
+                    } while (!isOkNickname() || !okNickname || Nickname.equalsIgnoreCase("system"));
                 }
 
                 case 3 ->{ //case of local use of RMI
@@ -544,7 +529,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 JSONObject obj;
                 obj = ChatWriter.writeChatMessage(action);
 
-                if (obj.get("receiver").toString().equals("all")) {
+                if (obj != null && obj.get("receiver").toString().equals("all")) {
                     try {
                         RemoteMethods.getStub().sendMessageToAll(obj.toJSONString(), Nickname);
                     } catch (RemoteException e) {
@@ -1009,8 +994,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 System.out.println("+-----------------+");
                 System.out.println(ANSI_RESET);
                 isYourTurn = true;
-                if(guiGameController!=null)
-                    guiGameController.startTurn();
             }
 
             //Servers-side errors
@@ -1115,7 +1098,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     /**
      * Update common card
      *
-     * @param nameOfCommonCard is name of commoncard
+     * @param nameOfCommonCard is name of common card
      * @param whatCommonCard   is 1 or 2 depending on card updated
      */
     @Override
@@ -1136,10 +1119,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         Port = port;
     }
 
-    public void setConnectionMode(int connectionMode) {
-        ConnectionMode = connectionMode;
-    }
-
     public void setNickname(String nickname) {
         Nickname = nickname;
     }
@@ -1148,31 +1127,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         return Nickname;
     }
 
-    public int getConnectionMode() {
-        return ConnectionMode;
-    }
-
-    public void setNumOfPlayer(int numOfPlayer) {
-        NumOfPlayer = numOfPlayer;
-    }
-
     public void setStartGame(int startGame) {
         StartGame = startGame;
     }
 
-    public void setGameMode(int gameMode) {
-        GameMode = gameMode;
-    }
-
-    public Scanner getInput(){
-        return input;
-    }
-
-    public GameBoard getUserGameBoard() {
-        return UserGameBoard;
-    }
-
-    public void setGuiClientSide(GUIClientSide guiClientSide) {
-        this.guiClientSide = guiClientSide;
-    }
 }
