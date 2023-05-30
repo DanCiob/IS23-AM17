@@ -8,6 +8,9 @@ import java.util.Random;
 import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.model.PersonalCards.FillPersonalCardsBag;
 
+/**
+ * main class of the model representing the game and connection all the subclasses
+ */
 public class Game{
     //board section
     private GameBoard gameBoard = new GameBoard();

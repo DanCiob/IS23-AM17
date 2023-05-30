@@ -8,6 +8,9 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+/**
+ * interface listing the methods exposed by the server to rmi users
+ */
 public interface ServerRemoteInterface extends Remote {
 
     /**

@@ -11,10 +11,21 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+/**
+ * class used when the client wants to establish an RMI connection
+ */
 public class ClientSideRMI {
-
+    /**
+     * attribute containing server stub
+     */
     private ServerRemoteInterface stub = null;
+    /**
+     * reference to the methods the client will expose for the server
+     */
     ClientSideMethods obj;
+    /**
+     * base port from which the client will start searching an open port
+     */
     int port = 1099;
 
     /**

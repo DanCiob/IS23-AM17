@@ -8,12 +8,29 @@ import org.json.simple.JSONObject;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+/**
+ * class that implements the methods for the RMI client interface
+ */
 public class ClientSideMethods implements ClientRemoteInterface {
+    /**
+     * reference to the ui object of which methods will be called
+     */
     private UI ui;
 
+    /**
+     * constructor method for client's methods
+     * @param ui the ui object of the client (ie cli or gui)
+     */
     public ClientSideMethods(UI ui){
         this.ui = ui;
     }
+
+    /**
+     * invokes a player update
+     * @param player player whose shelfie is sent (?)
+     * @param s shelfie sent
+     * @throws RemoteException remote exception
+     */
     @Override
     public void playerUpdate(Player player, Shelfie s) throws RemoteException {
         ui.eventManager("systemEvent");
@@ -24,6 +41,11 @@ public class ClientSideMethods implements ClientRemoteInterface {
         ui.shelfieVisualizer(s.getGrid());
     }
 
+    /**
+     * invokes a shelfie update
+     * @param shelfie new shelfie
+     * @throws RemoteException remote exception
+     */
     @Override
     public void shelfieUpdate(Shelfie shelfie) throws RemoteException {
         ui.eventManager("shelfieEvent");
@@ -31,6 +53,11 @@ public class ClientSideMethods implements ClientRemoteInterface {
         ui.shelfieVisualizer(shelfie.getGrid());
     }
 
+    /**
+     * invokes a gameboard update
+     * @param board new gameboard
+     * @throws RemoteException remote exception
+     */
     @Override
     public void gameBoardUpdate(GameBoard board) throws RemoteException {
         ui.eventManager("boardEvent");
@@ -38,6 +65,11 @@ public class ClientSideMethods implements ClientRemoteInterface {
         ui.boardVisualizer(board.getBoard(), board.getNotAvailable());
     }
 
+    /**
+     * shows the personal cards
+     * @param personalCards player's personal cards
+     * @throws RemoteException remote exception
+     */
     @Override
     public void sendPersonalCard(PersonalCards personalCards) throws RemoteException {
         ui.eventManager("personalCardEvent");
@@ -45,6 +77,11 @@ public class ClientSideMethods implements ClientRemoteInterface {
         ui.personalCardVisualizer(personalCards);
     }
 
+    /**
+     * show common card to player
+     * @param commonCards common card object
+     * @throws RemoteException remote exception
+     */
     @Override
     public void sendCommonCard(ArrayList<CommonCards> commonCards) throws RemoteException {
         ui.eventManager("commonCardEvent");
@@ -56,11 +93,22 @@ public class ClientSideMethods implements ClientRemoteInterface {
         }
     }
 
+    /**
+     * shows badge to player
+     * @param badge badge to be shown
+     * @throws RemoteException remote exception
+     */
     @Override
     public void sendBadge(Badge badge) throws RemoteException {
         ui.scoreUpdater(badge.getScore());
     }
 
+    /**
+     * shows chat message
+     * @param message message to be shown
+     * @param sender sender of the message
+     * @throws RemoteException remote exception
+     */
     @Override
     public void displayChatMessage(String message, String sender) throws RemoteException {
 
@@ -72,28 +120,50 @@ public class ClientSideMethods implements ClientRemoteInterface {
         ui.chatVisualizer(obj);
     }
 
+    /**
+     * shows the new player list
+     * @param playerList current player list
+     * @throws RemoteException remote exception
+     */
     @Override
     public void playerListUpdate(ArrayList<Player> playerList) throws RemoteException {
         ui.eventManager("playerEvent");
         ui.scoreVisualizer(playerList);
     }
 
+    /**
+     * gives the command to start the game to the ui
+     * @throws RemoteException remote exception
+     */
     @Override
     public void startGame() throws RemoteException {
         ui.beginGame(true);
     }
 
+    /**
+     * gives the command to end the game
+     * @param winner boolean indicating whether the player to which this method is called is the winner
+     * @throws RemoteException remote exception
+     */
     @Override
     public void endGame(boolean winner) throws RemoteException {
         ui.endGame(winner);
     }
 
+    /**
+     * notifies the player that it is its turn
+     * @throws RemoteException remote exception
+     */
     @Override
     public void notifyTurn() throws RemoteException {
         ui.eventManager("myTurn");
     }
 
-
+    /**
+     * method used from the server to assert the connection with a client
+     * @return generic boolean value true; if the connection doesn't work it will throw remote exception anyway
+     * @throws RemoteException remote exception
+     */
     @Override
     public Boolean ping() throws RemoteException {
         return true;

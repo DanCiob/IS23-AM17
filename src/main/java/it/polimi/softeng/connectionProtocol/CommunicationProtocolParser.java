@@ -10,10 +10,17 @@ import java.util.*;
 import java.io.FileReader;
 import java.io.Reader;
 
+/**
+ * class used to read the json config files for client and server
+ */
 public class CommunicationProtocolParser{
     private int portNumber;
     private String hostName;
 
+    /**
+     * parser method that parses the config files
+     * @param mode "client" for client use, "server" for server use
+     */
     public void parser(String mode){
         String directory;
         JSONParser parser = new JSONParser();
@@ -47,10 +54,18 @@ public class CommunicationProtocolParser{
         }
     }
 
+    /**
+     * getter method
+     * @return portnumber extracted from the json config file
+     */
     public int getPortNumber() {
         return portNumber;
     }
 
+    /**
+     * getter method; if used in server mode this getter will return null
+     * @return string containing the ip extracted from the json file
+     */
     public String getHostName() {
         return hostName;
     }

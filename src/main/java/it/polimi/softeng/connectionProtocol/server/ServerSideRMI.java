@@ -16,17 +16,32 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * class used to accept and manage rmi clients server side
+ */
 public class ServerSideRMI extends ServerSideMethods {
     /**
-     *
+     * needed to manage logins and disconnection
      */
     private LoginManagerV2 loginManager;
+    /**
+     * map that connects the identity of a player to it's method stub
+     */
     private Map<String, ClientRemoteInterface> nameToStub = new HashMap<>();
+    /**
+     * server's methods object that will be exposed to clients on the registry
+     */
     private ServerSideMethods obj;
 
+    /**
+     * constructor method for serverSideRMI that creates the registry and starts the ping function to assert player's connection
+     * @param loginManager login manager of the match
+     * @param serverSide serverside of the match
+     * @param controller controller of the match
+     */
     public ServerSideRMI(LoginManagerV2 loginManager, ServerSide serverSide, Controller controller)  {
 
-        super(loginManager,null,null, controller);   //horrendous, should work
+        super(loginManager,null,null, controller);
         this.loginManager = loginManager;
         obj = new ServerSideMethods(loginManager,this,serverSide,controller);
         ServerRemoteInterface stub  = null;
@@ -58,6 +73,11 @@ public class ServerSideRMI extends ServerSideMethods {
         t.start();
     }
 
+    /**
+     * method used to add an RMI client and connect its identity to its method stub
+     * @param nickName nickname of the player to login
+     * @param stub player's stub
+     */
     public void addRMIClient(String nickName, ClientRemoteInterface stub){
         nameToStub.put(nickName,stub);
         System.out.println(stub);
@@ -68,10 +88,17 @@ public class ServerSideRMI extends ServerSideMethods {
         }
     }
 
+    /**
+     * method to remove the player from map nameToStub
+     * @param nickName
+     */
     public void removeRMIClient(String nickName){
         nameToStub.remove(nickName);
     }
 
+    /**
+     * method that pings users every 5s to assert they're connection to the server
+     */
     public void pingRMIUsers(){
         Boolean flag = false;
         String playerToBeDeleted = null;
@@ -104,6 +131,10 @@ public class ServerSideRMI extends ServerSideMethods {
 
     //////////getter methods
 
+    /**
+     * getter method
+     * @return map nameToStub
+     */
     public Map<String, ClientRemoteInterface> getNameToStub() {
         return nameToStub;
     }

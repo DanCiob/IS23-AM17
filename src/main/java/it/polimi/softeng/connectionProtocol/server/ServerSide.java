@@ -13,19 +13,32 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Map;
 
-
+/**
+ * general class managing the server side communications
+ */
 public class ServerSide {
-
-    private int portNumber = 1234;
-
+    /**
+     * login manager used to manage logins
+     */
     private LoginManagerV2 loginManager;
+    /**
+     * serverside tcp reference
+     */
     private ServerSideTCP serverSideTCP;
+    /**
+     * serverside rmi reference
+     */
     private ServerSideRMI serverSideRMI;
-    private ServerMessageHandler serverMessageHandler = null;
-    private String gameLobby = "gameLobby";
-    private String gameStarted = "gameStarted";
+    /**
+     * server message handler reference
+     */
+    private ServerMessageHandler serverMessageHandler;
 
-
+    /**
+     * constructor method for serverside
+     * @param serverMessageHandler server message handler for the match
+     * @param controller reference to controller for the match
+     */
     public ServerSide(ServerMessageHandler serverMessageHandler, Controller controller) {
         this.serverMessageHandler = serverMessageHandler;
         loginManager = new LoginManagerV2(serverMessageHandler);
@@ -76,6 +89,11 @@ public class ServerSide {
         }
     }
 
+    /**
+     * method that looks whether a message is a chat message or not; used to send messages sent by tcp users to rmi users
+     * @param message message received server side
+     * @return boolean value indicating whether the message is a chat message
+     */
     private Boolean interceptChatMessage(String message){
         System.out.println("got into intercepting");
         JSONParser parser = new JSONParser();
@@ -87,13 +105,13 @@ public class ServerSide {
         }
         String requestType = obj.get("request").toString();
 
-        if(requestType.equals("@CHAT")){
-            System.out.println("its trueeee");
-            return true;
-        }
-        return false;
+        return requestType.equals("@CHAT");
     }
 
+    /**
+     * method used to send chat messages to rmi; this is used when a chat message from tcp is sent
+     * @param chatMessage message to be sent
+     */
     private void sendChatMessageRMI(String chatMessage){
         JSONParser parser = new JSONParser();
 
@@ -135,23 +153,42 @@ public class ServerSide {
     }
     ////////// getter methods
 
-
+    /**
+     * getter method
+     * @return reference to serversidetcp
+     */
     public ServerSideTCP getServerSideTCP() {
         return serverSideTCP;
     }
 
+    /**
+     * getter method
+     * @return reference to serverside rmi
+     */
     public ServerSideRMI getServerSideRMI() {
         return serverSideRMI;
     }
 
+    /**
+     * getter method
+     * @return list of nicknames
+     */
     public ArrayList<String> getNickNameList() {
         return loginManager.getNickNameList();
     }
 
+    /**
+     * getter method
+     * @return map players to stubs
+     */
     public Map<String, ClientRemoteInterface> getPlayerStubs(){
         return serverSideRMI.getNameToStub();
     }
 
+    /**
+     * getter method
+     * @return returns login manager for the match
+     */
     public LoginManagerV2 getLoginManager() {
         return loginManager;
     }

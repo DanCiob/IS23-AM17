@@ -10,17 +10,38 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * class used to manage tcp connection client side
+ */
 public class ClientSide {
+    /**
+     * server ip
+     */
     private String hostName;
+    /**
+     * server port
+     */
     private int portNumber;
+    /**
+     * client's socket
+     */
     private Socket socket;
+    /**
+     * client's output to server
+     */
     private PrintWriter out;
+    /**
+     * client's input from server
+     */
     private BufferedReader in;
-
+    /**
+     * message handler for received messages
+     */
     private MessageHandler messageHandler;
 
     /**
-     * Used for testing
+     * constructor used when you want to connect to the default server (ie the one specified in the json files)
+     * @param messageHandler client's message handler
      */
     public ClientSide(MessageHandler messageHandler){
 
@@ -43,7 +64,12 @@ public class ClientSide {
         t.start();
 
     }
-
+    /**
+     * constructor method used when you want to connect to a user-chosen server
+     * @param hostName server ip
+     * @param portNumber server port
+     * @param messageHandler client's message handler
+     */
     public ClientSide(String hostName, int portNumber, MessageHandler messageHandler){
 
         this.hostName = hostName;
@@ -64,6 +90,10 @@ public class ClientSide {
 
     }
 
+    /**
+     * method used to read a message from the input
+     * @param in client's input from server
+     */
     public void readMessage(BufferedReader in){
         String s = "";
         try {

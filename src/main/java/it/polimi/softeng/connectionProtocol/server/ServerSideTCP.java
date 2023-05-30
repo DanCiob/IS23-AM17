@@ -15,17 +15,48 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 //TODO controlla se viene killato se si chiudono tutti i socket tcp
 
+/**
+ * class used to handle the tcp connection server side
+ */
 public class ServerSideTCP {
+    /**
+     * communication protocol parser obj that takes infos about port to open on from json config file
+     */
     CommunicationProtocolParser communicationProtocolParser = new CommunicationProtocolParser();
+    /**
+     * serversocket that accepts clients
+     */
     private ServerSocket serverSocket = null;
+    /**
+     * port on which the server is opened; it's set to the value from the json file
+     */
     private int portNumber;
-
+    /**
+     * serverside reference
+     */
     private ServerSide serverSide;
+    /**
+     * list of current clientHandlers available
+     */
     private ArrayList<ClientHandler> clientList = new ArrayList<>();
+    /**
+     * map connecting a player's identity to its client handler
+     */
     private Map<String,ClientHandler> nickNameToClientHandler = new HashMap<>();
+    /**
+     * message handler reference
+     */
     private ServerMessageHandler serverMessageHandler = null;
+    /**
+     * reference to login manager to manage logins
+     */
     private LoginManagerV2 loginManager;
 
+    /**
+     * constructor method for the class
+     * @param loginManager login manager of the match
+     * @param serverMessageHandler servermessagehandler of the match
+     */
     public ServerSideTCP(LoginManagerV2 loginManager, ServerMessageHandler serverMessageHandler){
         communicationProtocolParser.parser("server");
         portNumber = communicationProtocolParser.getPortNumber();
@@ -196,6 +227,10 @@ public class ServerSideTCP {
         }
     }
 
+    /**
+     * getter method
+     * @return map listing nicknames to clienthandlers
+     */
     public Map<String, ClientHandler> getNickNameToClientHandler() {
         return nickNameToClientHandler;
     }

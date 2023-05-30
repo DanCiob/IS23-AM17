@@ -22,17 +22,55 @@ import static it.polimi.softeng.JSONWriter.ServerSignatureWriter.serverSignObjec
  */
 
 public class ClientHandler implements Runnable{
+    /**
+     * clientHandler's input from client
+     */
     private BufferedReader in = null;
+    /**
+     * clientHandler's output to client
+     */
     private PrintWriter out = null;
+    /**
+     * socket of the single client that connected
+     */
     private Socket clientSocket;
+    /**
+     * serverside reference
+     */
     private ServerSide serverSide;
+    /**
+     * boolean flag for login
+     */
     private Boolean nickNameNotConfirmed = true;
+    /**
+     * server message handler to read messages
+     */
     private ServerMessageHandler serverMessageHandler;
+    /**
+     * serverside tcp reference
+     */
     private ServerSideTCP serverSideTCP;
+    /**
+     * player number attribute used to set the match player number
+     */
     private int playerNumber;
+    /**
+     * used to manage logins
+     */
     private LoginManagerV2 loginManager;
+    /**
+     * player's nickname
+     */
     String nickname;
 
+    /**
+     * constructor method for clienthanlder
+     * @param clientSocket client's socket
+     * @param serverSide serverside reference
+     * @param serverMessageHandler servermessagehandler reference
+     * @param serverSideTCP serverside tcp reference
+     * @param loginManager login manager reference to manage logins
+     */
     public ClientHandler(Socket clientSocket, ServerSide serverSide, ServerMessageHandler serverMessageHandler,ServerSideTCP serverSideTCP,LoginManagerV2 loginManager){
         this.clientSocket = clientSocket;
         this.serverSide = serverSide;
@@ -41,6 +79,9 @@ public class ClientHandler implements Runnable{
         this.loginManager = loginManager;
     }
 
+    /**
+     * run method of client handler that establishes input and output to single client
+     */
     @Override
     public void run() {
         System.out.println("new clientHandler created !");
@@ -62,6 +103,10 @@ public class ClientHandler implements Runnable{
 
     }
 
+    /**
+     * method used to read messages
+     * @param in server's input from client
+     */
     public void readMessage(BufferedReader in){
         String s = "";
         try {
@@ -78,10 +123,18 @@ public class ClientHandler implements Runnable{
         }
     }
 
+    /**
+     * method used to send message to the client managed by this clienthanler object
+     * @param message message to be sent
+     */
     public void sendMessage(String message){
         out.println(message);
     }
 
+    /**
+     * method that intercepts a message and finds whether it is a login message; if that's true he manages the login
+     * @param message
+     */
     public void scanForNickName(String message){
         Boolean flag = false;
         JSONParser parser = new JSONParser();
@@ -112,17 +165,19 @@ public class ClientHandler implements Runnable{
                 }
                 if(!flag){
                     System.out.println("nickname is not acceptable ");
-                    //TODO popolare con send di messaggio di errore
                     out.println(serverSignObject(writeError(NICKNAME_NOT_UNIQUE), "@ERRO", nickname).toJSONString());
                 }
             } else{
-                //TODO aggiungere messaggio di errore da inviare al client
                 out.println(serverSignObject(writeError(NICKNAME_NOT_UNIQUE), "@ERRO", nickname).toJSONString());
                 System.out.println("nickName già usato");
             }
         }
     }
 
+    /**
+     * getter method to get player number
+     * @return int player number
+     */
     public int getPlayerNumber() {
         return playerNumber;
     }

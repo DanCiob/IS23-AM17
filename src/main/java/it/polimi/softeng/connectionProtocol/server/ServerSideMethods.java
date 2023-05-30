@@ -17,6 +17,9 @@ import java.rmi.server.RemoteServer;
 import java.rmi.server.ServerNotActiveException;
 import java.util.ArrayList;
 
+/**
+ * class that implements the methods exposed to the rmi users
+ */
 public class ServerSideMethods implements ServerRemoteInterface {
     /**
      * login manager needed to manage the game
