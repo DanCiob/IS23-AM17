@@ -39,6 +39,7 @@ public class ClientSideMethods implements ClientRemoteInterface {
         obj.put("message", "Received " + player.getNickname() + "'s shelfie");
         ui.chatVisualizer(obj);
         ui.shelfieVisualizer(s.getGrid());
+        ui.shelfieUpdater(s, player.getNickname());
     }
 
     /**

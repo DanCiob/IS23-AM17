@@ -58,6 +58,8 @@ public interface UI {
 
     void shelfieUpdater(Shelfie s);
 
+    void shelfieUpdater(Shelfie s, String nickname);
+
     void scoreUpdater(int s);
 
     void personalCardUpdater (PersonalCards pc);

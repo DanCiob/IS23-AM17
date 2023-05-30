@@ -382,10 +382,10 @@
                         </AnchorPane>
                         <AnchorPane layoutX="135.0" layoutY="179.0">
                            <children>
-                              <ImageView fx:id="commoncard2" fitHeight="75.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="commoncard2" fitHeight="75.0" fitWidth="125.0" pickOnBounds="true" preserveRatio="true" visible="false">
 
                               </ImageView>
-                              <ImageView fx:id="badgeCommonCard2"  fitHeight="29.0" fitWidth="30.0" layoutX="67.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="badgeCommonCard2"  fitHeight="29.0" fitWidth="30.0" layoutX="67.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" visible="false">
                                  <image>
                                     <Image url="/images/BadgeScore8.jpg" />
                                  </image>
@@ -423,6 +423,9 @@
                                  <GridPane.margin>
                                     <Insets />
                                  </GridPane.margin></ImageView>
+
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                               <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
                               <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="3" GridPane.rowIndex="0"/>
                               <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="4" GridPane.rowIndex="0"/>

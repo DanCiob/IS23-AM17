@@ -1,18 +1,28 @@
 package it.polimi.softeng.client.view.GUI;
 
 import it.polimi.softeng.customExceptions.IllegalInsertException;
-import it.polimi.softeng.model.Cell;
-import it.polimi.softeng.model.GameBoard;
-import it.polimi.softeng.model.PersonalCards;
+import it.polimi.softeng.model.*;
+import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import org.controlsfx.control.spreadsheet.Grid;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -42,10 +52,31 @@ public class GUIGameController implements Initializable{
     ImageView commoncard2;
 
     @FXML
+    ImageView badgeCommonCard2;
+
+    @FXML
     Pane panePlayer3;
 
     @FXML
     Pane panePlayer4;
+
+    @FXML
+    ImageView player1badge1;
+
+    @FXML
+    ImageView player1badge2;
+
+    @FXML
+    ImageView player1badge3;
+
+    @FXML
+    Label nickname2;
+
+    @FXML
+    Label nickname3;
+
+    @FXML
+    Label nickname4;
 
     public GUIGameController (GUIClientSide guiClientSide) {
         this.guiClientSide = guiClientSide;
@@ -55,13 +86,25 @@ public class GUIGameController implements Initializable{
     }
 
     public void initialize(URL url, ResourceBundle rb) {
-        guiClientSide = GUIRegistry.guiList.get(GUIRegistry.numberOfGUI);
+        guiClientSide = GUIRegistry.guiList.get(0);
         guiClientSide.setGameController(this);
         GUIRegistry.numberOfGUI++;
+        if(guiClientSide.isYourTurn){
+            player1badge1.setImage(new Image("/images/firstplayertoken.png"));
+        }
+        //TODO: aggiungere firstplayertoken al giocatore giusto
         updateBoard();
-        commoncard1.setImage(new Image("/images/CommonCard_" + guiClientSide.getCommonCard1() + ".jpg"));
-        if(guiClientSide.getCommonCard2()!=null)
-            commoncard2.setImage(new Image("/images/CommonCard_" + guiClientSide.getCommonCard2() + ".jpg"));
+        if(guiClientSide.getCommonCard1() == null) {
+            //todo.send error
+        }else{
+            //System.out.println("/images/CommonCard_" + guiClientSide.getCommonCard1() + ".jpg");
+            commoncard1.setImage(new Image("/images/CommonCard_" + guiClientSide.getCommonCard1() + ".jpg"));
+            if(guiClientSide.getCommonCard2()!=null) {
+                commoncard2.setVisible(true);
+                badgeCommonCard2.setVisible(true);
+                commoncard2.setImage(new Image("/images/CommonCard_" + guiClientSide.getCommonCard2() + ".jpg"));
+            }
+        }
         if(getNumberPersonalCard() == -1){
             //TODO: send error
         }else{
@@ -71,10 +114,27 @@ public class GUIGameController implements Initializable{
     }
 
     protected void initializeShelfies(){
-        if(guiClientSide.getNumOfPlayer() >= 3){
-            panePlayer3.setVisible(true);
-            panePlayer4.setVisible(true);
+        int i = 0;
+        System.out.println("Current player " + guiClientSide.getNickname());
+        for (String p : guiClientSide.nicknameShelfie.keySet()) {
+            System.out.println(p);
+            if(!p.equals(guiClientSide.getNickname())){
+                switch (i){
+                    case 0 -> nickname2.setText(p);
+                    case 1 -> {
+                        nickname3.setText(p);
+                        panePlayer3.setVisible(true);
+                    }
+                    case 2 -> {
+                        nickname4.setText(p);
+                        panePlayer4.setVisible(true);
+                    }
+                }
+                i++;
+            }
         }
+
+
 
         //TODO:set nicknames
     }
@@ -83,6 +143,8 @@ public class GUIGameController implements Initializable{
         int i = 0;
         PersonalCards pc = guiClientSide.getPersonalCard();
         for(PersonalCards pctemp : PersonalCards.FillPersonalCardsBag()){
+            if(pc==null)
+                return -1;
             PersonalCards.ObjectiveCell[] pcCell = pc.getObjective();
             int j=0;
             boolean equal = true;
@@ -138,7 +200,7 @@ public class GUIGameController implements Initializable{
              action = action + "(" + cell.getRow() + "," + cell.getColumn() + ")" + ",";
         }
         action = action + columnShelfie;
-        System.out.println(action);
+       // System.out.println(action);
         if(guiClientSide.getConnectionMode() == 1){ //socket
             JSONObject toBeSent = null;
             try {
@@ -282,7 +344,23 @@ public class GUIGameController implements Initializable{
     public void startTurn(){
         boardGrid.setOpacity(1);
         updateBoard();
+        Service New_Service = new Service() {
+            @Override
+            protected Task createTask() {
+                return new Task() {
+                    @Override
+                    protected Object call() throws Exception {
+                        Platform.runLater(() -> {
+                            //updateShelfies(guiClientSide.nicknameShelfie.);
+                        });
+                        return null;
+                    }
+                };
+            }
+        };
+        New_Service.start();
     }
+
 
     /**
      *
@@ -316,14 +394,18 @@ public class GUIGameController implements Initializable{
         for(int i=0;i<boardRows;i++){
             for(int j=0;j<boardColumns;j++){
                 imageView = getImageInBoard(i, j);
-                if(gameBoard.getBoard()[i][j] != null){
-                    if(imageView.getImage() == null){
-                        image = new Image("/images/Tile_" + gameBoard.getBoard()[i][j].getColor().colorLetter() + "1.png"); //TODO: change the object in the image
-                        imageView.setImage(image);
-                    }
+                if(gameBoard==null) {
+                    //TODO:send error
                 }else{
-                    if(imageView != null && imageView.getImage() != null){
-                        imageView.setImage(null);
+                    if (gameBoard.getBoard()[i][j] != null) {
+                        if (imageView.getImage() == null) {
+                            image = new Image("/images/Tile_" + gameBoard.getBoard()[i][j].getColor().colorLetter() + "1.png"); //TODO: change the object in the image
+                            imageView.setImage(image);
+                        }
+                    } else {
+                        if (imageView != null && imageView.getImage() != null) {
+                            imageView.setImage(null);
+                        }
                     }
                 }
             }
@@ -336,6 +418,35 @@ public class GUIGameController implements Initializable{
 
     @FXML
     GridPane shelfie2;
+
+    @FXML
+    GridPane shelfie3;
+
+    @FXML
+    GridPane shelfie4;
+
+
+    @FXML
+    public void updateShelfies(){
+        ImageView imageView;
+        Image image;
+
+        for(String s: guiClientSide.nicknameShelfie.keySet()){
+            if(!s.equals(guiClientSide.getNickname())){
+                for(int i=0;i<shelfieRows;i++){
+                    for(int j=0;j<shelfieColumns;j++){
+                        if(guiClientSide.nicknameShelfie.get(s).getGrid()[i][j] != null){
+                            image = new Image("/images/Tile_" + guiClientSide.nicknameShelfie.get(s).getGrid()[i][j].getColor().colorLetter() + "1.png"); //TODO: change the object in the image
+                            imageView = getImageViewInShelfie(s, shelfieRows - 1 - i, j); //TODO: change nickname
+                            if(imageView!=null)
+                                imageView.setImage(image);
+                            //shelfie2.add(imageView, j, shelfieRows-i);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
    /* public void updateShelfies(){
         String nickname = (String) GUIClientSide.getCli().getShelfies().get(0); //TODO: aggiungere nickname sulla schermata gamescreen e far vedere nella shelfie giusta
@@ -355,12 +466,30 @@ public class GUIGameController implements Initializable{
         }
     }*/
 
-    public ImageView getImageViewInShelfie(String id, int row, int column){
-        for (Node node : shelfie2.getChildren()) { //TODO:change shelfie2
-            if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column){
-                return (ImageView) node;
+    public ImageView getImageViewInShelfie(String nickname, int row, int column){
+        if(nickname == nickname2.getText()){
+            for (Node node : shelfie2.getChildren()) { //TODO:change shelfie2
+                if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column){
+                    return (ImageView) node;
+                }
             }
         }
+        if(nickname == nickname3.getText()) {
+            for (Node node : shelfie3.getChildren()) { //TODO:change shelfie2
+                if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column){
+                    return (ImageView) node;
+                }
+            }
+        }
+        if(nickname == nickname4.getText()) {
+            for (Node node : shelfie4.getChildren()) { //TODO:change shelfie2
+                System.out.println("test");
+                if(GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column){
+                    return (ImageView) node;
+                }
+            }
+        }
+
         return null;
     }
 
@@ -448,7 +577,31 @@ public class GUIGameController implements Initializable{
      */
     public boolean checkLegalChoiceShelfie(){
         int i = shelfieRows - firstFreeRowBeforeMoves;
-        System.out.println("ChecklegalchoiceShelfie first = " + firstFreeRowBeforeMoves);
+        //System.out.println("ChecklegalchoiceShelfie first = " + firstFreeRowBeforeMoves);
         return boardMoves.size() + i <= shelfieRows;
+    }
+
+    @FXML
+    public void giveBadge(int s){
+        if(player1badge1.getImage() == null){
+            player1badge1.setImage(new Image("/images/BadgeScore" + s + ".jpg"));
+        }else if(player1badge2.getImage() == null) {
+            player1badge2.setImage(new Image("/images/BadgeScore" + s + ".jpg"));
+
+        } else if (player1badge3.getImage() == null) {
+            player1badge3.setImage(new Image("/images/BadgeScore" + s + ".jpg"));
+        }
+    }
+
+    public void switchToEndGame(){
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/endGame.fxml"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Scene scene = new Scene(root);
+        guiClientSide.getStage().setScene(scene);
+        guiClientSide.getStage().show();
     }
 }

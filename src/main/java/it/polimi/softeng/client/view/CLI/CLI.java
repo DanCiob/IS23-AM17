@@ -1088,6 +1088,10 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         this.UserShelfie = s;
     }
 
+    @Override
+    public void shelfieUpdater(Shelfie s, String nickname) {
+    }
+
     /**
      * Called by RMI or Socket for score update
      *

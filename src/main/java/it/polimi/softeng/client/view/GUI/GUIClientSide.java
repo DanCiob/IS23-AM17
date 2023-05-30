@@ -11,10 +11,17 @@ import it.polimi.softeng.connectionProtocol.client.ClientSide;
 import it.polimi.softeng.connectionProtocol.client.ClientSideRMI;
 import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.*;
+import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.stage.Stage;
 import org.json.simple.JSONObject;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -45,6 +52,8 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     protected String CommonCard2 = null;
     protected String ServerAddress;
     protected int Port;
+
+    protected Map <String, Shelfie> nicknameShelfie = new HashMap<>();
 
     /**
      * 1 -> player want to create new game (FA: multi-game management)
@@ -89,6 +98,8 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     GUIGameController gameController;
     GUILoginController loginController;
+
+    Stage stage;
 
     public GUIClientSide() {
     }
@@ -321,11 +332,13 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable) {
 
     }
-
+    protected Tile[][] shelfiePlayer2;
     @Override
     public void shelfieVisualizer(Tile[][] shelfie) {
 
     }
+
+
 
     @Override
     public void commonCardsVisualizer(String commonCard) {
@@ -344,7 +357,10 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public void scoreVisualizer(ArrayList<Player> players) {
-
+        for (Player p: players) {
+            nicknameShelfie.put(p.getNickname(), new Shelfie());
+        }
+        //todo: final scene
     }
 
     @Override
@@ -375,6 +391,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                 System.out.println("| Received system message |");
                 System.out.println("+-------------------------+");
                 System.out.println(ANSI_RESET);
+
             }
             case ("boardEvent") -> {
                 System.out.println(ANSI_CYAN);
@@ -382,6 +399,8 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                 System.out.println("| Received board update |");
                 System.out.println("+-----------------------+");
                 System.out.println(ANSI_RESET);
+                if(gameController != null)
+                    gameController.updateBoard();
             }
             case ("shelfieEvent") -> {
                 System.out.println(ANSI_CYAN);
@@ -389,6 +408,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                 System.out.println("| Received shelfie update |");
                 System.out.println("+-------------------------+");
                 System.out.println(ANSI_RESET);
+
             }
             case ("personalCardEvent") -> {
                 System.out.println(ANSI_CYAN);
@@ -444,6 +464,8 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     @Override
     public void boardUpdater(GameBoard b) {
         UserGameBoard = b;
+        if(gameController!=null)
+            gameController.updateBoard();
     }
 
     @Override
@@ -452,8 +474,17 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     }
 
     @Override
-    public void scoreUpdater(int s) {
+    public void shelfieUpdater(Shelfie s, String nickname) {
+        nicknameShelfie.put(nickname, s);
+        gameController.updateShelfies();
+    }
 
+    @Override
+    public void scoreUpdater(int s) {
+        //TODO: give badge
+        if(gameController!=null){
+            gameController.giveBadge(s);
+        }
     }
 
     @Override
@@ -480,13 +511,44 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     }
 
     @Override
-    public void endGame(boolean winner) {
-
+    public void endGame(boolean winner){
+        if(gameController!=null)
+            gameController.switchToEndGame();
     }
 
     @Override
-    public void beginGame(boolean b) {
+    public void beginGame(boolean b){
+        boolean switchScene = false;
+        if(!GameIsOn)
+            switchScene = true;
+        this.GameIsOn = b;
+        if(switchScene && b){
+            if(loginController == null)
+                System.out.println("loginController is null");
+            else{
+                Service New_Service = new Service() {
+                    @Override
+                    protected Task createTask() {
+                        return new Task() {
+                            @Override
+                            protected Object call() throws Exception {
+                                Platform.runLater(() -> {
+                                    try {
+                                        loginController.switchToGame();
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                });
+                                return null;
+                            }
+                        };
+                    }
+                };
+                New_Service.start();
 
+            }
+
+        }
     }
 
     public void setStartGame(int startGame) {
@@ -531,6 +593,10 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     public void setYourTurn(boolean yourTurn) {
         isYourTurn = yourTurn;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     public void setMessageHandler(MessageHandler messageHandler) {
@@ -592,6 +658,10 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     public int getConnectionMode() {
         return ConnectionMode;
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 
     public boolean isGameIsOn() {
@@ -696,4 +766,13 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         }
         return true;
     }
+
+
+
+    /*
+    GUIWaitingController guiWaitingController;
+
+    public void setGuiWaitingController(GUIWaitingController guiWaitingController) {
+        this.guiWaitingController = guiWaitingController;
+    }*/
 }

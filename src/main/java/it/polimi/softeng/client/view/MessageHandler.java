@@ -98,6 +98,7 @@ public class MessageHandler {
                 objMess.put("message", "Received " + owner + "'s shelfie");
                 ui.chatVisualizer(objMess);
                 ui.shelfieVisualizer(newShelfie.getGrid());
+                ui.shelfieUpdater(newShelfie, owner);
             }
             case ("@VCCA") -> {
                 JSONParser p1 = new JSONParser();

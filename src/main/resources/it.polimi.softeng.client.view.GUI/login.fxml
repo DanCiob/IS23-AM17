@@ -13,6 +13,7 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 
+<?import javafx.scene.control.CheckBox?>
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
       fx:controller="it.polimi.softeng.client.view.GUI.GUILoginController">
     <padding>
@@ -55,7 +56,7 @@
     </HBox>
     <HBox spacing="20.0">
         <Label layoutX="330.0"  text="Choose socket or rmi: " />
-        <ChoiceBox fx:id="socketOrRmi" layoutX="309.0" onMouseClicked="#onNewGame"> <!--onMouseClicked="#onNewGame"-->
+        <ChoiceBox fx:id="socketOrRmi" layoutX="309.0" onMouseClicked="#onSocketOrRmi"> <!--onMouseClicked="#onNewGame"-->
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Socket" />
@@ -66,12 +67,13 @@
     </HBox>
 
     <HBox spacing="20.0">
-        <Label layoutX="430.0" text="Digit server IP: " />
+        <Label layoutX="430.0" text="Digit server IP: "/>
         <TextField layoutX="409.0" fx:id="serverIP"/>
     </HBox>
     <HBox spacing="20.0">
         <Label layoutX="530.0" text="Digit server port: " />
         <TextField layoutX="509.0" fx:id="serverPort"/>
+        <CheckBox fx:id="localCheckBox" mnemonicParsing="false" text="Local" onMouseClicked="#local"/>
     </HBox>
 
     <HBox spacing="20.0">
@@ -112,4 +114,5 @@
 
 
     <Button fx:id="loginButton" text="Login" onAction="#onLoginButtonClick"/>
+    <Label fx:id="waiting" layoutX="630.0" />
 </VBox>

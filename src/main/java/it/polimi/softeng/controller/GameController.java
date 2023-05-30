@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static it.polimi.softeng.JSONWriter.PlayerWriter.playerAndScoreWriter;
+import static it.polimi.softeng.JSONWriter.ServerSignatureWriter.serverSignObject;
+
 /**
  * This class allows to communicate gameMoves and the start of a game to the Model.
  * ??? communicate via interfaces
@@ -253,6 +256,23 @@ public class GameController {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        //Send all players and their score
+
+        //Send to RMI users
+        for (String s : controller.getServerSide().getServerSideRMI().getNameToStub().keySet()) {
+            ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
+            try {
+                temp.playerListUpdate(game.getPlayers());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //Send to all TCP user
+        controller.getServerSide().sendMessageToAll(serverSignObject(playerAndScoreWriter(getCurrentGame().getPlayers()), "@VPLA", "System").toJSONString());
+
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Ended setup
         //Notify first player
         controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ConfirmWriter.writeConfirm(), "@CONF", game.getCurrentPlayer().getNickname()).toJSONString(), game.getCurrentPlayer().getNickname());

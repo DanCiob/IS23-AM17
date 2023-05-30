@@ -8,6 +8,7 @@ import it.polimi.softeng.connectionProtocol.client.ClientSideRMI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,10 +17,14 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 
-public class GUILoginController {
+public class GUILoginController implements Initializable {
     GUIClientSide guiClientSide;
     @FXML
     Label np;
@@ -67,6 +72,16 @@ public class GUILoginController {
         }
     }
 
+    @FXML
+    protected void onSocketOrRmi(){
+        if(socketOrRmi.getSelectionModel().getSelectedIndex() + 1 == 2){//case rmi
+            serverPort.setEditable(false);
+        }
+    }
+
+    @FXML
+    Label waiting;
+
     /**
      * This method sends the login message to the server
      *
@@ -74,31 +89,66 @@ public class GUILoginController {
      * @throws IOException called by load in switchToGame
      */
     @FXML
-    protected void onLoginButtonClick(ActionEvent event) throws IOException {
-        guiClientSide = GUIRegistry.guiList.get(GUIRegistry.numberOfGUI);
-        GUIRegistry.guiList.get(GUIRegistry.numberOfGUI).setLoginController(this);
+    protected void onLoginButtonClick(ActionEvent event) throws IOException, InterruptedException {
 
         guiClientSide.setNickname(nickname.getText());
         if (!guiClientSide.isOkNickname()) {
             nickname.setText("");
         } else {
-            guiClientSide.setupGUI(socketOrRmi.getSelectionModel().getSelectedIndex() + 1,
-                    serverIP.getText(), Integer.parseInt(serverPort.getText()), game.getSelectionModel().getSelectedIndex() + 1,
+            if(serverPort.getText()==null)
+                serverPort.setText("");
+            if(serverIP.getText()==null)
+                serverIP.setText("");
+            int connectionMode = socketOrRmi.getSelectionModel().getSelectedIndex() + 1;
+            if(localCheckBox.isSelected())
+                connectionMode = 3;
+
+            //save values in guiClientSide
+            if(!serverPort.getText().equals(""))
+                guiClientSide.setupGUI(connectionMode, serverIP.getText(),
+                        Integer.parseInt(serverPort.getText()), game.getSelectionModel().getSelectedIndex() + 1,
                     numberOfPlayer.getSelectionModel().getSelectedIndex() + 2, mode.getSelectionModel().getSelectedIndex() + 1);
+            else
+                guiClientSide.setupGUI(connectionMode, serverIP.getText(),
+                        1099, game.getSelectionModel().getSelectedIndex() + 1,
+                        numberOfPlayer.getSelectionModel().getSelectedIndex() + 2, mode.getSelectionModel().getSelectedIndex() + 1);
+            //TODO:change port 1099
             loginNotifier();
-            switchToGame(event);
+            guiClientSide.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
+
+            switchToWait(event);
+           /* while(!guiClientSide.GameIsOn){
+                //TODO: call switchToGame from GUIClientSide-beginGame
+            }*/
+
         }
     }
 
+    Stage stage;
+
     /**
-     * This method change the scene from login to gamescreen
+     * This method change the scene from login to waitingScreen
      *
-     * @param event which is the event of onLoginButtonClick
+     * @param event which is when the user press the login button
      * @throws IOException called by load
      */
-    public void switchToGame(ActionEvent event) throws IOException {
+    public void switchToWait(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(GUILoginController.class.getResource("/it.polimi.softeng.client.view.GUI/WaitingScreen.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        //stage = new Stage();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void switchToGame() throws IOException{
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/gamescreen.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage = guiClientSide.getStage();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
@@ -131,18 +181,60 @@ public class GUILoginController {
         switch (guiClientSide.getConnectionMode()) {
             case 1 -> {
                 guiClientSide.messageHandler = new MessageHandler(guiClientSide);
-                guiClientSide.clientSide = new ClientSide(guiClientSide.messageHandler);
+
+                //this is so that if you press enter it connects to the server specified in the json file
+                if(!serverIP.getText().equals("") && !serverPort.getText().equals("")){
+                    guiClientSide.clientSide = new ClientSide(serverIP.getText(),Integer.parseInt(serverPort.getText()), guiClientSide.messageHandler);
+                    guiClientSide.setNickname(nickname.getText());
+                }else {
+                    guiClientSide.clientSide = new ClientSide(guiClientSide.messageHandler);
+                }
+
+                //guiClientSide.clientSide = new ClientSide(guiClientSide.messageHandler);
 
                 String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(nickname.getText(), gamemode, startgame, numPlayers), "@LOGN", nickname.getText()).toJSONString();
                 System.out.println(login);
                 guiClientSide.getClientSide().sendMessage(login);
             }
             case 2 -> {
-                guiClientSide.RemoteMethods = new ClientSideRMI(guiClientSide);
+                //guiClientSide.RemoteMethods = new ClientSideRMI(guiClientSide);
+                if(!serverIP.getText().equals("") ){
+                    guiClientSide.RemoteMethods = new ClientSideRMI(serverIP.getText(), guiClientSide);
+                }else guiClientSide.RemoteMethods = new ClientSideRMI(guiClientSide);
 
                 String gameModeString = gamemode == 1 ? "e" : "n";
                 guiClientSide.RMIInvoker("@LOGN", gameModeString);
             }
+            case 3 -> {
+                String gameModeString = gamemode == 1 ? "e" : "n";
+                try {
+                    boolean okNickname = guiClientSide.RemoteMethods.getStub().login(nickname.getText(),numPlayers,gameModeString,guiClientSide.RemoteMethods.getPort());
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+                //TODO: check oknickname
+            }
         }
+    }
+
+    public void initialize(URL location, ResourceBundle resources) {
+        guiClientSide = GUIRegistry.guiList.get(0);
+        guiClientSide.setLoginController(this);
+        GUIRegistry.numberOfGUI++;
+    }
+
+    @FXML
+    CheckBox localCheckBox;
+    @FXML
+    protected void local(){
+        if(localCheckBox.isSelected()){
+            serverPort.setText("");
+            serverPort.setEditable(false);
+            serverIP.setText("");
+            serverIP.setEditable(false);
+        }
+        if(!localCheckBox.isSelected())
+            serverPort.setEditable(true);
+            serverIP.setEditable(true);
     }
 }
