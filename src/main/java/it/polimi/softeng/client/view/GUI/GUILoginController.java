@@ -5,6 +5,9 @@ import it.polimi.softeng.JSONWriter.LoginWriter;
 import it.polimi.softeng.client.view.MessageHandler;
 import it.polimi.softeng.connectionProtocol.client.ClientSide;
 import it.polimi.softeng.connectionProtocol.client.ClientSideRMI;
+import javafx.animation.Interpolator;
+import javafx.animation.RotateTransition;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,8 +16,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -217,10 +222,22 @@ public class GUILoginController implements Initializable {
         }
     }
 
+    @FXML
+    ImageView loadingIcon;
+
     public void initialize(URL location, ResourceBundle resources) {
         guiClientSide = GUIRegistry.guiList.get(0);
         guiClientSide.setLoginController(this);
         GUIRegistry.numberOfGUI++;
+
+        //animation loading circle
+        RotateTransition rotate = new RotateTransition();
+        rotate.setNode(loadingIcon);
+        rotate.setDuration(Duration.millis(1500));
+        rotate.setCycleCount(TranslateTransition.INDEFINITE);
+        rotate.setInterpolator(Interpolator.LINEAR);
+        rotate.setByAngle(360);
+        rotate.play();
     }
 
     @FXML
