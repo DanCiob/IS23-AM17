@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ChatControllerTest {
 
     @Test
-    void sendChatMessage1() {
+    void sendChatMessage1Test() {
         ChatWriter chatWriter;
         JSONObject obj = ChatWriter.writeChatMessage("Test message");
     }

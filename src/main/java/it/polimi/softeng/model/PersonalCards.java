@@ -84,7 +84,7 @@ public class PersonalCards implements Serializable {
      */
     public static ArrayList<PersonalCards> FillPersonalCardsBag ()
     {
-        return InitializePersonalCards("src/main/resources/PersonalCards.json");
+        return InitializePersonalCards("src/main/resources/configs/PersonalCards.json");
     }
 
     /**

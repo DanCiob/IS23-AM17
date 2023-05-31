@@ -9,6 +9,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,7 +40,8 @@ public class PersonalCardsParser {
 
         JSONParser parser = new JSONParser();
 
-        try (Reader reader = new FileReader(path)) {
+        try (Reader reader = new InputStreamReader(PersonalCardsParser.class
+                .getResourceAsStream("/configs/PersonalCards.json"))) {
 
             JSONObject jsonObject = (JSONObject) parser.parse(reader);
 

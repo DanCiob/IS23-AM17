@@ -13,11 +13,11 @@ class CLITest {
     private CLI cli = new CLI();
 
     @Test
-    void setupCLI() {
+    void setupCLITest() {
     }
 
     @Test
-    void boardVisualizerTest4Players() {
+    void boardVisualizerTest4PlayersTest() {
         GameBoard gameBoard = new GameBoard();
         gameBoard.resetBoard(4);
         Tile[][] table = gameBoard.getBoard();
@@ -35,7 +35,7 @@ class CLITest {
     }
 
     @Test
-    void boardVisualizerTest3Players() {
+    void boardVisualizerTest3PlayersTest() {
         GameBoard gameBoard = new GameBoard();
         gameBoard.resetBoard(3);
         Tile[][] table = gameBoard.getBoard();
@@ -52,7 +52,7 @@ class CLITest {
     }
 
     @Test
-    void boardVisualizerTest2Players() {
+    void boardVisualizerTest2PlayersTest() {
         GameBoard gameBoard = new GameBoard();
         gameBoard.resetBoard(2);
         Tile[][] table = gameBoard.getBoard();
@@ -70,7 +70,7 @@ class CLITest {
 
 
     @Test
-    void shelfieVisualizer() {
+    void shelfieVisualizerTest() {
         Shelfie shelfie = new Shelfie();
         ArrayList<Tile> tilesToBeInserted = new ArrayList<>();
         Tile tile1, tile2, tile3, tile4, tile5, tile6;
@@ -122,89 +122,89 @@ class CLITest {
     }
 
     @Test
-    void commonCardsVisualizer() {
-        commonCardsVisualizer_ColumnsOfMaxDiffTypes();
-        commonCardsVisualizer_CornersOfEquals();
-        commonCardsVisualizer_DiagonalOfEquals();
-        commonCardsVisualizer_FourGroupsOfFourEquals();
-        commonCardsVisualizer_NEqualTiles();
-        commonCardsVisualizer_RowsOfMaxDiffTypes();
-        commonCardsVisualizer_SixGroupsOfTwoEquals();
-        commonCardsVisualizer_Stairs();
-        commonCardsVisualizer_TwoColumnsOfSixDifferent();
-        commonCardsVisualizer_TwoRowsOfFiveDifferent();
-        commonCardsVisualizer_TwoSquaresOfEquals();
-        commonCardsVisualizer_XOfEquals();
+    void commonCardsVisualizerTest() {
+        commonCardsVisualizer_ColumnsOfMaxDiffTypesTest();
+        commonCardsVisualizer_CornersOfEqualsTest();
+        commonCardsVisualizer_DiagonalOfEqualsTest();
+        commonCardsVisualizer_FourGroupsOfFourEqualsTest();
+        commonCardsVisualizer_NEqualTilesTest();
+        commonCardsVisualizer_RowsOfMaxDiffTypesTest();
+        commonCardsVisualizer_SixGroupsOfTwoEqualsTest();
+        commonCardsVisualizer_StairsTest();
+        commonCardsVisualizer_TwoColumnsOfSixDifferentTest();
+        commonCardsVisualizer_TwoRowsOfFiveDifferentTest();
+        commonCardsVisualizer_TwoSquaresOfEqualsTest();
+        commonCardsVisualizer_XOfEqualsTest();
     }
 
     @Test
-    void commonCardsVisualizer_SixGroupsOfTwoEquals() {
+    void commonCardsVisualizer_SixGroupsOfTwoEqualsTest() {
         String commonCard = "SixGroupsOfTwoEquals";
         cli.commonCardsVisualizer(commonCard);
     }
 
     @Test
-    void commonCardsVisualizer_FourGroupsOfFourEquals() {
+    void commonCardsVisualizer_FourGroupsOfFourEqualsTest() {
         String commonCard = "FourGroupsOfFourEquals";
         cli.commonCardsVisualizer(commonCard);
     }
 
     @Test
-    void commonCardsVisualizer_CornersOfEquals() {
+    void commonCardsVisualizer_CornersOfEqualsTest() {
         String commonCard = "CornersOfEquals";
         cli.commonCardsVisualizer(commonCard);
     }
 
     @Test
-    void commonCardsVisualizer_TwoSquaresOfEquals() {
+    void commonCardsVisualizer_TwoSquaresOfEqualsTest() {
         String commonCard = "TwoSquaresOfEquals";
         cli.commonCardsVisualizer(commonCard);
     }
 
     @Test
-    void commonCardsVisualizer_ColumnsOfMaxDiffTypes() {
+    void commonCardsVisualizer_ColumnsOfMaxDiffTypesTest() {
         String commonCard = "ColumnsOfMaxDiffTypes";
         cli.commonCardsVisualizer(commonCard);
     }
 
     @Test
-    void commonCardsVisualizer_TwoColumnsOfSixDifferent(){
+    void commonCardsVisualizer_TwoColumnsOfSixDifferentTest(){
         String commonCard = "TwoColumnsOfSixDifferent";
         cli.commonCardsVisualizer(commonCard);
     }
 
     @Test
-    void commonCardsVisualizer_NEqualTiles(){
+    void commonCardsVisualizer_NEqualTilesTest(){
         String commonCard = "NEqualTiles";
         cli.commonCardsVisualizer(commonCard);
     }
 
     @Test
-    void commonCardsVisualizer_TwoRowsOfFiveDifferent(){
+    void commonCardsVisualizer_TwoRowsOfFiveDifferentTest(){
         String commonCard = "TwoRowsOfFiveDifferent";
         cli.commonCardsVisualizer(commonCard);
     }
 
     @Test
-    void commonCardsVisualizer_RowsOfMaxDiffTypes(){
+    void commonCardsVisualizer_RowsOfMaxDiffTypesTest(){
         String commonCard = "RowsOfMaxDiffTypes";
         cli.commonCardsVisualizer(commonCard);
     }
 
     @Test
-    void commonCardsVisualizer_DiagonalOfEquals(){
+    void commonCardsVisualizer_DiagonalOfEqualsTest(){
         String commonCard = "DiagonalOfEquals";
         cli.commonCardsVisualizer(commonCard);
     }
 
     @Test
-    void commonCardsVisualizer_XOfEquals(){
+    void commonCardsVisualizer_XOfEqualsTest(){
         String commonCard = "XOfEquals";
         cli.commonCardsVisualizer(commonCard);
     }
 
     @Test
-    void commonCardsVisualizer_Stairs(){
+    void commonCardsVisualizer_StairsTest(){
         String commonCard = "Stairs";
         cli.commonCardsVisualizer(commonCard);
     }
@@ -212,7 +212,7 @@ class CLITest {
 
 
     @Test
-    void personalCardVisualizer() {
+    void personalCardVisualizerTest() {
         ArrayList<PersonalCards> arrayPersonalCards = new ArrayList<>();
         arrayPersonalCards = PersonalCards.FillPersonalCardsBag();
         CLI cli = new CLI();
@@ -231,7 +231,7 @@ class CLITest {
     }
 
     @Test
-    void scoreVisualizer() {
+    void scoreVisualizerTest() {
         CLI cli = new CLI();
         ArrayList<Player> players = new ArrayList<>();
         Player p1 = new Player("Alice", 200);
@@ -244,7 +244,7 @@ class CLITest {
     }
 
     @Test
-    void chatVisualizer() {
+    void chatVisualizerTest() {
         CLI cli = new CLI();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("receiver", "Tom");
@@ -271,7 +271,7 @@ class CLITest {
     }
 
     @Test
-    void isOkCommand() {
+    void isOkCommandTest() {
         assertTrue(cli.isOkCommand("@CHAT 'all' HI!", 2));
         assertFalse(cli.isOkCommand("@CH AT", 2));
         assertTrue(cli.isOkCommand("@Chat 'all' hi", 2));

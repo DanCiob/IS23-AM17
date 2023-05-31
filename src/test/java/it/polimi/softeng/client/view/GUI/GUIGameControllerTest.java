@@ -7,6 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class GUIGameControllerTest {
 
     @Test
-    void updateShelfie() {
+    void updateShelfieTest() {
     }
 }

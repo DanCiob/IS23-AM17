@@ -3,12 +3,7 @@ import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
-
-import java.io.FileReader;
-import java.io.Reader;
+import java.io.*;
 
 /**
  * class used to read the json config files for client and server
@@ -24,27 +19,32 @@ public class CommunicationProtocolParser{
     public void parser(String mode){
         String directory;
         JSONParser parser = new JSONParser();
+        JSONObject jsonObject = null;
 
         //to be refactored with the usage of "resources" folder
         //sets up the file to be picked up for setup
         switch (mode){
             case "server" ->{
-                directory = "src/main/java/it/polimi/softeng/connectionProtocol/server/serverConfig.json";
+                try(Reader reader = new InputStreamReader(getClass()
+                        .getResourceAsStream("/configs/serverConfig.json"))){
+                    jsonObject = (JSONObject) parser.parse(reader);
+                }catch(IOException | ParseException e){
+                    e.printStackTrace();
+                }
+                directory = "src/main/resources/serverConfig.json";
             }
             case "client" ->{
-                directory = "src/main/java/it/polimi/softeng/connectionProtocol/client/clientConfig.json";
+                try(Reader reader = new InputStreamReader(getClass()
+                        .getResourceAsStream("/configs/clientConfig.json"))){
+                    jsonObject = (JSONObject) parser.parse(reader);
+                }catch(IOException | ParseException e){
+                    e.printStackTrace();
+                }
+                directory = "src/main/resources/clientConfig.json";
             }
             default -> {
                 directory = null;           //should not happen
             }
-        }
-        JSONObject jsonObject = null;
-        try(Reader reader = new FileReader(directory)){
-            jsonObject = (JSONObject) parser.parse(reader);
-        }catch(IOException e){
-            e.printStackTrace();
-        }catch(ParseException e){
-            e.printStackTrace();
         }
         String port = (String) jsonObject.get("portNumber");
         portNumber = Integer.parseInt(port);

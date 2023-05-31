@@ -10,7 +10,7 @@ class PlayerTest {
      * Test if updateScore correctly add passed score
      */
     @Test
-    void updateScore() {
+    void updateScoreTest() {
         Player player = new Player("TestPlayer", 0);
         int correctScore = player.updateScore(4);
         assertEquals(4, correctScore);

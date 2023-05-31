@@ -16,7 +16,7 @@ class PersonalCardsParserTest {
     void initializePersonalCardsTest() {
         ArrayList<PersonalCards> pc;
 
-        pc = InitializePersonalCards("src/main/resources/PersonalCards.json");
+        pc = InitializePersonalCards("src/main/resources/configs/PersonalCards.json");
 
         //Size is 12
         assertEquals(12, pc.size());
@@ -36,7 +36,7 @@ class PersonalCardsParserTest {
     @Test
     void PersonalCards1Test() {
         ArrayList<PersonalCards> pc;
-        pc = InitializePersonalCards("src/main/resources/PersonalCards.json");
+        pc = InitializePersonalCards("src/main/resources/configs/PersonalCards.json");
         PersonalCards currentPC = pc.get(0);
 
         //Check if ObjectiveCells follows PersonalCard1 structure
@@ -57,7 +57,7 @@ class PersonalCardsParserTest {
     @Test
     void PersonalCards6Test() {
         ArrayList<PersonalCards> pc;
-        pc = InitializePersonalCards("src/main/resources/PersonalCards.json");
+        pc = InitializePersonalCards("src/main/resources/configs/PersonalCards.json");
         PersonalCards currentPC = pc.get(5);
 
         //Check if ObjectiveCells follows PersonalCard1 structure
@@ -78,7 +78,7 @@ class PersonalCardsParserTest {
     @Test
     void PersonalCards9Test() {
         ArrayList<PersonalCards> pc;
-        pc = InitializePersonalCards("src/main/resources/PersonalCards.json");
+        pc = InitializePersonalCards("src/main/resources/configs/PersonalCards.json");
         PersonalCards currentPC = pc.get(8);
 
         //Check if ObjectiveCells follows PersonalCard1 structure

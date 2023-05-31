@@ -12,12 +12,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class BoardParserTest {
 
     @Test
-    void boardParserTest1(){
+    void TestboardParserTest1(){
         GameBoard gameBoard = new GameBoard();
         int [][] updatedPositions = new int[1][2];
         updatedPositions[0][0] = 0;
         updatedPositions[0][1] = 5;
-        JSONObject msg = writeMsg(updatedPositions);
+        JSONObject msg = TestwriteMsg(updatedPositions);
         BoardParser boardParser = new BoardParser();
 
         boardParser.boardParser(msg.toString(), gameBoard);
@@ -26,14 +26,14 @@ class BoardParserTest {
     }
 
     @Test
-    void boardParserTest2(){
+    void TestboardParserTest2(){
         GameBoard gameBoard = new GameBoard();
         int [][] updatedPositions = new int[2][2];
         updatedPositions[0][0] = 5;
         updatedPositions[0][1] = 3;
         updatedPositions[1][0] = 6;
         updatedPositions[1][1] = 3;
-        JSONObject msg = writeMsg(updatedPositions);
+        JSONObject msg = TestwriteMsg(updatedPositions);
         BoardParser boardParser = new BoardParser();
 
         boardParser.boardParser(msg.toString(), gameBoard);
@@ -44,7 +44,7 @@ class BoardParserTest {
     }
 
     @Test
-    void boardParserTest3(){
+    void TestboardParserTest3(){
         GameBoard gameBoard = new GameBoard();
         int [][] updatedPositions = new int[3][2];
         updatedPositions[0][0] = 3;
@@ -53,7 +53,7 @@ class BoardParserTest {
         updatedPositions[1][1] = 7;
         updatedPositions[2][0] = 4;
         updatedPositions[2][1] = 6;
-        JSONObject msg = writeMsg(updatedPositions);
+        JSONObject msg = TestwriteMsg(updatedPositions);
         BoardParser boardParser = new BoardParser();
 
         boardParser.boardParser(msg.toString(), gameBoard);
@@ -67,7 +67,7 @@ class BoardParserTest {
         int[][] updatedPositions1 = new int[1][2];
         updatedPositions1[0][0] = 4;
         updatedPositions1[0][1] = 4;
-        JSONObject msg1 = writeMsg(updatedPositions1);
+        JSONObject msg1 = TestwriteMsg(updatedPositions1);
         boardParser.boardParser(msg1.toString(), gameBoard);
         assertEquals(4, boardParser.getPositionsToBeRemoved().get(0).getRow());
         assertEquals(4, boardParser.getPositionsToBeRemoved().get(0).getColumn());
@@ -75,7 +75,7 @@ class BoardParserTest {
 
 
 
-    private JSONObject writeMsg(int[][] updatedPositions){
+    private JSONObject TestwriteMsg(int[][] updatedPositions){
         JSONObject msg = new JSONObject();
         JSONArray array = new JSONArray();
 
@@ -90,7 +90,7 @@ class BoardParserTest {
     }
 
     @Test
-    void gameBoardFullParserTest() {
+    void TestgameBoardFullParserTest() {
         GameBoard gameBoard = new GameBoard();
         String msg;
 
