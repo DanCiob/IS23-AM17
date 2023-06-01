@@ -60,16 +60,13 @@ public class Game{
      * this method creates all the tiles and places them in the tileBag
      */
     public void initializeTile(){
-        for(int i = 0; i < totalTiles; i++){
-            switch(i % typesOfTiles){
-                case 0->tileBag.add(new Tile(i, Tile.TileColor.WHITE));
-                case 1->tileBag.add(new Tile(i, Tile.TileColor.BLUE));
-                case 2->tileBag.add(new Tile(i, Tile.TileColor.YELLOW));
-                case 3->tileBag.add(new Tile(i, Tile.TileColor.PURPLE));
-                case 4->tileBag.add(new Tile(i, Tile.TileColor.CYAN));
-                case 5->tileBag.add(new Tile(i, Tile.TileColor.GREEN));
-                default -> System.out.println("FATAL ERROR DURING TILES CREATION !");
-            }
+        for(int i = 0; i < totalTiles; i=i+typesOfTiles){
+            tileBag.add(new Tile(i, Tile.TileColor.WHITE));
+            tileBag.add(new Tile(i+1, Tile.TileColor.BLUE));
+            tileBag.add(new Tile(i+2, Tile.TileColor.YELLOW));
+            tileBag.add(new Tile(i+3, Tile.TileColor.PURPLE));
+            tileBag.add(new Tile(i+4, Tile.TileColor.CYAN));
+            tileBag.add(new Tile(i+5, Tile.TileColor.GREEN));
         }
     }
 

@@ -142,6 +142,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         }
     }
 
+    //TODO METODO DA TOGLIERE PERCHè COPIA E INCOLLA DA CLI?
     public void game(boolean firstRun) throws RemoteException {
         String command = null;
 
@@ -229,7 +230,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                     }
                 }
 
-                //Create JSON messages containing request
+                //Create JSON messages containing request (game move or chat message)
                 JSONObject toBeSent = null;
                 try {
                     toBeSent = actionToJSON(op, action);
