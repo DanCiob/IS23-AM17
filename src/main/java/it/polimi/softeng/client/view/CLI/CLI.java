@@ -336,8 +336,12 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             return;
         }
 
-        if (command.equalsIgnoreCase("@CMND") || command.equalsIgnoreCase("@VBOR") || command.equalsIgnoreCase("@VSHE") || command.equalsIgnoreCase("@VPCA") || command.equalsIgnoreCase("@VPLA") || command.equalsIgnoreCase("@VCCA")) {
+        if (command.equalsIgnoreCase("@CMND") || command.equalsIgnoreCase("@VBOR") || command.equalsIgnoreCase("@VSHE") || command.equalsIgnoreCase("@VPCA") || command.equalsIgnoreCase("@VPLA") || command.equalsIgnoreCase("@VCCA") || command.equalsIgnoreCase("@HELP")) {
             switch (command.toUpperCase()) {
+                case ("@HELP") -> {
+                    help();
+                    return;
+                }
                 case ("@CMND") -> {
                     return;
                 }
@@ -592,22 +596,45 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         scoreTable.setHeaders("Command", "Effect", "Example of command");
 
         System.out.println(ANSI_RESET);
-        System.out.println("+--------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+");
-        System.out.println("| Command                        | Effect                                                                            | Example                                                                                            |");
-        System.out.println("+--------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+");
+        System.out.println("+--------------------------------+");
+        System.out.println("| Command                        |");
+        System.out.println("+--------------------------------+");
 
-        System.out.println("| " + ANSI_GREEN + "@CMND                          " + ANSI_RESET + "| To show command table again                                                       | @CMND                                                                                              |");
-        System.out.println("| " + ANSI_GREEN + "@VBOR                          " + ANSI_RESET + "| Visualize board status                                                            | @VBOR                                                                                              |");
-        System.out.println("| " + ANSI_GREEN + "@VSHE                          " + ANSI_RESET + "| Visualize shelfie status                                                          | @VSHE                                                                                              |");
-        System.out.println("| " + ANSI_GREEN + "@VPLA                          " + ANSI_RESET + "| Visualize currently connected players and score                                   | @VPLA                                                                                              |");
-        System.out.println("| " + ANSI_GREEN + "@VCCA                          " + ANSI_RESET + "| Visualize common objectives                                                       | @VCCA                                                                                              |");
-        System.out.println("| " + ANSI_GREEN + "@VPCA                          " + ANSI_RESET + "| Visualize personal objectives                                                     | @VPCA                                                                                              |");
-        System.out.println("| " + ANSI_GREEN + "@GAME gameMoveFormat           " + ANSI_RESET + "| Do a game move                                                                    | @GAME (rowTile1,columnTil1),(rowTile2,columnTil2),(rowTile3,columnTil3),numColumnOfInsertion       |");
-        System.out.println("| " + ANSI_GREEN + "--------------------           " + ANSI_RESET + "| --------------                                                                    | EX: (5,5),(5,6),2                                                                                  |");
-        System.out.println("| " + ANSI_GREEN + "--------------------           " + ANSI_RESET + "| --------------                                                                    | You must select at least 1 but less than 3 (included), picking order is inserting order in shelfie |");
-        System.out.println("| " + ANSI_GREEN + "@CHAT 'nameOfReceiver' message " + ANSI_RESET + "| Send a chat message (to send a message to everybody type 'all' in nameOfReceiver) | @CHAT 'userRec' HI!                                                                                |");
+        System.out.println("| " + ANSI_GREEN + "@CMND                          " + ANSI_RESET + "|");
+        System.out.println("| " + ANSI_GREEN + "@VBOR                          " + ANSI_RESET + "|");
+        System.out.println("| " + ANSI_GREEN + "@VSHE                          " + ANSI_RESET + "|");
+        System.out.println("| " + ANSI_GREEN + "@VPLA                          " + ANSI_RESET + "|");
+        System.out.println("| " + ANSI_GREEN + "@VCCA                          " + ANSI_RESET + "|");
+        System.out.println("| " + ANSI_GREEN + "@VPCA                          " + ANSI_RESET + "|");
+        System.out.println("| " + ANSI_GREEN + "@GAME gameMoveFormat           " + ANSI_RESET + "|");
+        System.out.println("| " + ANSI_GREEN + "--------------------           " + ANSI_RESET + "|");
+        System.out.println("| " + ANSI_GREEN + "--------------------           " + ANSI_RESET + "|");
+        System.out.println("| " + ANSI_GREEN + "@CHAT 'nameOfReceiver' message " + ANSI_RESET + "|");
+        System.out.println("| " + ANSI_CYAN + "@HELP for help                 " + ANSI_RESET + "|");
 
-        System.out.println("+--------------------------------+-----------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------+");
+        System.out.println("+--------------------------------+");
+    }
+
+    /**
+     * Used to show correct format for every command
+     */
+    public void help() {
+        System.out.println("Input a command to know its correct usage!");
+        System.out.println(">");
+        String command = input.nextLine();
+
+        switch(command.toUpperCase())
+        {
+            case ("@CMND") -> System.out.println(ANSI_GREEN + "Used to show command table, EX: @CMND" + ANSI_RESET);
+            case ("@VBOR") -> System.out.println(ANSI_GREEN + "Used to show gameboard, EX: @VBOR" + ANSI_RESET);
+            case ("@VSHE") -> System.out.println(ANSI_GREEN + "Used to show your shelfie, EX: @VSHE" + ANSI_RESET);
+            case ("@VPLA") -> System.out.println(ANSI_GREEN + "Used to show players and their score, EX: @VPLA" + ANSI_RESET);
+            case ("@VCCA") -> System.out.println(ANSI_GREEN + "Used to show common cards used in match, EX: @VCCA" + ANSI_RESET);
+            case ("@VPCA") -> System.out.println(ANSI_GREEN + "Used to show your personal card used in match, EX: @VCCA" + ANSI_RESET);
+            case ("@GAME") -> System.out.println(ANSI_GREEN + "Used to do a game move, EX: @GAME (2,1),(3,0),0" + ANSI_RESET);
+            case ("@CHAT") -> System.out.println(ANSI_GREEN + "Used to send a chat message, EX: @CHAT 'all' Hello!" + ANSI_RESET);
+            default -> System.out.println(ANSI_RED + "Unrecognized command :(" + ANSI_RESET);
+        }
     }
 
     /**
@@ -682,7 +709,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 } else {
                     if (board[i][j] != null) {
                         tileColor = board[i][j].getColor();
-                        System.out.print(" " + tileColor.coloredText() + "▇" + " ");
+                        System.out.print(" " + tileColor.coloredText() + "#" + " ");
                     } else {
                         System.out.print(ANSI_GREY + " ░ ");
                     }
@@ -708,7 +735,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 for (int j = 0; j < shelfieColumns; j++) {
                     if (shelfie[i][j] != null) {
                         tileColor = shelfie[i][j].getColor();
-                        System.out.print(tileColor.coloredText() + " " + "▇" + " ");
+                        System.out.print(tileColor.coloredText() + " " + "#" + " ");
                     } else {
                         System.out.print(ANSI_GREY + " ░ ");
                     }
@@ -885,7 +912,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 tile = false;
                 for (PersonalCards.ObjectiveCell objectiveCell : personalCard.getObjective()) {
                     if (objectiveCell.getRow() == i && objectiveCell.getColumn() == j) {
-                        System.out.print(objectiveCell.getColor().coloredText() + " ▇ ");
+                        System.out.print(objectiveCell.getColor().coloredText() + " # ");
                         tile = true;
                     }
                 }
