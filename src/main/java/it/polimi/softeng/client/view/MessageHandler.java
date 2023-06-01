@@ -39,7 +39,7 @@ public class MessageHandler {
         String requestType = obj.get("request").toString();
 
         switch (requestType) {
-            //Invoke chat visualizer
+            //Received a chat message -> invoke visualizer
             case ("@CHAT") -> {
                     JSONParser p1 = new JSONParser();
                     JSONObject objChat = (JSONObject) p1.parse(message);
@@ -50,7 +50,7 @@ public class MessageHandler {
                     ui.chatVisualizer(objChat);
                     }
 
-            //Invoke board visualizer
+            //Received board update -> update gameBoard and invoke visualizer
             case ("@BORD") -> {
                     JSONParser p1 = new JSONParser();
                     JSONObject objBoard = (JSONObject) p1.parse(message);
@@ -64,7 +64,7 @@ public class MessageHandler {
                     ui.boardUpdater(newBoard);
                 }
 
-            //Invoke shelfie visualizer
+            //Received shelfie update -> update Shelfie and invoke visualizer
             case ("@SHEL") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objShelfie = (JSONObject) p1.parse(message);
@@ -81,7 +81,7 @@ public class MessageHandler {
                 ui.shelfieUpdater(newShelfie);
             }
 
-            //Invoke shelfie visualizer for other player
+            //Received shelfie update for other players -> other shelfie visualizer
             case ("@OSHE") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objShelfie = (JSONObject) p1.parse(message);
@@ -101,6 +101,8 @@ public class MessageHandler {
                 ui.shelfieVisualizer(newShelfie.getGrid());
                 ui.shelfieUpdater(newShelfie, owner);
             }
+
+            //First receiving of common cards -> update them and invoke visualizer
             case ("@VCCA") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objCC = (JSONObject) p1.parse(message);
@@ -131,6 +133,35 @@ public class MessageHandler {
                 }
             }
 
+            //Receiving of common cards -> update them (for badge score)
+            case ("@CCAU") -> {
+                JSONParser p1 = new JSONParser();
+                JSONObject objCC = (JSONObject) p1.parse(message);
+                JSONArray arrayCC = (JSONArray) objCC.get("commonCardsList");
+
+                //Read and visualize CommonCards
+                switch((int) (long) objCC.get("numOfCommonCards"))
+                {
+                    case 1 -> {
+                        ui.eventManager("commonCardEvent");
+
+                        JSONObject cc1 = (JSONObject) arrayCC.get(0);
+
+                        ui.commonCardUpdater(cc1.get("name").toString(), 1);
+                    }
+                    case 2 -> {
+                        ui.eventManager("commonCardEvent");
+
+                        JSONObject cc1 = (JSONObject) arrayCC.get(0);
+                        JSONObject cc2 = (JSONObject) arrayCC.get(1);
+
+                        ui.commonCardUpdater(cc1.get("name").toString(), 1);
+                        ui.commonCardUpdater(cc2.get("name").toString(), 2);
+                    }
+                }
+            }
+
+            //Received personal card -> update it and invoke visualizer
             case ("@VPCA") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objPC = (JSONObject) p1.parse(message);
@@ -143,6 +174,7 @@ public class MessageHandler {
                 ui.personalCardUpdater(newPC);
             }
 
+            //Received players and their score -> invoke visualizer
             case ("@VPLA") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objPC = (JSONObject) p1.parse(message);
@@ -151,6 +183,7 @@ public class MessageHandler {
                 ui.scoreVisualizer(PlayerParser.PlayerAndScoreParser(message));
             }
 
+            //Signal errors
             case ("@ERRO") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objError = (JSONObject) p1.parse(message);
@@ -159,6 +192,7 @@ public class MessageHandler {
                 ui.eventManager(error);
             }
 
+            //My turn
             case ("@CONF") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objMess = (JSONObject) p1.parse(message);
@@ -167,6 +201,7 @@ public class MessageHandler {
                 ui.eventManager("myTurn");
             }
 
+            //Trigger endgame
             case ("@ENDG") -> {
                 JSONParser p1 = new JSONParser();
                 JSONObject objMess = (JSONObject) p1.parse(message);
