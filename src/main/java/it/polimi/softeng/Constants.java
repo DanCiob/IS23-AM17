@@ -14,6 +14,7 @@ public abstract class Constants {
     //tiles
     public static final int totalTiles = 132;
     public static final int typesOfTiles = 6;
+    public static final int picturesForEachTile = 3; //different pictures on tiles of the same colour
     //cards
     public static final int totalCommonCards = 12;
     public static final int totalPersonalCards = 12;

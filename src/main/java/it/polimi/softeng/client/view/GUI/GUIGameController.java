@@ -17,10 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-import org.controlsfx.control.spreadsheet.Grid;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -399,7 +396,10 @@ public class GUIGameController implements Initializable{
                 }else{
                     if (gameBoard.getBoard()[i][j] != null) {
                         if (imageView.getImage() == null) {
-                            image = new Image("/images/Tile_" + gameBoard.getBoard()[i][j].getColor().colorLetter() + "1.png"); //TODO: change the object in the image
+                            //create a number n depending on tile id, to have tiles of the same color with different pictures
+                            int n = ((gameBoard.getBoard()[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
+                            image = new Image("/images/Tile_" + gameBoard.getBoard()[i][j].getColor().colorLetter() + n + ".png");
+                            imageView.setOpacity(1);
                             imageView.setImage(image);
                         }
                     } else {
