@@ -212,6 +212,7 @@ public class GUILoginController implements Initializable {
             }
             case 3 -> {
                 String gameModeString = gamemode == 1 ? "e" : "n";
+                guiClientSide.RemoteMethods = new ClientSideRMI(guiClientSide);
                 try {
                     boolean okNickname = guiClientSide.RemoteMethods.getStub().login(nickname.getText(),numPlayers,gameModeString,guiClientSide.RemoteMethods.getPort());
                 } catch (RemoteException e) {

@@ -55,6 +55,7 @@ public class GameController {
         Player currentPlayer = game.getCurrentPlayer(); //reference used to send the shelfie of the player who made a move
         int result = game.turn(tilesToBeRemoved, column);
 
+
         switch (result) {
             //Error
             case -1 -> {

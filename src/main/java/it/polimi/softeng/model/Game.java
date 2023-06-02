@@ -285,6 +285,7 @@ public class Game{
             if(card.verifyShape(currentPlayer.getShelfie())){
                 //current player has completed a common card, so he receives the badge. The badge is removed from the arrayList
                 currentPlayer.updateScore(card.getBadge().getScore());
+
             }
         }
 

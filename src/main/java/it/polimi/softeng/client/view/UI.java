@@ -1,6 +1,7 @@
 package it.polimi.softeng.client.view;
 
 import it.polimi.softeng.model.*;
+import it.polimi.softeng.model.commonCards.CommonCards;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public interface UI {
      * Visualizer of CommonCards used in game
      */
      void commonCardsVisualizer(String commonCard);
+
+    void commonCardsVisualizer(CommonCards commonCard);
 
     /**
      * Visualizer of PersonalCard

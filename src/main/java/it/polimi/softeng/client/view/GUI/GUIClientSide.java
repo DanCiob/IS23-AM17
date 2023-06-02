@@ -11,6 +11,7 @@ import it.polimi.softeng.connectionProtocol.client.ClientSide;
 import it.polimi.softeng.connectionProtocol.client.ClientSideRMI;
 import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.*;
+import it.polimi.softeng.model.commonCards.CommonCards;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -120,151 +121,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     }
 
 
-    public void run() {
-        boolean firstRun = true;
-        boolean GameIsOn = false;
-
-        System.out.println("Waiting for other players to join...");
-        //Waiting for beginning of game
-        while (!GameIsOn) {
-            System.out.println("Waiting for other players to join...");
-        }
-
-        while (GameIsOn) {
-            try {
-                //Wait for errors
-                TimeUnit.SECONDS.sleep(1);
-                game(firstRun);
-            } catch (InterruptedException | RemoteException e) {
-                throw new RuntimeException(e);
-            }
-            firstRun = false;
-        }
-    }
-
-    //TODO METODO DA TOGLIERE PERCHè COPIA E INCOLLA DA CLI?
-    public void game(boolean firstRun) throws RemoteException {
-        String command = null;
-
-        //Check empty command
-        if (command == null) {
-            System.out.println("Empty command!");
-            return;
-        }
-        //Check if player inserted a command that is not on the table
-        if (!isOkCommand(command, 1)) {
-            System.out.println("Please write a command that you can see in the table");
-            return;
-        }
-
-        if (command.equalsIgnoreCase("@CMND") || command.equalsIgnoreCase("@VBOR") || command.equalsIgnoreCase("@VSHE") || command.equalsIgnoreCase("@VPCA") || command.equalsIgnoreCase("@VPLA") || command.equalsIgnoreCase("@VCCA")) {
-            switch (command.toUpperCase()) {
-                case ("@CMND") -> {
-                    return;
-                }
-                case ("@VBOR") -> {
-                    boardVisualizer(UserGameBoard.getBoard(), UserGameBoard.getNotAvailable());
-                    return;
-                }
-                case ("@VSHE") -> {
-                    shelfieVisualizer(UserShelfie.getGrid());
-                    return;
-                }
-                case ("@VPCA") -> {
-                    personalCardVisualizer(PersonalCard);
-                    return;
-                }
-                case ("@VCCA") -> {
-                    commonCardsVisualizer(CommonCard1);
-                    if (CommonCard2 != null) commonCardsVisualizer(CommonCard2);
-                    return;
-                }
-                case ("@VPLA") -> {
-                    switch (ConnectionMode) {
-                        //Socket
-                        case 1 -> {
-                            JSONObject dummy = new JSONObject();
-                            clientSide.sendMessage(clientSignObject(dummy, "@VPLA", Nickname).toJSONString());
-                            return;
-                        }
-                        //RMI
-                        case 2 -> {
-                            eventManager("playerEvent");
-                            scoreVisualizer(RemoteMethods.getStub().getPlayersAndScore());
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (!isOkCommand(command, 2) && !isOkCommand(command, 3)) {
-            System.out.println("Please write a command that you can see in the table");
-            return;
-        }
-
-        //Command is in @CMND format (every command is 4 letters), uppercase avoid case sensitivity
-        String op = command.substring(0, 5).toUpperCase();
-        String action = command.substring(6);
-
-        if (!op.equals("@GAME") && !op.equals("@CHAT") && !op.equals("@VPLA")) {
-            System.out.println("Please write a command that you can see in the table");
-            return;
-        }
-
-        switch (ConnectionMode) {
-            //Socket
-            case 1 -> {
-                //Block illegal move
-                if (op.equals("@GAME")) {
-                    if (!isOkCommand(command, 3)) {
-                        System.out.println("Please, check gameMove syntax");
-                        return;
-                    }
-                }
-                //Block badly formatted messages
-                if (op.equals("@CHAT")) {
-                    if (!isOkCommand(command, 2)) {
-                        System.out.println("Please, check chat syntax");
-                        return;
-                    }
-                }
-
-                //Create JSON messages containing request (game move or chat message)
-                JSONObject toBeSent = null;
-                try {
-                    toBeSent = actionToJSON(op, action);
-                } catch (IllegalInsertException e) {
-                    throw new RuntimeException(e);
-                }
-
-                //Send message to server
-                if (toBeSent != null)
-                    clientSide.sendMessage(clientSignObject(toBeSent, op, Nickname).toJSONString());
-                isYourTurn = false;
-            }
-
-
-            case 2 -> {
-                if (op.equals("@GAME")) {
-                    if (!isOkCommand(command, 3)) {
-                        System.out.println("Please, check gameMove syntax");
-                        return;
-                    }
-                }
-
-                if (op.equals("@CHAT")) {
-                    if (!isOkCommand(command, 2)) {
-                        System.out.println("Please, check chat syntax");
-                        return;
-                    }
-                }
-                isYourTurn = false;
-                RMIInvoker(op, action);
-            }
-        }
-    }
-
     //////////////////
     //REGEX CHECKERS//
     //////////////////
@@ -347,6 +203,11 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     }
 
     @Override
+    public void commonCardsVisualizer(CommonCards commonCard) {
+//TODO:remove
+    }
+
+    @Override
     public void personalCardVisualizer(PersonalCards personalCard) {
 
     }
@@ -369,7 +230,10 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         switch (event) {
             //Client-side errors
             case ("chatError") -> System.out.println("Error in chat message syntax, try again!");
-            case ("gameMoveError") -> System.out.println("Error in game move syntax, try again!");
+            case ("gameMoveError") -> {
+                System.out.println("Error in game move syntax, try again!");
+                gameController.resetMoves();
+            }
 
             //Events
             case ("chatEvent") -> {
@@ -400,8 +264,12 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                 System.out.println("| Received board update |");
                 System.out.println("+-----------------------+");
                 System.out.println(ANSI_RESET);
-                if(gameController != null)
+                if(gameController != null){
+                    gameController.setMoveConfirmed(true);
                     gameController.updateBoard();
+                    gameController.resetAfterMove();
+                    gameController.updatePersonalShelfie();
+                }
             }
             case ("shelfieEvent") -> {
                 System.out.println(ANSI_CYAN);
@@ -455,7 +323,14 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
             case (INVALID_RECEIVER) -> System.out.println(INVALID_RECEIVER);
             case (ALREADY_LOGGED_IN) -> System.out.println(ALREADY_LOGGED_IN);
             case (YOU_ARE_RECEIVER) -> System.out.println(YOU_ARE_RECEIVER);
-            case (ERROR_IN_GAMEMOVE) -> System.out.println((ERROR_IN_GAMEMOVE));
+            case (ERROR_IN_GAMEMOVE) ->{
+                System.out.println((ERROR_IN_GAMEMOVE));
+                if(gameController != null){
+                    gameController.setMoveError(true);
+                    gameController.resetAfterMove();
+                    gameController.updatePersonalShelfie();
+                }
+            }
 
             default -> System.out.println("Unrecognized event!");
         }
@@ -495,10 +370,15 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public void commonCardUpdater(String nameOfCommonCard, int whatCommonCard) {
-        if (whatCommonCard == 1)
+        if (whatCommonCard == 1) {
             CommonCard1 = nameOfCommonCard;
-        else
+            if(gameController!=null)
+                gameController.updateCommonCardBadges(1);
+        }else {
             CommonCard2 = nameOfCommonCard;
+            if(gameController!=null)
+                gameController.updateCommonCardBadges(2);
+        }
     }
 
     @Override

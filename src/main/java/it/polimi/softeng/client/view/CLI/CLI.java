@@ -13,6 +13,7 @@ import it.polimi.softeng.model.*;
 import it.polimi.softeng.client.view.CommonOperationsFramework;
 import it.polimi.softeng.client.view.UI;
 import it.polimi.softeng.model.PersonalCards;
+import it.polimi.softeng.model.commonCards.CommonCards;
 import org.json.simple.JSONObject;
 
 import java.rmi.RemoteException;
@@ -901,6 +902,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         }
 
     }
+    @Override
+    public void commonCardsVisualizer(CommonCards commonCard) {}
 
     @Override
     public void personalCardVisualizer(PersonalCards personalCard) {

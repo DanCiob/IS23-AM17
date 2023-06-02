@@ -93,12 +93,16 @@ public class ClientSideMethods implements ClientRemoteInterface {
                 ui.commonCardUpdater(commonCard.getName(), i);
                 i++;
                 ui.commonCardsVisualizer(commonCard.getName());
+                System.out.println("Prova common card");
+                ui.commonCardsVisualizer(commonCard);
             }
         }
         else
             for (CommonCards commonCard : commonCards) {
                 ui.commonCardUpdater(commonCard.getName(), i);
                 i++;
+                System.out.println("Prova common card");
+                ui.commonCardsVisualizer(commonCard);
             }
     }
 
