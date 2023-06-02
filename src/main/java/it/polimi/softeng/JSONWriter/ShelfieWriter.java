@@ -13,7 +13,7 @@ public class ShelfieWriter {
         JSONObject jsonObject = new JSONObject();
         JSONArray shelfieGrid = new JSONArray();
 
-        for(int i = 0; i < shelfieColumns; i++) {
+        for(int i = 0; i < shelfieRows; i++) {
             for (int j = 0; j < shelfieColumns; j++) {
                 if (shelfie.getTile(i, j) != null) {
                     JSONObject posColorId = new JSONObject();
@@ -34,7 +34,7 @@ public class ShelfieWriter {
         JSONObject jsonObject = new JSONObject();
         JSONArray shelfieGrid = new JSONArray();
 
-        for(int i = 0; i < shelfieColumns; i++) {
+        for(int i = 0; i < shelfieRows; i++) {
             for (int j = 0; j < shelfieColumns; j++) {
                 if (shelfie.getTile(i, j) != null) {
                     JSONObject posColorId = new JSONObject();
