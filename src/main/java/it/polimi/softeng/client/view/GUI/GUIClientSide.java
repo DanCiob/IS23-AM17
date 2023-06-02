@@ -268,7 +268,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                     gameController.setMoveConfirmed(true);
                     gameController.updateBoard();
                     gameController.resetAfterMove();
-                    gameController.updatePersonalShelfie();
                 }
             }
             case ("shelfieEvent") -> {
@@ -328,7 +327,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                 if(gameController != null){
                     gameController.setMoveError(true);
                     gameController.resetAfterMove();
-                    gameController.updatePersonalShelfie();
                 }
             }
 
@@ -347,6 +345,8 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     @Override
     public void shelfieUpdater(Shelfie s) {
         UserShelfie = s;
+        if(gameController!=null)
+            gameController.updatePersonalShelfie();
     }
 
     @Override
@@ -393,8 +393,22 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public void endGame(boolean winner){
-        if(gameController!=null)
-            gameController.switchToEndGame();
+        if(gameController!=null){
+            Service New_Service = new Service() {
+                @Override
+                protected Task createTask() {
+                    return new Task() {
+                        @Override
+                        protected Object call() throws Exception {
+                            Platform.runLater(() -> {
+                                gameController.switchToEndGame();
+                            });
+                            return null;
+                        }
+                    };
+                }
+            };
+        }
     }
 
     @Override
@@ -580,6 +594,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                     return ChatWriter.writeChatMessage(action);
             }
             case ("@GAME") -> {
+                System.out.println(GameMoveWriter.writeGameMove(action));
                 if (!GameMoveWriter.gameMoveRegex(action) || GameMoveWriter.writeGameMove(action) == null) {
                     eventManager("gameMoveError");
                     return null;
@@ -647,13 +662,4 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         }
         return true;
     }
-
-
-
-    /*
-    GUIWaitingController guiWaitingController;
-
-    public void setGuiWaitingController(GUIWaitingController guiWaitingController) {
-        this.guiWaitingController = guiWaitingController;
-    }*/
 }

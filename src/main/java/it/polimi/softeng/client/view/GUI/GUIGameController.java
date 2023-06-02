@@ -183,9 +183,11 @@ public class GUIGameController implements Initializable{
 
         for(Node node: boardGrid.getChildren()){
             if((GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode))&&(GridPane.getRowIndex(node) == GridPane.getRowIndex(clickedNode))){
-                createBoardMoves(GridPane.getRowIndex(clickedNode), GridPane.getColumnIndex(clickedNode));
                 ImageView i = (ImageView) node;
-                i.setOpacity(0.3);
+                if(i.getImage()!=null){
+                    createBoardMoves(GridPane.getRowIndex(clickedNode), GridPane.getColumnIndex(clickedNode));
+                    i.setOpacity(0.3);
+                }
             }
         }
     }
@@ -223,8 +225,9 @@ public class GUIGameController implements Initializable{
             }
 
             //Send message to server
-            if (toBeSent != null)
+            if (toBeSent != null) {
                 guiClientSide.getClientSide().sendMessage(clientSignObject(toBeSent, "@GAME", nickname).toJSONString());
+            }
         }else{
             guiClientSide.RMIInvoker("@GAME",action);
         }
@@ -238,6 +241,18 @@ public class GUIGameController implements Initializable{
     GridPane shelfie1;
 
     /**
+     *
+     * @return true if there is at least a tile chosen from the board to insert in the shelfie, false if not
+     */
+    protected boolean boardMovesToInsert(){
+        for(Moves m: boardMoves){
+            if(m.toInsert)
+                return true;
+        }
+        return false;
+    }
+
+    /**
      * this method insert the last selected tile from the board in the shelfie
      * @param event which is when the user select a column of the shelfie
      */
@@ -247,26 +262,30 @@ public class GUIGameController implements Initializable{
         int row = firstFree(clickedNode);
         Image img;
         //TODO: insert all the selected tiles (more than 1)?
-        for (Node node : shelfie1.getChildren()) {
-            if ((GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode)) && row==GridPane.getRowIndex(node)) {
-                if(columnShelfie == -1 || GridPane.getColumnIndex(clickedNode) == columnShelfie){
-                    if(columnShelfie == -1) { //it's the first tile and we also need to save the column to check if the other tiles are put in the same column
-                        columnShelfie = GridPane.getColumnIndex(node);
-                        firstFreeRowBeforeMoves = row;
-                    }
-                    ImageView tileImageView = (ImageView) node;
-                    int i = 0;
-                    while(i<boardMoves.size()){
-                        if(boardMoves.get(i).toInsert) {
-                            boardMoves.get(i).toInsert = false;
-                            img = getImageInBoard(boardMoves.get(boardMoves.size() - 1).cell.getRow(), boardMoves.get(boardMoves.size() - 1).cell.getColumn()).getImage();
-                            tileImageView.setImage(img);
+        if(boardMovesToInsert()){
+            for (Node node : shelfie1.getChildren()) {
+                if ((GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode)) && row==GridPane.getRowIndex(node)) {
+                    if(columnShelfie == -1 || GridPane.getColumnIndex(clickedNode) == columnShelfie){
+                        if(columnShelfie == -1) { //it's the first tile and we also need to save the column to check if the other tiles are put in the same column
+                            columnShelfie = GridPane.getColumnIndex(node);
+                            firstFreeRowBeforeMoves = row;
                         }
-                        i++;
+                        ImageView tileImageView = (ImageView) node;
+                        int i = 0;
+                        while(i<boardMoves.size()){
+                            if(boardMoves.get(i).toInsert) {
+                                if (tileImageView.getImage() == null) {
+                                    img = getImageInBoard(boardMoves.get(boardMoves.size() - 1).cell.getRow(), boardMoves.get(boardMoves.size() - 1).cell.getColumn()).getImage();
+                                    tileImageView.setImage(img);
+                                }
+                                boardMoves.get(i).toInsert = false; //if the image is not null it means that there is already an image in that position, so we are in the first row from the top and the column is full
+                            }
+                            i++;
+                        }
                     }
                 }
-            }
 
+            }
         }
     }
 
@@ -326,21 +345,21 @@ public class GUIGameController implements Initializable{
             System.out.println("Errore! entrambi false");
         if(moveConfirmed)
             System.out.println("Move confirmed is true");
-        Boolean legalChoiceBoard, legalChoiceShelfie;
+       /* Boolean legalChoiceBoard, legalChoiceShelfie;
         legalChoiceBoard = checkLegalChoiceBoard();
         legalChoiceShelfie = checkLegalChoiceShelfie();
         if(!(legalChoiceBoard && legalChoiceShelfie))
+            resetMoves();*/
+        if(moveError)
             resetMoves();
-        //if(moveError)
-        //    resetMoves();
         for (Moves moves : boardMoves) {
             for (Node node : boardGrid.getChildren()) {
                 if ((GridPane.getColumnIndex(node) == moves.cell.getColumn()) && (GridPane.getRowIndex(node) == moves.cell.getRow())) {
                     ImageView i = (ImageView) node;
                     if (columnShelfie != -1){
-                        if(legalChoiceBoard && legalChoiceShelfie){//if(moveConfirmed){
+                        if(moveConfirmed){//if(legalChoiceBoard && legalChoiceShelfie){
                             i.setImage(null);
-                        }else { //if(moveError)
+                        }else if(moveError){
                             i.setOpacity(1);
                         }//TODO: else? it's not arrived error/board update
                     }else{ //there is no column selected in the shelfie
@@ -352,7 +371,7 @@ public class GUIGameController implements Initializable{
                 for (Node node : shelfie1.getChildren()) {
                     if (GridPane.getColumnIndex(node) == columnShelfie && GridPane.getRowIndex(node) <= firstFreeRowBeforeMoves) {
                         imageView = (ImageView) node;
-                        if(!legalChoiceShelfie) //if(moveError)
+                        if(moveError)//if(!legalChoiceShelfie)
                             imageView.setImage(null);
                     }
                 }
@@ -361,7 +380,8 @@ public class GUIGameController implements Initializable{
         boardMoves.clear();
         columnShelfie = -1;
         firstFreeRowBeforeMoves = -1;
-        if(legalChoiceBoard && legalChoiceShelfie){//if(moveConfirmed){
+        moveError = false;
+        if(moveConfirmed){//if(legalChoiceBoard && legalChoiceShelfie){
             boardGrid.setOpacity(0.3);
             guiClientSide.setYourTurn(false);
             boardGrid.setDisable(true);
@@ -373,6 +393,7 @@ public class GUIGameController implements Initializable{
      * this method is called by the CLI when it's the turn of this player
      */
     public void startTurn(){
+        boardMoves.clear();
         boardGrid.setOpacity(1);
         updateBoard();
         moveError = false;
@@ -402,18 +423,20 @@ public class GUIGameController implements Initializable{
      */
     private int firstFree(Node clickedNode){
         int row =0;
-        for (int i=0; i < shelfieRows; i++){
+        for (int i=shelfieRows-1; i>=0; i--){
             for(Node node: shelfie1.getChildren()){
                 if(GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode) && i==GridPane.getRowIndex(node)){
                     ImageView tileImageView = (ImageView) node;
                     if (tileImageView.getImage() == null){
-                        if(i > row)
-                             row = GridPane.getRowIndex(node);
+                        //if(i >= row){
+                            row = i;
+                            return row;
+                        //}
                     }
                 }
             }
         }
-        return row;
+        return -1;
         //TODO: if the column is full
     }
 
@@ -485,11 +508,22 @@ public class GUIGameController implements Initializable{
 
     @FXML
     protected void updatePersonalShelfie(){
+        Tile[][] s;
+        int n;
         for(int i=0;i<shelfieRows;i++) {
             for (int j = 0; j < shelfieColumns; j++) {
+                s = guiClientSide.getUserShelfie().getGrid();
                 ImageView imageView = getImageViewInShelfie(Integer.toString(1), shelfieRows - 1 - i, j);
-                if(imageView!=null && guiClientSide.getUserShelfie().getGrid()[i][j]!=null)
-                    imageView.setImage(new Image("/images/Tile_" + guiClientSide.getUserShelfie().getGrid()[i][j].getColor().colorLetter() + "1.png"));
+                n = ((s[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
+                if(imageView==null && s[i][j]!=null){
+                    imageView = new ImageView(new Image("/images/Tile_" + s[i][j].getColor().colorLetter() + n + ".png"));
+                }
+                if(imageView!=null && s[i][j]!=null){
+                    imageView.setImage(new Image("/images/Tile_" + s[i][j].getColor().colorLetter() + n + ".png"));
+                }
+                if(imageView!=null && s[i][j]!=null){
+                    imageView.setImage(null);
+                }
             }
         }
     }
@@ -508,13 +542,16 @@ public class GUIGameController implements Initializable{
     public void updateShelfies(){
         ImageView imageView;
         Image image;
+        Tile[][] grid;
 
         for(String s: guiClientSide.nicknameShelfie.keySet()){
             if(!s.equals(guiClientSide.getNickname())){
+                grid = guiClientSide.nicknameShelfie.get(s).getGrid();
                 for(int i=0;i<shelfieRows;i++){
                     for(int j=0;j<shelfieColumns;j++){
-                        if(guiClientSide.nicknameShelfie.get(s).getGrid()[i][j] != null){
-                            image = new Image("/images/Tile_" + guiClientSide.nicknameShelfie.get(s).getGrid()[i][j].getColor().colorLetter() + "1.png"); //TODO: change the object in the image
+                        if(grid[i][j] != null){
+                            int n = ((grid[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
+                            image = new Image("/images/Tile_" + grid[i][j].getColor().colorLetter() + n + ".png");
                             imageView = getImageViewInShelfie(s, shelfieRows - 1 - i, j);
                             if(imageView!=null)
                                 imageView.setImage(image);
@@ -557,94 +594,6 @@ public class GUIGameController implements Initializable{
         }
 
         return null;
-    }
-
-    /**
-     * @return true if the move is legal, false otherwise
-     */
-    public boolean checkLegalChoiceBoard() {
-        int i, j;
-        Cell cell2, cell3, cell4;
-        if(boardMoves.isEmpty())
-            return false;
-
-        for (Moves moves : boardMoves) {
-            i = moves.cell.getRow();
-            j = moves.cell.getColumn();
-
-            if((i!=0 && i!=8 && j!=0 && j!=8)) {
-                if((getImageInBoard(i+1, j) != null) && (getImageInBoard(i, j+1) != null) && (getImageInBoard(i-1, j) != null) && (getImageInBoard(i, j-1) != null))
-                    if((getImageInBoard(i+1, j).getImage() != null) && (getImageInBoard(i, j+1).getImage() != null) && (getImageInBoard(i-1, j).getImage() != null) && (getImageInBoard(i, j-1).getImage() != null))
-                        return false; /*false if the tile is completely surrounded by other tiles (up, down, left and right)*/
-            }
-
-        }
-        if(boardMoves.size() == 1){
-            return true; //if the move takes one single tile, we don't need to verify it is aligned with others
-        }
-        if(boardMoves.size() == 2){
-            cell2 = boardMoves.get(0).cell;
-            cell3 = boardMoves.get(1).cell;
-            if(cell2.getRow() == cell3.getRow()) {
-                if(cell2.getColumn() == cell3.getColumn() + 1)
-                    return true;
-                if(cell2.getColumn() == cell3.getColumn() - 1)
-                    return true;
-            }
-            if(cell2.getColumn() == cell3.getColumn()){
-                if(cell2.getRow() == cell3.getRow() + 1)
-                    return true;
-                if(cell2.getRow() == cell3.getRow() - 1)
-                    return true;
-
-            }
-        }
-        if(boardMoves.size() == 3){
-            cell2 = boardMoves.get(0).cell;
-            cell3 = boardMoves.get(1).cell;
-            cell4 = boardMoves.get(2).cell;
-            if(cell2.getRow() == cell3.getRow() && cell2.getRow() == cell4.getRow()){
-                int c2 = cell2.getColumn(), c3 = cell3.getColumn(), c4 = cell4.getColumn();
-                if(c2==c3-1 && c3==c4-1)
-                    return true;
-                if(c2==c4-1 && c4==c3-1)
-                    return true;
-                if(c3==c2-1 && c2==c4-1)
-                    return true;
-                if(c3==c4-1 && c4==c2-1)
-                    return true;
-                if(c4==c2-1 && c2==c3-1)
-                    return true;
-                if(c4==c3-1 && c3==c2-1)
-                    return true;
-            }
-            if(cell2.getColumn() == cell3.getColumn() && cell2.getColumn() == cell4.getColumn()){
-                int r2 = cell2.getRow(), r3 = cell3.getRow(), r4 = cell4.getRow();
-                if(r2==r3-1 && r3==r4-1)
-                    return true;
-                if(r2==r4-1 && r4==r3-1)
-                    return true;
-                if(r3==r2-1 && r2==r4-1)
-                    return true;
-                if(r3==r4-1 && r4==r2-1)
-                    return true;
-                if(r4==r2-1 && r2==r3-1)
-                    return true;
-                if(r4==r3-1 && r3==r2-1)
-                    return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @return true if the move is legal, false otherwise
-     */
-    public boolean checkLegalChoiceShelfie(){
-        int i = shelfieRows - firstFreeRowBeforeMoves;
-        //System.out.println("ChecklegalchoiceShelfie first = " + firstFreeRowBeforeMoves);
-        return boardMoves.size() + i <= shelfieRows;
     }
 
     @FXML
