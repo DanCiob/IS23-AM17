@@ -385,8 +385,11 @@ public class GUIGameController implements Initializable{
             boardGrid.setOpacity(0.3);
             guiClientSide.setYourTurn(false);
             boardGrid.setDisable(true);
+            moveConfirmed = false;
             //TODO: this and end game
         }
+        moveError = false;
+
     }
 
     /**

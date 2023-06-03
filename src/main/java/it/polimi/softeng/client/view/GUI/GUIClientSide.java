@@ -232,7 +232,10 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
             case ("chatError") -> System.out.println("Error in chat message syntax, try again!");
             case ("gameMoveError") -> {
                 System.out.println("Error in game move syntax, try again!");
-                gameController.resetMoves();
+                if(gameController != null){
+                    gameController.setMoveError(true);
+                    gameController.resetAfterMove();
+                }
             }
 
             //Events
