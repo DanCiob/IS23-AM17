@@ -443,9 +443,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                     }
                 };
                 New_Service.start();
-
             }
-
         }
     }
 
