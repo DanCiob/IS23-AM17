@@ -159,7 +159,6 @@ public class GameController {
             if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(game.getCurrentPlayer().getNickname())) {
                 ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(game.getCurrentPlayer().getNickname());
                 try {
-                    //temp.displayChatMessage("It's your turn!", "System");
                     temp.notifyTurn();
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);

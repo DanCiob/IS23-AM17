@@ -267,10 +267,12 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                 System.out.println("| Received board update |");
                 System.out.println("+-----------------------+");
                 System.out.println(ANSI_RESET);
-                if(gameController != null){
-                    gameController.setMoveConfirmed(true);
+                if(gameController != null)
                     gameController.updateBoard();
+                if(gameController != null && isYourTurn){
+                    gameController.setMoveConfirmed(true);
                     gameController.resetAfterMove();
+                    isYourTurn = false;
                 }
             }
             case ("shelfieEvent") -> {
