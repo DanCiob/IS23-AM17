@@ -457,13 +457,22 @@ public class GUIGameController implements Initializable{
                     //TODO:send error
                 }else{
                     if (gameBoard.getBoard()[i][j] != null) {
-                        if (imageView.getImage() == null) {
+                        //if (imageView.getImage() == null) {
                             //create a number n depending on tile id, to have tiles of the same color with different pictures
                             int n = ((gameBoard.getBoard()[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
                             image = new Image("/images/Tile_" + gameBoard.getBoard()[i][j].getColor().colorLetter() + n + ".png");
                             imageView.setOpacity(1);
                             imageView.setImage(image);
-                        }
+                        /*}else{
+                            System.out.println(imageView.getImage());
+                            System.out.println(imageView.getImage().getUrl().charAt(16));
+                            if(imageView.getImage().getUrl().charAt(16) != gameBoard.getBoard()[i][j].getColor().colorLetter()){
+                                int n = ((gameBoard.getBoard()[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
+                                image = new Image("/images/Tile_" + gameBoard.getBoard()[i][j].getColor().colorLetter() + n + ".png");
+                                imageView.setOpacity(1);
+                                imageView.setImage(image);
+                            }
+                        }*/
                     } else {
                         if (imageView != null && imageView.getImage() != null) {
                             imageView.setImage(null);
