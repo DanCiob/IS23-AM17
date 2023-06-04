@@ -362,10 +362,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public void scoreUpdater(int s) {
-        //TODO: give badge
-        if(gameController!=null){
-            gameController.giveBadge(s);
-        }
     }
 
     @Override
@@ -375,11 +371,14 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public void commonCardUpdater(String nameOfCommonCard, int whatCommonCard) {
+        System.out.println("In commonCardUpdater");
         if (whatCommonCard == 1) {
+            System.out.println("In commonCardUpdater card 1");
             CommonCard1 = nameOfCommonCard;
             if(gameController!=null)
                 gameController.updateCommonCardBadges(1);
         }else {
+            System.out.println("In commonCardUpdater card 2");
             CommonCard2 = nameOfCommonCard;
             if(gameController!=null)
                 gameController.updateCommonCardBadges(2);

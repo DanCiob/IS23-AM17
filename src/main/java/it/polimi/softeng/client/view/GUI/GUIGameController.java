@@ -94,6 +94,14 @@ public class GUIGameController implements Initializable{
     @FXML
     Label nickname4;
 
+    @FXML
+    Button sendBoardMovesButton;
+
+    @FXML
+    Button resetButton;
+
+    int scoreBadgeCommonCard1 = 8, scoreBadgeCommonCard2 = 8;
+
     public GUIGameController (GUIClientSide guiClientSide) {
         this.guiClientSide = guiClientSide;
     }
@@ -109,6 +117,8 @@ public class GUIGameController implements Initializable{
             player1badge1.setImage(new Image("/images/firstplayertoken.png"));
         }else{
             boardGrid.setDisable(true);
+            sendBoardMovesButton.setDisable(true);
+            resetButton.setDisable(true);
         }
         updateBoard();
         if(guiClientSide.getCommonCard1() == null) {
@@ -304,9 +314,6 @@ public class GUIGameController implements Initializable{
         return null;
     }
 
-    @FXML
-    Button resetButton;
-
     /**
      * This method is called when the user press the "Reset your move" button and put the tiles again in the board
      */
@@ -385,6 +392,8 @@ public class GUIGameController implements Initializable{
             boardGrid.setOpacity(0.3);
             guiClientSide.setYourTurn(false);
             boardGrid.setDisable(true);
+            sendBoardMovesButton.setDisable(true);
+            resetButton.setDisable(true);
             moveConfirmed = false;
             //TODO: end game
         }
@@ -486,36 +495,42 @@ public class GUIGameController implements Initializable{
         else{
             boardGrid.setOpacity(1);
             boardGrid.setDisable(false);
+            sendBoardMovesButton.setDisable(false);
+            resetButton.setDisable(false);
         }
     }
 
     @FXML
     public void updateCommonCardBadges(int i){//TODO: correct this
         System.out.println("Update common card badges");
-        switch (i){
+       /* switch (i){
             case 1 -> {
-                if(badgeCommonCard1.getImage().getUrl() == "/images/BadgeScore8.jpg") {
+                System.out.println(badgeCommonCard1.getImage().getUrl());
+                if(scoreBadgeCommonCard1==8) {
                     System.out.println("Entra in if badgescore8 commoncard1");
                     badgeCommonCard1.setImage(new Image("/images/BadgeScore6.jpg"));
-                }if(Objects.equals(badgeCommonCard1.getImage().getUrl(), "/images/BadgeScore6.jpg"))
+                }if(scoreBadgeCommonCard1==6)
                     badgeCommonCard1.setImage(new Image("/images/BadgeScore4.jpg"));
-                if(Objects.equals(badgeCommonCard1.getImage().getUrl(), "/images/BadgeScore4.jpg"))
+                if(scoreBadgeCommonCard1==4)
                     badgeCommonCard1.setImage(new Image("/images/BadgeScore2.jpg"));
-                if(Objects.equals(badgeCommonCard1.getImage().getUrl(), "/images/BadgeScore2.jpg"))
+                if(scoreBadgeCommonCard1==2)
                     badgeCommonCard1.setVisible(false);
+                scoreBadgeCommonCard1 = scoreBadgeCommonCard1-2;
             }
             case 2 -> {
-                if (badgeCommonCard2.getImage().getUrl() == "/images/BadgeScore8.jpg"){
+                if (scoreBadgeCommonCard2==8){
                     System.out.println("Entra in if badgescore8 commoncard2");
                     badgeCommonCard2.setImage(new Image("/images/BadgeScore6.jpg"));
-            }if(Objects.equals(badgeCommonCard2.getImage().getUrl(), "/images/BadgeScore6.jpg"))
+                }if(scoreBadgeCommonCard2==6)
                     badgeCommonCard2.setImage(new Image("/images/BadgeScore4.jpg"));
-                if(Objects.equals(badgeCommonCard2.getImage().getUrl(), "/images/BadgeScore4.jpg"))
+                if(scoreBadgeCommonCard2==4)
                     badgeCommonCard2.setImage(new Image("/images/BadgeScore2.jpg"));
-                if(Objects.equals(badgeCommonCard2.getImage().getUrl(), "/images/BadgeScore2.jpg"))
+                if(scoreBadgeCommonCard2==2)
                     badgeCommonCard2.setVisible(false);
+                scoreBadgeCommonCard2 = scoreBadgeCommonCard2-2;
+
             }
-        }
+        }*/
     }
 
     @FXML
