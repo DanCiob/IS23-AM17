@@ -541,16 +541,20 @@ public class GUIGameController implements Initializable{
             for (int j = 0; j < shelfieColumns; j++) {
                 s = guiClientSide.getUserShelfie().getGrid();
                 ImageView imageView = getImageViewInShelfie(Integer.toString(1), shelfieRows - 1 - i, j);
-                n = ((s[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
                 if(imageView==null && s[i][j]!=null){
+                    n = ((s[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
                     imageView = new ImageView(new Image("/images/Tile_" + s[i][j].getColor().colorLetter() + n + ".png"));
                 }
                 if(imageView!=null && s[i][j]!=null){
+                    n = ((s[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
                     imageView.setImage(new Image("/images/Tile_" + s[i][j].getColor().colorLetter() + n + ".png"));
                 }
+
+                /*
                 if(imageView!=null && s[i][j]!=null){
                     imageView.setImage(null);
                 }
+                */
             }
         }
     }

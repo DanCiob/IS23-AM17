@@ -100,30 +100,36 @@ public class GameController {
                         if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(p.getNickname())) {
                             ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(p.getNickname());
                             try {
-                                if (shelfiesToSend.get(s).getNickname().equals(p.getNickname()))
+                                if (shelfiesToSend.get(s).getNickname().equals(p.getNickname())) {
+                                    System.out.println(temp);
+                                    System.out.println(s);
                                     temp.shelfieUpdate(s);
+                                }
                                 else
                                     temp.playerUpdate(shelfiesToSend.get(s), s);
+                                System.out.println("Player " + p.getNickname() + " updated shelfie sent");
                             } catch (RemoteException e) {
                                 throw new RuntimeException(e);
                             }
                         }
                         //Is TCP user
                         else
-                        if (shelfiesToSend.get(s).equals(p.getNickname()))
+                        if (shelfiesToSend.get(s).getNickname().equals(p.getNickname()))
                             controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(s), "@SHEL", p.getNickname()).toJSONString(), p.getNickname());
                         else
                             controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(s, shelfiesToSend.get(s).getNickname()), "@OSHE", p.getNickname()).toJSONString(), p.getNickname());
-                        System.out.println("Player " + p.getNickname() + "updated shelfie sent");
+                        System.out.println("Player " + p.getNickname() + " updated shelfie sent");
                     }
                 }
 
                 //////////////////////
                 //BADGE COMMON CARDS//
                 //////////////////////
+                /*
                 ArrayList <CommonCards> cc = game.getCommonCards();
 
                 for (Player p: game.getPlayers()) {
+                    System.out.println("Sending common cards to " + p.getNickname());
                     //Is a RMI user
                     if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(p.getNickname())) {
                         ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(p.getNickname());
@@ -140,7 +146,7 @@ public class GameController {
                         else
                             controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(CommonCardWriter.writeCommonCard(cc.get(0).getName(), cc.get(1).getName()), "@CCAU", "all").toJSONString());
                 }
-            }
+            }*/
 
             ////////////////////////////
             //NEXT PLAYER NOTIFICATION//
@@ -169,7 +175,6 @@ public class GameController {
                 controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ConfirmWriter.writeConfirm(), "@CONF", game.getCurrentPlayer().getNickname()).toJSONString(), game.getCurrentPlayer().getNickname());
 
             return true;
-
         }
 
         //Win phase

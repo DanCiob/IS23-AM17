@@ -57,6 +57,7 @@ public class Controller {
                 return gameController.sendGameMove(positionsToBeRemoved, column, requester);
             }catch (RuntimeException e)
             {
+                e.printStackTrace();
                 return false;
             }
 
