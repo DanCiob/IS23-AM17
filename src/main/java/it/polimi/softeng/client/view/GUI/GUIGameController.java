@@ -668,6 +668,9 @@ public class GUIGameController implements Initializable{
 
     @FXML
     TextField chatMessage;
+
+    @FXML
+    TextField receiver;
     @FXML
     Button sendMessage;
 
@@ -678,23 +681,40 @@ public class GUIGameController implements Initializable{
     public void onSendMessage() throws IllegalInsertException {
         String message = chatMessage.getText();
        // JSONObject jsonMessage = ChatWriter.writeChatMessage(message);
-        //TODO: add receiver
-        String action = "" + "'all' " + message;
+        String action = "'" + receiver.getText() + "' " + message;
         //if (!isOkCommand(command, 2)) { errore}
 
 
         if(guiClientSide.getConnectionMode() == 1) { //socket
             JSONObject toBeSent = guiClientSide.actionToJSON("@CHAT", action);
-            if (toBeSent != null)
+            if (toBeSent != null) {
                 guiClientSide.getClientSide().sendMessage(clientSignObject(toBeSent, "@CHAT", guiClientSide.getNickname()).toJSONString());
-
+                chatMessage.setText("");
+                receiver.setText("");
+            }
         }else{//RMI
              guiClientSide.RMIInvoker("@CHAT", action);
+             chatMessage.setText("");
+             receiver.setText("");
         }
     }
 
     @FXML
     public void setChatMessage(String message){
-        receivedMessage.setText(message);
+        Service New_Service = new Service() {
+            @Override
+            protected Task createTask() {
+                return new Task() {
+                    @Override
+                    protected Object call() throws Exception {
+                        Platform.runLater(() -> {
+                            receivedMessage.setText(message);
+                        });
+                        return null;
+                    }
+                };
+            }
+        };
+        New_Service.start();
     }
 }

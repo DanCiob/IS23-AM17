@@ -215,23 +215,9 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public void chatVisualizer(JSONObject jsonMessage) {
-        Service New_Service = new Service() {
-            @Override
-            protected Task createTask() {
-                return new Task() {
-                    @Override
-                    protected Object call() throws Exception {
-                        Platform.runLater(() -> {
-                            ChatParser chatParser = new ChatParser();
-                            chatParser.chatParser(jsonMessage.toJSONString());
-                            gameController.setChatMessage(chatParser.getRequester() + ": " + chatParser.getMessage());
-                        });
-                        return null;
-                    }
-                };
-            }
-        };
-        New_Service.start();
+        ChatParser chatParser = new ChatParser();
+        chatParser.chatParser(jsonMessage.toJSONString());
+        gameController.setChatMessage(chatParser.getRequester() + ": " + chatParser.getMessage());
     }
 
     @Override
@@ -246,7 +232,9 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     public void eventManager(String event) {
         switch (event) {
             //Client-side errors
-            case ("chatError") -> System.out.println("Error in chat message syntax, try again!");
+            case ("chatError") -> {
+                System.out.println("Error in chat message syntax, try again!");
+            }
             case ("gameMoveError") -> {
                 System.out.println("Error in game move syntax, try again!");
                 if(gameController != null){
@@ -341,7 +329,25 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
             case (INVALID_NUMBER_OF_PLAYERS) -> System.out.println(INVALID_NUMBER_OF_PLAYERS);
             case (INVALID_CHOICE_OF_TILES) -> System.out.println(INVALID_CHOICE_OF_TILES);
             case (INVALID_COLUMN) -> System.out.println(INVALID_COLUMN);
-            case (INVALID_RECEIVER) -> System.out.println(INVALID_RECEIVER);
+            case (INVALID_RECEIVER) -> {
+                System.out.println(INVALID_RECEIVER);
+                Service New_Service = new Service() {
+                    @Override
+                    protected Task createTask() {
+                        return new Task() {
+                            @Override
+                            protected Object call() throws Exception {
+                                Platform.runLater(() -> {
+                                    gameController.setChatMessage("Invalid receiver");
+
+                                });
+                                return null;
+                            }
+                        };
+                    }
+                };
+                New_Service.start();
+            }
             case (ALREADY_LOGGED_IN) -> System.out.println(ALREADY_LOGGED_IN);
             case (YOU_ARE_RECEIVER) -> System.out.println(YOU_ARE_RECEIVER);
             case (ERROR_IN_GAMEMOVE) ->{
@@ -436,6 +442,8 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                     };
                 }
             };
+            New_Service.start();
+
         }
     }
 
@@ -639,6 +647,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
             case ("@CHAT") -> {
                 if (!ChatWriter.chatMessageRegex(action)) {
                     System.out.println("Error in Chat message syntax, try again!");
+                    gameController.chatMessage.setText("Error in chat message, try again!");
                     return false;
                 }
 
@@ -650,6 +659,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                         RemoteMethods.getStub().sendMessageToAll(obj.toJSONString(), Nickname);
                     } catch (RemoteException e) {
                         System.out.println("Please, reinsert your message!");
+                        gameController.chatMessage.setText("Error in chat message, try again!");
                     }
                 } else {
                     try {
