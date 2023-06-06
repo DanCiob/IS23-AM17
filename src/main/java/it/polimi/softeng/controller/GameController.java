@@ -300,8 +300,6 @@ public class GameController {
         //Send to all TCP user
         controller.getServerSide().sendMessageToAll(serverSignObject(playerAndScoreWriter(getCurrentGame().getPlayers()), "@VPLA", "System").toJSONString());
 
-
-
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Ended setup
         //Notify first player
