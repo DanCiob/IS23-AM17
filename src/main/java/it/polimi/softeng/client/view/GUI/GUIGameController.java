@@ -1,5 +1,6 @@
 package it.polimi.softeng.client.view.GUI;
 
+import it.polimi.softeng.JSONWriter.ChatWriter;
 import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.*;
 import javafx.application.Platform;
@@ -13,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -21,6 +23,7 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -640,15 +643,17 @@ public class GUIGameController implements Initializable{
     }
 
     public void switchToEndGame(){
-        Parent root = null;
         try {
-            root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/endGame.fxml"));
+            System.out.println("switch to end game");
+            Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/endGame.fxml"));
+            System.out.println("after load");
+            Scene scene = new Scene(root);
+            guiClientSide.getStage().setScene(scene);
+            guiClientSide.getStage().show();
         } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
-        Scene scene = new Scene(root);
-        guiClientSide.getStage().setScene(scene);
-        guiClientSide.getStage().show();
     }
 
 
@@ -658,5 +663,38 @@ public class GUIGameController implements Initializable{
 
     public void setMoveConfirmed(boolean moveConfirmed) {
         this.moveConfirmed = moveConfirmed;
+    }
+
+
+    @FXML
+    TextField chatMessage;
+    @FXML
+    Button sendMessage;
+
+    @FXML
+    Label receivedMessage;
+
+    @FXML
+    public void onSendMessage() throws IllegalInsertException {
+        String message = chatMessage.getText();
+       // JSONObject jsonMessage = ChatWriter.writeChatMessage(message);
+        //TODO: add receiver
+        String action = "" + "'all' " + message;
+        //if (!isOkCommand(command, 2)) { errore}
+
+
+        if(guiClientSide.getConnectionMode() == 1) { //socket
+            JSONObject toBeSent = guiClientSide.actionToJSON("@CHAT", action);
+            if (toBeSent != null)
+                guiClientSide.getClientSide().sendMessage(clientSignObject(toBeSent, "@CHAT", guiClientSide.getNickname()).toJSONString());
+
+        }else{//RMI
+             guiClientSide.RMIInvoker("@CHAT", action);
+        }
+    }
+
+    @FXML
+    public void setChatMessage(String message){
+        receivedMessage.setText(message);
     }
 }

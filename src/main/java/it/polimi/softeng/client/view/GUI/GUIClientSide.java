@@ -1,5 +1,6 @@
 package it.polimi.softeng.client.view.GUI;
 
+import it.polimi.softeng.JSONParser.ChatParser;
 import it.polimi.softeng.JSONParser.GameMoveParser;
 import it.polimi.softeng.JSONWriter.ChatWriter;
 import it.polimi.softeng.JSONWriter.GameMoveWriter;
@@ -214,7 +215,23 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public void chatVisualizer(JSONObject jsonMessage) {
-
+        Service New_Service = new Service() {
+            @Override
+            protected Task createTask() {
+                return new Task() {
+                    @Override
+                    protected Object call() throws Exception {
+                        Platform.runLater(() -> {
+                            ChatParser chatParser = new ChatParser();
+                            chatParser.chatParser(jsonMessage.toJSONString());
+                            gameController.setChatMessage(chatParser.getRequester() + ": " + chatParser.getMessage());
+                        });
+                        return null;
+                    }
+                };
+            }
+        };
+        New_Service.start();
     }
 
     @Override
@@ -397,7 +414,13 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public void endGame(boolean winner){
+        System.out.println("In endGame");
         if(gameController!=null){
+            System.out.println("gameController is not null");
+            if(isYourTurn && gameController!=null){
+                System.out.println("isYourTurn");
+                gameController.resetAfterMove();
+            }
             Service New_Service = new Service() {
                 @Override
                 protected Task createTask() {
@@ -405,6 +428,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                         @Override
                         protected Object call() throws Exception {
                             Platform.runLater(() -> {
+                                System.out.println("runLater");
                                 gameController.switchToEndGame();
                             });
                             return null;

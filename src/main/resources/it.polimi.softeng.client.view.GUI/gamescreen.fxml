@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="601.0" prefWidth="912.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="it.polimi.softeng.client.view.GUI.GUIGameController">
    <children>
       <VBox prefHeight="440.0" prefWidth="110.0">
@@ -347,7 +348,16 @@
             </AnchorPane>
             <AnchorPane>
                <children>
-                  <TextArea layoutY="3.0" prefHeight="91.0" prefWidth="342.0" text="CHAT" />
+                  <TextArea layoutY="3.0" prefHeight="91.0" prefWidth="342.0"/>
+                  <VBox layoutY="5.0" prefHeight="89.0" prefWidth="340.0">
+                     <Label text="Chat" />
+                     <Label fx:id="receivedMessage" />
+                     <HBox>
+                        <TextField  fx:id="chatMessage"/>
+                        <Button fx:id="sendMessage" text="Send" onAction="#onSendMessage" />
+                     </HBox>
+                  </VBox>
+
                </children>
             </AnchorPane>
          </children>
