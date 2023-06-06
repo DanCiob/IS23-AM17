@@ -84,7 +84,7 @@ public class ServerMessageHandler {
                 boolean confirm = controller.SocketLoginRequest(lp.getNickname(), lp.getGameMode(), lp.getStartGame(), lp.getNumOfPlayer());
                 //TODO Multiple games -> startGame
 
-                if (!confirm)
+                //if (!confirm)
                     //controller.sendErrorMessage(serverSignObject(writeError(ALREADY_LOGGED_IN), "@ERRO", requester).toJSONString(),requester);
 
                 //Descriptive output
