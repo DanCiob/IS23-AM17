@@ -237,7 +237,7 @@ public class Game{
     public int turn(ArrayList<Cell> positionsToBeRemoved, int column){
         //find the first available row of the @param column
         int firstFree = 0;
-        Badge badge;
+       // Badge badge; for gui
         while(firstFree<shelfieRows && currentPlayer.getShelfie().getGrid()[firstFree][column] != null){
             firstFree++;
         }
@@ -284,11 +284,13 @@ public class Game{
         //verify common cards
         for(CommonCards card : commonCards){
             if(card.verifyShape(currentPlayer.getShelfie())){
-                badge = card.getBadge();
-                if(badge != null){
+               // badge = card.getBadge(); for gui
+               /* if(badge != null){ for gui
                     //current player has completed a common card, so he receives the badge. The badge is removed from the arrayList
                     currentPlayer.updateScore(badge.getScore());
-                }
+                }*/
+                //current player has completed a common card, so he receives the badge. The badge is removed from the arrayList
+                currentPlayer.updateScore(card.getBadge().getScore());
             }
         }
 
