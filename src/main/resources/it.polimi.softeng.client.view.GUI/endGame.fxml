@@ -17,7 +17,6 @@
     </padding>
 
     <HBox spacing="20" alignment="CENTER">
-        <Label text="Il vincitore è :" />
         <Label fx:id="winner" />
     </HBox>
 

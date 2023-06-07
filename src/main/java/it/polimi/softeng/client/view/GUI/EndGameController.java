@@ -1,14 +1,21 @@
 package it.polimi.softeng.client.view.GUI;
 
+import it.polimi.softeng.model.Player;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import org.json.simple.JSONObject;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
+
 public class EndGameController implements Initializable {
+
+    GUIClientSide guiClientSide;
 
     @FXML
     Label winner;
@@ -41,13 +48,40 @@ public class EndGameController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        guiClientSide = GUIRegistry.guiList.get(0);
+        guiClientSide.setEndGameController(this);
+        GUIRegistry.numberOfGUI++;
         //TODO: set nicknames and points
-        player1.setText("Player 1"); pointsPlayer1.setText("0");
-        player2.setText("Player 2"); pointsPlayer2.setText("1");
-        player3.setText("Player 3"); pointsPlayer3.setText("2");
-        player4.setText("Player 4"); pointsPlayer4.setText("3");
-        winner.setText("10");
+
+
+        switch(guiClientSide.getNumOfPlayer()){
+            case 2 ->{}
+            case 3 -> {
+                player3.setText(" ");
+                pointsPlayer3.setText(" ");
+            }
+            case 4 ->{
+                player4.setText(" ");
+                pointsPlayer4.setText(" ");
+            }
+        }
     }
+
+   @FXML
+   public void scoreVisualizer(ArrayList<Player> players){
+       player1.setText(players.get(0).getNickname());
+       pointsPlayer1.setText(Integer.toString(players.get(0).getCurrentScore()));
+       player2.setText(players.get(1).getNickname());
+       pointsPlayer2.setText(Integer.toString(players.get(1).getCurrentScore()));
+       if(players.size()>=3){
+           player3.setText(players.get(2).getNickname());
+           pointsPlayer3.setText(Integer.toString(players.get(2).getCurrentScore()));
+       }
+       if(players.size()==4){
+           player4.setText(players.get(3).getNickname());
+           pointsPlayer4.setText(Integer.toString(players.get(3).getCurrentScore()));
+       }
+   }
 
 
 }

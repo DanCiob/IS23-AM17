@@ -101,6 +101,8 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     GUIGameController gameController;
     GUILoginController loginController;
 
+    EndGameController endGameController;
+
     Stage stage;
 
     public GUIClientSide() {
@@ -224,6 +226,9 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     public void scoreVisualizer(ArrayList<Player> players) {
         for (Player p: players) {
             nicknameShelfie.put(p.getNickname(), new Shelfie());
+        }
+        if(endGameController!=null){
+            endGameController.scoreVisualizer(players);
         }
         //todo: final scene
     }
@@ -436,6 +441,11 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                             Platform.runLater(() -> {
                                 System.out.println("runLater");
                                 gameController.switchToEndGame();
+                                if(winner){
+                                    endGameController.setWinner("YOU WON");
+                                }else{
+                                    endGameController.setWinner("YOU LOST");
+                                }
                             });
                             return null;
                         }
@@ -514,6 +524,10 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     public void setGameController(GUIGameController gameController) {
         this.gameController = gameController;
+    }
+
+    public void setEndGameController(EndGameController endGameController) {
+        this.endGameController = endGameController;
     }
 
     public void setLoginController(GUILoginController loginController) {
