@@ -8,6 +8,7 @@ import javafx.scene.control.TableView;
 import org.json.simple.JSONObject;
 
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -53,16 +54,20 @@ public class EndGameController implements Initializable {
         GUIRegistry.numberOfGUI++;
         //TODO: set nicknames and points
 
-
-        switch(guiClientSide.getNumOfPlayer()){
-            case 2 ->{}
-            case 3 -> {
-                player3.setText(" ");
-                pointsPlayer3.setText(" ");
+        switch (guiClientSide.getConnectionMode()) {
+            //Socket
+            case 1 -> {
+                JSONObject dummy = new JSONObject();
+                guiClientSide.getClientSide().sendMessage(clientSignObject(dummy, "@VPLA", guiClientSide.getNickname()).toJSONString());
             }
-            case 4 ->{
-                player4.setText(" ");
-                pointsPlayer4.setText(" ");
+            //RMI
+            case 2 -> {
+                guiClientSide.eventManager("playerEvent");
+                try {
+                    scoreVisualizer(guiClientSide.getRemoteMethods().getStub().getPlayersAndScore());
+                } catch (RemoteException e) {
+                    System.out.println("");
+                }
             }
         }
     }

@@ -230,7 +230,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         if(endGameController!=null){
             endGameController.scoreVisualizer(players);
         }
-        //todo: final scene
+        //todo: non arrivano punteggi
     }
 
     @Override

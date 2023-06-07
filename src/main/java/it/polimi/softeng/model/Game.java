@@ -29,6 +29,8 @@ public class Game{
     private Player winner;
     private Player firstPlayer;     //should it be final?
 
+    private Boolean fullShelfie = false;
+
     //maybe finished
     //TODO dovremmo controllare che non parta con meno del numero di giocatori scelto
     public void beginGame(ArrayList<String> nameList){
@@ -281,33 +283,37 @@ public class Game{
             gameBoard.positionTiles(tileBag);
         }
 
+        Badge badge;
         //verify common cards
         for(CommonCards card : commonCards){
             if(card.verifyShape(currentPlayer.getShelfie())){
-               // badge = card.getBadge(); for gui
-               /* if(badge != null){ for gui
+                badge = card.getBadge();
+                if(badge != null){
                     //current player has completed a common card, so he receives the badge. The badge is removed from the arrayList
                     currentPlayer.updateScore(badge.getScore());
-                }*/
-                //current player has completed a common card, so he receives the badge. The badge is removed from the arrayList
-                currentPlayer.updateScore(card.getBadge().getScore());
+                }
             }
         }
 
-
-        if(checkEndGame()){
-            getCurrentPlayer().updateScore(getEndGameBadge().getScore());
-            if(!(getNextPlayer().isFirst())){//current player is the one that has a full shelfie
-                setCurrentPlayer(getNextPlayer());
-            }else{
+        if(!fullShelfie){
+            if(checkEndGame())
+                fullShelfie = true;
+        }
+        if(fullShelfie){
+            getCurrentPlayer().updateScore(getEndGameBadge().getScore()); //TODO:Check if it doesn't give a badge at every player after the one that has a full shelfie
+            // if(!(getNextPlayer().isFirst())){//current player is the one that has a full shelfie
+               // setCurrentPlayer(getNextPlayer());
+            //}else{
+            System.out.println("Chechendgame");
+            if((getNextPlayer().isFirst())){
                 calculateScore(); //it checks personal cards score: TODO: testing
                 selectWinner();
+                System.out.println("Turn - return 1");
                 return 1;
             }
         }
-        else{
-            setNextPlayer();
-        }
+
+        setNextPlayer();
         return 0;
     }
 
