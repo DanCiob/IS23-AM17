@@ -10,6 +10,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.TreeMap;
 
 /**
  * class used when the client wants to establish an RMI connection
@@ -40,6 +41,8 @@ public class ClientSideRMI {
 
         //connection to server
         connect();
+        Thread t = new Thread(() -> pingServer());
+        t.start();
     }
 
     /**
@@ -55,6 +58,8 @@ public class ClientSideRMI {
 
         //connection to server
         connect(serverIP);
+        Thread t = new Thread(() -> pingServer());
+        t.start();
     }
 
     /**
@@ -132,12 +137,20 @@ public class ClientSideRMI {
     }
 
     private void pingServer(){
-        try{
-            stub.ping();
-        }catch (RemoteException e) {
-            System.out.println("cannot reach server, relaunch my shelfie and retry with same nickname ");
-            System.exit(0);
+        while(true){
+            try{
+                stub.ping();
+            }catch (RemoteException e) {
+                System.out.println("cannot reach server, relaunch my shelfie and retry with same nickname ");
+                System.exit(0);
+            }
+            try {
+                wait(5000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
+
     }
     /**
      * getter method
