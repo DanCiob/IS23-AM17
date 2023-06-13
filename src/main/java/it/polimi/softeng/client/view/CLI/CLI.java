@@ -214,7 +214,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                             this.RemoteMethods = new ClientSideRMI(ServerAddress, this);
                         } else this.RemoteMethods = new ClientSideRMI(this);
 
-                    } while (!isOkNickname() || !okNickname || Nickname.equalsIgnoreCase("system"));
+                    } while (!isOkNickname()  || Nickname.equalsIgnoreCase("system"));
                     String GameModeStringifed = GameMode == 1 ? "e" : "n";
                     okNickname = RMIInvoker("@LOGN", GameModeStringifed);
                 }

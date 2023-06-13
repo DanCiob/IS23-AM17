@@ -8,6 +8,8 @@ import it.polimi.softeng.connectionProtocol.server.ServerSideMethods;
 import it.polimi.softeng.controller.Controller;
 
 import java.rmi.AlreadyBoundException;
+import java.rmi.ConnectException;
+import java.rmi.ConnectIOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -108,8 +110,8 @@ public class ServerSideRMI extends ServerSideMethods {
                     if(nameToStub.containsKey(player)) {
                         nameToStub.get(player).ping();
                     }
-                } catch (RemoteException e) {
-                    e.printStackTrace();
+                } catch (RemoteException e ) {
+                    //e.printStackTrace();
                     playerToBeDeleted = player;
                     flag = true;
                 }

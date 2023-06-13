@@ -105,8 +105,8 @@ public class ClientHandler implements Runnable{
         Thread t = new Thread(()-> readMessage(in));
         t.start();
 
-        t = new Thread(() -> pingUsers());
-        t.start();
+        /*t = new Thread(() -> pingUsers());
+        t.start();*/
     }
 
     /**

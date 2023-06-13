@@ -131,6 +131,14 @@ public class ClientSideRMI {
         }
     }
 
+    private void pingServer(){
+        try{
+            stub.ping();
+        }catch (RemoteException e) {
+            System.out.println("cannot reach server, relaunch my shelfie and retry with same nickname ");
+            System.exit(0);
+        }
+    }
     /**
      * getter method
      * @return server stub

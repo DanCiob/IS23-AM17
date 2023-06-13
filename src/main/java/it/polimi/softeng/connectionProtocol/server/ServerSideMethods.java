@@ -357,6 +357,11 @@ public class ServerSideMethods implements ServerRemoteInterface {
         }
     }
 
+    @Override
+    public Boolean ping() throws RemoteException {
+        return true;
+    }
+
     /**
      * private method used by the chat methods that adds the required infos to the json messages for tcp users
      * @param message

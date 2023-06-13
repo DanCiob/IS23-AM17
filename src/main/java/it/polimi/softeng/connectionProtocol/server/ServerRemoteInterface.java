@@ -80,4 +80,11 @@ public interface ServerRemoteInterface extends Remote {
      */
     void sendMessage(String message, String nickName, String sender) throws RemoteException;
 
+    /**
+     * responds with a boolean value to indicate the client that the connection is still good
+     * @return boolean value
+     * @throws RemoteException
+     */
+    Boolean ping() throws RemoteException;
+
 }
