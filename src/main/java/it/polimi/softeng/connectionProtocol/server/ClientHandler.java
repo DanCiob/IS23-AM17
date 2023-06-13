@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.Objects;
 
 import static it.polimi.softeng.Constants.ALREADY_LOGGED_IN;
@@ -59,6 +60,10 @@ public class ClientHandler implements Runnable{
      */
     private LoginManagerV2 loginManager;
     /**
+     * flag used to say that the clientHandler got the pong from client
+     */
+    Boolean pong = false;
+    /**
      * player's nickname
      */
     String nickname;
@@ -100,7 +105,8 @@ public class ClientHandler implements Runnable{
         Thread t = new Thread(()-> readMessage(in));
         t.start();
 
-
+        t = new Thread(() -> pingUsers());
+        t.start();
     }
 
     /**
@@ -111,10 +117,15 @@ public class ClientHandler implements Runnable{
         String s = "";
         try {
             while ((s = in.readLine()) != null) {
-                System.out.println(s);
-                serverMessageHandler.parsingMessage(s);
-                if(nickNameNotConfirmed){
-                    scanForNickName(s);
+                //System.out.println(s);
+                if(s.equals("pong")){
+                    pong = true;
+                }
+                else{
+                    serverMessageHandler.parsingMessage(s);
+                    if(nickNameNotConfirmed){
+                        scanForNickName(s);
+                    }
                 }
             }
         } catch (IOException | ParseException e) {
@@ -180,5 +191,33 @@ public class ClientHandler implements Runnable{
      */
     public int getPlayerNumber() {
         return playerNumber;
+    }
+
+    public void pingUsers(){
+
+        while(true){
+            ///send ping message and wait 500ms
+            out.println("ping");
+            System.out.println("sent a ping to :" + nickname);
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            if(!pong){
+                System.out.println("user " + nickname + " disconnected"); //todo consider case in which he didnt send log in yet
+                //loginManager.addDisconnectedPlayer(playerToBeDeleted); //todo here goes clienthandler reference of nickname
+                //removeRMIClient(playerToBeDeleted); //todo this becomes remove socket user
+                //todo command to kill thread
+            }
+            else pong = false;
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

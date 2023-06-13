@@ -91,15 +91,18 @@ public class ClientSide {
     }
 
     /**
-     * method used to read a message from the input
+     * method used to read a message from the input,manages ping
      * @param in client's input from server
      */
     public void readMessage(BufferedReader in){
         String s = "";
         try {
             while ((s = in.readLine()) != null) {
-                System.out.println(s);
-                messageHandler.parsingMessage(s);
+                //System.out.println(s);
+                if(s.equals("ping")){
+                    out.println("pong");
+                }
+                else messageHandler.parsingMessage(s);
             }
         } catch (IOException e) {
             e.printStackTrace();
