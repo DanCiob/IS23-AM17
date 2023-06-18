@@ -100,12 +100,14 @@ public class ClientSide {
             while ((s = in.readLine()) != null) {
                 //System.out.println(s);
                 if(s.equals("ping")){
+                    System.out.println("answering to server ping");
                     out.println("pong");
                 }
                 else messageHandler.parsingMessage(s);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("cannot reach server, relaunch my shelfie and retry with same nickname");
+            System.exit(0);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }

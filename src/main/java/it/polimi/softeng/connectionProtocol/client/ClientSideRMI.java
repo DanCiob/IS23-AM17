@@ -141,11 +141,11 @@ public class ClientSideRMI {
             try{
                 stub.ping();
             }catch (RemoteException e) {
-                System.out.println("cannot reach server, relaunch my shelfie and retry with same nickname ");
+                System.out.println("cannot reach server, relaunch my shelfie and retry with same nickname");
                 System.exit(0);
             }
             try {
-                wait(5000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
