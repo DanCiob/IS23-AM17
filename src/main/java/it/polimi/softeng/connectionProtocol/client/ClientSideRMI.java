@@ -121,16 +121,18 @@ public class ClientSideRMI {
      */
     private void getServerStub(String serverIP){
         Registry registry = null;
+        System.setProperty("java.rmi.server.hostname",serverIP);
         try {
             //needs changing
             registry = LocateRegistry.getRegistry(serverIP,1099);
-            System.out.println("connected to server");
+
         } catch (RemoteException e) {
             e.printStackTrace();
         }
 
         try {
             stub = (ServerRemoteInterface) registry.lookup("ServerRemoteInterface");
+            System.out.println("connected to server");
         } catch (RemoteException | NotBoundException e) {
             throw new RuntimeException(e);
         }
@@ -145,7 +147,7 @@ public class ClientSideRMI {
                 System.exit(0);
             }
             try {
-                Thread.sleep(5000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
