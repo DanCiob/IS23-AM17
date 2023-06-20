@@ -90,24 +90,6 @@ public class BoardParser {
             column = (long) jso.get("column");
             gameBoard.setBoard(row.intValue(), column.intValue(), tile);
 
-            //JSONArray rowOfTiles = (JSONArray) jso.get(j); //rowOfTiles = array of tiles
-            //System.out.println(rowOfTiles);
-            //JSONObject rowOfTiles = (JSONObject) rows.get(j);
-            //Iterator<JSONObject> iterator2 = rowOfTiles.iterator();
-            //k = 0;
-
-            //while (iterator2.hasNext()) {
-                //JSONObject posColorId = (JSONObject) rowOfTiles.get(k);
-                /*id = (long) posColorId.get("id");
-                Tile tile = new Tile(id.intValue(), PersonalCardsParser.StringToColor((String) posColorId.get("color")));
-                row = (long) posColorId.get("rowOfTiles");
-                gameBoard.setBoard(row.intValue(), (int)posColorId.get("column"), tile);
-
-
-                k++;
-                iterator2.next();*/
-           // }
-
             j++;
             iterator1.next();
         }

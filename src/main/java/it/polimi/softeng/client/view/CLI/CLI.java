@@ -125,7 +125,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         do {
             ConnectionMode = Integer.parseInt(input.nextLine());
 
-            //TODO local rmi mode
             switch (ConnectionMode) {
                 case 1 -> { //socket
                     System.out.println("Connection with Socket...");
@@ -168,14 +167,11 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         this.clientSide = new ClientSide(messageHandler);
                     }
 
-                    //TODO nicknameUniqueness
-                    //do {
                     do {
                         System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed, nickname: System/system isn't allowed)");
                         System.out.println(">");
                         Nickname = input.nextLine();
                     } while (!isOkNickname() || !confirm || Nickname.equalsIgnoreCase("system"));
-                    //TODO Now connect to 127.0.0.1
                     String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(Nickname, GameMode, StartGame, NumOfPlayer), "@LOGN", Nickname).toJSONString();
                     System.out.println(login);
                     clientSide.sendMessage(login);
@@ -1070,23 +1066,23 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         System.out.println("Game is ended!");
 
         if (winner) {
-            System.out.println(ANSI_GREEN + "██    ██  ██████  ██    ██     ██     ██  ██████  ███    ██     ██      ██ \n" +
-                    " ██  ██  ██    ██ ██    ██     ██     ██ ██    ██ ████   ██      ██     ██ \n" +
-                    "  ████   ██    ██ ██    ██     ██  █  ██ ██    ██ ██ ██  ██      ██     ██ \n" +
-                    "   ██    ██    ██ ██    ██     ██ ███ ██ ██    ██ ██  ██ ██      ██        \n" +
-                    "   ██     ██████   ██████       ███ ███   ██████  ██   ████     ██      ██ \n" +
-                    "                                                                           \n" +
-                    "                                                                           \n" +
-                    "\n" + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "██    ██  ██████  ██    ██     ██     ██  ██████  ███    ██ ██ \n" +
+                    " ██  ██  ██    ██ ██    ██     ██     ██ ██    ██ ████   ██ ██ \n" +
+                    "  ████   ██    ██ ██    ██     ██  █  ██ ██    ██ ██ ██  ██ ██ \n" +
+                    "   ██    ██    ██ ██    ██     ██ ███ ██ ██    ██ ██  ██ ██    \n" +
+                    "   ██     ██████   ██████       ███ ███   ██████  ██   ████ ██ \n" +
+                    "                                                               \n" +
+                    "                                                               \n" +
+                    "\n" +
+                    "                                                                                 " + ANSI_RESET);
         } else {
-            System.out.println(ANSI_RED + "██    ██  ██████  ██    ██     ██       ██████  ███████ ████████      ██     ██ \n" +
-                    " ██  ██  ██    ██ ██    ██     ██      ██    ██ ██         ██        ██      ██ \n" +
-                    "  ████   ██    ██ ██    ██     ██      ██    ██ ███████    ██        ██      ██ \n" +
-                    "   ██    ██    ██ ██    ██     ██      ██    ██      ██    ██        ██         \n" +
-                    "   ██     ██████   ██████      ███████  ██████  ███████    ██         ██     ██ \n" +
-                    "                                                                                \n" +
-                    "                                                                                \n" +
-                    "\n" + ANSI_RESET);
+            System.out.println(ANSI_RED + "██    ██  ██████  ██    ██     ██       ██████  ███████ ████████ ██ \n" +
+                    " ██  ██  ██    ██ ██    ██     ██      ██    ██ ██         ██    ██ \n" +
+                    "  ████   ██    ██ ██    ██     ██      ██    ██ ███████    ██    ██ \n" +
+                    "   ██    ██    ██ ██    ██     ██      ██    ██      ██    ██       \n" +
+                    "   ██     ██████   ██████      ███████  ██████  ███████    ██    ██ \n" +
+                    "                                                                    \n" +
+                    "                                                                    " + ANSI_RESET);
         }
 
     }
@@ -1175,4 +1171,26 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         StartGame = startGame;
     }
 
+    ////////////////////////////
+    //GETTERS USED FOR TESTING//
+    ////////////////////////////
+    public GameBoard getUserGameBoard() {
+        return UserGameBoard;
+    }
+
+    public Shelfie getUserShelfie() {
+        return UserShelfie;
+    }
+
+    public PersonalCards getPersonalCard() {
+        return PersonalCard;
+    }
+
+    public String getCommonCard1() {
+        return CommonCard1;
+    }
+
+    public String getCommonCard2() {
+        return CommonCard2;
+    }
 }
