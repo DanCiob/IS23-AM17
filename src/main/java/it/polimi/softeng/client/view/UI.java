@@ -79,5 +79,6 @@ public interface UI {
     void endGame(boolean winner);
 
     void beginGame(boolean b);
+
 }
 

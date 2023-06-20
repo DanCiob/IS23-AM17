@@ -150,6 +150,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
                 }
                 case ("gameStarted") -> {
                     if (loginManager.getDisconnectedPlayerList().contains(name)) {
+
                         ClientRemoteInterface stub = null;
                         try {
                             stub = (ClientRemoteInterface) LocateRegistry.getRegistry(host,port).lookup("ClientRemoteInterface");

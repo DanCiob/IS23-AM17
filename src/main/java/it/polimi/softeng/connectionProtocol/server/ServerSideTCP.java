@@ -152,7 +152,6 @@ public class ServerSideTCP {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //todo dopo una riconessione non vengono esposti i comandi di myshelfie
         }
     }
 
@@ -163,14 +162,16 @@ public class ServerSideTCP {
     public void addDisconnectedPlayer(String player) {
         loginManager.addDisconnectedPlayer(player);
         //deleting the client with such nickname from the list of clientHandlers
-        int j = 43;
+        boolean flag = false;
+        int j = 0;
         for(int i = 0; i < clientList.size(); i++){
             if(clientList.get(i).equals(nickNameToClientHandler.get(player))){
                 j = i;
                 System.out.println("found clienthandler to be removed from the list of active nickNames");
+                flag = true;
             }
         }
-        if(j != 43){
+        if(flag){
             clientList.remove(j);
         }
 

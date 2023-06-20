@@ -45,6 +45,7 @@ public class ServerSideRMI extends ServerSideMethods {
 
         super(loginManager,null,null, controller);
         this.loginManager = loginManager;
+        System.setProperty("sun.rmi.transport.tcp.responseTimeout", String.valueOf(1000));
         obj = new ServerSideMethods(loginManager,this,serverSide,controller);
         ServerRemoteInterface stub  = null;
         try {
@@ -69,6 +70,7 @@ public class ServerSideRMI extends ServerSideMethods {
         } catch (RemoteException | AlreadyBoundException e) {
             throw new RuntimeException(e);
         }
+
         System.out.println("server up !");
 
         Thread t = new Thread(() -> pingRMIUsers());
@@ -107,7 +109,7 @@ public class ServerSideRMI extends ServerSideMethods {
         while(true){
             for(String player : loginManager.getNickNameList()){
                 try {
-                    if(nameToStub.containsKey(player)) {
+                    if(nameToStub.containsKey(player)) { //todo this should be a list of players to be removed
                         nameToStub.get(player).ping();
                     }
                 } catch (RemoteException e ) {
@@ -124,7 +126,7 @@ public class ServerSideRMI extends ServerSideMethods {
             }
 
             try {
-                Thread.sleep(5000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

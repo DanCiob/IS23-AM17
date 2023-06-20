@@ -91,20 +91,34 @@ public class LoginManagerV2 {
             disconnectedPlayerList.add(player);
             System.out.println("added " + player + " to disconnected player list");
         }
-        //TODO refactor of this code
+
         //deleting such nickname from active nicknames
-        int j = 43;
+        boolean flag = false;
+        int j = 0;
         for(int i = 0; i < nickNameList.size(); i++){
             if(nickNameList.get(i).equals(player)){
                 j = i;
                 System.out.println("found string to be removed from the list of active nickNames");
+                flag = true;
             }
         }
-        if(j != 43){
+        if(flag){
             nickNameList.remove(j);
         }
 
+        //removing from name to stub map if the player used rmi
         if(nameToStub.containsKey(player)) nameToStub.remove(player);
+
+        if(disconnectedPlayerList.size() == 3){
+            //here you start countdown and block the game
+
+        }
+
+        //notify turn
+        if(serverMessageHandler.getController().getGameController().getCurrentGame().getCurrentPlayer().getNickname().equals(player)){
+            serverMessageHandler.getController().getGameController().selectNextPlayer();
+            serverMessageHandler.getController().getGameController().notifyTurn();
+        }
     }
 
     /**
@@ -114,10 +128,27 @@ public class LoginManagerV2 {
     public void addNickName(String nickName) {
         nickNameList.add(nickName);
         System.out.println(nickName + " entered the game");
+
+        //command to start game when the number of player has reached the desired amount
         if(nickNameList.size() == playerNumber && !status.equals(gameStarted)) {
             startGame();
         }
 
+        //removing the player from disconnected player list if he was previously there
+        if(disconnectedPlayerList.contains(nickName)){
+            boolean flag = false;
+            int j = 0;
+            for(int i = 0; i < disconnectedPlayerList.size(); i++){
+                if(disconnectedPlayerList.get(i).equals(nickName)){
+                    j = i;
+                    System.out.println("found nickName to be removed from the list of disconnected players");
+                    flag = true;
+                }
+            }
+            if(flag){
+                disconnectedPlayerList.remove(j);
+            }
+        }
     }
 
     /**

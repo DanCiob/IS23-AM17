@@ -309,6 +309,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 //Wait for errors
                 TimeUnit.SECONDS.sleep(1);
                 game(firstRun);
+
             } catch (InterruptedException | RemoteException e) {
                 throw new RuntimeException(e);
             }

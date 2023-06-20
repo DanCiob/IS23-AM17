@@ -152,15 +152,10 @@ public class GameController {
             //NEXT PLAYER NOTIFICATION//
             ////////////////////////////
 
-            //it doesnt really work
-            //here goes the code to skip players in case of disconnection
-            //TODO control because this may break if disconnectedPlayerList is updated in the meantime
-            boolean connectedPlayerNotFound = true;
-            while(connectedPlayerNotFound){
-                if(controller.getServerSide().getLoginManager().getDisconnectedPlayerList().contains(game.getCurrentPlayer().getNickname())){
-                    game.setNextPlayer();
-                }else connectedPlayerNotFound = false;
-            }
+            //here goes the code to skip players in case of disconnection (in this point is managed the disconnection of a player that isn't the current one)
+            selectNextPlayer();
+
+            /*
             //Is an RMI user
             if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(game.getCurrentPlayer().getNickname())) {
                 ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(game.getCurrentPlayer().getNickname());
@@ -172,7 +167,8 @@ public class GameController {
             }
             //Is TCP user
             else
-                controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ConfirmWriter.writeConfirm(), "@CONF", game.getCurrentPlayer().getNickname()).toJSONString(), game.getCurrentPlayer().getNickname());
+                controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ConfirmWriter.writeConfirm(), "@CONF", game.getCurrentPlayer().getNickname()).toJSONString(), game.getCurrentPlayer().getNickname());*/
+            notifyTurn();
 
             return true;
         }
@@ -314,7 +310,29 @@ public class GameController {
             }
         }
     }
+    public void selectNextPlayer(){
+        boolean connectedPlayerNotFound = true;
+        while(connectedPlayerNotFound){
+            if(controller.getServerSide().getLoginManager().getDisconnectedPlayerList().contains(game.getCurrentPlayer().getNickname())){
+                game.setNextPlayer();
+            }else connectedPlayerNotFound = false;
+        }
+    }
 
+    public void notifyTurn(){
+        if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(game.getCurrentPlayer().getNickname())) {
+            ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(game.getCurrentPlayer().getNickname());
+            try {
+                temp.notifyTurn();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //Is TCP user
+        else
+            controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ConfirmWriter.writeConfirm(), "@CONF", game.getCurrentPlayer().getNickname()).toJSONString(), game.getCurrentPlayer().getNickname());
+
+    }
     public Game getCurrentGame() {
         return game;
     }

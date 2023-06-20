@@ -34,11 +34,11 @@ public class ClientHandler implements Runnable{
     /**
      * socket of the single client that connected
      */
-    private Socket clientSocket;
+    private final Socket clientSocket;
     /**
      * serverside reference
      */
-    private ServerSide serverSide;
+    private final ServerSide serverSide;
     /**
      * boolean flag for login
      */
@@ -46,11 +46,11 @@ public class ClientHandler implements Runnable{
     /**
      * server message handler to read messages
      */
-    private ServerMessageHandler serverMessageHandler;
+    private final ServerMessageHandler serverMessageHandler;
     /**
      * serverside tcp reference
      */
-    private ServerSideTCP serverSideTCP;
+    private final ServerSideTCP serverSideTCP;
     /**
      * player number attribute used to set the match player number
      */
@@ -58,7 +58,7 @@ public class ClientHandler implements Runnable{
     /**
      * used to manage logins
      */
-    private LoginManagerV2 loginManager;
+    private final LoginManagerV2 loginManager;
     /**
      * flag used to say that the clientHandler got the pong from client
      */
@@ -124,6 +124,7 @@ public class ClientHandler implements Runnable{
                 else{
                     serverMessageHandler.parsingMessage(s);
                     if(nickNameNotConfirmed){
+                        System.out.println("scannin for nick");
                         scanForNickName(s);
                     }
                 }
@@ -157,7 +158,7 @@ public class ClientHandler implements Runnable{
                 e.printStackTrace();
             }
         }
-        if(obj != null && Objects.equals((String) obj.get("request"), "@LOGN")){
+        if(obj != null && Objects.equals(obj.get("request"), "@LOGN")){
 
             playerNumber = (int)(long) obj.get("numOfPlayer");
             loginManager.setPlayerNumber(playerNumber);   //TODO questo può essere fatto direttamente da loginManager
@@ -167,17 +168,17 @@ public class ClientHandler implements Runnable{
                 serverSideTCP.addUser(this,nickname);
                 nickNameNotConfirmed = false;
             } else if (loginManager.getStatus().equals("gameStarted")) {
-                for(String disconnectedPlayer : loginManager.getDisconnectedPlayerList()){
-                    if(nickname.equals(disconnectedPlayer)){
-                        flag = true;
-                        System.out.println(nickname + " reconnected !");
-                        serverSideTCP.addUser(this,nickname);
-                    }
+
+                if (loginManager.getDisconnectedPlayerList().contains(nickname)) {
+                    serverSideTCP.addUser(this,nickname);
+                    nickNameNotConfirmed = false;
+                    System.out.println(nickname + " reconnected !");
                 }
-                if(!flag){
+                else {
                     System.out.println("nickname is not acceptable ");
                     out.println(serverSignObject(writeError(NICKNAME_NOT_UNIQUE), "@ERRO", nickname).toJSONString());
                 }
+
             } else{
                 out.println(serverSignObject(writeError(NICKNAME_NOT_UNIQUE), "@ERRO", nickname).toJSONString());
                 System.out.println("nickName già usato");
