@@ -105,8 +105,8 @@ public class ClientHandler implements Runnable{
         Thread t = new Thread(()-> readMessage(in));
         t.start();
 
-        /*t = new Thread(() -> pingUsers());
-        t.start();*/
+        t = new Thread(() -> pingUsers());
+        t.start();
     }
 
     /**
@@ -215,7 +215,8 @@ public class ClientHandler implements Runnable{
             }
             else pong = false;
             try {
-                Thread.sleep(5000);
+
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

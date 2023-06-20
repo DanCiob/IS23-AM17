@@ -8,6 +8,9 @@ import it.polimi.softeng.connectionProtocol.client.ClientSideRMI;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -119,9 +122,26 @@ public class GUILoginController implements Initializable {
                         numberOfPlayer.getSelectionModel().getSelectedIndex() + 2, mode.getSelectionModel().getSelectedIndex() + 1);
             //TODO:change port 1099
             loginNotifier();
-            guiClientSide.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
+            Service New_Service = new Service() {
+                @Override
+                protected Task createTask() {
+                    return new Task() {
+                        @Override
+                        protected Object call() throws Exception {
+                            Platform.runLater(() -> {
+                                guiClientSide.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
+                                try {
+                                    switchToWait(event);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            });
+                            return null;
+                        }
+                    };
+                }
+            };
 
-            switchToWait(event);
            /* while(!guiClientSide.GameIsOn){
                 //TODO: call switchToGame from GUIClientSide-beginGame
             }*/
