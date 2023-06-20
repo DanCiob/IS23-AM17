@@ -121,7 +121,7 @@ public class ClientSideRMI {
      */
     private void getServerStub(String serverIP){
         Registry registry = null;
-        System.setProperty("java.rmi.server.hostname",serverIP);
+        //System.setProperty("java.rmi.server.hostname",serverIP);
         try {
             //needs changing
             registry = LocateRegistry.getRegistry(serverIP,1099);
