@@ -73,6 +73,7 @@ public class GameController {
 
                 //Notifies every RMI User -> gameBoard notifications
                 for (String s : controller.getServerSide().getServerSideRMI().getNameToStub().keySet()) {
+                    System.out.println(s);
                     ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
                     try {
                         temp.gameBoardUpdate(game.getGameBoard());

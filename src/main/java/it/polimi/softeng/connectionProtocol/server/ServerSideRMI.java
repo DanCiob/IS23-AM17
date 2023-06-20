@@ -45,7 +45,7 @@ public class ServerSideRMI extends ServerSideMethods {
 
         super(loginManager,null,null, controller);
         this.loginManager = loginManager;
-        System.setProperty("sun.rmi.transport.tcp.responseTimeout", String.valueOf(1000));
+        //System.setProperty("sun.rmi.transport.tcp.responseTimeout", String.valueOf(1000));
         obj = new ServerSideMethods(loginManager,this,serverSide,controller);
         ServerRemoteInterface stub  = null;
         try {

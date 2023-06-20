@@ -16,6 +16,7 @@ import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.commonCards.CommonCards;
 import org.json.simple.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -96,6 +97,15 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     public CLI() {
         this.messageHandler = new MessageHandler(this);
         this.input = new Scanner(System.in);
+    }
+
+    /**
+     * Just for testing purposes
+     * @param inputStream is directed input stream
+     */
+    public CLI (ByteArrayInputStream inputStream) {
+        this.messageHandler = new MessageHandler(this);
+        this.input = new Scanner(inputStream);
     }
 
     ////////////////

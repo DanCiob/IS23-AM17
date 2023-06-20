@@ -23,7 +23,7 @@ public class ClientSideRMI {
     /**
      * reference to the methods the client will expose for the server
      */
-    ClientSideMethods obj;
+    ClientSideMethods obj ;
     /**
      * base port from which the client will start searching an open port
      */
@@ -36,11 +36,13 @@ public class ClientSideRMI {
     public ClientSideRMI(UI ui) {
         //opening the registry with clients methods
         obj = new ClientSideMethods(ui);
+
         openRegistry(obj);
         System.out.println("client up !");
 
         //connection to server
         connect();
+
         Thread t = new Thread(() -> pingServer());
         t.start();
     }
@@ -53,6 +55,7 @@ public class ClientSideRMI {
     public ClientSideRMI(String serverIP, UI ui) {
         //opening the registry with clients methods
         obj = new ClientSideMethods(ui);
+
         openRegistry(obj);
         System.out.println("client up !");
 
@@ -102,6 +105,7 @@ public class ClientSideRMI {
         }
 
         ClientRemoteInterface stub;
+        System.out.println(obj);
         try {
             stub = (ClientRemoteInterface) UnicastRemoteObject.exportObject(obj,port);
         } catch (RemoteException e) {
@@ -120,18 +124,21 @@ public class ClientSideRMI {
      * @param serverIP string containing the server ip
      */
     private void getServerStub(String serverIP){
+        System.out.println(serverIP);
         Registry registry = null;
-        //System.setProperty("java.rmi.server.hostname",serverIP);
-        try {
+        System.setProperty("java.rmi.server.hostname",serverIP);
+        /*try {
             //needs changing
+            System.out.println("trying to connect to server");
             registry = LocateRegistry.getRegistry(serverIP,1099);
 
         } catch (RemoteException e) {
             e.printStackTrace();
-        }
+        }*/
 
         try {
-            stub = (ServerRemoteInterface) registry.lookup("ServerRemoteInterface");
+            System.out.println("getting stub");
+            stub = (ServerRemoteInterface) LocateRegistry.getRegistry(serverIP,1099).lookup("ServerRemoteInterface");
             System.out.println("connected to server");
         } catch (RemoteException | NotBoundException e) {
             throw new RuntimeException(e);
@@ -141,6 +148,7 @@ public class ClientSideRMI {
     private void pingServer(){
         while(true){
             try{
+                System.out.println(stub);
                 stub.ping();
             }catch (RemoteException e) {
                 System.out.println("cannot reach server, relaunch my shelfie and retry with same nickname");
