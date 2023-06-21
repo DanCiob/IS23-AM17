@@ -1,7 +1,6 @@
 package it.polimi.softeng.client.view;
 
 import it.polimi.softeng.JSONParser.*;
-import it.polimi.softeng.client.view.CLI.CLI;
 import it.polimi.softeng.model.GameBoard;
 import it.polimi.softeng.model.PersonalCards;
 import it.polimi.softeng.model.Shelfie;
@@ -166,7 +165,7 @@ public class MessageHandler {
                 JSONParser p1 = new JSONParser();
                 JSONObject objPC = (JSONObject) p1.parse(message);
 
-                PersonalCards newPC = null;
+                PersonalCards newPC;
                 newPC = personalCardsParser(objPC.toJSONString());
 
                 ui.eventManager("personalCardEvent");

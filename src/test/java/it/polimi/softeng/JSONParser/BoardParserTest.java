@@ -122,36 +122,4 @@ class BoardParserTest {
         assertEquals(gameBoard.getBoard()[1][3].getColor(), gameBoard1.getBoard()[1][3].getColor());
 
     }
-
-   /* private String writeMsgFullBoard(GameBoard gameBoard){
-        JSONObject msg = new JSONObject();
-
-        JSONArray notAvailable = new JSONArray();
-        for (Cell c : gameBoard.getNotAvailable()){
-            JSONObject cell = new JSONObject();
-            cell.put("column", c.getColumn());
-            cell.put("row", c.getRow());
-            notAvailable.add(cell);
-        }
-        msg.put("notAvailable", notAvailable);
-
-        JSONArray rows = new JSONArray(); //rows: array of rows
-        for (int i = 0; i<boardRows; i++){
-            JSONArray rowOfTiles = new JSONArray(); // rowOfTiles: array of tiles
-            for (int j = 0; j<boardColumns; j++){
-                if (gameBoard.getBoard()[i][j] != null){
-                    JSONObject posColorId = new JSONObject();
-                    posColorId.put("color", gameBoard.getBoard()[i][j].getColor().toString());
-                    posColorId.put("column", j);
-                    posColorId.put("row", i);
-                    posColorId.put("id", gameBoard.getBoard()[i][j].getId());
-                    rowOfTiles.add(posColorId);
-                }
-            }
-            rows.add("Row " + i);
-        }
-        msg.put("Rows", rows);
-
-        return msg.toString();
-    }*/
 }

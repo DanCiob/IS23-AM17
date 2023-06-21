@@ -5,7 +5,6 @@ import it.polimi.softeng.connectionProtocol.client.ClientRemoteInterface;
 import it.polimi.softeng.model.*;
 import it.polimi.softeng.model.commonCards.CommonCards;
 
-import java.lang.reflect.Array;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -77,6 +76,7 @@ public class GameController {
 
                 //Notifies every RMI User -> gameBoard notifications
                 for (String s : controller.getServerSide().getServerSideRMI().getNameToStub().keySet()) {
+                    System.out.println(s);
                     ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
                     try {
                         temp.gameBoardUpdate(game.getGameBoard());
@@ -126,31 +126,6 @@ public class GameController {
                     }
                 }
 
-                //////////////////////
-                //BADGE COMMON CARDS//
-                //////////////////////
-                /*
-                ArrayList <CommonCards> cc = game.getCommonCards();
-
-                for (Player p: game.getPlayers()) {
-                    System.out.println("Sending common cards to " + p.getNickname());
-                    //Is a RMI user
-                    if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(p.getNickname())) {
-                        ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(p.getNickname());
-                        try {
-                            temp.sendCommonCard(cc, false);
-                        } catch (RemoteException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    //Is TCP user
-                    else {
-                        if (cc.size() == 1)
-                            controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(CommonCardWriter.writeCommonCard(cc.get(0).getName(), null), "@CCAU", "all").toJSONString());
-                        else
-                            controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(CommonCardWriter.writeCommonCard(cc.get(0).getName(), cc.get(1).getName()), "@CCAU", "all").toJSONString());
-                }
-            }*/
 
             ////////////////////////////
             //NEXT PLAYER NOTIFICATION//

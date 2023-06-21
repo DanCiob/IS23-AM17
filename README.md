@@ -9,7 +9,7 @@
 | RMI |🟢|
 | Socket |🟢|
 | CLI |🟢|
-| GUI |🟡|
+| GUI |🟢|
 | Multiple games |🟡|
 | Chat |🟢|
 | Persistence |🔴|

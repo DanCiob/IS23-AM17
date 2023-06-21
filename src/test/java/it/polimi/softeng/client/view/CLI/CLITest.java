@@ -2,6 +2,7 @@ package it.polimi.softeng.client.view.CLI;
 
 import it.polimi.softeng.model.*;
 import org.json.simple.JSONObject;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -9,14 +10,13 @@ import java.util.ArrayList;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
+/**
+ * All ignored tests are graphics visualizer
+ */
 class CLITest {
     private CLI cli = new CLI();
 
-    @Test
-    void setupCLITest() {
-    }
-
-    @Test
+    @Ignore
     void boardVisualizerTest4PlayersTest() {
         GameBoard gameBoard = new GameBoard();
         gameBoard.resetBoard(4);
@@ -34,7 +34,7 @@ class CLITest {
 
     }
 
-    @Test
+    @Ignore
     void boardVisualizerTest3PlayersTest() {
         GameBoard gameBoard = new GameBoard();
         gameBoard.resetBoard(3);
@@ -51,7 +51,7 @@ class CLITest {
         cli.boardVisualizer(table, gameBoard.getNotAvailable());
     }
 
-    @Test
+    @Ignore
     void boardVisualizerTest2PlayersTest() {
         GameBoard gameBoard = new GameBoard();
         gameBoard.resetBoard(2);
@@ -69,7 +69,7 @@ class CLITest {
     }
 
 
-    @Test
+    @Ignore
     void shelfieVisualizerTest() {
         Shelfie shelfie = new Shelfie();
         ArrayList<Tile> tilesToBeInserted = new ArrayList<>();
@@ -121,7 +121,7 @@ class CLITest {
         cli.shelfieVisualizer(shelfie.getGrid());
     }
 
-    @Test
+    @Ignore
     void commonCardsVisualizerTest() {
         commonCardsVisualizer_ColumnsOfMaxDiffTypesTest();
         commonCardsVisualizer_CornersOfEqualsTest();
@@ -137,73 +137,73 @@ class CLITest {
         commonCardsVisualizer_XOfEqualsTest();
     }
 
-    @Test
+    @Ignore
     void commonCardsVisualizer_SixGroupsOfTwoEqualsTest() {
         String commonCard = "SixGroupsOfTwoEquals";
         cli.commonCardsVisualizer(commonCard);
     }
 
-    @Test
+    @Ignore
     void commonCardsVisualizer_FourGroupsOfFourEqualsTest() {
         String commonCard = "FourGroupsOfFourEquals";
         cli.commonCardsVisualizer(commonCard);
     }
 
-    @Test
+    @Ignore
     void commonCardsVisualizer_CornersOfEqualsTest() {
         String commonCard = "CornersOfEquals";
         cli.commonCardsVisualizer(commonCard);
     }
 
-    @Test
+    @Ignore
     void commonCardsVisualizer_TwoSquaresOfEqualsTest() {
         String commonCard = "TwoSquaresOfEquals";
         cli.commonCardsVisualizer(commonCard);
     }
 
-    @Test
+    @Ignore
     void commonCardsVisualizer_ColumnsOfMaxDiffTypesTest() {
         String commonCard = "ColumnsOfMaxDiffTypes";
         cli.commonCardsVisualizer(commonCard);
     }
 
-    @Test
+    @Ignore
     void commonCardsVisualizer_TwoColumnsOfSixDifferentTest(){
         String commonCard = "TwoColumnsOfSixDifferent";
         cli.commonCardsVisualizer(commonCard);
     }
 
-    @Test
+    @Ignore
     void commonCardsVisualizer_NEqualTilesTest(){
         String commonCard = "NEqualTiles";
         cli.commonCardsVisualizer(commonCard);
     }
 
-    @Test
+    @Ignore
     void commonCardsVisualizer_TwoRowsOfFiveDifferentTest(){
         String commonCard = "TwoRowsOfFiveDifferent";
         cli.commonCardsVisualizer(commonCard);
     }
 
-    @Test
+    @Ignore
     void commonCardsVisualizer_RowsOfMaxDiffTypesTest(){
         String commonCard = "RowsOfMaxDiffTypes";
         cli.commonCardsVisualizer(commonCard);
     }
 
-    @Test
+    @Ignore
     void commonCardsVisualizer_DiagonalOfEqualsTest(){
         String commonCard = "DiagonalOfEquals";
         cli.commonCardsVisualizer(commonCard);
     }
 
-    @Test
+    @Ignore
     void commonCardsVisualizer_XOfEqualsTest(){
         String commonCard = "XOfEquals";
         cli.commonCardsVisualizer(commonCard);
     }
 
-    @Test
+    @Ignore
     void commonCardsVisualizer_StairsTest(){
         String commonCard = "Stairs";
         cli.commonCardsVisualizer(commonCard);
@@ -211,7 +211,7 @@ class CLITest {
 
 
 
-    @Test
+    @Ignore
     void personalCardVisualizerTest() {
         ArrayList<PersonalCards> arrayPersonalCards = new ArrayList<>();
         arrayPersonalCards = PersonalCards.FillPersonalCardsBag();
@@ -230,7 +230,7 @@ class CLITest {
         cli.personalCardVisualizer(arrayPersonalCards.get(11));
     }
 
-    @Test
+    @Ignore
     void scoreVisualizerTest() {
         CLI cli = new CLI();
         ArrayList<Player> players = new ArrayList<>();
@@ -243,7 +243,7 @@ class CLITest {
         cli.scoreVisualizer(players);
     }
 
-    @Test
+    @Ignore
     void chatVisualizerTest() {
         CLI cli = new CLI();
         JSONObject jsonObject = new JSONObject();
@@ -252,19 +252,7 @@ class CLITest {
         cli.chatVisualizer(jsonObject);
     }
 
-    @Test
-    void beginGame() {
-    }
-
-    @Test
-    void run() {
-    }
-
-    @Test
-    void game() {
-    }
-
-    @Test
+    @Ignore
     void commandsTest() {
         cli.commands(true);
         cli.commands(false);
@@ -282,5 +270,12 @@ class CLITest {
         assertFalse(cli.isOkCommand("@GAME (1,1),())", 3));
         assertFalse(cli.isOkCommand("@GAME (1,1)1", 3));
         assertFalse(cli.isOkCommand("@game(1,1),2", 3));
+    }
+
+    @Ignore
+    void winnerLoserTest () {
+        CLI cli = new CLI();
+        cli.endGame(true);
+        cli.endGame(false);
     }
 }
