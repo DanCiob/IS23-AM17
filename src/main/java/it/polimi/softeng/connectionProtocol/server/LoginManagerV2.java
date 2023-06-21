@@ -101,6 +101,7 @@ public class LoginManagerV2 {
     /**
      * if a player disconnects during the match it's name it's inserted from this method to the list of disconnected players
      *
+     *
      * @param player player nickname to be disconnected
      */
     public void addDisconnectedPlayer(String player) {
