@@ -704,9 +704,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
         System.out.println(ANSI_RESET + "BOARD:");
         System.out.println(ANSI_GREY + "     0  1  2  3  4  5  6  7  8"); //print column index
-        System.out.println("    ━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.println("    ---------------------------");
         for (int i = 0; i < boardRows; i++) { //loop for rows
-            System.out.print(i + "  ┃"); //print row index
+            System.out.print(i + "  |"); //print row index
             for (int j = 0; j < boardColumns; j++) {
                 notAv = false;
                 for (Cell cell1 : notAvailable) { //if not Available
@@ -716,19 +716,19 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     }
                 }
                 if (notAv) {
-                    System.out.print(ANSI_GREY + " ░ ");
+                    System.out.print(ANSI_GREY + "   ");
                 } else {
                     if (board[i][j] != null) {
                         tileColor = board[i][j].getColor();
                         System.out.print(" " + tileColor.coloredText() + "#" + " ");
                     } else {
-                        System.out.print(ANSI_GREY + " ░ ");
+                        System.out.print(ANSI_GREY + "   ");
                     }
                 }
             }
-            System.out.print(ANSI_GREY + "┃\n");
+            System.out.print(ANSI_GREY + "|\n");
         }
-        System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━━━━━━━━━━━━━" + ANSI_RESET);
+        System.out.println(ANSI_GREY + "    ---------------------------" + ANSI_RESET);
     }
 
     /**
@@ -740,20 +740,20 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         Tile.TileColor tileColor;
         if (shelfie != null) {
             System.out.println(ANSI_RESET + "SHELFIE:");
-            System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━");
+            System.out.println(ANSI_GREY + "    ---------------");
             for (int i = shelfieRows - 1; i >= 0; i--) {
-                System.out.print(ANSI_GREY + i + "  ┃");
+                System.out.print(ANSI_GREY + i + "  |");
                 for (int j = 0; j < shelfieColumns; j++) {
                     if (shelfie[i][j] != null) {
                         tileColor = shelfie[i][j].getColor();
                         System.out.print(tileColor.coloredText() + " " + "#" + " ");
                     } else {
-                        System.out.print(ANSI_GREY + " ░ ");
+                        System.out.print(ANSI_GREY + "   ");
                     }
                 }
-                System.out.println(ANSI_GREY + "┃");
+                System.out.println(ANSI_GREY + "|");
             }
-            System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━");
+            System.out.println(ANSI_GREY + "    ---------------");
             System.out.println(ANSI_GREY + "     0  1  2  3  4" + Tile.TileColor.WHITE.coloredText());
 
         }
@@ -920,9 +920,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     @Override
     public void personalCardVisualizer(PersonalCards personalCard) {
         boolean tile;
-        System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━");
+        System.out.println(ANSI_GREY + "    ---------------");
         for (int i = shelfieRows - 1; i >= 0; i--) {
-            System.out.print(ANSI_GREY + i + "  ┃");
+            System.out.print(ANSI_GREY + i + "  |");
             for (int j = 0; j < shelfieColumns; j++) {
                 tile = false;
                 for (PersonalCards.ObjectiveCell objectiveCell : personalCard.getObjective()) {
@@ -932,12 +932,12 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     }
                 }
                 if (!tile) {
-                    System.out.print(ANSI_GREY + " ░ ");
+                    System.out.print(ANSI_GREY + "   ");
                 }
             }
-            System.out.println(ANSI_GREY + "┃");
+            System.out.println(ANSI_GREY + "|");
         }
-        System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━");
+        System.out.println(ANSI_GREY + "    ---------------");
         System.out.println(ANSI_GREY + "     0  1  2  3  4" + Tile.TileColor.WHITE.coloredText());
     }
 
