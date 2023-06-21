@@ -100,7 +100,7 @@ public class ClientSide {
             while ((s = in.readLine()) != null) {
                 //System.out.println(s);
                 if(s.equals("ping")){
-                    System.out.println("answering to server ping");
+                    //System.out.println("answering to server ping");
                     out.println("pong");
                 }
                 else messageHandler.parsingMessage(s);
