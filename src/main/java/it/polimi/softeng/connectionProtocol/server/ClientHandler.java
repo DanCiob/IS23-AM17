@@ -107,6 +107,7 @@ public class ClientHandler implements Runnable{
 
         t = new Thread(() -> pingUsers());
         t.start();
+
     }
 
     /**
@@ -117,9 +118,10 @@ public class ClientHandler implements Runnable{
         String s = "";
         try {
             while ((s = in.readLine()) != null) {
-                //System.out.println(s);
-                if(s.equals("pong")){
-                    pong = true;
+
+                //part responsible for answering a ping from the server
+                if(s.equals("ping")){
+
                 }
                 else{
                     serverMessageHandler.parsingMessage(s);
@@ -130,6 +132,7 @@ public class ClientHandler implements Runnable{
                 }
             }
         } catch (IOException | ParseException e) {
+
             System.out.println("utente " + nickname + " si è disconnesso");
             serverSideTCP.addDisconnectedPlayer(nickname);
         }
@@ -197,29 +200,12 @@ public class ClientHandler implements Runnable{
     public void pingUsers(){
 
         while(true){
-            ///send ping message and wait 500ms
-            out.println("ping");
-            System.out.println("sent a ping to :" + nickname);
-
             try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-            if(!pong){
-                System.out.println("user " + nickname + " disconnected"); //todo consider case in which he didnt send log in yet
-                //loginManager.addDisconnectedPlayer(playerToBeDeleted); //todo here goes clienthandler reference of nickname
-                //removeRMIClient(playerToBeDeleted); //todo this becomes remove socket user
-                //todo command to kill thread
-            }
-            else pong = false;
-            try {
-
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            out.println("ping"); //TODO this doesnt throw an error
         }
     }
 }

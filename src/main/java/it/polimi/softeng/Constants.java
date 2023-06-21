@@ -52,6 +52,7 @@ public abstract class Constants {
     public static final String NICKNAME_NOT_UNIQUE = "Error: Nickname not unique, try again";
     public static final String PLAYER_DISCONNECTED = "Error: Client disconnected";
     public static final String ERROR_IN_GAMEMOVE = "Error: Either it's not your turn or gameMove syntax is wrong!";
+    public static final String ALL_PLAYERS_DISCONNECTED = "Error, you can't send game moves when you're the only player remaining";
     public static final String INVALID_NUMBER_OF_PLAYERS = "Error: Number of player must be between 2-4";
     public static final String INVALID_CHOICE_OF_TILES = "Error: You can't select these tiles, try again!";
     public static final String INVALID_COLUMN = "Error: You can't select these column (column cannot contain selected tiles)";

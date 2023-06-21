@@ -116,6 +116,10 @@ public class Controller {
     public GameController getGameController() {
         return gameController;
     }
+
+    public ChatController getChatController() {
+        return chatController;
+    }
 }
 
 

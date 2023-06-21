@@ -1046,6 +1046,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             case (ALREADY_LOGGED_IN) -> System.out.println(ALREADY_LOGGED_IN);
             case (YOU_ARE_RECEIVER) -> System.out.println(YOU_ARE_RECEIVER);
             case (ERROR_IN_GAMEMOVE) -> System.out.println((ERROR_IN_GAMEMOVE));
+            case (ALL_PLAYERS_DISCONNECTED) -> System.out.println(ALL_PLAYERS_DISCONNECTED);
 
             default -> System.out.println("Unrecognized event!");
         }

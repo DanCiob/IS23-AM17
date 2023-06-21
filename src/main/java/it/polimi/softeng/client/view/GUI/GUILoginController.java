@@ -122,6 +122,7 @@ public class GUILoginController implements Initializable {
                         numberOfPlayer.getSelectionModel().getSelectedIndex() + 2, mode.getSelectionModel().getSelectedIndex() + 1);
             //TODO:change port 1099
             loginNotifier();
+            guiClientSide.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
             Service New_Service = new Service() {
                 @Override
                 protected Task createTask() {
@@ -129,7 +130,6 @@ public class GUILoginController implements Initializable {
                         @Override
                         protected Object call() throws Exception {
                             Platform.runLater(() -> {
-                                guiClientSide.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
                                 try {
                                     switchToWait(event);
                                 } catch (IOException e) {
@@ -203,6 +203,8 @@ public class GUILoginController implements Initializable {
             gamemode = 1;
         else if (mode.getSelectionModel().getSelectedIndex() == 1)
             gamemode = 2;
+        //nickname uniqueness
+        if(guiClientSide.isOkNickname())
         switch (guiClientSide.getConnectionMode()) {
             case 1 -> {
                 guiClientSide.messageHandler = new MessageHandler(guiClientSide);

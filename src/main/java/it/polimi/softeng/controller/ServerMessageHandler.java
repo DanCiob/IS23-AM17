@@ -72,7 +72,10 @@ public class ServerMessageHandler {
                 boolean confirm = controller.SocketGameMoveRequest (gp.getTilesToBeRemoved(), gp.getColumn(), gp.getRequester());
 
                 if (!confirm)
-                    controller.sendErrorMessage(serverSignObject(writeError(ERROR_IN_GAMEMOVE), "@ERRO", requester).toJSONString(), requester);
+                    if(controller.getServerSide().getLoginManager().isCountdownStarted()){
+                        controller.sendErrorMessage(serverSignObject(writeError(ALL_PLAYERS_DISCONNECTED), "@ERRO", requester).toJSONString(), requester);
+                    }
+                    else controller.sendErrorMessage(serverSignObject(writeError(ERROR_IN_GAMEMOVE), "@ERRO", requester).toJSONString(), requester);
                 else
                     //Descriptive output
                     System.out.println("Received game move request from " + requester);
