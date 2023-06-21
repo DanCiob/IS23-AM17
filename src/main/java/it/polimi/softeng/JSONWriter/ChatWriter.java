@@ -34,7 +34,7 @@ public class ChatWriter {
         String receiver;
         String message;
 
-        //Double check of syntax correcteness
+        //Double check of syntax correctness
         if (!chatMessageRegex(chatMessage))
             return null;
 

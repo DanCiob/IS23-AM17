@@ -25,7 +25,12 @@ public class ClientSide {
     /**
      * client's socket
      */
+
     private Socket socket;
+    /**
+     * flag used to say that the clientHandler got the pong from server
+     */
+    Boolean pong = false;
     /**
      * client's output to server
      */
@@ -88,6 +93,8 @@ public class ClientSide {
         Thread t = new Thread(() -> readMessage(in));
         t.start();
 
+        t = new Thread(() -> pingServer());
+        t.start();
     }
 
     /**
@@ -98,10 +105,9 @@ public class ClientSide {
         String s = "";
         try {
             while ((s = in.readLine()) != null) {
-                //System.out.println(s);
+                //part responsible for answering a ping from the server
                 if(s.equals("ping")){
-                    //System.out.println("answering to server ping");
-                    out.println("pong");
+
                 }
                 else messageHandler.parsingMessage(s);
             }
@@ -114,5 +120,16 @@ public class ClientSide {
     }
     public void sendMessage(String message){
         out.println(message);
+    }
+
+    private void pingServer(){
+        while(true){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            out.println("ping"); //TODO this doesnt throw an error
+        }
     }
 }

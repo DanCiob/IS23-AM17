@@ -45,6 +45,10 @@ public class GameController {
             System.out.println("Received gameMove request by " + requester + " but it's " + game.getCurrentPlayer().getNickname() + " turn");
             return false;
         }
+        //this blocks the user from sending game moves if he's the only one remaining
+        if(controller.getServerSide().getLoginManager().isCountdownStarted()){
+            return false;
+        }
 
         /////////////////////////////
         //BEGINNING OF TURN ROUTINE//
