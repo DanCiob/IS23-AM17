@@ -319,11 +319,12 @@ public class ServerSideMethods implements ServerRemoteInterface {
     @Override
     public void sendMessageToAll(String message, String sender) throws RemoteException {
         String messageOut = addInfo(message,sender);
-        chatController.sendChatMessage("all", messageOut, serverSide,sender);
+        //chatController.sendChatMessage("all", messageOut, serverSide,sender);
+        serverSide.getServerSideTCP().sendMessageExcept(messageOut,sender);
 
         for(String player : loginManager.getNickNameList()){
             if(serverSideRMI.getNameToStub().containsKey(player) && !sender.equals(player)){
-                serverSideRMI.getNameToStub().get(player).displayChatMessage(message,sender);
+                serverSideRMI.getNameToStub().get(player).displayChatMessage(getMessage(message),sender);
             }
         }
 
@@ -347,12 +348,13 @@ public class ServerSideMethods implements ServerRemoteInterface {
                 }
             }
         }
-        String messageOut = addInfo(message,sender);
-        chatController.sendChatMessage(nickName, messageOut, serverSide, sender);
 
+        String messageOut = addInfo(message,sender);
+        //chatController.sendChatMessage(nickName, messageOut, serverSide, sender);
+        serverSide.getServerSideTCP().sendMessage(messageOut,nickName);
         for(String player : loginManager.getNickNameList()){
             if(serverSideRMI.getNameToStub().containsKey(player) && nickName.equals(player)){
-                serverSideRMI.getNameToStub().get(player).displayChatMessage(message,sender);
+                serverSideRMI.getNameToStub().get(player).displayChatMessage(getMessage(message),sender);
                 return;
             }
         }
@@ -381,4 +383,17 @@ public class ServerSideMethods implements ServerRemoteInterface {
 
         return obj.toString();
     }
+
+    private String getMessage (String jsonMessage){
+        JSONParser parser = new JSONParser();
+        JSONObject obj = null;
+        try {
+            obj = (JSONObject) parser.parse(jsonMessage);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return (String) obj.get("message");
+    }
+
+
 }
