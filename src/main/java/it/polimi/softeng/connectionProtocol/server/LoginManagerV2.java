@@ -182,9 +182,13 @@ public class LoginManagerV2 {
                     flag = true;
                 }
             }
+            serverMessageHandler.getController().getGameController().addReconnectedPlayer(nickName);
+
+            //removing reconnected player from disconnected player list
             if (flag) {
                 disconnectedPlayerList.remove(j);
             }
+
             //this stops the countdown in case it started and a players rejoins
             if (countdownStarted) {
                 countdownStarted = false;
