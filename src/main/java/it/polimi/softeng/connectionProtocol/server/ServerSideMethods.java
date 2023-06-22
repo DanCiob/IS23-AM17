@@ -105,7 +105,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
                         serverSideRMI.addRMIClient(name,stub);
                         loginManager.addNickName(name);
                         System.out.println(name + " reconnected !");
-                        stub.startGame();
+                        //stub.startGame();
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");
@@ -161,7 +161,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
                         serverSideRMI.addRMIClient(name,stub);
                         loginManager.addNickName(name);
                         System.out.println(name + " reconnected !");
-                        stub.startGame();
+                        //stub.startGame();
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");
@@ -215,7 +215,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
                         loginManager.addStub(name,stub);
                         serverSideRMI.addRMIClient(name,stub);
                         loginManager.addNickName(name);
-                        stub.startGame();
+                        //stub.startGame();
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");
@@ -274,7 +274,7 @@ public class ServerSideMethods implements ServerRemoteInterface {
                         serverSideRMI.addRMIClient(name,stub);
                         loginManager.addNickName(name);
                         System.out.println(name + " reconnected !");
-                        stub.startGame();
+                        //stub.startGame();
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");

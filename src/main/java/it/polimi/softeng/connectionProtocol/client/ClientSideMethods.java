@@ -64,6 +64,8 @@ public class ClientSideMethods implements ClientRemoteInterface {
         ui.eventManager("boardEvent");
         ui.boardUpdater(board);
         ui.boardVisualizer(board.getBoard(), board.getNotAvailable());
+        //this, in case of reconnection, restarts the ui
+        ui.beginGame(true);
     }
 
     /**

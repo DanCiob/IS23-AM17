@@ -148,7 +148,6 @@ public class ClientSideRMI {
     private void pingServer(){
         while(true){
             try{
-                System.out.println(stub);
                 stub.ping();
             }catch (RemoteException e) {
                 System.out.println("cannot reach server, relaunch my shelfie and retry with same nickname");
