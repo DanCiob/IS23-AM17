@@ -210,24 +210,6 @@ public class Game{
         firstPlayer.setIsFirst();
     }
 
-    /*
-     * it handles the last turns after that one player has a full shelfie
-     * this method is called after checkEndGame
-     */
-  /*  public void lastTurn(){
-        getCurrentPlayer().updateScore(getEndGameBadge().getScore());
-        if(!(getNextPlayer().isFirst())){//current player is the one that has a full shelfie
-            setCurrentPlayer(getNextPlayer());
-            while(!(currentPlayer.isFirst())){
-                turn();
-                setCurrentPlayer(getNextPlayer());
-            }
-        }
-        calculateScore();
-        selectWinner();
-    }*/
-
-
     /**
      * It's turn version used in controller: it receives the move of the current player, updating board and shelfie.
      * It also checks if the move is legal, if there are only islands, if a CommonCard is completed, if the
@@ -262,10 +244,6 @@ public class Game{
         try{
            currentPlayer.getShelfie().insertTile(tilesToInsert, column);
         }catch (IllegalInsertException e){
-            /*for(Cell cell : positionsToBeRemoved){
-                currentPlayer.getShelfie().setGridAtNull(cell.getRow(), cell.getColumn());
-                System.out.println("Tile in pos " + cell.getRow()+ " "+ cell.getColumn() + " is " + currentPlayer.getShelfie().getGrid()[cell.getRow()][cell.getColumn()]);
-            }*/
             gameBoard.reinsertTiles(tilesToInsert, positionsToBeRemoved);
             for(int i=0; i<tilesToInsert.size() && firstFree<shelfieRows; i++){
                 currentPlayer.getShelfie().setGridAtNull(firstFree, column);
@@ -304,7 +282,7 @@ public class Game{
             // if(!(getNextPlayer().isFirst())){//current player is the one that has a full shelfie
                // setCurrentPlayer(getNextPlayer());
             //}else{
-            System.out.println("Chechendgame");
+            System.out.println("Checkendgame");
             if((getNextPlayer().isFirst())){
                 calculateScore(); //it checks personal cards score: TODO: testing
                 selectWinner();

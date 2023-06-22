@@ -74,14 +74,6 @@ class ControllerTest {
         assertNotNull(cli1.getCommonCard2());
         assertNotNull(cli2.getCommonCard2());
 
-        cli2.getClientSide().sendMessage(clientSignObject(cli1.actionToJSON("@CHAT", "'all' Test"), "@CHAT", cli1.getNickname()).toJSONString());
-
-        ArrayList <Cell> cellToSend = new ArrayList<>();
-        Cell toSend = new Cell();
-        toSend.setRow(7);
-        toSend.setColumn(4);
-        cellToSend.add(toSend);
-
         try {
             String move = "@GAME (7,4),0";
             if (controller.getGameController().getCurrentGame().getCurrentPlayer().getNickname().equals(cli1.getNickname()))
@@ -96,6 +88,41 @@ class ControllerTest {
                 cli1.game(move);
             else
                 cli2.game(move);
+
+            move = "@CHAT 'all' Test";
+            cli2.game(move);
+            cli1.game(move);
+
+            move = "@VPLA";
+            cli2.game(move);
+            cli1.game(move);
+
+            move = "@VCCA";
+            cli2.game(move);
+            cli1.game(move);
+
+            move = "@VBOR";
+            cli2.game(move);
+            cli1.game(move);
+
+            move = "@VSHE";
+            cli2.game(move);
+            cli1.game(move);
+
+            //An error is issued
+            move = "@GAME (7,5),0";
+            if (controller.getGameController().getCurrentGame().getCurrentPlayer().getNickname().equals(cli1.getNickname()))
+                cli1.game(move);
+            else
+                cli2.game(move);
+
+            //Simulate disconnection
+            cli1 = null;
+            cli1 = new CLI(new ByteArrayInputStream((3 + enter + "" + enter + "" + enter + 2 + enter + "Player_1" + enter).getBytes()));
+
+            assertEquals(1, controller.getServerSide().getServerSideRMI().getNameToStub().size());
+            assertEquals(1, controller.getServerSide().getServerSideTCP().getNickNameToClientHandler().size());
+
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
