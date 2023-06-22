@@ -576,7 +576,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             }
 
             case ("@LOGN") -> {
-                //TODO Right now we don't receive GameMode, StartGame, NumOfPlayer...
                 try {
                     RemoteMethods.getStub().login(Nickname, NumOfPlayer, action, RemoteMethods.getPort());
                 } catch (RemoteException e) {
@@ -705,9 +704,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
         System.out.println(ANSI_RESET + "BOARD:");
         System.out.println(ANSI_GREY + "     0  1  2  3  4  5  6  7  8"); //print column index
-        System.out.println("    ━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+        System.out.println("    ---------------------------");
         for (int i = 0; i < boardRows; i++) { //loop for rows
-            System.out.print(i + "  ┃"); //print row index
+            System.out.print(i + "  |"); //print row index
             for (int j = 0; j < boardColumns; j++) {
                 notAv = false;
                 for (Cell cell1 : notAvailable) { //if not Available
@@ -717,19 +716,19 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     }
                 }
                 if (notAv) {
-                    System.out.print(ANSI_GREY + " ░ ");
+                    System.out.print(ANSI_GREY + "   ");
                 } else {
                     if (board[i][j] != null) {
                         tileColor = board[i][j].getColor();
                         System.out.print(" " + tileColor.coloredText() + "#" + " ");
                     } else {
-                        System.out.print(ANSI_GREY + " ░ ");
+                        System.out.print(ANSI_GREY + "   ");
                     }
                 }
             }
-            System.out.print(ANSI_GREY + "┃\n");
+            System.out.print(ANSI_GREY + "|\n");
         }
-        System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━━━━━━━━━━━━━" + ANSI_RESET);
+        System.out.println(ANSI_GREY + "    ---------------------------" + ANSI_RESET);
     }
 
     /**
@@ -741,20 +740,20 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         Tile.TileColor tileColor;
         if (shelfie != null) {
             System.out.println(ANSI_RESET + "SHELFIE:");
-            System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━");
+            System.out.println(ANSI_GREY + "    ---------------");
             for (int i = shelfieRows - 1; i >= 0; i--) {
-                System.out.print(ANSI_GREY + i + "  ┃");
+                System.out.print(ANSI_GREY + i + "  |");
                 for (int j = 0; j < shelfieColumns; j++) {
                     if (shelfie[i][j] != null) {
                         tileColor = shelfie[i][j].getColor();
                         System.out.print(tileColor.coloredText() + " " + "#" + " ");
                     } else {
-                        System.out.print(ANSI_GREY + " ░ ");
+                        System.out.print(ANSI_GREY + "   ");
                     }
                 }
-                System.out.println(ANSI_GREY + "┃");
+                System.out.println(ANSI_GREY + "|");
             }
-            System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━");
+            System.out.println(ANSI_GREY + "    ---------------");
             System.out.println(ANSI_GREY + "     0  1  2  3  4" + Tile.TileColor.WHITE.coloredText());
 
         }
@@ -921,9 +920,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     @Override
     public void personalCardVisualizer(PersonalCards personalCard) {
         boolean tile;
-        System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━");
+        System.out.println(ANSI_GREY + "    ---------------");
         for (int i = shelfieRows - 1; i >= 0; i--) {
-            System.out.print(ANSI_GREY + i + "  ┃");
+            System.out.print(ANSI_GREY + i + "  |");
             for (int j = 0; j < shelfieColumns; j++) {
                 tile = false;
                 for (PersonalCards.ObjectiveCell objectiveCell : personalCard.getObjective()) {
@@ -933,12 +932,12 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     }
                 }
                 if (!tile) {
-                    System.out.print(ANSI_GREY + " ░ ");
+                    System.out.print(ANSI_GREY + "   ");
                 }
             }
-            System.out.println(ANSI_GREY + "┃");
+            System.out.println(ANSI_GREY + "|");
         }
-        System.out.println(ANSI_GREY + "    ━━━━━━━━━━━━━━━");
+        System.out.println(ANSI_GREY + "    ---------------");
         System.out.println(ANSI_GREY + "     0  1  2  3  4" + Tile.TileColor.WHITE.coloredText());
     }
 
@@ -1172,9 +1171,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         StartGame = startGame;
     }
 
-    ////////////////////////////
-    //GETTERS USED FOR TESTING//
-    ////////////////////////////
+    //////////////////
+    //TESTING METHOD//
+    //////////////////
     public GameBoard getUserGameBoard() {
         return UserGameBoard;
     }
@@ -1193,5 +1192,136 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     public String getCommonCard2() {
         return CommonCard2;
+    }
+
+    public ClientSide getClientSide() {
+        return clientSide;
+    }
+    public ClientSideRMI getRemoteMethods() {
+        return RemoteMethods;
+    }
+
+    /**
+     * Game routine that wait for commands, check syntax and send JSON/invoke method to server if needed -> just for purpose
+     */
+    public void game(String move) throws RemoteException {
+        String command = move;
+
+        //Check empty command
+        if (command == null) {
+            System.out.println("Empty command!");
+            return;
+        }
+        //Check if player inserted a command that is not on the table
+        if (!isOkCommand(command, 1)) {
+            System.out.println("Please write a command that you can see in the table");
+            return;
+        }
+
+        if (command.equalsIgnoreCase("@CMND") || command.equalsIgnoreCase("@VBOR") || command.equalsIgnoreCase("@VSHE") || command.equalsIgnoreCase("@VPCA") || command.equalsIgnoreCase("@VPLA") || command.equalsIgnoreCase("@VCCA") || command.equalsIgnoreCase("@HELP")) {
+            switch (command.toUpperCase()) {
+                case ("@HELP") -> {
+                    help();
+                    return;
+                }
+                case ("@CMND") -> {
+                    return;
+                }
+                case ("@VBOR") -> {
+                    boardVisualizer(UserGameBoard.getBoard(), UserGameBoard.getNotAvailable());
+                    return;
+                }
+                case ("@VSHE") -> {
+                    shelfieVisualizer(UserShelfie.getGrid());
+                    return;
+                }
+                case ("@VPCA") -> {
+                    personalCardVisualizer(PersonalCard);
+                    return;
+                }
+                case ("@VCCA") -> {
+                    commonCardsVisualizer(CommonCard1);
+                    if (CommonCard2 != null) commonCardsVisualizer(CommonCard2);
+                    return;
+                }
+                case ("@VPLA") -> {
+                    switch (ConnectionMode) {
+                        //Socket
+                        case 1 -> {
+                            JSONObject dummy = new JSONObject();
+                            clientSide.sendMessage(clientSignObject(dummy, "@VPLA", Nickname).toJSONString());
+                            return;
+                        }
+                        //RMI
+                        case 2 -> {
+                            eventManager("playerEvent");
+                            scoreVisualizer(RemoteMethods.getStub().getPlayersAndScore());
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!isOkCommand(command, 2) && !isOkCommand(command, 3)) {
+            System.out.println("Please write a command that you can see in the table");
+            return;
+        }
+
+        //Command is in @CMND format (every command is 4 letters), uppercase avoid case sensitivity
+        String op = command.substring(0, 5).toUpperCase();
+        String action = command.substring(6);
+
+        if (!op.equals("@GAME") && !op.equals("@CHAT") && !op.equals("@VPLA")) {
+            System.out.println("Please write a command that you can see in the table");
+            return;
+        }
+
+        switch (ConnectionMode) {
+            //Socket
+            case 1 -> {
+                //Block illegal move
+                if (op.equals("@GAME")) {
+                    if (!isOkCommand(command, 3)) {
+                        System.out.println("Please, check gameMove syntax");
+                        return;
+                    }
+                }
+                //Block badly formatted messages
+                if (op.equals("@CHAT")) {
+                    if (!isOkCommand(command, 2)) {
+                        System.out.println("Please, check chat syntax");
+                        return;
+                    }
+                }
+
+                //Create JSON messages containing request
+                JSONObject toBeSent = actionToJSON(op, action);
+
+                //Send message to server
+                if (toBeSent != null)
+                    clientSide.sendMessage(clientSignObject(toBeSent, op, Nickname).toJSONString());
+                isYourTurn = false;
+            }
+
+
+            case 2 -> {
+                if (op.equals("@GAME")) {
+                    if (!isOkCommand(command, 3)) {
+                        System.out.println("Please, check gameMove syntax");
+                        return;
+                    }
+                }
+
+                if (op.equals("@CHAT")) {
+                    if (!isOkCommand(command, 2)) {
+                        System.out.println("Please, check chat syntax");
+                        return;
+                    }
+                }
+                isYourTurn = false;
+                RMIInvoker(op, action);
+            }
+        }
     }
 }
