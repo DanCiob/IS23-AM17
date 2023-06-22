@@ -219,7 +219,8 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     public void chatVisualizer(JSONObject jsonMessage) {
         ChatParser chatParser = new ChatParser();
         chatParser.chatParser(jsonMessage.toJSONString());
-        gameController.setChatMessage(chatParser.getRequester() + ": " + chatParser.getMessage());
+        if(!(chatParser.getRequester().equals("System")))
+            gameController.setChatMessage(chatParser.getRequester() + ": " + chatParser.getMessage());
     }
 
     @Override

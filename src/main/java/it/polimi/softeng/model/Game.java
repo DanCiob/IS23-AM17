@@ -283,7 +283,7 @@ public class Game{
                // setCurrentPlayer(getNextPlayer());
             //}else{
             System.out.println("Checkendgame");
-            if((getNextPlayer().isFirst())){
+            if((getNextPlayer().isFirst())){//current player is the one that has a full shelfie
                 calculateScore(); //it checks personal cards score: TODO: testing
                 selectWinner();
                 System.out.println("Turn - return 1");
