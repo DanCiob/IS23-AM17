@@ -62,7 +62,7 @@ public class EndGameController implements Initializable {
             }
             //RMI
             case 2 -> {
-                guiClientSide.eventManager("playerEvent");
+                guiClientSide.eventManager("playerEvent"); //TODO: serve?
                 try {
                     scoreVisualizer(guiClientSide.getRemoteMethods().getStub().getPlayersAndScore());
                 } catch (RemoteException e) {
@@ -72,21 +72,21 @@ public class EndGameController implements Initializable {
         }
     }
 
-   @FXML
-   public void scoreVisualizer(ArrayList<Player> players){
-       player1.setText(players.get(0).getNickname());
-       pointsPlayer1.setText(Integer.toString(players.get(0).getCurrentScore()));
-       player2.setText(players.get(1).getNickname());
-       pointsPlayer2.setText(Integer.toString(players.get(1).getCurrentScore()));
-       if(players.size()>=3){
-           player3.setText(players.get(2).getNickname());
-           pointsPlayer3.setText(Integer.toString(players.get(2).getCurrentScore()));
-       }
-       if(players.size()==4){
-           player4.setText(players.get(3).getNickname());
-           pointsPlayer4.setText(Integer.toString(players.get(3).getCurrentScore()));
-       }
-   }
+    @FXML
+    public void scoreVisualizer(ArrayList<Player> players){
+        player1.setText(players.get(0).getNickname());
+        pointsPlayer1.setText(Integer.toString(players.get(0).getCurrentScore()));
+        player2.setText(players.get(1).getNickname());
+        pointsPlayer2.setText(Integer.toString(players.get(1).getCurrentScore()));
+        if(players.size()>=3){
+            player3.setText(players.get(2).getNickname());
+            pointsPlayer3.setText(Integer.toString(players.get(2).getCurrentScore()));
+        }
+        if(players.size()==4){
+            player4.setText(players.get(3).getNickname());
+            pointsPlayer4.setText(Integer.toString(players.get(3).getCurrentScore()));
+        }
+    }
 
 
 }

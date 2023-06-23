@@ -19,11 +19,17 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -98,9 +104,11 @@ public class GUILoginController implements Initializable {
      */
     @FXML
     protected void onLoginButtonClick(ActionEvent event) throws IOException, InterruptedException {
-
+        System.out.println(nickname.getText());
         guiClientSide.setNickname(nickname.getText());
-        if (!guiClientSide.isOkNickname()) {
+        System.out.println(guiClientSide.Nickname);
+        System.out.println(guiClientSide.isOkNickname());
+        if (!(guiClientSide.isOkNickname()) || guiClientSide.Nickname.equalsIgnoreCase("system")) {
             nickname.setText("");
         } else {
             if(serverPort.getText()==null)
@@ -115,32 +123,35 @@ public class GUILoginController implements Initializable {
             if(!serverPort.getText().equals(""))
                 guiClientSide.setupGUI(connectionMode, serverIP.getText(),
                         Integer.parseInt(serverPort.getText()), game.getSelectionModel().getSelectedIndex() + 1,
-                    numberOfPlayer.getSelectionModel().getSelectedIndex() + 2, mode.getSelectionModel().getSelectedIndex() + 1);
+                        numberOfPlayer.getSelectionModel().getSelectedIndex() + 2, mode.getSelectionModel().getSelectedIndex() + 1);
             else
                 guiClientSide.setupGUI(connectionMode, serverIP.getText(),
                         1099, game.getSelectionModel().getSelectedIndex() + 1,
                         numberOfPlayer.getSelectionModel().getSelectedIndex() + 2, mode.getSelectionModel().getSelectedIndex() + 1);
             //TODO:change port 1099
-            loginNotifier();
-            guiClientSide.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
-            Service New_Service = new Service() {
-                @Override
-                protected Task createTask() {
-                    return new Task() {
-                        @Override
-                        protected Object call() throws Exception {
-                            Platform.runLater(() -> {
-                                try {
-                                    switchToWait(event);
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            });
-                            return null;
-                        }
-                    };
-                }
-            };
+            if(loginNotifier()){
+                guiClientSide.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
+                Service New_Service = new Service() {
+                    @Override
+                    protected Task createTask() {
+                        return new Task() {
+                            @Override
+                            protected Object call() throws Exception {
+                                Platform.runLater(() -> {
+                                    try {
+                                        switchToWait(event);
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                });
+                                return null;
+                            }
+                        };
+                    }
+                };
+                New_Service.start();
+            }
+
 
            /* while(!guiClientSide.GameIsOn){
                 //TODO: call switchToGame from GUIClientSide-beginGame
@@ -172,17 +183,29 @@ public class GUILoginController implements Initializable {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/gamescreen.fxml"));
+        final int initWidth = 912;
+        final int initHeight = 601;
+        Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
+        double width = resolution.getWidth();
+        double height = resolution.getHeight();
+        Pane root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/gamescreen.fxml"));
+
+        Scale scale = new Scale(width/initWidth, height/initHeight, 0, 0);
+        scale.xProperty().bind(root.widthProperty().divide(initWidth));
+        scale.yProperty().bind(root.heightProperty().divide(initHeight));
+        root.getTransforms().add(scale);
         stage = guiClientSide.getStage();
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root, initWidth, initHeight);
         stage.setScene(scene);
+        stage.setResizable(true);
         stage.show();
     }
 
     /**
      * This method sends the login message to the server
+     * @return false if the nickname is not unique or there is an error
      */
-    public void loginNotifier() {
+    public boolean loginNotifier() {
         int startgame;
         int gamemode = 0;
         int numPlayers = 0;
@@ -205,44 +228,56 @@ public class GUILoginController implements Initializable {
             gamemode = 2;
         //nickname uniqueness
         if(guiClientSide.isOkNickname())
-        switch (guiClientSide.getConnectionMode()) {
-            case 1 -> {
-                guiClientSide.messageHandler = new MessageHandler(guiClientSide);
-
-                //this is so that if you press enter it connects to the server specified in the json file
-                if(!serverIP.getText().equals("") && !serverPort.getText().equals("")){
-                    guiClientSide.clientSide = new ClientSide(serverIP.getText(),Integer.parseInt(serverPort.getText()), guiClientSide.messageHandler);
+            switch (guiClientSide.getConnectionMode()) {
+                case 1 -> {
+                    guiClientSide.messageHandler = new MessageHandler(guiClientSide);
                     guiClientSide.setNickname(nickname.getText());
-                }else {
-                    guiClientSide.clientSide = new ClientSide(guiClientSide.messageHandler);
+
+                    //this is so that if you press enter it connects to the server specified in the json file
+                    if(!serverIP.getText().equals("") && !serverPort.getText().equals("")){
+                        guiClientSide.clientSide = new ClientSide(serverIP.getText(),Integer.parseInt(serverPort.getText()), guiClientSide.messageHandler);
+                    }else {
+                        guiClientSide.clientSide = new ClientSide(guiClientSide.messageHandler);
+                    }
+
+                    //guiClientSide.clientSide = new ClientSide(guiClientSide.messageHandler);
+
+                    String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(nickname.getText(), gamemode, startgame, numPlayers), "@LOGN", nickname.getText()).toJSONString();
+                    System.out.println(login);
+                    guiClientSide.getClientSide().sendMessage(login);
+                    try {
+                        TimeUnit.SECONDS.sleep(2);
+                    } catch (InterruptedException e) {
+                        System.out.println("Server did not respond, try again");
+                        guiClientSide.setOkNickname(false);
+                        return false;
+                    }
                 }
+                case 2 -> {
+                    //guiClientSide.RemoteMethods = new ClientSideRMI(guiClientSide);
+                    if(!serverIP.getText().equals("") ){
+                        guiClientSide.RemoteMethods = new ClientSideRMI(serverIP.getText(), guiClientSide);
+                    }else guiClientSide.RemoteMethods = new ClientSideRMI(guiClientSide);
 
-                //guiClientSide.clientSide = new ClientSide(guiClientSide.messageHandler);
-
-                String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(nickname.getText(), gamemode, startgame, numPlayers), "@LOGN", nickname.getText()).toJSONString();
-                System.out.println(login);
-                guiClientSide.getClientSide().sendMessage(login);
-            }
-            case 2 -> {
-                //guiClientSide.RemoteMethods = new ClientSideRMI(guiClientSide);
-                if(!serverIP.getText().equals("") ){
-                    guiClientSide.RemoteMethods = new ClientSideRMI(serverIP.getText(), guiClientSide);
-                }else guiClientSide.RemoteMethods = new ClientSideRMI(guiClientSide);
-
-                String gameModeString = gamemode == 1 ? "e" : "n";
-                guiClientSide.RMIInvoker("@LOGN", gameModeString);
-            }
-            case 3 -> {
-                String gameModeString = gamemode == 1 ? "e" : "n";
-                guiClientSide.RemoteMethods = new ClientSideRMI(guiClientSide);
-                try {
-                    boolean okNickname = guiClientSide.RemoteMethods.getStub().login(nickname.getText(),numPlayers,gameModeString,guiClientSide.RemoteMethods.getPort());
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
+                    String gameModeString = gamemode == 1 ? "e" : "n";
+                    guiClientSide.RMIInvoker("@LOGN", gameModeString);
                 }
-                //TODO: check oknickname
+                case 3 -> {
+                    String gameModeString = gamemode == 1 ? "e" : "n";
+                    guiClientSide.RemoteMethods = new ClientSideRMI(guiClientSide);
+                    try {
+                        boolean okNickname = guiClientSide.RemoteMethods.getStub().localLogin(nickname.getText(),numPlayers,gameModeString,guiClientSide.RemoteMethods.getPort());
+                        if(!okNickname){
+                            nickname.setText("");
+                            return false;
+                        }
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                    //TODO: check oknickname
+                }
             }
-        }
+        return true;
     }
 
     @FXML
@@ -275,6 +310,6 @@ public class GUILoginController implements Initializable {
         }
         if(!localCheckBox.isSelected())
             serverPort.setEditable(true);
-            serverIP.setEditable(true);
+        serverIP.setEditable(true);
     }
 }

@@ -28,10 +28,10 @@
                 layoutY="83.0"
                 pickOnBounds="true"
                 preserveRatio="true">
-                <Image
-                        url="/images/banner.png"
-                        backgroundLoading="true"
-                />
+            <Image
+                    url="/images/banner.png"
+                    backgroundLoading="true"
+            />
         </ImageView>
         <ImageView
                 fx:id="TitleView"
@@ -41,17 +41,17 @@
                 layoutY="83.0"
                 pickOnBounds="true"
                 preserveRatio="true">
-                <Image
-                        url="/images/Title.png"
-                        backgroundLoading="false"
-                />
+            <Image
+                    url="/images/Title.png"
+                    backgroundLoading="false"
+            />
         </ImageView>
 
     </StackPane>
 
 
     <HBox layoutY="200" spacing="20.0">
-        <Label layoutX="100.0" text="Insert your nickname (ONLY characters a-z A-Z 0-9 and _ allowed): " />
+        <Label layoutX="100.0" text="Insert your nickname (ONLY characters a-z A-Z 0-9 and _ allowed, nickname: System/system isn't allowed): " />
         <TextField layoutX="230.0" fx:id="nickname"/>
     </HBox>
     <HBox spacing="20.0">

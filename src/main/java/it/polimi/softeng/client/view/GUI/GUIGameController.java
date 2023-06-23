@@ -112,12 +112,20 @@ public class GUIGameController implements Initializable{
     public GUIGameController () {
     }
 
+    @FXML
+    public void setFirstPlayer(){
+        player1badge1.setImage(new Image("/images/firstplayertoken.png"));
+    }
+
     public void initialize(URL url, ResourceBundle rb) {
         guiClientSide = GUIRegistry.guiList.get(0);
         guiClientSide.setGameController(this);
         GUIRegistry.numberOfGUI++;
-        if(guiClientSide.isYourTurn){
+        if(guiClientSide.isFirst)
             player1badge1.setImage(new Image("/images/firstplayertoken.png"));
+        if(guiClientSide.isYourTurn){//TODO: change this for reconnection
+
+            //player1badge1.setImage(new Image("/images/firstplayertoken.png"));
         }else{
             boardGrid.setDisable(true);
             sendBoardMovesButton.setDisable(true);
@@ -141,6 +149,8 @@ public class GUIGameController implements Initializable{
             personalCard.setImage(new Image("/images/PC" + getNumberPersonalCard() + ".jpg"));
         }
         initializeShelfies();
+        updatePersonalShelfie();
+        updateShelfies();
     }
 
     protected void initializeShelfies(){
@@ -225,10 +235,10 @@ public class GUIGameController implements Initializable{
         String nickname = guiClientSide.getNickname();
         String action = "";
         for(Moves moves : boardMoves){
-             action = action + "(" + moves.cell.getRow() + "," + moves.cell.getColumn() + ")" + ",";
+            action = action + "(" + moves.cell.getRow() + "," + moves.cell.getColumn() + ")" + ",";
         }
         action = action + columnShelfie;
-       // System.out.println(action);
+        // System.out.println(action);
         if(guiClientSide.getConnectionMode() == 1){ //socket
             JSONObject toBeSent = null;
             try {
@@ -245,8 +255,8 @@ public class GUIGameController implements Initializable{
             guiClientSide.RMIInvoker("@GAME",action);
         }
         //if(moveConfirmed){
-            //resetAfterMove();
-            //updatePersonalShelfie();
+        //resetAfterMove();
+        //updatePersonalShelfie();
         //}
     }
 
@@ -444,8 +454,8 @@ public class GUIGameController implements Initializable{
                     ImageView tileImageView = (ImageView) node;
                     if (tileImageView.getImage() == null){
                         //if(i >= row){
-                            row = i;
-                            return row;
+                        row = i;
+                        return row;
                         //}
                     }
                 }
@@ -470,11 +480,11 @@ public class GUIGameController implements Initializable{
                 }else{
                     if (gameBoard.getBoard()[i][j] != null) {
                         //if (imageView.getImage() == null) {
-                            //create a number n depending on tile id, to have tiles of the same color with different pictures
-                            int n = ((gameBoard.getBoard()[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
-                            image = new Image("/images/Tile_" + gameBoard.getBoard()[i][j].getColor().colorLetter() + n + ".png");
-                            imageView.setOpacity(1);
-                            imageView.setImage(image);
+                        //create a number n depending on tile id, to have tiles of the same color with different pictures
+                        int n = ((gameBoard.getBoard()[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
+                        image = new Image("/images/Tile_" + gameBoard.getBoard()[i][j].getColor().colorLetter() + n + ".png");
+                        imageView.setOpacity(1);
+                        imageView.setImage(image);
                         /*}else{
                             System.out.println(imageView.getImage());
                             System.out.println(imageView.getImage().getUrl().charAt(16));
@@ -542,15 +552,19 @@ public class GUIGameController implements Initializable{
         int n;
         for(int i=0;i<shelfieRows;i++) {
             for (int j = 0; j < shelfieColumns; j++) {
-                s = guiClientSide.getUserShelfie().getGrid();
-                ImageView imageView = getImageViewInShelfie(Integer.toString(1), shelfieRows - 1 - i, j);
-                if(imageView==null && s[i][j]!=null){
-                    n = ((s[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
-                    imageView = new ImageView(new Image("/images/Tile_" + s[i][j].getColor().colorLetter() + n + ".png"));
-                }
-                if(imageView!=null && s[i][j]!=null){
-                    n = ((s[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
-                    imageView.setImage(new Image("/images/Tile_" + s[i][j].getColor().colorLetter() + n + ".png"));
+                if(guiClientSide.getUserShelfie()!=null){
+                    s = guiClientSide.getUserShelfie().getGrid();
+                    ImageView imageView = getImageViewInShelfie(Integer.toString(1), shelfieRows - 1 - i, j);
+                    if(imageView==null && s[i][j]!=null){
+                        n = ((s[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
+                        imageView = new ImageView(new Image("/images/Tile_" + s[i][j].getColor().colorLetter() + n + ".png"));
+                    }
+                    if(imageView!=null && s[i][j]!=null){
+                        n = ((s[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
+                        imageView.setImage(new Image("/images/Tile_" + s[i][j].getColor().colorLetter() + n + ".png"));
+                    }
+                }else{
+                    //TODO: send error
                 }
 
                 /*
@@ -579,21 +593,21 @@ public class GUIGameController implements Initializable{
         Tile[][] grid;
 
         for(String s: guiClientSide.nicknameShelfie.keySet()){
-            if(!s.equals(guiClientSide.getNickname())){
-                grid = guiClientSide.nicknameShelfie.get(s).getGrid();
-                for(int i=0;i<shelfieRows;i++){
-                    for(int j=0;j<shelfieColumns;j++){
-                        if(grid[i][j] != null){
-                            int n = ((grid[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
-                            image = new Image("/images/Tile_" + grid[i][j].getColor().colorLetter() + n + ".png");
-                            imageView = getImageViewInShelfie(s, shelfieRows - 1 - i, j);
-                            if(imageView!=null)
-                                imageView.setImage(image);
-                            //shelfie2.add(imageView, j, shelfieRows-i);
-                        }
+            // if(!s.equals(guiClientSide.getNickname())){
+            grid = guiClientSide.nicknameShelfie.get(s).getGrid();
+            for(int i=0;i<shelfieRows;i++){
+                for(int j=0;j<shelfieColumns;j++){
+                    if(grid[i][j] != null){
+                        int n = ((grid[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
+                        image = new Image("/images/Tile_" + grid[i][j].getColor().colorLetter() + n + ".png");
+                        imageView = getImageViewInShelfie(s, shelfieRows - 1 - i, j);
+                        if(imageView!=null)
+                            imageView.setImage(image);
+                        //shelfie2.add(imageView, j, shelfieRows-i);
                     }
                 }
             }
+            // }
         }
     }
 
@@ -680,7 +694,7 @@ public class GUIGameController implements Initializable{
     @FXML
     public void onSendMessage() throws IllegalInsertException {
         String message = chatMessage.getText();
-       // JSONObject jsonMessage = ChatWriter.writeChatMessage(message);
+        // JSONObject jsonMessage = ChatWriter.writeChatMessage(message);
         String action = "'" + receiver.getText() + "' " + message;
         //if (!isOkCommand(command, 2)) { errore}
 
@@ -693,9 +707,9 @@ public class GUIGameController implements Initializable{
                 receiver.setText("");
             }
         }else{//RMI
-             guiClientSide.RMIInvoker("@CHAT", action);
-             chatMessage.setText("");
-             receiver.setText("");
+            guiClientSide.RMIInvoker("@CHAT", action);
+            chatMessage.setText("");
+            receiver.setText("");
         }
     }
 
