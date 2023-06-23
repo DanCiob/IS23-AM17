@@ -74,7 +74,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     protected boolean GameIsOn = false;
 
-    private boolean okNickname;
+    private boolean okNickname = true;
     protected final Scanner input;
 
     protected final MessageHandler messageHandler;
@@ -158,7 +158,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         } while (GameMode != 1 && GameMode != 2);
                     }
 
-                    boolean confirm = true;
                     //this is so that if you press enter it connects to the server specified in the json file
                     if (!ServerAddress.equals("") && !PortString.equals("")) {
                         Port = Integer.parseInt(PortString);
@@ -168,24 +167,29 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     }
 
                     do {
-                        System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed, nickname: System/system isn't allowed)");
-                        System.out.println(">");
-                        Nickname = input.nextLine();
-                    } while (!isOkNickname() || !confirm || Nickname.equalsIgnoreCase("system"));
-                    String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(Nickname, GameMode, StartGame, NumOfPlayer), "@LOGN", Nickname).toJSONString();
-                    System.out.println(login);
-                    clientSide.sendMessage(login);
+                        do {
+                            System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed, nickname: System/system isn't allowed)");
+                            System.out.println(">");
+                            Nickname = input.nextLine();
+                        } while (!isOkNickname() || Nickname.equalsIgnoreCase("system"));
+                        String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(Nickname, GameMode, StartGame, NumOfPlayer), "@LOGN", Nickname).toJSONString();
+                        clientSide.sendMessage(login);
+                        try {
+                            TimeUnit.SECONDS.sleep(2);
+                        } catch (InterruptedException e) {
+                            System.out.println("Server did not respond, try again");
+                            okNickname = false;
+                        }
+                    } while (!okNickname);
                 }
 
-
-                //}while(nicknameNotUnique())
                 case 2 -> {//RMI
                     System.out.println("Connection with RMI...");
                     System.out.println("Digit server IP");
                     System.out.println(">");
                     ServerAddress = input.nextLine();
                     System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");
-                    System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
+                    System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname (you'll see a waiting lobby and rejoin when it's your turn)");
                     System.out.println(">");
                     do {
                         StartGame = input.nextInt();
@@ -227,7 +231,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
                 case 3 -> { //case of local use of RMI
                     System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");
-                    System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
+                    System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname (you'll see a waiting lobby and rejoin when it's your turn)");
                     System.out.println(">");
                     do {
                         StartGame = input.nextInt();
@@ -569,7 +573,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 ArrayList<Cell> cells = gmp.getTilesToBeRemoved();
                 int column = gmp.getColumn();
                 try {
-                    RemoteMethods.getStub().sendMove(cells, column, Nickname);
+                    boolean confirm = RemoteMethods.getStub().sendMove(cells, column, Nickname);
+                    if (!confirm)
+                        System.out.println("Error: Either it's not your turn or gameMove syntax is wrong");
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -1174,34 +1180,49 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     //////////////////
     //TESTING METHOD//
     //////////////////
+
+    /**
+     * Used only for testing
+     * @return gameboard
+     */
     public GameBoard getUserGameBoard() {
         return UserGameBoard;
     }
 
+    /**
+     * Used only for testing
+     * @return shelfie
+     */
     public Shelfie getUserShelfie() {
         return UserShelfie;
     }
 
+    /**
+     * Used only for testing
+     * @return PersonalCard
+     */
     public PersonalCards getPersonalCard() {
         return PersonalCard;
     }
 
+    /**
+     * Used only for testing
+     * @return Commoncard1
+     */
     public String getCommonCard1() {
         return CommonCard1;
     }
 
+    /**
+     * Used only for testing
+     * @return Commoncard2
+     */
     public String getCommonCard2() {
         return CommonCard2;
     }
 
-    public ClientSide getClientSide() {
-        return clientSide;
-    }
-    public ClientSideRMI getRemoteMethods() {
-        return RemoteMethods;
-    }
-
     /**
+     * Used only for testing
      * Game routine that wait for commands, check syntax and send JSON/invoke method to server if needed -> just for purpose
      */
     public void game(String move) throws RemoteException {
@@ -1323,5 +1344,14 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 RMIInvoker(op, action);
             }
         }
+    }
+
+    /**
+     * Used only for testing
+     * Disconnect CLI
+     */
+    public void disconnect() {
+        clientSide = null;
+        RemoteMethods = null;
     }
 }
