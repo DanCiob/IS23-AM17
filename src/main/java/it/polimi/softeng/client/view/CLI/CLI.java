@@ -179,8 +179,10 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                             System.out.println(">");
                             Nickname = input.nextLine();
                         } while (!isOkNickname() || Nickname.equalsIgnoreCase("system"));
+                        okNickname = true;
                         String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(Nickname, GameMode, StartGame, NumOfPlayer), "@LOGN", Nickname).toJSONString();
                         clientSide.sendMessage(login);
+
                         try {
                             TimeUnit.SECONDS.sleep(2);
                         } catch (InterruptedException e) {
@@ -326,7 +328,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 //Wait for errors
                 TimeUnit.SECONDS.sleep(1);
                 game(firstRun);
-
             } catch (InterruptedException | RemoteException e) {
                 throw new RuntimeException(e);
             }
@@ -343,7 +344,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      */
     public void game(boolean firstRun) throws RemoteException {
         //Print of the available commands (only at the first run), that the user can digit
-        commands(firstRun);
+        if (firstRun)
+            commands(true);
 
         String command = input.nextLine();
 
@@ -1346,14 +1348,5 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 RMIInvoker(op, action);
             }
         }
-    }
-
-    /**
-     * Used only for testing
-     * Disconnect CLI
-     */
-    public void disconnect() {
-        clientSide = null;
-        RemoteMethods = null;
     }
 }
