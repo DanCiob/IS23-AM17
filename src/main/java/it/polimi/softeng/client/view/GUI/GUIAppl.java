@@ -33,4 +33,9 @@ public class GUIAppl extends Application {
         primaryStage.show();
 
     }
+
+    @Override
+    public void stop(){
+        System.exit(0);
+    }
 }
