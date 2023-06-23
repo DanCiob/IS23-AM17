@@ -39,25 +39,36 @@ class ControllerTest {
     }
 
     /**
-     * Check that every connected player (with mixed connection method) has received all information
+     * Check that every connected player (with mixed connection method) has received all information, a particularly stressful situation is simulated due to the fact that
+     * every player send commands to server at the same time for every move
      */
     @Test
     void startGameMixedConnection() throws InterruptedException {
         Controller controller = new Controller();
         String enter = System.lineSeparator();
 
-        ByteArrayInputStream input1 = new ByteArrayInputStream((3 + enter + "" + enter + 1 + enter + 2 + enter + 2 + enter + "Player_1" + enter).getBytes());
+        ByteArrayInputStream input1 = new ByteArrayInputStream((3 + enter + "" + enter + 1 + enter + 4 + enter + 2 + enter + "Player_1" + enter).getBytes());
         ByteArrayInputStream input2 = new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 2 + enter + "Player_2" + enter).getBytes());
+        ByteArrayInputStream input3 = new ByteArrayInputStream((3 + enter + "" + enter + 2 + enter + "Player_3" + enter).getBytes());
+        ByteArrayInputStream input4 = new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 2 + enter + "Player_4" + enter).getBytes());
         CLI cli1 = new CLI(input1);
         CLI cli2 = new CLI(input2);
+        CLI cli3 = new CLI(input3);
+        CLI cli4 = new CLI(input4);
 
         cli1.setupCLI();
         cli2.setupCLI();
+        cli3.setupCLI();
+        cli4.setupCLI();
 
         assertNotNull(cli1.getNickname());
         assertNotNull(cli2.getNickname());
+        assertNotNull(cli3.getNickname());
+        assertNotNull(cli4.getNickname());
         assertEquals("Player_1", cli1.getNickname());
         assertEquals("Player_2", cli2.getNickname());
+        assertEquals("Player_3", cli3.getNickname());
+        assertEquals("Player_4", cli4.getNickname());
 
         TimeUnit.SECONDS.sleep(1);
 
@@ -71,81 +82,102 @@ class ControllerTest {
         assertNotNull(cli2.getCommonCard1());
         assertNotNull(cli1.getCommonCard2());
         assertNotNull(cli2.getCommonCard2());
+        assertNotNull(cli3.getUserGameBoard());
+        assertNotNull(cli4.getUserGameBoard());
+        assertNotNull(cli3.getUserShelfie());
+        assertNotNull(cli4.getUserShelfie());
+        assertNotNull(cli3.getPersonalCard());
+        assertNotNull(cli4.getPersonalCard());
+        assertNotNull(cli3.getCommonCard1());
+        assertNotNull(cli4.getCommonCard1());
+        assertNotNull(cli3.getCommonCard2());
+        assertNotNull(cli4.getCommonCard2());
+
 
         try {
-            String move = "@GAME (7,4),0";
-            if (controller.getGameController().getCurrentGame().getCurrentPlayer().getNickname().equals(cli1.getNickname()))
-                cli1.game(move);
-            else
-                cli2.game(move);
+            String move = "@GAME (0,3),0";
+            cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
+            cli4.game(move);
 
             TimeUnit.SECONDS.sleep(1);
 
-            move = "@GAME (7,5),0";
-            if (controller.getGameController().getCurrentGame().getCurrentPlayer().getNickname().equals(cli1.getNickname()))
-                cli1.game(move);
-            else
-                cli2.game(move);
+            move = "@GAME (0,4),0";
+            cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
+            cli4.game(move);
 
             move = "@CHAT 'all' Test";
-            cli2.game(move);
             cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
+            cli4.game(move);
 
             move = "@VPLA";
-            cli2.game(move);
             cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
+            cli4.game(move);
 
             move = "@VCCA";
-            cli2.game(move);
             cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
+            cli4.game(move);
 
             move = "@VBOR";
-            cli2.game(move);
             cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
+            cli4.game(move);
 
             move = "@VSHE";
-            cli2.game(move);
             cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
+            cli4.game(move);
 
             //An error is issued
-            move = "@GAME (7,5),0";
-            if (controller.getGameController().getCurrentGame().getCurrentPlayer().getNickname().equals(cli1.getNickname()))
-                cli1.game(move);
-            else
-                cli2.game(move);
+            move = "@GAME (0,3),0";
+            cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
+            cli4.game(move);
 
             //Simulate disconnection
             controller.getServerSide().getServerSideTCP().addDisconnectedPlayer("Player_2");
+            controller.getServerSide().getLoginManager().addDisconnectedPlayer("Player_3");
+            controller.getServerSide().getServerSideRMI().removeRMIClient("Player_3");
+            controller.getServerSide().getServerSideTCP().addDisconnectedPlayer("Player_4");
+
+            TimeUnit.SECONDS.sleep(1);
+
             assertEquals(1, controller.getServerSide().getServerSideRMI().getNameToStub().size());
             assertEquals(0, controller.getServerSide().getServerSideTCP().getNickNameToClientHandler().size());
-            CLI cli3 = new CLI(new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 2 + enter + "Player_2" + enter).getBytes()));
+
+            //An error is issued -> only one player connected
+            move = "@GAME (7,5),0";
+            cli1.game(move);
+
+            //Reconnect two client
+            cli2 = new CLI(new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 2 + enter + "Player_2" + enter).getBytes()));
+            cli3 = new CLI(new ByteArrayInputStream((3 + enter + "" + enter + 2 + enter + "Player_3" + enter).getBytes()));
+            cli2.setupCLI();
             cli3.setupCLI();
             TimeUnit.SECONDS.sleep(1);
-
-            //An error is issued
-            move = "@GAME (7,5),0";
-            if (controller.getGameController().getCurrentGame().getCurrentPlayer().getNickname().equals(cli1.getNickname()))
-                cli1.game(move);
-            else
-                cli3.game(move);
-
-            //Simulate disconnection
-            controller.getServerSide().getServerSideRMI().getLoginManager().addDisconnectedPlayer("Player_1");
-            controller.getServerSide().getServerSideRMI().removeRMIClient("Player_1");
-            assertEquals(0, controller.getServerSide().getServerSideRMI().getNameToStub().size());
+            assertEquals(2, controller.getServerSide().getServerSideRMI().getNameToStub().size());
             assertEquals(1, controller.getServerSide().getServerSideTCP().getNickNameToClientHandler().size());
-            CLI cli4 = new CLI(new ByteArrayInputStream((3 + enter + "" + enter + 2 + enter + "Player_1" + enter).getBytes()));
-            cli4.setupCLI();
-            TimeUnit.SECONDS.sleep(1);
 
+            //Error is issued
             move = "@GAME (1,3),(1,4),0";
-            if (controller.getGameController().getCurrentGame().getCurrentPlayer().getNickname().equals(cli1.getNickname()))
-                cli4.game(move);
-            else
-                cli3.game(move);
+            cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
 
-            assertNotNull(controller.getGameController().getCurrentGame().getGameBoard().getBoard()[1][3]);
-            assertNotNull(controller.getGameController().getCurrentGame().getGameBoard().getBoard()[1][4]);
+            assertNull(controller.getGameController().getCurrentGame().getGameBoard().getBoard()[1][3]);
+            assertNull(controller.getGameController().getCurrentGame().getGameBoard().getBoard()[1][4]);
 
             //Simulate end game
             Shelfie fullShelfie = new Shelfie();
@@ -161,18 +193,40 @@ class ControllerTest {
             fullShelfie.setGridAtNull(Constants.shelfieRows - 1, Constants.shelfieColumns - 1);
             controller.getGameController().getCurrentGame().getPlayers().get(0).setShelfie(fullShelfie);
             controller.getGameController().getCurrentGame().getPlayers().get(1).setShelfie(fullShelfie);
+            controller.getGameController().getCurrentGame().getPlayers().get(2).setShelfie(fullShelfie);
+
+            move = "@CHAT 'all' Test";
+            cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
+            move = "@CHAT 'Player_1' Test";
+            cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
+            move = "@CHAT 'Player_5' Test";
+            cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
+            move = "@CHAT 'Player_4' Test";
+            cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
 
             move = "@GAME (2,3),4";
-            if (controller.getGameController().getCurrentGame().getCurrentPlayer().getNickname().equals(cli1.getNickname()))
-                cli4.game(move);
-            else
-                cli3.game(move);
+            cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
 
             move = "@GAME (2,4),4";
-            if (controller.getGameController().getCurrentGame().getCurrentPlayer().getNickname().equals(cli1.getNickname()))
-                cli4.game(move);
-            else
-                cli3.game(move);
+            cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
+
+            move = "@GAME (8,4),4";
+            cli1.game(move);
+            cli2.game(move);
+            cli3.game(move);
+
 
         } catch (RemoteException e) {
             throw new RuntimeException(e);
@@ -180,7 +234,9 @@ class ControllerTest {
 
         TimeUnit.SECONDS.sleep(1);
 
-        assertNull(controller.getGameController().getCurrentGame().getGameBoard().getBoard()[7][4]);
-        assertNull(controller.getGameController().getCurrentGame().getGameBoard().getBoard()[7][5]);
+        assertNull(controller.getGameController().getCurrentGame().getGameBoard().getBoard()[0][3]);
+        assertNull(controller.getGameController().getCurrentGame().getGameBoard().getBoard()[0][4]);
+        assertNotNull(controller.getGameController().getCurrentGame().getGameBoard().getBoard()[5][3]);
+        assertNotNull(controller.getGameController().getCurrentGame().getGameBoard().getBoard()[5][4]);
     }
 }
