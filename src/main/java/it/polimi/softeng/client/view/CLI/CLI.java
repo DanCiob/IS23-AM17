@@ -1349,4 +1349,13 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             }
         }
     }
+
+    /**
+     * Used only for testing
+     * Disconnect CLI
+     */
+    public void disconnect() {
+        clientSide = null;
+        RemoteMethods = null;
+    }
 }
