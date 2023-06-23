@@ -27,6 +27,9 @@ import java.util.regex.Pattern;
 import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
 
+/**
+ * Command Line Interface for MyShelfie
+ */
 public class CLI extends CommonOperationsFramework implements UI, Runnable {
     /**
      * Local representation of GameBoard
@@ -50,7 +53,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     protected int Port;
 
     /**
-     * 1 -> player want to create new game (FA: multi-game management)
+     * 1 -> player want to create new game
      * 2 -> player want to join (if present) a game which is already started
      */
     protected int StartGame;
@@ -72,11 +75,20 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      */
     protected int ConnectionMode = 0;
 
+    /**
+     * Trigger to activate game phase
+     */
     protected boolean GameIsOn = false;
 
+    /**
+     * Used in login procedure to avoid duplicate nickname
+     */
     private boolean okNickname = true;
     protected final Scanner input;
 
+    /**
+     * Manage reception of message -> Socket
+     */
     protected final MessageHandler messageHandler;
 
     /**
@@ -88,11 +100,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      * Manage connection -> RMI
      */
     protected ClientSideRMI RemoteMethods;
-
-    /**
-     * True if it's player turn
-     */
-    private boolean isYourTurn = false;
 
     public CLI() {
         this.messageHandler = new MessageHandler(this);
@@ -434,7 +441,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 //Send message to server
                 if (toBeSent != null)
                     clientSide.sendMessage(clientSignObject(toBeSent, op, Nickname).toJSONString());
-                isYourTurn = false;
             }
 
 
@@ -452,7 +458,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         return;
                     }
                 }
-                isYourTurn = false;
                 RMIInvoker(op, action);
             }
         }
@@ -672,27 +677,27 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      * Print loading animation
      */
     public void loadingScreen() throws InterruptedException {
-        TimeUnit.MILLISECONDS.sleep(500);
+        TimeUnit.MILLISECONDS.sleep(1000);
         if (GameIsOn) return;
         System.out.println("[          ]");
         if (GameIsOn) return;
 
-        TimeUnit.MILLISECONDS.sleep(500);
+        TimeUnit.MILLISECONDS.sleep(1000);
         if (GameIsOn) return;
         System.out.println("[===       ]");
         if (GameIsOn) return;
 
-        TimeUnit.MILLISECONDS.sleep(500);
+        TimeUnit.MILLISECONDS.sleep(1000);
         if (GameIsOn) return;
         System.out.println("[=====     ]");
         if (GameIsOn) return;
 
-        TimeUnit.MILLISECONDS.sleep(500);
+        TimeUnit.MILLISECONDS.sleep(1000);
         if (GameIsOn) return;
         System.out.println("[=======   ]");
         if (GameIsOn) return;
 
-        TimeUnit.MILLISECONDS.sleep(500);
+        TimeUnit.MILLISECONDS.sleep(1000);
         if (GameIsOn) return;
         System.out.println("[==========]");
     }
@@ -1041,7 +1046,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 System.out.println("| It's your turn! |");
                 System.out.println("+-----------------+");
                 System.out.println(ANSI_RESET);
-                isYourTurn = true;
             }
 
             //Servers-side errors
@@ -1322,7 +1326,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 //Send message to server
                 if (toBeSent != null)
                     clientSide.sendMessage(clientSignObject(toBeSent, op, Nickname).toJSONString());
-                isYourTurn = false;
             }
 
 
@@ -1340,7 +1343,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         return;
                     }
                 }
-                isYourTurn = false;
                 RMIInvoker(op, action);
             }
         }
