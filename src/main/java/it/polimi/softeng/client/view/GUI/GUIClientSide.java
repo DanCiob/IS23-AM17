@@ -665,7 +665,10 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     }
 
     public Stage getStage() {
-        return stage;
+        if(stage!=null)
+            return stage;
+        else
+            return new Stage();
     }
 
     public boolean isGameIsOn() {

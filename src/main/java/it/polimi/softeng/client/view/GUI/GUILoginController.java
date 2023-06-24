@@ -171,7 +171,8 @@ public class GUILoginController implements Initializable {
     public void switchToWait(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(GUILoginController.class.getResource("/it.polimi.softeng.client.view.GUI/WaitingScreen.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        //stage = new Stage();
+        if(stage == null)
+            stage = new Stage();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
