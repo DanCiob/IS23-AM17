@@ -47,10 +47,10 @@ class ControllerTest {
         Controller controller = new Controller();
         String enter = System.lineSeparator();
 
-        ByteArrayInputStream input1 = new ByteArrayInputStream((3 + enter + "" + enter + 1 + enter + 4 + enter + 2 + enter + "Player_1" + enter).getBytes());
-        ByteArrayInputStream input2 = new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 2 + enter + "Player_2" + enter).getBytes());
-        ByteArrayInputStream input3 = new ByteArrayInputStream((3 + enter + "" + enter + 2 + enter + "Player_3" + enter).getBytes());
-        ByteArrayInputStream input4 = new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 2 + enter + "Player_4" + enter).getBytes());
+        ByteArrayInputStream input1 = new ByteArrayInputStream((3 + enter + "" + enter + 4 + enter + 2 + enter + "Player_1" + enter).getBytes());
+        ByteArrayInputStream input2 = new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 4 + enter + 2 + enter + "Player_2" + enter).getBytes());
+        ByteArrayInputStream input3 = new ByteArrayInputStream((3 + enter + "" + enter + 1 + enter + 4 + enter + 2 + enter + "Player_3" + enter).getBytes());
+        ByteArrayInputStream input4 = new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 4 + enter + 2 + enter + "Player_4" + enter).getBytes());
         CLI cli1 = new CLI(input1);
         CLI cli2 = new CLI(input2);
         CLI cli3 = new CLI(input3);
@@ -162,8 +162,8 @@ class ControllerTest {
             cli1.game(move);
 
             //Reconnect two client
-            cli2 = new CLI(new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 2 + enter + "Player_2" + enter).getBytes()));
-            cli3 = new CLI(new ByteArrayInputStream((3 + enter + "" + enter + 2 + enter + "Player_3" + enter).getBytes()));
+            cli2 = new CLI(new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 4 + enter + 2 + enter + "Player_2" + enter).getBytes()));
+            cli3 = new CLI(new ByteArrayInputStream((3 + enter + "" + enter + 1 + enter + 4 + enter + 2 + enter + "Player_3" + enter).getBytes()));
             cli2.setupCLI();
             cli3.setupCLI();
             TimeUnit.SECONDS.sleep(1);
