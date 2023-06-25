@@ -107,22 +107,24 @@ public class ServerSideRMI extends ServerSideMethods {
         Boolean flag = false;
         String playerToBeDeleted = null;
         while(true){
-            for(String player : loginManager.getNickNameList()){
-                try {
-                    if(nameToStub.containsKey(player)) { //todo this should be a list of players to be removed
-                        nameToStub.get(player).ping();
+            synchronized (loginManager.getNickNameList()){
+                for(String player : loginManager.getNickNameList()){
+                    try {
+                        if(nameToStub.containsKey(player)) { //todo this should be a list of players to be removed
+                            nameToStub.get(player).ping();
+                        }
+                    } catch (RemoteException e ) {
+                        //e.printStackTrace();
+                        playerToBeDeleted = player;
+                        flag = true;
                     }
-                } catch (RemoteException e ) {
-                    //e.printStackTrace();
-                    playerToBeDeleted = player;
-                    flag = true;
                 }
-            }
-            if(flag){
-                loginManager.addDisconnectedPlayer(playerToBeDeleted);
-                removeRMIClient(playerToBeDeleted);
-                flag = false;
-                playerToBeDeleted = null;
+                if(flag){
+                    loginManager.addDisconnectedPlayer(playerToBeDeleted);
+                    removeRMIClient(playerToBeDeleted);
+                    flag = false;
+                    playerToBeDeleted = null;
+                }
             }
 
             try {

@@ -65,7 +65,11 @@ public class LoginManagerV2 {
     /**
      * this value is the number of seconds the server is going to wait for reconnection of a player to a match that remained with only one player
      */
-    int timerValue = 30;            //TODO this variable should be in a json file
+    int timerValue = 30;  //TODO this variable should be in a json file
+    /**
+     * value in seconds of time after win message (in case of disconnection of all players) before closing the game app
+     */
+    int endTimerValue = 10; //TODO this variable should be in a json file
 
     /**
      * constructor method for this class; sets the status to gamelobby
@@ -106,17 +110,19 @@ public class LoginManagerV2 {
      */
     public void addDisconnectedPlayer(String player) {
         //deleting such nickname from active nicknames
-        boolean flag = false;
-        int j = 0;
-        for (int i = 0; i < nickNameList.size(); i++) {
-            if (nickNameList.get(i).equals(player)) {
-                j = i;
-                System.out.println("found string to be removed from the list of active nickNames");
-                flag = true;
+        synchronized (nickNameList){
+            boolean flag = false;
+            int j = 0;
+            for (int i = 0; i < nickNameList.size(); i++) {
+                if (nickNameList.get(i).equals(player)) {
+                    j = i;
+                    System.out.println("found string to be removed from the list of active nickNames");
+                    flag = true;
+                }
             }
-        }
-        if (flag) {
-            nickNameList.remove(j);
+            if (flag) {
+                nickNameList.remove(j);
+            }
         }
 
         //removing from name to stub map if the player used rmi
@@ -168,36 +174,41 @@ public class LoginManagerV2 {
         }
 
         //removing the player from disconnected player list if he was previously there
-        if (disconnectedPlayerList.contains(nickName)) {
-            boolean flag = false;
-            int j = 0;
-            for (int i = 0; i < disconnectedPlayerList.size(); i++) {
-                if (disconnectedPlayerList.get(i).equals(nickName)) {
-                    j = i;
-                    System.out.println("found nickName to be removed from the list of disconnected players");
+        synchronized (disconnectedPlayerList){
+            if (disconnectedPlayerList.contains(nickName)) {
+                synchronized (disconnectedPlayerList){
+                    boolean flag = false;
+                    int j = 0;
+                    for (int i = 0; i < disconnectedPlayerList.size(); i++) {
+                        if (disconnectedPlayerList.get(i).equals(nickName)) {
+                            j = i;
+                            System.out.println("found nickName to be removed from the list of disconnected players");
 
-                    String msg = writeUserReconnectedMsg(nickName);
-                    serverMessageHandler.getController().getChatController().sendChatMessage("all",msg,serverMessageHandler.getController().getServerSide(), "server");
+                            String msg = writeUserReconnectedMsg(nickName);
+                            serverMessageHandler.getController().getChatController().sendChatMessage("all",msg,serverMessageHandler.getController().getServerSide(), "server");
 
-                    flag = true;
+                            flag = true;
+                        }
+                    }
+                    serverMessageHandler.getController().getGameController().disconnectionRoutine(nickName); //todo this becomes call of controller to start game again
+
+                    //removing reconnected player from disconnected player list
+                    if (flag) {
+                        disconnectedPlayerList.remove(j);
+                    }
                 }
+
+                //this stops the countdown in case it started and a players rejoins
+                if (countdownStarted) {
+                    countdownStarted = false;
+
+                    String msg = writeCountdownStoppedMsg();
+                    serverMessageHandler.getController().getChatController().sendChatMessage("all",msg,serverMessageHandler.getController().getServerSide(), "server");
+                }
+
             }
-            serverMessageHandler.getController().getGameController().addReconnectedPlayer(nickName);
-
-            //removing reconnected player from disconnected player list
-            if (flag) {
-                disconnectedPlayerList.remove(j);
-            }
-
-            //this stops the countdown in case it started and a players rejoins
-            if (countdownStarted) {
-                countdownStarted = false;
-
-                String msg = writeCountdownStoppedMsg();
-                serverMessageHandler.getController().getChatController().sendChatMessage("all",msg,serverMessageHandler.getController().getServerSide(), "server");
-            }
-
         }
+
     }
 
     /**
@@ -276,6 +287,16 @@ public class LoginManagerV2 {
         while (countdownStarted) {
             if (secondsElapsed == timerValue) {
                 //set winner and kill game
+
+                msg = writeWinMessage(lastPlayer);
+                serverMessageHandler.getController().getChatController().sendChatMessage(lastPlayer,msg,serverMessageHandler.getController().getServerSide(), "system");
+
+                try {
+                    Thread.sleep(endTimerValue * 1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
                 System.out.println("game ended because nobody rejoined");
                 System.exit(0);
             } else {
@@ -347,6 +368,16 @@ public class LoginManagerV2 {
         JSONObject ChatJSON = new JSONObject();
 
         String msg = "user " + reconnectedUser + " has rejoined the game";
+        ChatJSON.put("message", msg);
+        ChatJSON.put("requester","server");
+        ChatJSON = serverSignObject(ChatJSON,"@CHAT","all");
+
+        return ChatJSON.toJSONString();
+    }
+    public String writeWinMessage (String receiver) {
+        JSONObject ChatJSON = new JSONObject();
+
+        String msg = "you won the game; the application is going to close in 10 seconds";
         ChatJSON.put("message", msg);
         ChatJSON.put("requester","server");
         ChatJSON = serverSignObject(ChatJSON,"@CHAT","all");

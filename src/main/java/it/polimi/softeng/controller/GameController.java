@@ -35,17 +35,6 @@ public class GameController {
      * @param requester        is receiver of updates
      */
     public boolean sendGameMove(ArrayList<Cell> tilesToBeRemoved, int column, String requester) {
-
-        //when somebody sends a game move they start the ui for the reconnected players waiting; they need some infos sent to them by the method disconnectedPlayerRoutine
-        if(reconnectedPlayer.size() > 0){
-            disconnectionRoutine(reconnectedPlayer);
-
-            //fast way to empty an arraylist
-            reconnectedPlayer = new ArrayList<>();
-        }
-
-
-
         ////////////////////////////////
         //CHECK IF IT'S REQUESTER TURN//
         ////////////////////////////////
@@ -315,7 +304,7 @@ public class GameController {
             try {
                 temp.notifyTurn();
             } catch (RemoteException e) {
-                throw new RuntimeException(e);
+                System.out.println("cant send command for turn");
             }
         }
         //Is TCP user
@@ -326,13 +315,19 @@ public class GameController {
 
     /**
      * accessory method used to send info to the reconnected users; it sends again personal card, common cards, player list with their scores
-     * @param nameList list of disconnected players that need the infos sent again
+     * @param nickName name of disconnected player that need the infos sent again
      */
-    public void disconnectionRoutine(ArrayList<String> nameList){
+    public void disconnectionRoutine(String nickName){
+        //README : this method contains reused code from above with some workarounds and minor adaptations; this is because the code above is well tested
 
         //Send personal card to everybody
         ArrayList<Player> players;
         players = game.getPlayers();
+
+        //creating an arraylist to reuse the code of another section
+        ArrayList<String> nameList = new ArrayList<>();
+        nameList.add(nickName);
+
         for (String s : nameList) {
             //Get personal card related to player
             Player actualPlayer = players.stream().filter(p -> p.getNickname().equals(s)).findAny().get();
@@ -343,7 +338,7 @@ public class GameController {
                 try {
                     temp.sendPersonalCard(pc);
                 } catch (RemoteException e) {
-                    throw new RuntimeException(e);
+                    System.out.println("couldnt send personal card");
                 }
             }
             //If it's a TCP  user
@@ -353,23 +348,26 @@ public class GameController {
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        //Send Common Cards to everyone
+        //Send Common Cards
         ArrayList<CommonCards> cc = game.getCommonCards();
 
-        //Send to RMI users
+        //Send to RMI user
         for (String s : controller.getServerSide().getServerSideRMI().getNameToStub().keySet()) {
-            ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
-            try {
-                temp.sendCommonCard(cc, true);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
+            if(s.equals(nickName)){
+                ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
+                try {
+                    temp.sendCommonCard(cc, true);
+                } catch (RemoteException e) {
+                    System.out.println("couldnt send common card");
+                }
             }
         }
-        //Send to all TCP user
-        if (cc.size() == 1)
-            controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(CommonCardWriter.writeCommonCard(cc.get(0).getName(), null), "@VCCA", "all").toJSONString());
-        else
-            controller.getServerSide().sendMessageToAll(ServerSignatureWriter.serverSignObject(CommonCardWriter.writeCommonCard(cc.get(0).getName(), cc.get(1).getName()), "@VCCA", "all").toJSONString());
+        //Send to TCP user; this works because sendMessage doesnt send such message if the user is not in the list of tcp user
+
+            if (cc.size() == 1)
+                controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(CommonCardWriter.writeCommonCard(cc.get(0).getName(), null), "@VCCA", "all").toJSONString(),nickName);
+            else
+                controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(CommonCardWriter.writeCommonCard(cc.get(0).getName(), cc.get(1).getName()), "@VCCA", "all").toJSONString(),nickName);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -377,15 +375,78 @@ public class GameController {
 
         //Send to RMI users
         for (String s : controller.getServerSide().getServerSideRMI().getNameToStub().keySet()) {
-            ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
-            try {
-                temp.playerListUpdate(game.getPlayers());
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
+            if(s.equals(nickName)){
+                ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
+                try {
+                    temp.playerListUpdate(game.getPlayers());
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
         //Send to all TCP user
-        controller.getServerSide().sendMessageToAll(serverSignObject(playerAndScoreWriter(getCurrentGame().getPlayers()), "@VPLA", "System").toJSONString());
+        controller.getServerSide().sendMessage(serverSignObject(playerAndScoreWriter(getCurrentGame().getPlayers()), "@VPLA", "System").toJSONString(),nickName);
+
+        //////////////////
+        //SHELFIE UPDATE//
+        //////////////////
+
+        Map<Shelfie, Player> shelfiesToSend = new HashMap<>();
+        //Collect all shelfies
+        for (Player p: game.getPlayers())
+            shelfiesToSend.put(p.getShelfie(), p);
+
+        //Send shelfies to everybody
+        for (Player p: game.getPlayers()) {
+            if(p.getNickname().equals(nickName)) {
+                for (Shelfie s : shelfiesToSend.keySet()) {
+                    //Is a RMI user
+                    if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(p.getNickname())) {
+
+                        ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(p.getNickname());
+                        try {
+                            if (shelfiesToSend.get(s).getNickname().equals(p.getNickname())) {
+                                System.out.println(temp);
+                                System.out.println(s);
+                                temp.shelfieUpdate(s);
+                            } else
+                                temp.playerUpdate(shelfiesToSend.get(s), s);
+                            System.out.println("Player " + p.getNickname() + " updated shelfie sent");
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    //Is TCP user
+                    else if (shelfiesToSend.get(s).getNickname().equals(p.getNickname()))
+                        controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(s), "@SHEL", p.getNickname()).toJSONString(), p.getNickname());
+                    else
+                        controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ShelfieWriter.shelfieChangeNotifier(s, shelfiesToSend.get(s).getNickname()), "@OSHE", p.getNickname()).toJSONString(), p.getNickname());
+                    System.out.println("Player " + p.getNickname() + " updated shelfie sent");
+                }
+            }
+        }
+
+        //THIS MUST BE THE LAST UPDATE OR THE FIRST ?
+        ////////////////
+        //BOARD UPDATE//
+        ////////////////
+
+        //Notifies every RMI User -> gameBoard notifications
+        for (String s : controller.getServerSide().getServerSideRMI().getNameToStub().keySet()) {
+            System.out.println(s);
+            if(s.equals(nickName)){
+                ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(s);
+                try {
+                    temp.gameBoardUpdate(game.getGameBoard());
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        //Notifies every TCP user
+        controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(BoardWriter.boardChangeNotifier(game.getGameBoard()), "@BORD", "all").toJSONString(),nickName);
+        System.out.println("Updated board sent");
+
     }
     public Game getCurrentGame() {
         return game;

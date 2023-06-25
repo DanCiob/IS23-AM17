@@ -133,7 +133,7 @@ public class ServerSide {
                         try {
                             serverSideRMI.getNameToStub().get(player).displayChatMessage(message,requester);
                         } catch (RemoteException e) {
-                            throw new RuntimeException(e);
+                            System.out.println("cant send chat message");
                         }
                     }
                 }
@@ -144,7 +144,7 @@ public class ServerSide {
                         try {
                             serverSideRMI.getNameToStub().get(player).displayChatMessage(message,requester);
                         } catch (RemoteException e) {
-                            throw new RuntimeException(e);
+                            System.out.println("cant send chat message");
                         }
                     }
                 }
