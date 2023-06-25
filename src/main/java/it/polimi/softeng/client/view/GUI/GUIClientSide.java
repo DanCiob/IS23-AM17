@@ -62,12 +62,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     protected int StartGame;
 
     /**
-     * 1 -> Easy Mode (only one Common Card is used the game)
-     * 2 -> Normal Mode (two Common Cards are used during the game)
-     */
-    protected int GameMode;
-
-    /**
      * NumOfPlayer for current game
      */
     protected int NumOfPlayer;
@@ -106,15 +100,10 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     public GUIClientSide() {
     }
 
-    public void setupGUI(int connectionMode, String serverAddress, int port, int startGame, int numPlayers, int mode) {
+    public void setupGUI(int connectionMode, String serverAddress, int port, int numPlayers) {
         setConnectionMode(connectionMode);
         setServerAddress(serverAddress);
         setPort(port);
-        setStartGame(startGame);
-        if (startGame == 1) { //create new game
-            setNumOfPlayer(numPlayers);
-            setGameMode(mode);
-        }
     }
 
     public ClientSide getClientSide() {
@@ -204,6 +193,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public void scoreVisualizer(ArrayList<Player> players) {
+        setNumOfPlayer(players.size());
         for (Player p: players) {
             nicknameShelfie.put(p.getNickname(), new Shelfie());
 
@@ -531,10 +521,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         StartGame = startGame;
     }
 
-    public void setGameMode(int gameMode) {
-        GameMode = gameMode;
-    }
-
     public void setNumOfPlayer(int numOfPlayer) {
         NumOfPlayer = numOfPlayer;
     }
@@ -626,10 +612,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     public int getStartGame() {
         return StartGame;
-    }
-
-    public int getGameMode() {
-        return GameMode;
     }
 
     public int getNumOfPlayer() {

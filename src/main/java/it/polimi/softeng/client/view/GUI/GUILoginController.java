@@ -56,14 +56,8 @@ public class GUILoginController implements Initializable {
     @FXML
     TextField serverPort;
 
-
-    @FXML
-    ChoiceBox<String> game;
     @FXML
     ChoiceBox<String> numberOfPlayer;
-
-    @FXML
-    ChoiceBox<String> mode;
 
     @FXML
     HBox hboxNumPlayers;
@@ -73,20 +67,6 @@ public class GUILoginController implements Initializable {
 
     @FXML
     Button loginButton;
-
-    @FXML
-    protected void onNewGame() {
-        if (game.getSelectionModel().getSelectedIndex() == 0) { //option create new game
-            np.setText("Select the number of players: ");
-            hboxNumPlayers.setVisible(true);
-            hboxMode.setVisible(true);
-        }
-        if (game.getSelectionModel().getSelectedIndex() == 1) { //option join a new game
-            np.setText("Select the number of players: ");
-            hboxNumPlayers.setVisible(false);
-            hboxMode.setVisible(false);
-        }
-    }
 
     @FXML
     protected void onSocketOrRmi(){
@@ -123,12 +103,12 @@ public class GUILoginController implements Initializable {
             //save values in guiClientSide
             if(!serverPort.getText().equals(""))
                 guiClientSide.setupGUI(connectionMode, serverIP.getText(),
-                        Integer.parseInt(serverPort.getText()), game.getSelectionModel().getSelectedIndex() + 1,
-                        numberOfPlayer.getSelectionModel().getSelectedIndex() + 2, mode.getSelectionModel().getSelectedIndex() + 1);
+                        Integer.parseInt(serverPort.getText()),
+                        numberOfPlayer.getSelectionModel().getSelectedIndex() + 2);
             else
                 guiClientSide.setupGUI(connectionMode, serverIP.getText(),
-                        1099, game.getSelectionModel().getSelectedIndex() + 1,
-                        numberOfPlayer.getSelectionModel().getSelectedIndex() + 2, mode.getSelectionModel().getSelectedIndex() + 1);
+                        1099,
+                        numberOfPlayer.getSelectionModel().getSelectedIndex() + 2);
             if(loginNotifier()){
                 guiClientSide.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
                 Service New_Service = new Service() {
@@ -205,15 +185,8 @@ public class GUILoginController implements Initializable {
      * @return false if the nickname is not unique or there is an error
      */
     public boolean loginNotifier() {
-        int startgame;
-        int gamemode = 0;
+        int gamemode = 2;
         int numPlayers = 0;
-
-        if (game.getSelectionModel().getSelectedIndex() == 0)
-            startgame = 1;
-        else {
-            startgame = 2;
-        }
 
         if (numberOfPlayer.getSelectionModel().getSelectedIndex() == 0)
             numPlayers = 2;
@@ -221,10 +194,6 @@ public class GUILoginController implements Initializable {
             numPlayers = 3;
         else if (numberOfPlayer.getSelectionModel().getSelectedIndex() == 2)
             numPlayers = 4;
-        if (mode.getSelectionModel().getSelectedIndex() == 0)
-            gamemode = 1;
-        else if (mode.getSelectionModel().getSelectedIndex() == 1)
-            gamemode = 2;
         //nickname uniqueness
         if(guiClientSide.isOkNickname())
             switch (guiClientSide.getConnectionMode()) {
@@ -239,7 +208,7 @@ public class GUILoginController implements Initializable {
                         guiClientSide.clientSide = new ClientSide(guiClientSide.messageHandler);
                     }
 
-                    String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(nickname.getText(), gamemode, startgame, numPlayers), "@LOGN", nickname.getText()).toJSONString();
+                    String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(nickname.getText(), gamemode, 1, numPlayers), "@LOGN", nickname.getText()).toJSONString();
                     System.out.println(login);
                     guiClientSide.getClientSide().sendMessage(login);
                     try {
