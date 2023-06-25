@@ -23,7 +23,8 @@ public class PlayerParser {
         {
             JSONObject obj1 = (JSONObject) arr.get(i);
             Player p = new Player((String) obj1.get("name"), (int) (long) obj1.get("score"));
-
+            if((Boolean) obj1.get("isFirst"))
+                p.setIsFirst();
             toBeRet.add(p);
         }
 

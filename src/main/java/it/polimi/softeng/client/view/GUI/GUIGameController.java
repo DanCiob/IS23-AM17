@@ -1,6 +1,5 @@
 package it.polimi.softeng.client.view.GUI;
 
-import it.polimi.softeng.JSONWriter.ChatWriter;
 import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.*;
 import javafx.application.Platform;
@@ -23,11 +22,9 @@ import org.json.simple.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 
 import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
@@ -36,9 +33,15 @@ import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObjec
  * Manage game screen for GUI
  */
 public class GUIGameController implements Initializable{
+    //TODO: remove cbadgecommoncard in comments
 
     boolean moveError = false;
     boolean moveConfirmed = false;
+
+    int pointsCommonCard1;
+
+    int pointsCommonCard2;
+
 
     GUIClientSide guiClientSide;
 
@@ -67,14 +70,14 @@ public class GUIGameController implements Initializable{
     @FXML
     ImageView commoncard1;
 
-    @FXML
-    ImageView badgeCommonCard1;
+ /*   @FXML
+    ImageView badgeCommonCard1;*/
 
     @FXML
     ImageView commoncard2;
 
-    @FXML
-    ImageView badgeCommonCard2;
+   /* @FXML
+    ImageView badgeCommonCard2;*/
 
     @FXML
     Pane panePlayer3;
@@ -121,28 +124,29 @@ public class GUIGameController implements Initializable{
     }
 
     public void initialize(URL url, ResourceBundle rb) {
+        System.out.println("GuiRegistry size" + GUIRegistry.guiList.size());
+
         guiClientSide = GUIRegistry.guiList.get(0);
         guiClientSide.setGameController(this);
         GUIRegistry.numberOfGUI++;
+
+        System.out.println("number of gui after guigamecontroller added"+ GUIRegistry.numberOfGUI);
+
         if(guiClientSide.isFirst)
             player1badge1.setImage(new Image("/images/firstplayertoken.png"));
-        if(guiClientSide.isYourTurn){//TODO: change this for reconnection
-
-            //player1badge1.setImage(new Image("/images/firstplayertoken.png"));
-        }else{
+        if(!guiClientSide.isYourTurn){
             boardGrid.setDisable(true);
             sendBoardMovesButton.setDisable(true);
             resetButton.setDisable(true);
         }
         updateBoard();
-        if(guiClientSide.getCommonCard1() == null) {
-            //todo: send error
-        }else{
-            //System.out.println("/images/CommonCard_" + guiClientSide.getCommonCard1() + ".jpg");
+        if(guiClientSide.getCommonCard1() != null){
             commoncard1.setImage(new Image("/images/CommonCard_" + guiClientSide.getCommonCard1() + ".jpg"));
+            pointsCommonCard1 = 8;
             if(guiClientSide.getCommonCard2()!=null) {
+                pointsCommonCard2 = 8;
                 commoncard2.setVisible(true);
-                badgeCommonCard2.setVisible(true);
+               // badgeCommonCard2.setVisible(true);
                 commoncard2.setImage(new Image("/images/CommonCard_" + guiClientSide.getCommonCard2() + ".jpg"));
             }
         }
@@ -234,20 +238,19 @@ public class GUIGameController implements Initializable{
      * this method sends the message with the chosen tiles and column to the ClientSide
      */
     @FXML
-    protected void sendBoardMoves() throws InterruptedException {
+    protected void sendBoardMoves() {
         String nickname = guiClientSide.getNickname();
         String action = "";
         for(Moves moves : boardMoves){
             action = action + "(" + moves.cell.getRow() + "," + moves.cell.getColumn() + ")" + ",";
         }
         action = action + columnShelfie;
-        // System.out.println(action);
         if(guiClientSide.getConnectionMode() == 1){ //socket
-            JSONObject toBeSent = null;
+            JSONObject toBeSent=null;
             try {
                 toBeSent = guiClientSide.actionToJSON("@GAME", action);
             } catch (IllegalInsertException e) {
-                throw new RuntimeException(e);
+                System.out.println("Errore");
             }
 
             //Send message to server
@@ -257,10 +260,6 @@ public class GUIGameController implements Initializable{
         }else{
             guiClientSide.RMIInvoker("@GAME",action);
         }
-        //if(moveConfirmed){
-        //resetAfterMove();
-        //updatePersonalShelfie();
-        //}
     }
 
     @FXML
@@ -345,7 +344,7 @@ public class GUIGameController implements Initializable{
             }
             if (columnShelfie != -1) {
                 for (Node node : shelfie1.getChildren()) {
-                    if (GridPane.getColumnIndex(node) == columnShelfie && GridPane.getRowIndex(node) <= firstFreeRowBeforeMoves) { //TODO: controlla se è giusto il minore
+                    if (GridPane.getColumnIndex(node) == columnShelfie && GridPane.getRowIndex(node) <= firstFreeRowBeforeMoves) {
                         imageView = (ImageView) node;
                         imageView.setImage(null);
                     }
@@ -362,17 +361,6 @@ public class GUIGameController implements Initializable{
      */
     protected void resetAfterMove() {
         ImageView imageView;
-        if(moveError && moveConfirmed)
-            System.out.println("Errore! entrambi true");
-        if(!moveError && !moveConfirmed)
-            System.out.println("Errore! entrambi false");
-        if(moveConfirmed)
-            System.out.println("Move confirmed is true");
-       /* Boolean legalChoiceBoard, legalChoiceShelfie;
-        legalChoiceBoard = checkLegalChoiceBoard();
-        legalChoiceShelfie = checkLegalChoiceShelfie();
-        if(!(legalChoiceBoard && legalChoiceShelfie))
-            resetMoves();*/
         if(moveError)
             resetMoves();
         for (Moves moves : boardMoves) {
@@ -380,11 +368,11 @@ public class GUIGameController implements Initializable{
                 if ((GridPane.getColumnIndex(node) == moves.cell.getColumn()) && (GridPane.getRowIndex(node) == moves.cell.getRow())) {
                     ImageView i = (ImageView) node;
                     if (columnShelfie != -1){
-                        if(moveConfirmed){//if(legalChoiceBoard && legalChoiceShelfie){
+                        if(moveConfirmed){
                             i.setImage(null);
                         }else if(moveError){
                             i.setOpacity(1);
-                        }//TODO: else? it's not arrived error/board update
+                        }
                     }else{ //there is no column selected in the shelfie
                         i.setOpacity(1);
                     }
@@ -394,7 +382,7 @@ public class GUIGameController implements Initializable{
                 for (Node node : shelfie1.getChildren()) {
                     if (GridPane.getColumnIndex(node) == columnShelfie && GridPane.getRowIndex(node) <= firstFreeRowBeforeMoves) {
                         imageView = (ImageView) node;
-                        if(moveError)//if(!legalChoiceShelfie)
+                        if(moveError)
                             imageView.setImage(null);
                     }
                 }
@@ -404,14 +392,13 @@ public class GUIGameController implements Initializable{
         columnShelfie = -1;
         firstFreeRowBeforeMoves = -1;
         moveError = false;
-        if(moveConfirmed){//if(legalChoiceBoard && legalChoiceShelfie){
+        if(moveConfirmed){
             boardGrid.setOpacity(0.3);
             guiClientSide.setYourTurn(false);
             boardGrid.setDisable(true);
             sendBoardMovesButton.setDisable(true);
             resetButton.setDisable(true);
             moveConfirmed = false;
-            //TODO: end game
         }
         moveError = false;
 
@@ -426,21 +413,6 @@ public class GUIGameController implements Initializable{
         updateBoard();
         moveError = false;
         moveConfirmed = false;
-       /* Service New_Service = new Service() {
-            @Override
-            protected Task createTask() {
-                return new Task() {
-                    @Override
-                    protected Object call() throws Exception {
-                        Platform.runLater(() -> {
-                            //updateShelfies(guiClientSide.nicknameShelfie.);
-                        });
-                        return null;
-                    }
-                };
-            }
-        };
-        New_Service.start();*/
     }
 
 
@@ -456,16 +428,13 @@ public class GUIGameController implements Initializable{
                 if(GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode) && i==GridPane.getRowIndex(node)){
                     ImageView tileImageView = (ImageView) node;
                     if (tileImageView.getImage() == null){
-                        //if(i >= row){
                         row = i;
                         return row;
-                        //}
                     }
                 }
             }
         }
         return -1;
-        //TODO: if the column is full
     }
 
     /**
@@ -478,26 +447,13 @@ public class GUIGameController implements Initializable{
         for(int i=0;i<boardRows;i++){
             for(int j=0;j<boardColumns;j++){
                 imageView = getImageInBoard(i, j);
-                if(gameBoard==null) {
-                    //TODO:send error
-                }else{
+                if(gameBoard!=null){
                     if (gameBoard.getBoard()[i][j] != null) {
-                        //if (imageView.getImage() == null) {
                         //create a number n depending on tile id, to have tiles of the same color with different pictures
                         int n = ((gameBoard.getBoard()[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
                         image = new Image("/images/Tile_" + gameBoard.getBoard()[i][j].getColor().colorLetter() + n + ".png");
                         imageView.setOpacity(1);
                         imageView.setImage(image);
-                        /*}else{
-                            System.out.println(imageView.getImage());
-                            System.out.println(imageView.getImage().getUrl().charAt(16));
-                            if(imageView.getImage().getUrl().charAt(16) != gameBoard.getBoard()[i][j].getColor().colorLetter()){
-                                int n = ((gameBoard.getBoard()[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
-                                image = new Image("/images/Tile_" + gameBoard.getBoard()[i][j].getColor().colorLetter() + n + ".png");
-                                imageView.setOpacity(1);
-                                imageView.setImage(image);
-                            }
-                        }*/
                     } else {
                         if (imageView != null && imageView.getImage() != null) {
                             imageView.setImage(null);
@@ -569,12 +525,6 @@ public class GUIGameController implements Initializable{
                 }else{
                     //TODO: send error
                 }
-
-                /*
-                if(imageView!=null && s[i][j]!=null){
-                    imageView.setImage(null);
-                }
-                */
             }
         }
     }
@@ -596,7 +546,6 @@ public class GUIGameController implements Initializable{
         Tile[][] grid;
 
         for(String s: guiClientSide.nicknameShelfie.keySet()){
-            // if(!s.equals(guiClientSide.getNickname())){
             grid = guiClientSide.nicknameShelfie.get(s).getGrid();
             for(int i=0;i<shelfieRows;i++){
                 for(int j=0;j<shelfieColumns;j++){
@@ -606,11 +555,9 @@ public class GUIGameController implements Initializable{
                         imageView = getImageViewInShelfie(s, shelfieRows - 1 - i, j);
                         if(imageView!=null)
                             imageView.setImage(image);
-                        //shelfie2.add(imageView, j, shelfieRows-i);
                     }
                 }
             }
-            // }
         }
     }
 
@@ -647,8 +594,29 @@ public class GUIGameController implements Initializable{
         return null;
     }
 
-    @FXML
-    public void giveBadge(int s){
+  /*  public int updateCardPoints(int card){
+        int s=0;
+        if(card==1){
+            s = pointsCommonCard1 - 2;
+            System.out.println("In updateCardPoints, pointscommoncard1 " + pointsCommonCard1 + " s " + s);
+            pointsCommonCard1 = s;
+            badgeCommonCard1.setImage(new Image("/images/BadgeScore" + s + ".jpg"));
+
+        }
+        if(card==2){
+            s = pointsCommonCard2 - 2;
+            System.out.println("In updateCardPoints, pointscommoncard2 " + pointsCommonCard2 + " s " + s);
+            pointsCommonCard2 = s;
+            badgeCommonCard2.setImage(new Image("/images/BadgeScore" + s + ".jpg"));
+        }
+        return s;
+    }*/
+
+   /* @FXML
+    public void giveBadge(int card){
+        int s;
+        s = updateCardPoints(card);
+
         if(player1badge1.getImage() == null){
             player1badge1.setImage(new Image("/images/BadgeScore" + s + ".jpg"));
         }else if(player1badge2.getImage() == null) {
@@ -657,7 +625,7 @@ public class GUIGameController implements Initializable{
         } else if (player1badge3.getImage() == null) {
             player1badge3.setImage(new Image("/images/BadgeScore" + s + ".jpg"));
         }
-    }
+    }*/
 
     public void switchToEndGame(){
         try {
@@ -697,9 +665,7 @@ public class GUIGameController implements Initializable{
     @FXML
     public void onSendMessage() throws IllegalInsertException {
         String message = chatMessage.getText();
-        // JSONObject jsonMessage = ChatWriter.writeChatMessage(message);
         String action = "'" + receiver.getText() + "' " + message;
-        //if (!isOkCommand(command, 2)) { errore}
 
 
         if(guiClientSide.getConnectionMode() == 1) { //socket

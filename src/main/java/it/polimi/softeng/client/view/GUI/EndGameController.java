@@ -19,8 +19,6 @@ import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObjec
  */
 public class EndGameController implements Initializable {
 
-    GUIClientSide guiClientSide;
-
     @FXML
     Label winner;
 
@@ -52,24 +50,24 @@ public class EndGameController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        guiClientSide = GUIRegistry.guiList.get(0);
-        guiClientSide.setEndGameController(this);
-        GUIRegistry.numberOfGUI++;
-        //TODO: set nicknames and points
+        for(GUIClientSide guiClientSide:  GUIRegistry.guiList){
+            guiClientSide.setEndGameController(this);
+            GUIRegistry.numberOfGUI++;
 
-        switch (guiClientSide.getConnectionMode()) {
-            //Socket
-            case 1 -> {
-                JSONObject dummy = new JSONObject();
-                guiClientSide.getClientSide().sendMessage(clientSignObject(dummy, "@VPLA", guiClientSide.getNickname()).toJSONString());
-            }
-            //RMI
-            case 2 -> {
-                guiClientSide.eventManager("playerEvent"); //TODO: serve?
-                try {
-                    scoreVisualizer(guiClientSide.getRemoteMethods().getStub().getPlayersAndScore());
-                } catch (RemoteException e) {
-                    System.out.println("");
+            switch (guiClientSide.getConnectionMode()) {
+                //Socket
+                case 1 -> {
+                    JSONObject dummy = new JSONObject();
+                    guiClientSide.getClientSide().sendMessage(clientSignObject(dummy, "@VPLA", guiClientSide.getNickname()).toJSONString());
+
+                }
+                //RMI
+                case 2 -> {
+                    try {
+                        scoreVisualizer(guiClientSide.getRemoteMethods().getStub().getPlayersAndScore());
+                    } catch (RemoteException e) {
+                        System.out.println("");
+                    }
                 }
             }
         }
@@ -90,6 +88,4 @@ public class EndGameController implements Initializable {
             pointsPlayer4.setText(Integer.toString(players.get(3).getCurrentScore()));
         }
     }
-
-
 }

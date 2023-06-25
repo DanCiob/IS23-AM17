@@ -4,7 +4,6 @@ import it.polimi.softeng.JSONParser.ChatParser;
 import it.polimi.softeng.JSONParser.GameMoveParser;
 import it.polimi.softeng.JSONWriter.ChatWriter;
 import it.polimi.softeng.JSONWriter.GameMoveWriter;
-import it.polimi.softeng.client.view.CLI.CLI;
 import it.polimi.softeng.client.view.CommonOperationsFramework;
 import it.polimi.softeng.client.view.MessageHandler;
 import it.polimi.softeng.client.view.UI;
@@ -27,14 +26,10 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static it.polimi.softeng.Constants.*;
-import static it.polimi.softeng.Constants.gameCommandREGEX;
-import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
 
 /**
  * Main class of Graphic User Interface for MyShelfie
@@ -65,12 +60,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     protected Map <String, Shelfie> nicknameShelfie = new HashMap<>();
 
     protected int StartGame;
-
-    /**
-     * 1 -> Easy Mode (only one Common Card is used the game)
-     * 2 -> Normal Mode (two Common Cards are used during the game)
-     */
-    protected int GameMode;
 
     /**
      * NumOfPlayer for current game
@@ -111,15 +100,10 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     public GUIClientSide() {
     }
 
-    public void setupGUI(int connectionMode, String serverAddress, int port, int startGame, int numPlayers, int mode) {
+    public void setupGUI(int connectionMode, String serverAddress, int port, int numPlayers) {
         setConnectionMode(connectionMode);
         setServerAddress(serverAddress);
         setPort(port);
-        setStartGame(startGame);
-        if (startGame == 1) { //create new game
-            setNumOfPlayer(numPlayers);
-            setGameMode(mode);
-        }
     }
 
     public ClientSide getClientSide() {
@@ -137,31 +121,12 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         return matcher.matches();
     }
 
-    public boolean isOkCommand(String command, int typeOfCommand) {
-        switch (typeOfCommand) {
-            case 1 -> {
-                Pattern pattern = Pattern.compile(commandREGEX);
-                Matcher matcher = pattern.matcher(command);
-                return matcher.lookingAt();
-            }
-            case 2 -> {
-                Pattern pattern = Pattern.compile(chatCommandREGEX);
-                Matcher matcher = pattern.matcher(command);
-                return matcher.lookingAt();
-            }
-            case 3 -> {
-                Pattern pattern = Pattern.compile(gameCommandREGEX);
-                Matcher matcher = pattern.matcher(command);
-                return matcher.lookingAt();
-            }
-        }
-        return false;
-    }
-
 
     ///////////
     //SETTERS//
     ///////////
+
+
 
     public void setUserGameBoard(GameBoard userGameBoard) {
         UserGameBoard = userGameBoard;
@@ -195,7 +160,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable) {
 
     }
-    protected Tile[][] shelfiePlayer2;
+
     @Override
     public void shelfieVisualizer(Tile[][] shelfie) {
 
@@ -228,24 +193,35 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public void scoreVisualizer(ArrayList<Player> players) {
+        setNumOfPlayer(players.size());
         for (Player p: players) {
             nicknameShelfie.put(p.getNickname(), new Shelfie());
 
             if (p.isFirst() && p.getNickname().equals(Nickname)) {
-                System.out.println("Is first!!");
                 isFirst = true;
                 if(gameController!=null)
                     gameController.setFirstPlayer();
             }
 
-            if(p.isFirst())
-                System.out.println("First player is " + p.getNickname());
             //todo:add first player token to other players
         }
         if(endGameController!=null){
-            endGameController.scoreVisualizer(players);
+            Service New_Service = new Service() {
+                @Override
+                protected Task createTask() {
+                    return new Task() {
+                        @Override
+                        protected Object call() {
+                            Platform.runLater(() -> {
+                                endGameController.scoreVisualizer(players);
+                            });
+                            return null;
+                        }
+                    };
+                }
+            };
+            New_Service.start();
         }
-        //todo: non arrivano punteggi
     }
 
     @Override
@@ -354,7 +330,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                     protected Task createTask() {
                         return new Task() {
                             @Override
-                            protected Object call() throws Exception {
+                            protected Object call() {
                                 Platform.runLater(() -> {
                                     if(gameController!=null){
                                         gameController.setChatMessage("Player disconnected");
@@ -377,7 +353,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                     protected Task createTask() {
                         return new Task() {
                             @Override
-                            protected Object call() throws Exception {
+                            protected Object call() {
                                 Platform.runLater(() -> {
                                     if(gameController!=null) {
                                         gameController.setChatMessage("Invalid receiver");
@@ -406,7 +382,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                     protected Task createTask() {
                         return new Task() {
                             @Override
-                            protected Object call() throws Exception {
+                            protected Object call() {
                                 Platform.runLater(() -> {
                                     if(gameController!=null) {
                                         gameController.setChatMessage("All players disconnected");
@@ -459,17 +435,10 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public void commonCardUpdater(String nameOfCommonCard, int whatCommonCard) {
-        System.out.println("In commonCardUpdater");
         if (whatCommonCard == 1) {
-            System.out.println("In commonCardUpdater card 1");
             CommonCard1 = nameOfCommonCard;
-            if(gameController!=null)
-                gameController.updateCommonCardBadges(1);
         }else {
-            System.out.println("In commonCardUpdater card 2");
             CommonCard2 = nameOfCommonCard;
-            if(gameController!=null)
-                gameController.updateCommonCardBadges(2);
         }
     }
 
@@ -497,7 +466,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                 protected Task createTask() {
                     return new Task() {
                         @Override
-                        protected Object call() throws Exception {
+                        protected Object call() {
                             Platform.runLater(() -> {
                                 System.out.println("runLater");
                                 gameController.switchToEndGame();
@@ -519,9 +488,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public void beginGame(boolean b){
-        boolean switchScene = false;
-        if(!GameIsOn)
-            switchScene = true;
+        boolean switchScene = !GameIsOn;
         this.GameIsOn = b;
         if(switchScene && b){
             if(loginController == null)
@@ -532,7 +499,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                     protected Task createTask() {
                         return new Task() {
                             @Override
-                            protected Object call() throws Exception {
+                            protected Object call() {
                                 Platform.runLater(() -> {
                                     try {
                                         loginController.switchToGame();
@@ -552,10 +519,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     public void setStartGame(int startGame) {
         StartGame = startGame;
-    }
-
-    public void setGameMode(int gameMode) {
-        GameMode = gameMode;
     }
 
     public void setNumOfPlayer(int numOfPlayer) {
@@ -651,10 +614,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         return StartGame;
     }
 
-    public int getGameMode() {
-        return GameMode;
-    }
-
     public int getNumOfPlayer() {
         return NumOfPlayer;
     }
@@ -733,20 +692,22 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                 JSONObject obj;
                 obj = ChatWriter.writeChatMessage(action);
 
-                if (obj.get("receiver").toString().equals("all")) {
-                    try {
-                        RemoteMethods.getStub().sendMessageToAll(obj.toJSONString(), Nickname);
-                    } catch (RemoteException e) {
-                        System.out.println("Please, reinsert your message!");
-                        if(gameController!=null) {
-                            gameController.chatMessage.setText("Error in chat message, try again!");
+                if (obj != null) {
+                    if (obj.get("receiver").toString().equals("all")) {
+                        try {
+                            RemoteMethods.getStub().sendMessageToAll(obj.toJSONString(), Nickname);
+                        } catch (RemoteException e) {
+                            System.out.println("Please, reinsert your message!");
+                            if(gameController!=null) {
+                                gameController.chatMessage.setText("Error in chat message, try again!");
+                            }
                         }
-                    }
-                } else {
-                    try {
-                        RemoteMethods.getStub().sendMessage(obj.toJSONString(), (String) obj.get("receiver"), Nickname);
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
+                    } else {
+                        try {
+                            RemoteMethods.getStub().sendMessage(obj.toJSONString(), (String) obj.get("receiver"), Nickname);
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
             }
@@ -799,7 +760,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
             protected Task createTask() {
                 return new Task() {
                     @Override
-                    protected Object call() throws Exception {
+                    protected Object call() {
                         Platform.runLater(() -> {
                             try {
                                 Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/login.fxml"));

@@ -33,7 +33,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
@@ -57,14 +56,8 @@ public class GUILoginController implements Initializable {
     @FXML
     TextField serverPort;
 
-
-    @FXML
-    ChoiceBox<String> game;
     @FXML
     ChoiceBox<String> numberOfPlayer;
-
-    @FXML
-    ChoiceBox<String> mode;
 
     @FXML
     HBox hboxNumPlayers;
@@ -74,20 +67,6 @@ public class GUILoginController implements Initializable {
 
     @FXML
     Button loginButton;
-
-    @FXML
-    protected void onNewGame() {
-        if (game.getSelectionModel().getSelectedIndex() == 0) { //option create new game
-            np.setText("Select the number of players: ");
-            hboxNumPlayers.setVisible(true);
-            hboxMode.setVisible(true);
-        }
-        if (game.getSelectionModel().getSelectedIndex() == 1) { //option join a new game
-            np.setText("Select the number of players: ");
-            hboxNumPlayers.setVisible(false);
-            hboxMode.setVisible(false);
-        }
-    }
 
     @FXML
     protected void onSocketOrRmi(){
@@ -103,10 +82,9 @@ public class GUILoginController implements Initializable {
      * This method sends the login message to the server
      *
      * @param event which is when the user press the login button
-     * @throws IOException called by load in switchToGame
      */
     @FXML
-    protected void onLoginButtonClick(ActionEvent event) throws IOException, InterruptedException {
+    protected void onLoginButtonClick(ActionEvent event) {
         System.out.println(nickname.getText());
         guiClientSide.setNickname(nickname.getText());
         System.out.println(guiClientSide.Nickname);
@@ -125,13 +103,12 @@ public class GUILoginController implements Initializable {
             //save values in guiClientSide
             if(!serverPort.getText().equals(""))
                 guiClientSide.setupGUI(connectionMode, serverIP.getText(),
-                        Integer.parseInt(serverPort.getText()), game.getSelectionModel().getSelectedIndex() + 1,
-                        numberOfPlayer.getSelectionModel().getSelectedIndex() + 2, mode.getSelectionModel().getSelectedIndex() + 1);
+                        Integer.parseInt(serverPort.getText()),
+                        numberOfPlayer.getSelectionModel().getSelectedIndex() + 2);
             else
                 guiClientSide.setupGUI(connectionMode, serverIP.getText(),
-                        1099, game.getSelectionModel().getSelectedIndex() + 1,
-                        numberOfPlayer.getSelectionModel().getSelectedIndex() + 2, mode.getSelectionModel().getSelectedIndex() + 1);
-            //TODO:change port 1099
+                        1099,
+                        numberOfPlayer.getSelectionModel().getSelectedIndex() + 2);
             if(loginNotifier()){
                 guiClientSide.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
                 Service New_Service = new Service() {
@@ -139,7 +116,7 @@ public class GUILoginController implements Initializable {
                     protected Task createTask() {
                         return new Task() {
                             @Override
-                            protected Object call() throws Exception {
+                            protected Object call() {
                                 Platform.runLater(() -> {
                                     try {
                                         switchToWait(event);
@@ -154,12 +131,6 @@ public class GUILoginController implements Initializable {
                 };
                 New_Service.start();
             }
-
-
-           /* while(!guiClientSide.GameIsOn){
-                //TODO: call switchToGame from GUIClientSide-beginGame
-            }*/
-
         }
     }
 
@@ -187,21 +158,25 @@ public class GUILoginController implements Initializable {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        final int initWidth = 912;
-        final int initHeight = 601;
+        final int initWidth = 712;
+        final int initHeight = 490;
         Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
         double width = resolution.getWidth();
         double height = resolution.getHeight();
         Pane root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/gamescreen.fxml"));
 
-        Scale scale = new Scale(width/initWidth, height/initHeight, 0, 0);
+        Scale scale = new Scale(width/initWidth, height /initHeight, 0, 0);
         scale.xProperty().bind(root.widthProperty().divide(initWidth));
         scale.yProperty().bind(root.heightProperty().divide(initHeight));
+
         root.getTransforms().add(scale);
         stage = guiClientSide.getStage();
         Scene scene = new Scene(root, initWidth, initHeight);
         stage.setScene(scene);
+
         stage.setResizable(true);
+        // stage.minWidthProperty().bind(scene.heightProperty().multiply(scene.getHeight() / initHeight));
+        // stage.minHeightProperty().bind(scene.widthProperty().multiply(scene.getWidth() / initWidth));
         stage.show();
     }
 
@@ -210,15 +185,8 @@ public class GUILoginController implements Initializable {
      * @return false if the nickname is not unique or there is an error
      */
     public boolean loginNotifier() {
-        int startgame;
-        int gamemode = 0;
+        int gamemode = 2;
         int numPlayers = 0;
-
-        if (game.getSelectionModel().getSelectedIndex() == 0)
-            startgame = 1;
-        else {
-            startgame = 2;
-        }
 
         if (numberOfPlayer.getSelectionModel().getSelectedIndex() == 0)
             numPlayers = 2;
@@ -226,10 +194,6 @@ public class GUILoginController implements Initializable {
             numPlayers = 3;
         else if (numberOfPlayer.getSelectionModel().getSelectedIndex() == 2)
             numPlayers = 4;
-        if (mode.getSelectionModel().getSelectedIndex() == 0)
-            gamemode = 1;
-        else if (mode.getSelectionModel().getSelectedIndex() == 1)
-            gamemode = 2;
         //nickname uniqueness
         if(guiClientSide.isOkNickname())
             switch (guiClientSide.getConnectionMode()) {
@@ -244,9 +208,7 @@ public class GUILoginController implements Initializable {
                         guiClientSide.clientSide = new ClientSide(guiClientSide.messageHandler);
                     }
 
-                    //guiClientSide.clientSide = new ClientSide(guiClientSide.messageHandler);
-
-                    String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(nickname.getText(), gamemode, startgame, numPlayers), "@LOGN", nickname.getText()).toJSONString();
+                    String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(nickname.getText(), gamemode, 1, numPlayers), "@LOGN", nickname.getText()).toJSONString();
                     System.out.println(login);
                     guiClientSide.getClientSide().sendMessage(login);
                     try {
@@ -258,7 +220,6 @@ public class GUILoginController implements Initializable {
                     }
                 }
                 case 2 -> {
-                    //guiClientSide.RemoteMethods = new ClientSideRMI(guiClientSide);
                     if(!serverIP.getText().equals("") ){
                         guiClientSide.RemoteMethods = new ClientSideRMI(serverIP.getText(), guiClientSide);
                     }else guiClientSide.RemoteMethods = new ClientSideRMI(guiClientSide);
@@ -278,7 +239,6 @@ public class GUILoginController implements Initializable {
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }
-                    //TODO: check oknickname
                 }
             }
         return true;
