@@ -145,6 +145,9 @@ public class ClientSideRMI {
         }
     }
 
+    /**
+     * method running on its owm thread that pings the server
+     */
     private void pingServer(){
         while(true){
             try{

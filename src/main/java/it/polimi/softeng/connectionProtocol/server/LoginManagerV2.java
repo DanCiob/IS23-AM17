@@ -103,9 +103,7 @@ public class LoginManagerV2 {
     }
 
     /**
-     * if a player disconnects during the match it's name it's inserted from this method to the list of disconnected players
-     *
-     *
+     * if a player disconnects during the match it's name it's inserted from this method to the list of disconnected player
      * @param player player nickname to be disconnected
      */
     public void addDisconnectedPlayer(String player) {
@@ -161,7 +159,6 @@ public class LoginManagerV2 {
 
     /**
      * method used to add a nickname to the nickname list; if the number of players is now the desired one it calls the start of the game
-     *
      * @param nickName nickname to add
      */
     public void addNickName(String nickName) {
@@ -212,8 +209,7 @@ public class LoginManagerV2 {
     }
 
     /**
-     * method used to set the number of players
-     *
+     * method used to set the number of player
      * @param playerNumber number of players desired
      */
     public void setPlayerNumber(int playerNumber) {
@@ -272,12 +268,21 @@ public class LoginManagerV2 {
         return status;
     }
 
+    /**
+     * getter method used to see whether the countdown has started or not
+     * @return boolean value indicating if the countdown has started
+     */
     public boolean isCountdownStarted() {
         return countdownStarted;
     }
 
+    /**
+     * method running in its own thread that sends a chat message with the countdown
+     */
     private void countdown() {
+        //this is for sure the last player as it's the only one remaining in this list
         String lastPlayer = nickNameList.get(0);
+
         int secondsElapsed = 0;
 
         //sending a message informing the player the countdown has started
@@ -288,7 +293,7 @@ public class LoginManagerV2 {
             if (secondsElapsed == timerValue) {
                 //set winner and kill game
 
-                msg = writeWinMessage(lastPlayer);
+                msg = writeWinMessage();
                 serverMessageHandler.getController().getChatController().sendChatMessage(lastPlayer,msg,serverMessageHandler.getController().getServerSide(), "system");
 
                 try {
@@ -321,6 +326,12 @@ public class LoginManagerV2 {
         }
 
     }
+
+    /**
+     * this method writes the message saying that the countdown has started
+     * @param receiver nickname of the receiver
+     * @return string containing the message
+     */
     public String writeCountdownStartedMsg (String receiver) {
         JSONObject ChatJSON = new JSONObject();
 
@@ -331,6 +342,12 @@ public class LoginManagerV2 {
 
         return ChatJSON.toJSONString();
     }
+    /**
+     * this method writes the message with the value of the countdown
+     * @param secondsElapsed seconds passed
+     * @param receiver nickname of the receiver
+     * @return string containing the message
+     */
     public String writeCountdownMsg (int secondsElapsed, String receiver) {
         JSONObject ChatJSON = new JSONObject();
 
@@ -341,7 +358,10 @@ public class LoginManagerV2 {
 
         return ChatJSON.toJSONString();
     }
-
+    /**
+     * this method writes the message saying that the countdown has stopped
+     * @return string containing the message
+     */
     public String writeCountdownStoppedMsg () {
         JSONObject ChatJSON = new JSONObject();
 
@@ -352,7 +372,11 @@ public class LoginManagerV2 {
 
         return ChatJSON.toJSONString();
     }
-
+    /**
+     * this method writes the message saying that a user disconnected
+     * @param disconnectedUser nickname of disconnected user
+     * @return string containing the message
+     */
     public String writeUserDisconnectedMsg(String disconnectedUser){
         JSONObject ChatJSON = new JSONObject();
 
@@ -363,7 +387,11 @@ public class LoginManagerV2 {
 
         return ChatJSON.toJSONString();
     }
-
+    /**
+     * this method writes the message saying that a user reconnected
+     * @param reconnectedUser nickname of reconnected user
+     * @return string containing the message
+     */
     public String writeUserReconnectedMsg(String reconnectedUser){
         JSONObject ChatJSON = new JSONObject();
 
@@ -374,7 +402,12 @@ public class LoginManagerV2 {
 
         return ChatJSON.toJSONString();
     }
-    public String writeWinMessage (String receiver) {
+
+    /**
+     * this method writes a message for the case in which a player wins as he's the remaining one after the countdown
+     * @return String containing the message
+     */
+    public String writeWinMessage () {
         JSONObject ChatJSON = new JSONObject();
 
         String msg = "you won the game; the application is going to close in 10 seconds";

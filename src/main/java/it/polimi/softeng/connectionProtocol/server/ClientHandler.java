@@ -10,10 +10,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.rmi.RemoteException;
+
 import java.util.Objects;
 
-import static it.polimi.softeng.Constants.ALREADY_LOGGED_IN;
 import static it.polimi.softeng.Constants.NICKNAME_NOT_UNIQUE;
 import static it.polimi.softeng.JSONWriter.ErrorWriter.writeError;
 import static it.polimi.softeng.JSONWriter.ServerSignatureWriter.serverSignObject;
@@ -197,6 +196,9 @@ public class ClientHandler implements Runnable{
         return playerNumber;
     }
 
+    /**
+     * method running on its own thread pinging the user related to this clienthandler
+     */
     public void pingUsers(){
 
         while(true){
@@ -205,7 +207,7 @@ public class ClientHandler implements Runnable{
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            out.println("ping"); //TODO this doesnt throw an error
+            out.println("ping");
         }
     }
 }
