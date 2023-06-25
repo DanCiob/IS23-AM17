@@ -132,4 +132,8 @@ public class ClientSide {
             out.println("ping"); //TODO this doesnt throw an error
         }
     }
+
+    public Socket getSocket() {
+        return socket;
+    }
 }

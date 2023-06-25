@@ -1,8 +1,5 @@
 package it.polimi.softeng.client.view.GUI;
 
-import it.polimi.softeng.client.view.CLI.CLI;
-import it.polimi.softeng.client.view.MessageHandler;
-import it.polimi.softeng.connectionProtocol.client.ClientSide;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,7 +7,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Used to start GUI
@@ -39,6 +35,14 @@ public class GUIAppl extends Application {
 
     @Override
     public void stop(){
+        if(guiClientSide!=null && guiClientSide.getConnectionMode()==1){
+            try {
+                guiClientSide.getClientSide().getSocket().close();
+                System.out.println(" socket " + guiClientSide.getClientSide().getSocket().isClosed());
+            } catch (IOException e) {
+                System.out.println("Error closing socket");
+            }
+        }
         System.exit(0);
     }
 }

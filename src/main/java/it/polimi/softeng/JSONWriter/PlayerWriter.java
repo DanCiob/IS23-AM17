@@ -23,7 +23,10 @@ public class PlayerWriter {
             JSONObject obj = new JSONObject();
             obj.put("name", list.get(i).getNickname());
             obj.put("score", list.get(i).getCurrentScore());
-
+            if(list.get(i).isFirst())
+                obj.put("isFirst", true);
+            else
+                obj.put("isFirst", false);
             playerList.add(obj);
         }
 

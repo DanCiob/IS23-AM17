@@ -112,7 +112,7 @@
         </ChoiceBox>
     </HBox>
 
-
+    <Label text="WARNING: If you create a new game but there's already an active lobby you'll join the lobby"/>
     <Button fx:id="loginButton" text="Login" onAction="#onLoginButtonClick"/>
     <Label fx:id="waiting" layoutX="630.0" />
 </VBox>
