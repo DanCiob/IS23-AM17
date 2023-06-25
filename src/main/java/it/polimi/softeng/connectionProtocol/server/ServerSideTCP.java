@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-//TODO controlla se viene killato se si chiudono tutti i socket tcp
 
 /**
  * Class used to handle the tcp connection server side

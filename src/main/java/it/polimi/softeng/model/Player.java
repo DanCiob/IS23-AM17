@@ -6,6 +6,9 @@ import java.io.Serializable;
  * Model representation of player
  */
 public class Player implements Serializable {
+    /**
+     *
+     */
     private final String Nickname;
     private int CurrentScore;
     private boolean isFirst;

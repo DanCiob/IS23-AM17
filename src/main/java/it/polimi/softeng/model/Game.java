@@ -13,9 +13,21 @@ import static it.polimi.softeng.model.PersonalCards.FillPersonalCardsBag;
  */
 public class Game{
     //board section
+    /**
+     * gameboard reference
+     */
     private GameBoard gameBoard = new GameBoard();
+    /**
+     * tilebag reference
+     */
     private final ArrayList<Tile> tileBag = new ArrayList<>();
+    /**
+     * badgeEndGame reference
+     */
     private BadgeEndGame endGameBadge;
+    /**
+     * boolean value indicating wheter simple rules are used or not
+     */
     private final boolean simpleRules = false;
 
     //player section
@@ -24,16 +36,32 @@ public class Game{
      * entry in the game lobby (ie player 0 is who created the game). the game turns go from player in position 0 to position player.size()
      */
     private final ArrayList<Player> players = new ArrayList<>();
+    /**
+     * reference to the current player
+     */
     private Player currentPlayer;
+    /**
+     * common cards reference
+     */
     private final ArrayList<CommonCards> commonCards = new ArrayList<>();
+    /**
+     * winning player reference
+     */
     private Player winner;
-    private Player firstPlayer;     //should it be final?
-
+    /**
+     * first player reference
+     */
+    private Player firstPlayer;
+    /**
+     * boolean attribute indicating wheter a shelfie is full or not
+     */
     private Boolean fullShelfie = false;
 
-    //maybe finished
+    /**
+     *this method initializes all the necessary components of a game
+     * @param nameList list of players of the match (after this such list cannot be chanced)
+     */
     public void beginGame(ArrayList<String> nameList){
-        //vedi cosa serve
         for(String name : nameList){
             createNewPlayer(name);
         }
@@ -45,6 +73,10 @@ public class Game{
         initializeBadgeEndGame();
         chooseFirstPlayer();
     }
+
+    /**
+     * testing version of the method beginGame
+     */
     //here for testing purpose
     public void beginGame(){
         //vedi cosa serve
@@ -196,6 +228,9 @@ public class Game{
         }
     }
 
+    /**
+     * this method chooses the first player of the game
+     */
     public void chooseFirstPlayer(){
         Random random = new Random();
         int i = random.nextInt(players.size());
@@ -356,7 +391,6 @@ public class Game{
 
     }
 
-    //should we keep a reference to removed players as long as a Game object exists ?
     /**
      * method used to remove a player from the player list Players;
      * @param player reference to the player to be removed
@@ -405,10 +439,6 @@ public class Game{
      */
     public void setNextPlayer() {
         setCurrentPlayer(getNextPlayer());
-    }
-
-    public String gameChangeNotifier(){
-        return null;
     }
 
     //methods for testing purpose

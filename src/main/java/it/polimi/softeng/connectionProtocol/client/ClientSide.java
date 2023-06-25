@@ -122,6 +122,9 @@ public class ClientSide {
         out.println(message);
     }
 
+    /**
+     * method that runs on its own thread used to ping the server
+     */
     private void pingServer(){
         while(true){
             try {
@@ -129,7 +132,7 @@ public class ClientSide {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            out.println("ping"); //TODO this doesnt throw an error
+            out.println("ping");
         }
     }
 }

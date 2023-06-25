@@ -360,6 +360,11 @@ public class ServerSideMethods implements ServerRemoteInterface {
         }
     }
 
+    /**
+     * interface to call a ping from server
+     * @return true
+     * @throws RemoteException
+     */
     @Override
     public Boolean ping() throws RemoteException {
         return true;
@@ -367,8 +372,8 @@ public class ServerSideMethods implements ServerRemoteInterface {
 
     /**
      * private method used by the chat methods that adds the required infos to the json messages for tcp users
-     * @param message
-     * @param requester
+     * @param message message
+     * @param requester requester
      * @return
      */
     private String addInfo(String message, String requester){
@@ -384,6 +389,11 @@ public class ServerSideMethods implements ServerRemoteInterface {
         return obj.toString();
     }
 
+    /**
+     * method that gets the json message from a json string
+     * @param jsonMessage json message
+     * @return message in the json message
+     */
     private String getMessage (String jsonMessage){
         JSONParser parser = new JSONParser();
         JSONObject obj = null;

@@ -10,12 +10,22 @@ import static it.polimi.softeng.Constants.*;
  * This class contains a "bag" with every tile available in the game
  */
 public class TileBag {
+    /**
+     * arrayList containing the tiles for the game
+     */
     private final static ArrayList<Tile> tileBag = new ArrayList<>();
 
+    /**
+     * getter method for the tile bag
+     * @return arraylist of tiles
+     */
     public ArrayList<Tile> getTileBag() {
         return tileBag;
     }
 
+    /**
+     * method used to fill the tilebag with the right amount and type of tiles
+     */
     public void initializeTile(){
         tileBag.clear();
         for(int i = 0; i < totalTiles/typesOfTiles; i+=typesOfTiles){
@@ -28,6 +38,10 @@ public class TileBag {
         }
     }
 
+    /**
+     * picks a random tile from tile bag
+     * @return tile
+     */
     public Tile drawTile(){
         Random random = new Random();
         return tileBag.get(random.nextInt(tileBag.size()));

@@ -58,14 +58,6 @@ public class Shelfie implements Serializable {
                 throw new IllegalInsertException("illegal insert caused by overflow of column " + column + " because array size is " + tilesToBeInserted.size() + " but first free cell is in position "+ i);
             }
         }
-        /*for(int r=shelfieRows;r>=0;r--){
-            for(int c=0;c<shelfieColumns;c++){
-                System.out.print("  " + grid[r][c] + "  " );
-            }
-            System.out.println(" ");
-        }*/
-        //notify changes
-        shelfieChangeNotifier();
     }
 
     /**
@@ -123,6 +115,11 @@ public class Shelfie implements Serializable {
         return tilesToBeInserted.size() + i <= shelfieRows;
     }
 
+    /**
+     * testing method for tile insertion
+     * @param tilesToBeInserted arrayList of tiles to be inserted
+     * @param column chosen column for the insertion
+     */
     public void insertTileForTesting(ArrayList<Tile> tilesToBeInserted, int column){
             int i = 0;
             int k = 0;
@@ -137,18 +134,22 @@ public class Shelfie implements Serializable {
             }
     }
 
-
-
-
-    public String shelfieChangeNotifier(){
-        return null;
-    }
-
-
+    /**
+     * method used to set a grid in a fast way; it creates a new tile with the desired id and color
+     * @param row selected row
+     * @param column selected column
+     * @param id id of selected tile
+     * @param color color of chosen tile
+     */
     public void setGrid(int row, int column, int id, Tile.TileColor color){
         grid[row][column] = new Tile(id, color);
     }
 
+    /**
+     * sets desired cell of shelfie to null
+     * @param row selected row
+     * @param column selected column
+     */
     public void setGridAtNull(int row, int column){
         grid[row][column] = null;
     }

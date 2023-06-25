@@ -9,7 +9,13 @@ import java.io.*;
  * Class used to read the json config files for client and server
  */
 public class CommunicationProtocolParser{
+    /**
+     * variable holding the port number found in the json config file
+     */
     private int portNumber;
+    /**
+     * variable holding the host name found in the json config file
+     */
     private String hostName;
 
     /**
