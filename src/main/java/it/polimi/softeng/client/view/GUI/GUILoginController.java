@@ -225,7 +225,11 @@ public class GUILoginController implements Initializable {
                     }else guiClientSide.RemoteMethods = new ClientSideRMI(guiClientSide);
 
                     String gameModeString = gamemode == 1 ? "e" : "n";
-                    guiClientSide.RMIInvoker("@LOGN", gameModeString);
+                    boolean okNickname = guiClientSide.RMIInvoker("@LOGN", gameModeString);
+                    if(!okNickname){
+                        nickname.setText("");
+                        return false;
+                    }
                 }
                 case 3 -> {
                     String gameModeString = gamemode == 1 ? "e" : "n";
