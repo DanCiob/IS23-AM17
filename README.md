@@ -15,6 +15,9 @@
 | Persistence |🔴|
 | Resilience |🟢|
 
+🟢 : implemented
+🔴 : not implemented
+
 ## Deliveries content
 Deliveries folder includes:
 * High level UML describing interaction between main components of the application,
