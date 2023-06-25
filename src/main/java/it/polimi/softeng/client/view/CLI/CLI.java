@@ -52,10 +52,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     protected String ServerAddress;
     protected int Port;
 
-    /**
-     * 1 -> player want to create new game
-     * 2 -> player want to join (if present) a game which is already started
-     */
     protected int StartGame;
 
     /**
@@ -108,9 +104,10 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     /**
      * Just for testing purposes
+     *
      * @param inputStream is directed input stream
      */
-    public CLI (ByteArrayInputStream inputStream) {
+    public CLI(ByteArrayInputStream inputStream) {
         this.messageHandler = new MessageHandler(this);
         this.input = new Scanner(inputStream);
     }
@@ -141,29 +138,23 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     System.out.println("Digit server Port");
                     System.out.println(">");
                     PortString = input.nextLine();
-                    System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");
-                    System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname");
+                    System.out.println("If you want to reconnect to a previous game choose the same nickname and same number of players of old match");
+                    System.out.println(ANSI_YELLOW + "WARNING:" + ANSI_RESET + "If there's already an active lobby you'll join the lobby");
                     System.out.println(">");
 
                     do {
-                        StartGame = input.nextInt();
+                        System.out.println("Insert the number of players(2-4)");
+                        System.out.println(">");
+                        NumOfPlayer = input.nextInt();
                         input.nextLine();
-                    } while (StartGame != 1 && StartGame != 2);
-                    if (StartGame == 1) {
-                        do {
-                            System.out.println("Insert the number of players(2-4)");
-                            System.out.println(">");
-                            NumOfPlayer = input.nextInt();
-                            input.nextLine();
-                        } while (NumOfPlayer < 2 || NumOfPlayer > 4);
+                    } while (NumOfPlayer < 2 || NumOfPlayer > 4);
 
+                    do {
                         System.out.println("Do you want to play with Easy mode(1) or Normal mode(2)?");
                         System.out.println(">");
-                        do {
-                            GameMode = input.nextInt();
-                            input.nextLine();
-                        } while (GameMode != 1 && GameMode != 2);
-                    }
+                        GameMode = input.nextInt();
+                        input.nextLine();
+                    } while (GameMode != 1 && GameMode != 2);
 
                     //this is so that if you press enter it connects to the server specified in the json file
                     if (!ServerAddress.equals("") && !PortString.equals("")) {
@@ -197,73 +188,60 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     System.out.println("Digit server IP");
                     System.out.println(">");
                     ServerAddress = input.nextLine();
-                    System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");
-                    System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname (you'll see a waiting lobby and rejoin when it's your turn)");
+                    System.out.println("If you want to reconnect to a previous game choose the same nickname and same number of players of old match");
+                    System.out.println(ANSI_YELLOW + "WARNING:" + ANSI_RESET + "If there's already an active lobby you'll join the lobby");
                     System.out.println(">");
+
                     do {
-                        StartGame = input.nextInt();
-                        input.nextLine();
-                    } while (StartGame != 1 && StartGame != 2);
-                    if (StartGame == 1) {
-                        System.out.println("Insert the number of players(2-4)?");
+                        System.out.println("Insert the number of players(2-4)");
                         System.out.println(">");
-                        do {
-                            NumOfPlayer = input.nextInt();
-                            input.nextLine();
+                        NumOfPlayer = input.nextInt();
+                        input.nextLine();
+                    } while (NumOfPlayer < 2 || NumOfPlayer > 4);
 
-                            if (NumOfPlayer > 4 || NumOfPlayer < 2)
-                                eventManager(INVALID_NUMBER_OF_PLAYERS);
-                        } while (NumOfPlayer > 4 || NumOfPlayer < 2);
-
+                    do {
                         System.out.println("Do you want to play with Easy mode(1) or Normal mode(2)?");
                         System.out.println(">");
-                        do {
-                            GameMode = input.nextInt();
-                            input.nextLine();
-                        } while (GameMode != 1 && GameMode != 2);
-                    }
+                        GameMode = input.nextInt();
+                        input.nextLine();
+                    } while (GameMode != 1 && GameMode != 2);
+
 
                     do {
-                        System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed, nickname: System/system isn't allowed)");
-                        System.out.println(">");
-                        Nickname = input.nextLine();
+                        do {
+                            System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed, nickname: System/system isn't allowed)");
+                            System.out.println(">");
+                            Nickname = input.nextLine();
 
-                        //if the user pressed enter it connects to the server specified in the json file
-                        if (!ServerAddress.equals("")) {
-                            this.RemoteMethods = new ClientSideRMI(ServerAddress, this);
-                        } else this.RemoteMethods = new ClientSideRMI(this);
+                            //if the user pressed enter it connects to the server specified in the json file
+                            if (!ServerAddress.equals("")) {
+                                this.RemoteMethods = new ClientSideRMI(ServerAddress, this);
+                            } else this.RemoteMethods = new ClientSideRMI(this);
 
-                    } while (!isOkNickname()  || Nickname.equalsIgnoreCase("system"));
-                    String GameModeStringifed = GameMode == 1 ? "e" : "n";
-                    okNickname = RMIInvoker("@LOGN", GameModeStringifed);
+                        } while (!isOkNickname() || Nickname.equalsIgnoreCase("system"));
+                        String GameModeStringifed = GameMode == 1 ? "e" : "n";
+                        okNickname = RMIInvoker("@LOGN", GameModeStringifed);
+                    } while (!okNickname);
                 }
 
                 case 3 -> { //case of local use of RMI
-                    System.out.println("Do you want to create a new game(1) or join a game which is already started(2)?");
-                    System.out.println("If you want to reconnect to a previous game choose 2 and use the same nickname (you'll see a waiting lobby and rejoin when it's your turn)");
+                    System.out.println("If you want to reconnect to a previous game choose the same nickname and same number of players of old match");
+                    System.out.println(ANSI_YELLOW + "WARNING:" + ANSI_RESET + "If there's already an active lobby you'll join the lobby");
                     System.out.println(">");
+
                     do {
-                        StartGame = input.nextInt();
-                        input.nextLine();
-                    } while (StartGame != 1 && StartGame != 2);
-                    if (StartGame == 1) {
-                        System.out.println("Insert the number of players(2-4)?");
+                        System.out.println("Insert the number of players(2-4)");
                         System.out.println(">");
-                        do {
-                            NumOfPlayer = input.nextInt();
-                            input.nextLine();
+                        NumOfPlayer = input.nextInt();
+                        input.nextLine();
+                    } while (NumOfPlayer < 2 || NumOfPlayer > 4);
 
-                            if (NumOfPlayer > 4 || NumOfPlayer < 2)
-                                eventManager(INVALID_NUMBER_OF_PLAYERS);
-                        } while (NumOfPlayer > 4 || NumOfPlayer < 2);
-
+                    do {
                         System.out.println("Do you want to play with Easy mode(1) or Normal mode(2)?");
                         System.out.println(">");
-                        do {
-                            GameMode = input.nextInt();
-                            input.nextLine();
-                        } while (GameMode != 1 && GameMode != 2);
-                    }
+                        GameMode = input.nextInt();
+                        input.nextLine();
+                    } while (GameMode != 1 && GameMode != 2);
 
                     do {
                         System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed)");
@@ -590,7 +568,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
             case ("@LOGN") -> {
                 try {
-                    RemoteMethods.getStub().login(Nickname, NumOfPlayer, action, RemoteMethods.getPort());
+                    return RemoteMethods.getStub().login(Nickname, NumOfPlayer, action, RemoteMethods.getPort());
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -1055,6 +1033,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 System.out.println(NICKNAME_NOT_UNIQUE);
                 okNickname = false;
             }
+            case (JOINING_LOBBY) -> System.out.println(JOINING_LOBBY);
             case (PLAYER_DISCONNECTED) -> System.out.println(PLAYER_DISCONNECTED);
             case (INVALID_NUMBER_OF_PLAYERS) -> System.out.println(INVALID_NUMBER_OF_PLAYERS);
             case (INVALID_CHOICE_OF_TILES) -> System.out.println(INVALID_CHOICE_OF_TILES);
@@ -1189,6 +1168,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     /**
      * Used only for testing
+     *
      * @return gameboard
      */
     public GameBoard getUserGameBoard() {
@@ -1197,6 +1177,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     /**
      * Used only for testing
+     *
      * @return shelfie
      */
     public Shelfie getUserShelfie() {
@@ -1205,6 +1186,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     /**
      * Used only for testing
+     *
      * @return PersonalCard
      */
     public PersonalCards getPersonalCard() {
@@ -1213,6 +1195,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     /**
      * Used only for testing
+     *
      * @return Commoncard1
      */
     public String getCommonCard1() {
@@ -1221,6 +1204,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     /**
      * Used only for testing
+     *
      * @return Commoncard2
      */
     public String getCommonCard2() {

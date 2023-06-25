@@ -32,6 +32,9 @@ import java.util.concurrent.TimeUnit;
 import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
 
+/**
+ * Manage game screen for GUI
+ */
 public class GUIGameController implements Initializable{
 
     boolean moveError = false;

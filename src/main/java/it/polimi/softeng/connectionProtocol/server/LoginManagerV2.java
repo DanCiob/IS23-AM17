@@ -19,7 +19,7 @@ import static it.polimi.softeng.JSONWriter.ErrorWriter.writeError;
 import static it.polimi.softeng.JSONWriter.ServerSignatureWriter.serverSignObject;
 
 /**
- * class that manages the logins from both rmi and socket users for a match
+ * Class that manages the logins from both rmi and socket users for a match
  */
 public class LoginManagerV2 {
     /**

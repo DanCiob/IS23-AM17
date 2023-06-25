@@ -14,6 +14,9 @@ import java.util.ResourceBundle;
 
 import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
 
+/**
+ * Manage end game screen in GUI
+ */
 public class EndGameController implements Initializable {
 
     GUIClientSide guiClientSide;

@@ -36,6 +36,9 @@ import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.Constants.gameCommandREGEX;
 import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
 
+/**
+ * Main class of Graphic User Interface for MyShelfie
+ */
 public class GUIClientSide extends CommonOperationsFramework implements UI {
     /**
      * Local representation of GameBoard
@@ -61,10 +64,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     protected Map <String, Shelfie> nicknameShelfie = new HashMap<>();
 
-    /**
-     * 1 -> player want to create new game (FA: multi-game management)
-     * 2 -> player want to join (if present) a game which is already started
-     */
     protected int StartGame;
 
     /**

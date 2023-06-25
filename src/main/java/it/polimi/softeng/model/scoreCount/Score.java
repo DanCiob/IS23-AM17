@@ -9,7 +9,9 @@ import java.util.Stack;
 import java.util.Vector;
 import static it.polimi.softeng.Constants.*;
 
-
+/**
+ * This class contains some static methods useful for score calculation
+ */
 public class Score {
     static ArrayList<Tile> visited = new ArrayList<>();
     /**

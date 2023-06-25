@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * class that implements the methods exposed to the rmi users
+ * Class that implements the methods exposed to the rmi users
  */
 public class ServerSideMethods implements ServerRemoteInterface {
     /**

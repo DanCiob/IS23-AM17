@@ -2,6 +2,9 @@ package it.polimi.softeng.model;
 
 import java.io.Serializable;
 
+/**
+ * Tile used in game
+ */
 public class Tile implements Serializable {
     int id;
     TileColor color;

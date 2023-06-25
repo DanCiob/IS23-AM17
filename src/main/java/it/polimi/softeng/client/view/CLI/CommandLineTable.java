@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Simple graphic class for visualization of some elements of CLI
+ */
 public class CommandLineTable {
     private static final String HORIZONTAL_SEP = "-";
     private String verticalSep;

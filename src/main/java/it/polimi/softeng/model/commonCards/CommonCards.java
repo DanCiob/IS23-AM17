@@ -5,6 +5,9 @@ import it.polimi.softeng.model.Shelfie;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Abstract representation of CommonCards
+ */
 public abstract class CommonCards implements Serializable {
     public boolean verifyShape(Shelfie s) {
         return true;

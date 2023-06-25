@@ -36,8 +36,6 @@ public class GameMoveParser {
 
         for (int index = 0; index < JSONArr.size(); index++)
         {
-            System.out.println("Reading gameMove");
-
             Cell c = new Cell();
             JSONObject tempCell = (JSONObject) JSONArr.get(index);
             c.setRow((int) (long) tempCell.get("row"));

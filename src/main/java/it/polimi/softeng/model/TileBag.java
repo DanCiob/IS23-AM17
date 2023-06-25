@@ -6,6 +6,9 @@ import java.util.Random;
 
 import static it.polimi.softeng.Constants.*;
 
+/**
+ * This class contains a "bag" with every tile available in the game
+ */
 public class TileBag {
     private final static ArrayList<Tile> tileBag = new ArrayList<>();
 

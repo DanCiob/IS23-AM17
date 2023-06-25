@@ -12,6 +12,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Used to start GUI
+ */
 public class GUIAppl extends Application {
     GUIClientSide guiClientSide;
 

@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * class used to accept and manage rmi clients server side
+ * Class used to accept and manage rmi clients server side
  */
 public class ServerSideRMI extends ServerSideMethods {
     /**

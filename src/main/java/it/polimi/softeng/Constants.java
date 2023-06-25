@@ -1,7 +1,7 @@
 package it.polimi.softeng;
 
 /**
- * we use this class to collect all the constants that are useful in the game
+ * We use this class to collect all the constants that are useful in the game
  */
 
 public abstract class Constants {
@@ -49,6 +49,7 @@ public abstract class Constants {
     public static final String commandREGEX = "^([@][Cc][Mm][Nn][Dd])|^([@][Vv][Bb][Oo][Rr])|^([@][Vv][Ss][Hh][Ee])|^([@][Vv][Pp][Cc][Aa])|^([@][Vv][Cc][Cc][Aa])|^([@][Vv][Pp][Ll][Aa])|^([@][Cc][Hh][Aa][Tt])|^([@][Gg][Aa][Mm][Ee])|^([@][Hh][Ee][Ll][Pp])";
 
     //Errors
+    public static final String JOINING_LOBBY = "You will join existing lobby";
     public static final String NICKNAME_NOT_UNIQUE = "Error: Nickname not unique, try again";
     public static final String PLAYER_DISCONNECTED = "Error: Client disconnected";
     public static final String ERROR_IN_GAMEMOVE = "Error: Either it's not your turn or gameMove syntax is wrong!";

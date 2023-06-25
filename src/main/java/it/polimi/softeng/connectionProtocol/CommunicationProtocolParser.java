@@ -6,7 +6,7 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 
 /**
- * class used to read the json config files for client and server
+ * Class used to read the json config files for client and server
  */
 public class CommunicationProtocolParser{
     private int portNumber;

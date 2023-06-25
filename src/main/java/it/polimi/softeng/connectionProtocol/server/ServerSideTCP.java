@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 //TODO controlla se viene killato se si chiudono tutti i socket tcp
 
 /**
- * class used to handle the tcp connection server side
+ * Class used to handle the tcp connection server side
  */
 public class ServerSideTCP {
     /**

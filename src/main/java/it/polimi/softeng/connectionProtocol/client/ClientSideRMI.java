@@ -13,7 +13,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 
 /**
- * class used when the client wants to establish an RMI connection
+ * Class used when the client wants to establish an RMI connection
  */
 public class ClientSideRMI {
     /**

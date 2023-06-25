@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
- * class used to manage tcp connection client side
+ * Class used to manage tcp connection client side
  */
 public class ClientSide {
     /**

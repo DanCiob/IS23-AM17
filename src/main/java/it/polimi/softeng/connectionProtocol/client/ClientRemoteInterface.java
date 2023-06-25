@@ -9,7 +9,7 @@ import java.rmi.registry.Registry;
 import java.util.ArrayList;
 
 /**
- * interface that defines the available RMI client methods
+ * Interface that defines the available RMI client methods
  */
 public interface ClientRemoteInterface extends Remote {
     /**

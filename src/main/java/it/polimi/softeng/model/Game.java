@@ -32,7 +32,6 @@ public class Game{
     private Boolean fullShelfie = false;
 
     //maybe finished
-    //TODO dovremmo controllare che non parta con meno del numero di giocatori scelto
     public void beginGame(ArrayList<String> nameList){
         //vedi cosa serve
         for(String name : nameList){

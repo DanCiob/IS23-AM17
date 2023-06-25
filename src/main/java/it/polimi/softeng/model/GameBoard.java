@@ -6,7 +6,9 @@ import java.util.Random;
 
 import static it.polimi.softeng.Constants.*;
 
-
+/**
+ * Model representation of GameBoard
+ */
 public class GameBoard implements Serializable {
     /**
      * matrix that represents the board;

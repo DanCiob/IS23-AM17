@@ -6,6 +6,9 @@ import static it.polimi.softeng.Constants.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * Representation of shelfie
+ */
 public class Shelfie implements Serializable {
     /**
      * matrix that represent the shelfie;

@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
- * class that implements the methods for the RMI client interface
+ * Class that implements the methods for the RMI client interface
  */
 public class ClientSideMethods implements ClientRemoteInterface {
     /**

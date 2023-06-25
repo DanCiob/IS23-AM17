@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * general class managing the server side communications
+ * General class managing the server side communications
  */
 public class ServerSide {
     /**

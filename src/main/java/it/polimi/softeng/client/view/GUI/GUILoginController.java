@@ -38,6 +38,9 @@ import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
 
+/**
+ * Manage login screen for GUI
+ */
 public class GUILoginController implements Initializable {
     GUIClientSide guiClientSide;
     @FXML

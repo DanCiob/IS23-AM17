@@ -15,7 +15,6 @@ import static it.polimi.softeng.JSONWriter.ServerSignatureWriter.serverSignObjec
 
 /**
  * This class allows to communicate gameMoves and the start of a game to the Model.
- * ??? communicate via interfaces
  *
  */
 public class GameController {
