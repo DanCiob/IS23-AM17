@@ -3,6 +3,7 @@ package it.polimi.softeng.controller;
 import it.polimi.softeng.Constants;
 import it.polimi.softeng.client.view.CLI.CLI;
 import it.polimi.softeng.model.*;
+import org.json.simple.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -10,9 +11,187 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ControllerTest {
+
+    /**
+     * Introduce getter and game methods for testing
+     */
+    private class CLIWithInputString extends CLI {
+        /**
+         * Used only for testing
+         * Game routine that wait for commands, check syntax and send JSON/invoke method to server if needed -> just for testing purpose
+         */
+        private void game(String move) throws RemoteException {
+
+            //Check empty command
+            if (move == null) {
+                System.out.println("Empty command!");
+                return;
+            }
+            //Check if player inserted a command that is not on the table
+            if (!isOkCommand(move, 1)) {
+                System.out.println("Please write a command that you can see in the table");
+                return;
+            }
+
+            if (move.equalsIgnoreCase("@CMND") || move.equalsIgnoreCase("@VBOR") || move.equalsIgnoreCase("@VSHE") || move.equalsIgnoreCase("@VPCA") || move.equalsIgnoreCase("@VPLA") || move.equalsIgnoreCase("@VCCA") || move.equalsIgnoreCase("@HELP")) {
+                switch (move.toUpperCase()) {
+                    case ("@HELP") -> {
+                        help();
+                        return;
+                    }
+                    case ("@CMND") -> {
+                        return;
+                    }
+                    case ("@VBOR") -> {
+                        boardVisualizer(UserGameBoard.getBoard(), UserGameBoard.getNotAvailable());
+                        return;
+                    }
+                    case ("@VSHE") -> {
+                        shelfieVisualizer(UserShelfie.getGrid());
+                        return;
+                    }
+                    case ("@VPCA") -> {
+                        personalCardVisualizer(PersonalCard);
+                        return;
+                    }
+                    case ("@VCCA") -> {
+                        commonCardsVisualizer(CommonCard1);
+                        if (CommonCard2 != null) commonCardsVisualizer(CommonCard2);
+                        return;
+                    }
+                    case ("@VPLA") -> {
+                        switch (ConnectionMode) {
+                            //Socket
+                            case 1 -> {
+                                JSONObject dummy = new JSONObject();
+                                clientSide.sendMessage(clientSignObject(dummy, "@VPLA", Nickname).toJSONString());
+                                return;
+                            }
+                            //RMI
+                            case 2 -> {
+                                eventManager("playerEvent");
+                                scoreVisualizer(RemoteMethods.getStub().getPlayersAndScore());
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!isOkCommand(move, 2) && !isOkCommand(move, 3)) {
+                System.out.println("Please write a command that you can see in the table");
+                return;
+            }
+
+            //Command is in @CMND format (every command is 4 letters), uppercase avoid case sensitivity
+            String op = move.substring(0, 5).toUpperCase();
+            String action = move.substring(6);
+
+            if (!op.equals("@GAME") && !op.equals("@CHAT") && !op.equals("@VPLA")) {
+                System.out.println("Please write a command that you can see in the table");
+                return;
+            }
+
+            switch (ConnectionMode) {
+                //Socket
+                case 1 -> {
+                    //Block illegal move
+                    if (op.equals("@GAME")) {
+                        if (!isOkCommand(move, 3)) {
+                            System.out.println("Please, check gameMove syntax");
+                            return;
+                        }
+                    }
+                    //Block badly formatted messages
+                    if (op.equals("@CHAT")) {
+                        if (!isOkCommand(move, 2)) {
+                            System.out.println("Please, check chat syntax");
+                            return;
+                        }
+                    }
+
+                    //Create JSON messages containing request
+                    JSONObject toBeSent = actionToJSON(op, action);
+
+                    //Send message to server
+                    if (toBeSent != null)
+                        clientSide.sendMessage(clientSignObject(toBeSent, op, Nickname).toJSONString());
+                }
+
+
+                case 2 -> {
+                    if (op.equals("@GAME")) {
+                        if (!isOkCommand(move, 3)) {
+                            System.out.println("Please, check gameMove syntax");
+                            return;
+                        }
+                    }
+
+                    if (op.equals("@CHAT")) {
+                        if (!isOkCommand(move, 2)) {
+                            System.out.println("Please, check chat syntax");
+                            return;
+                        }
+                    }
+                    RMIInvoker(op, action);
+                }
+            }
+        }
+
+        public CLIWithInputString(ByteArrayInputStream inputStream) {
+            super(inputStream);
+        }
+
+        /**
+         * Used only for testing
+         *
+         * @return gameboard
+         */
+        public GameBoard getUserGameBoard() {
+            return UserGameBoard;
+        }
+
+        /**
+         * Used only for testing
+         *
+         * @return shelfie
+         */
+        public Shelfie getUserShelfie() {
+            return UserShelfie;
+        }
+
+        /**
+         * Used only for testing
+         *
+         * @return PersonalCard
+         */
+        public PersonalCards getPersonalCard() {
+            return PersonalCard;
+        }
+
+        /**
+         * Used only for testing
+         *
+         * @return Commoncard1
+         */
+        public String getCommonCard1() {
+            return CommonCard1;
+        }
+
+        /**
+         * Used only for testing
+         *
+         * @return Commoncard2
+         */
+        public String getCommonCard2() {
+            return CommonCard2;
+        }
+    }
+
     /**
      * Check that game controller game setup goes correctly
      */
@@ -47,14 +226,14 @@ class ControllerTest {
         Controller controller = new Controller();
         String enter = System.lineSeparator();
 
-        ByteArrayInputStream input1 = new ByteArrayInputStream((3 + enter + "" + enter + 4 + enter + 2 + enter + "Player_1" + enter).getBytes());
-        ByteArrayInputStream input2 = new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 4 + enter + 2 + enter + "Player_2" + enter).getBytes());
-        ByteArrayInputStream input3 = new ByteArrayInputStream((3 + enter + "" + enter + 1 + enter + 4 + enter + 2 + enter + "Player_3" + enter).getBytes());
-        ByteArrayInputStream input4 = new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 4 + enter + 2 + enter + "Player_4" + enter).getBytes());
-        CLI cli1 = new CLI(input1);
-        CLI cli2 = new CLI(input2);
-        CLI cli3 = new CLI(input3);
-        CLI cli4 = new CLI(input4);
+        ByteArrayInputStream input1 = new ByteArrayInputStream((3 + enter + "" + enter + 4 + enter + "Player_1" + enter).getBytes());
+        ByteArrayInputStream input2 = new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 4 + enter + "Player_2" + enter).getBytes());
+        ByteArrayInputStream input3 = new ByteArrayInputStream((3 + enter + "" + enter + 1 + enter + 4 + enter + "Player_3" + enter).getBytes());
+        ByteArrayInputStream input4 = new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 4 + enter  + "Player_4" + enter).getBytes());
+        CLIWithInputString cli1 = new CLIWithInputString(input1);
+        CLIWithInputString cli2 = new CLIWithInputString(input2);
+        CLIWithInputString cli3 = new CLIWithInputString(input3);
+        CLIWithInputString cli4 = new CLIWithInputString(input4);
 
         cli1.setupCLI();
         cli2.setupCLI();
@@ -162,8 +341,8 @@ class ControllerTest {
             cli1.game(move);
 
             //Reconnect two client
-            cli2 = new CLI(new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 4 + enter + 2 + enter + "Player_2" + enter).getBytes()));
-            cli3 = new CLI(new ByteArrayInputStream((3 + enter + "" + enter + 1 + enter + 4 + enter + 2 + enter + "Player_3" + enter).getBytes()));
+            cli2 = new CLIWithInputString(new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 4 + enter + "Player_2" + enter).getBytes()));
+            cli3 = new CLIWithInputString(new ByteArrayInputStream((3 + enter + "" + enter + 1 + enter + 4 + enter + "Player_3" + enter).getBytes()));
             cli2.setupCLI();
             cli3.setupCLI();
             TimeUnit.SECONDS.sleep(1);

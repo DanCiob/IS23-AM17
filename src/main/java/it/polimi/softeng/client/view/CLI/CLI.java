@@ -68,6 +68,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     /**
      * 1 -> Connected with Socket
      * 2 -> Connected with RMI
+     * 3 -> Connection in localhost with RMI
      */
     protected int ConnectionMode = 0;
 
@@ -127,7 +128,12 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         System.out.println("Do you want to connect using Socket(1),RMI(2) or local RMI(3)?");
         System.out.println(">");
         do {
-            ConnectionMode = Integer.parseInt(input.nextLine());
+            try {
+                ConnectionMode = Integer.parseInt(input.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println(ANSI_RED + "Please relaunch client and select a valid option for connection" + ANSI_RESET);
+                System.exit(0);
+            }
 
             switch (ConnectionMode) {
                 case 1 -> { //socket
@@ -148,13 +154,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         NumOfPlayer = input.nextInt();
                         input.nextLine();
                     } while (NumOfPlayer < 2 || NumOfPlayer > 4);
-
-                    do {
-                        System.out.println("Do you want to play with Easy mode(1) or Normal mode(2)?");
-                        System.out.println(">");
-                        GameMode = input.nextInt();
-                        input.nextLine();
-                    } while (GameMode != 1 && GameMode != 2);
 
                     //this is so that if you press enter it connects to the server specified in the json file
                     if (!ServerAddress.equals("") && !PortString.equals("")) {
@@ -200,14 +199,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     } while (NumOfPlayer < 2 || NumOfPlayer > 4);
 
                     do {
-                        System.out.println("Do you want to play with Easy mode(1) or Normal mode(2)?");
-                        System.out.println(">");
-                        GameMode = input.nextInt();
-                        input.nextLine();
-                    } while (GameMode != 1 && GameMode != 2);
-
-
-                    do {
                         do {
                             System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed, nickname: System/system isn't allowed)");
                             System.out.println(">");
@@ -235,13 +226,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         NumOfPlayer = input.nextInt();
                         input.nextLine();
                     } while (NumOfPlayer < 2 || NumOfPlayer > 4);
-
-                    do {
-                        System.out.println("Do you want to play with Easy mode(1) or Normal mode(2)?");
-                        System.out.println(">");
-                        GameMode = input.nextInt();
-                        input.nextLine();
-                    } while (GameMode != 1 && GameMode != 2);
 
                     do {
                         System.out.println("Insert nickname (ONLY characters a-z A-Z 0-9 and _ allowed)");
@@ -1160,186 +1144,5 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     public void setStartGame(int startGame) {
         StartGame = startGame;
-    }
-
-    //////////////////
-    //TESTING METHOD//
-    //////////////////
-
-    /**
-     * Used only for testing
-     *
-     * @return gameboard
-     */
-    public GameBoard getUserGameBoard() {
-        return UserGameBoard;
-    }
-
-    /**
-     * Used only for testing
-     *
-     * @return shelfie
-     */
-    public Shelfie getUserShelfie() {
-        return UserShelfie;
-    }
-
-    /**
-     * Used only for testing
-     *
-     * @return PersonalCard
-     */
-    public PersonalCards getPersonalCard() {
-        return PersonalCard;
-    }
-
-    /**
-     * Used only for testing
-     *
-     * @return Commoncard1
-     */
-    public String getCommonCard1() {
-        return CommonCard1;
-    }
-
-    /**
-     * Used only for testing
-     *
-     * @return Commoncard2
-     */
-    public String getCommonCard2() {
-        return CommonCard2;
-    }
-
-    /**
-     * Used only for testing
-     * Game routine that wait for commands, check syntax and send JSON/invoke method to server if needed -> just for purpose
-     */
-    public void game(String move) throws RemoteException {
-        String command = move;
-
-        //Check empty command
-        if (command == null) {
-            System.out.println("Empty command!");
-            return;
-        }
-        //Check if player inserted a command that is not on the table
-        if (!isOkCommand(command, 1)) {
-            System.out.println("Please write a command that you can see in the table");
-            return;
-        }
-
-        if (command.equalsIgnoreCase("@CMND") || command.equalsIgnoreCase("@VBOR") || command.equalsIgnoreCase("@VSHE") || command.equalsIgnoreCase("@VPCA") || command.equalsIgnoreCase("@VPLA") || command.equalsIgnoreCase("@VCCA") || command.equalsIgnoreCase("@HELP")) {
-            switch (command.toUpperCase()) {
-                case ("@HELP") -> {
-                    help();
-                    return;
-                }
-                case ("@CMND") -> {
-                    return;
-                }
-                case ("@VBOR") -> {
-                    boardVisualizer(UserGameBoard.getBoard(), UserGameBoard.getNotAvailable());
-                    return;
-                }
-                case ("@VSHE") -> {
-                    shelfieVisualizer(UserShelfie.getGrid());
-                    return;
-                }
-                case ("@VPCA") -> {
-                    personalCardVisualizer(PersonalCard);
-                    return;
-                }
-                case ("@VCCA") -> {
-                    commonCardsVisualizer(CommonCard1);
-                    if (CommonCard2 != null) commonCardsVisualizer(CommonCard2);
-                    return;
-                }
-                case ("@VPLA") -> {
-                    switch (ConnectionMode) {
-                        //Socket
-                        case 1 -> {
-                            JSONObject dummy = new JSONObject();
-                            clientSide.sendMessage(clientSignObject(dummy, "@VPLA", Nickname).toJSONString());
-                            return;
-                        }
-                        //RMI
-                        case 2 -> {
-                            eventManager("playerEvent");
-                            scoreVisualizer(RemoteMethods.getStub().getPlayersAndScore());
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (!isOkCommand(command, 2) && !isOkCommand(command, 3)) {
-            System.out.println("Please write a command that you can see in the table");
-            return;
-        }
-
-        //Command is in @CMND format (every command is 4 letters), uppercase avoid case sensitivity
-        String op = command.substring(0, 5).toUpperCase();
-        String action = command.substring(6);
-
-        if (!op.equals("@GAME") && !op.equals("@CHAT") && !op.equals("@VPLA")) {
-            System.out.println("Please write a command that you can see in the table");
-            return;
-        }
-
-        switch (ConnectionMode) {
-            //Socket
-            case 1 -> {
-                //Block illegal move
-                if (op.equals("@GAME")) {
-                    if (!isOkCommand(command, 3)) {
-                        System.out.println("Please, check gameMove syntax");
-                        return;
-                    }
-                }
-                //Block badly formatted messages
-                if (op.equals("@CHAT")) {
-                    if (!isOkCommand(command, 2)) {
-                        System.out.println("Please, check chat syntax");
-                        return;
-                    }
-                }
-
-                //Create JSON messages containing request
-                JSONObject toBeSent = actionToJSON(op, action);
-
-                //Send message to server
-                if (toBeSent != null)
-                    clientSide.sendMessage(clientSignObject(toBeSent, op, Nickname).toJSONString());
-            }
-
-
-            case 2 -> {
-                if (op.equals("@GAME")) {
-                    if (!isOkCommand(command, 3)) {
-                        System.out.println("Please, check gameMove syntax");
-                        return;
-                    }
-                }
-
-                if (op.equals("@CHAT")) {
-                    if (!isOkCommand(command, 2)) {
-                        System.out.println("Please, check chat syntax");
-                        return;
-                    }
-                }
-                RMIInvoker(op, action);
-            }
-        }
-    }
-
-    /**
-     * Used only for testing
-     * Disconnect CLI
-     */
-    public void disconnect() {
-        clientSide = null;
-        RemoteMethods = null;
     }
 }
