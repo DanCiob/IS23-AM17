@@ -1,17 +1,18 @@
 package it.polimi.softeng.model;
 
-import it.polimi.softeng.JSONWriter.CommonCardWriter;
 import it.polimi.softeng.client.view.CLI.CLI;
 import it.polimi.softeng.customExceptions.IllegalInsertException;
 import it.polimi.softeng.model.commonCards.CommonCards;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 import static it.polimi.softeng.Constants.*;
 import static junit.framework.Assert.*;
 
+/**
+ * Simulate full match
+ */
 public class MatchTest {
     Game game = new Game();
 
@@ -28,13 +29,8 @@ public class MatchTest {
         game.beginGame(nameList);
 
         while (!(game.checkEndGame())) {
-            //TODO: modifica column
-            //TODO: modifica positionsToBeRemoved
-            //TODO: modifica tilesToInsert
             game.turn(positionsToBeRemoved, column);
         }
-        //game.lastTurn();
-        //TODO modify lastturn call
     }
 
     public String match1() {

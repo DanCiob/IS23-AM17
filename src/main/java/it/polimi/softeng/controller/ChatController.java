@@ -1,7 +1,5 @@
 package it.polimi.softeng.controller;
 
-import it.polimi.softeng.JSONWriter.ChatWriter;
-import it.polimi.softeng.JSONWriter.ServerSignatureWriter;
 import it.polimi.softeng.connectionProtocol.server.ServerSide;
 
 /**
@@ -12,7 +10,8 @@ public class ChatController {
 
     /**
      * This method sends a chat message using {@link ServerSide}
-     *  The message can be sent to all or to a specific receiver
+     * The message can be sent to all or to a specific receiver
+     *
      * @param receiver is receiver of chat message
      * @param message is chat message
      * @param serverSide is socket communicator

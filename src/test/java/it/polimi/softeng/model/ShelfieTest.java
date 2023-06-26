@@ -7,10 +7,13 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
+/**
+ * Check Shelfie main functionalities
+ */
 class ShelfieTest {
 
     /**
-     * checks for insertTile correctness by inserting 3 tiles in an empty shelfie in the 0 column; then checks if the
+     * Checks for insertTile correctness by inserting 3 tiles in an empty shelfie in the 0 column; then checks if the
      * tiles are in the correct place
      */
     @Test
