@@ -1,7 +1,7 @@
 package it.polimi.softeng;
 
 /**
- * We use this class to collect all the constants that are useful in the game
+ * This class is used to collect all the constants that are useful in the game.
  */
 
 public abstract class Constants {

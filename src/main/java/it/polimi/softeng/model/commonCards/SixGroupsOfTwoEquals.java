@@ -3,12 +3,13 @@ import it.polimi.softeng.model.Shelfie;
 
 import static it.polimi.softeng.model.scoreCount.Score.GroupsOfEqualTiles;
 
+/**
+ * This class implements the method verifyShape() to check if the shelfie contains six groups each containing at least two tiles of the same color.
+ * The number and the size of groups are configurable parameters.
+ */
+
 public class SixGroupsOfTwoEquals extends CommonCards {
 
-    /**
-     * @param s is the shelfie
-     * @return true if the shape is satisfied, false if not
-     */
     @Override
     public boolean verifyShape(Shelfie s) {
         int numOfGroups = 6;

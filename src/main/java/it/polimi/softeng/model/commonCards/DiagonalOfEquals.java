@@ -4,27 +4,30 @@ import it.polimi.softeng.model.Shelfie;
 import it.polimi.softeng.model.Tile;
 import static it.polimi.softeng.Constants.*;
 
+/**
+ * This class implements the method verifyShape() to check if the shelfie contains a diagonal of five tiles of the same color.
+ */
 
 public class DiagonalOfEquals extends CommonCards {
 
     /**
-     * The enum Direction indicates from which bottom angle (+offset) we start to analyze the shelfie
-     * (bottom LEFT or bottom RIGHT)
+     * The enum Direction indicates from which bottom angle (+offset) we start to analyze the shelfie (bottom LEFT or bottom RIGHT).
      */
     private enum Direction{
         LEFT,
         RIGHT
     }
+
     /**
-     * indicates whether I'm checking for a diagonal starting from row 0 (offset = 0) or row 1 (offset = 1)
+     * It indicates whether we're checking for a diagonal starting from row 0 (offset = 0) or row 1 (offset = 1).
      */
     private int offset;
 
     /**
-     * method used to verify whether the common goal (in this case "diagonal of five equals") is achieved; it cycles
-     * through the various possible pattern of diagonal to find one
-     * @param s the shelfie on which you check the common goal
-     * @return boolean value; true means the common goal is achieved on the shelfie s
+     * This method is used to verify whether the common goal "Diagonal of five equals" is achieved: it cycles through
+     * the various possible patterns of diagonal to find one.
+     * @param s the shelfie on which you check the common goal.
+     * @return boolean value, true if the common goal is achieved on the shelfie s.
      */
     public boolean verifyShape(Shelfie s){
         offset = 0;
@@ -38,12 +41,12 @@ public class DiagonalOfEquals extends CommonCards {
         return false;
     }
     /**
-     * this method is the base of verifyShape; it has two internal ways to verify for a diagonal based on the required
-     * direction, including an offset modifier
-     * @param shelfie the shelfie on which you check the common goal
-     * @param direction the direction we start to analyze the diagonal
-     * @param offset vertical offset as explained above
-     * @return boolean value representing whether the searched pattern is present or not
+     * This method is the base of verifyShape; it has two internal ways to verify for a diagonal based on the required
+     * direction, including an offset modifier.
+     * @param shelfie the shelfie on which you check the common goal.
+     * @param direction the direction we start to analyze the diagonal.
+     * @param offset vertical offset as explained above.
+     * @return boolean value representing whether the searched pattern is present or not.
      */
     private boolean singleCheck(Shelfie shelfie, Direction direction, int offset){
 
@@ -59,10 +62,10 @@ public class DiagonalOfEquals extends CommonCards {
     }
 
     /**
-     * private method that controls for left direction diagonals
-     * @param shelfie the shelfie on which you check the common goal
-     * @param offset vertical offset as explained above
-     * @return boolean value representing whether the searched pattern is present or not
+     * Private method that controls for left direction diagonals.
+     * @param shelfie the shelfie on which you check the common goal.
+     * @param offset vertical offset as explained above.
+     * @return boolean value representing whether the searched pattern is present or not.
      */
     private boolean leftCheck(Shelfie shelfie, int offset){
         int currentRow;
@@ -83,10 +86,10 @@ public class DiagonalOfEquals extends CommonCards {
         return count == 5;
     }
     /**
-     * private method that controls for right direction diagonals
-     * @param shelfie the shelfie on which you check the common goal
-     * @param offset vertical offset as explained above
-     * @return boolean value representing whether the searched pattern is present or not
+     * Private method that controls for right direction diagonals.
+     * @param shelfie the shelfie on which you check the common goal.
+     * @param offset vertical offset as explained above.
+     * @return boolean value representing whether the searched pattern is present or not.
      */
     private boolean rightCheck(Shelfie shelfie, int offset){
         int currentRow;

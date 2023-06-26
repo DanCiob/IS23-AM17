@@ -7,8 +7,8 @@ import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.model.scoreCount.Score.verifyMaxDifferentColor;
 
 /**
- * This class verifies if the shelfie has 'n' completed rows of maximum 'm' different colors (types)
- * 'n' and 'm' are two configurable parameters (target and maxDifferentColor)
+ * This class verifies if the shelfie has 'n' completed rows of maximum 'm' different colors (types),
+ * 'n' and 'm' are two configurable parameters (target and maxDifferentColor).
  */
 
 public class RowsOfMaxDiffTypes extends CommonCards {

@@ -35,7 +35,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
 
@@ -49,7 +49,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
 
@@ -62,7 +62,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 2);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
 
@@ -86,7 +86,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
 
@@ -100,7 +100,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
 
@@ -113,7 +113,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 2);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
 
@@ -137,7 +137,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
 
@@ -151,7 +151,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
 
@@ -164,7 +164,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 2);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
 
@@ -188,7 +188,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 0);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
         assertFalse(card.verifyShape(shelfie));
@@ -202,7 +202,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 1);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
         assertFalse(card.verifyShape(shelfie));
@@ -216,7 +216,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 2);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
         assertTrue(card.verifyShape(shelfie));
@@ -230,7 +230,7 @@ class XOfEqualsTest {
         try {
             shelfie.insertTile(tiles, 3);
         } catch (IllegalInsertException e) {
-            assertFalse(true);
+            fail();
         }
         tiles.clear();
         assertTrue(card.verifyShape(shelfie));

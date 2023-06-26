@@ -7,8 +7,8 @@ import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.model.scoreCount.Score.verifyMaxDifferentColor;
 
 /**
- * This class verifies if the shelfie has the target number (target_ColumnsOfMaxDiffTypes) of completed columns
- * with no more than a certain number of different colors (maxDiffTypes_ColumnsOfMaxDiffTypes)
+ * This class implements the method verifyShape() to check if the shelfie has the target number (target_ColumnsOfMaxDiffTypes)
+ * of completed columns with no more than a certain number of different colors (maxDiffTypes_ColumnsOfMaxDiffTypes).
  */
 public class ColumnsOfMaxDiffTypes extends CommonCards {
     public boolean verifyShape(Shelfie shelfie) {
