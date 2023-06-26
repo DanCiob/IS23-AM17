@@ -61,6 +61,7 @@ public class MyShelfie {
             }
 
             default -> System.out.println("Unrecognized mode, closing application...");
+
         }
     }
 }
