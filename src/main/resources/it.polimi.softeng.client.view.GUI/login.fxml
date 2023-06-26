@@ -56,7 +56,7 @@
     </HBox>
     <HBox spacing="20.0">
         <Label layoutX="330.0"  text="Choose socket or rmi: " />
-        <ChoiceBox fx:id="socketOrRmi" layoutX="309.0" onMouseClicked="#onSocketOrRmi"> <!--onMouseClicked="#onNewGame"-->
+        <ChoiceBox fx:id="socketOrRmi" layoutX="309.0" onMouseClicked="#onSocketOrRmi">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Socket" />
@@ -89,7 +89,7 @@
         </ChoiceBox>
     </HBox>
 
-    <Label text="WARNING: If you create a new game but there's already an active lobby you'll join the lobby"/>
+    <Label text="WARNING:If there's already an active lobby you'll join the lobby"/>
     <Button fx:id="loginButton" text="Login" onAction="#onLoginButtonClick"/>
     <Label fx:id="waiting" layoutX="630.0" />
 </VBox>

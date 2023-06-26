@@ -42,6 +42,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class GUILoginController implements Initializable {
     GUIClientSide guiClientSide;
+
+    Stage stage;
+
     @FXML
     Label np;
     @FXML
@@ -69,72 +72,74 @@ public class GUILoginController implements Initializable {
     Button loginButton;
 
     @FXML
+    Label waiting;
+
+    @FXML
+    ImageView loadingIcon;
+
+    @FXML
+    CheckBox localCheckBox;
+
+    @FXML
     protected void onSocketOrRmi(){
         if(socketOrRmi.getSelectionModel().getSelectedIndex() + 1 == 2){//case rmi
             serverPort.setEditable(false);
         }
     }
 
-    @FXML
-    Label waiting;
 
     /**
      * This method sends the login message to the server
-     *
+     * It's called when the  user press the login button
      * @param event which is when the user press the login button
      */
     @FXML
     protected void onLoginButtonClick(ActionEvent event) {
-        System.out.println(nickname.getText());
         guiClientSide.setNickname(nickname.getText());
-        System.out.println(guiClientSide.Nickname);
-        System.out.println(guiClientSide.isOkNickname());
-        if (!(guiClientSide.isOkNickname()) || guiClientSide.Nickname.equalsIgnoreCase("system")) {
-            nickname.setText("");
-        } else {
-            if(serverPort.getText()==null)
-                serverPort.setText("");
-            if(serverIP.getText()==null)
-                serverIP.setText("");
-            int connectionMode = socketOrRmi.getSelectionModel().getSelectedIndex() + 1;
-            if(localCheckBox.isSelected())
-                connectionMode = 3;
+        if(socketOrRmi.getSelectionModel().getSelectedIndex()==0 || socketOrRmi.getSelectionModel().getSelectedIndex()==1){
+            if (!(guiClientSide.isOkNickname()) || guiClientSide.Nickname.equalsIgnoreCase("system")) {
+                nickname.setText("");
+            } else {
+                if(serverPort.getText()==null)
+                    serverPort.setText("");
+                if(serverIP.getText()==null)
+                    serverIP.setText("");
+                int connectionMode = socketOrRmi.getSelectionModel().getSelectedIndex() + 1;
+                if(localCheckBox.isSelected())
+                    connectionMode = 3;
 
-            //save values in guiClientSide
-            if(!serverPort.getText().equals(""))
-                guiClientSide.setupGUI(connectionMode, serverIP.getText(),
-                        Integer.parseInt(serverPort.getText()),
-                        numberOfPlayer.getSelectionModel().getSelectedIndex() + 2);
-            else
-                guiClientSide.setupGUI(connectionMode, serverIP.getText(),
-                        1099,
-                        numberOfPlayer.getSelectionModel().getSelectedIndex() + 2);
-            if(loginNotifier()){
-                guiClientSide.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
-                Service New_Service = new Service() {
-                    @Override
-                    protected Task createTask() {
-                        return new Task() {
-                            @Override
-                            protected Object call() {
-                                Platform.runLater(() -> {
-                                    try {
-                                        switchToWait(event);
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                });
-                                return null;
-                            }
-                        };
-                    }
-                };
-                New_Service.start();
+                //save values in guiClientSide
+                if(!serverPort.getText().equals(""))
+                    guiClientSide.setupGUI(connectionMode, serverIP.getText(),
+                            Integer.parseInt(serverPort.getText()));
+                else
+                    guiClientSide.setupGUI(connectionMode, serverIP.getText(),
+                            1099);
+                if(loginNotifier()){
+                    guiClientSide.setStage((Stage) ((Node) event.getSource()).getScene().getWindow());
+                    Service New_Service = new Service() {
+                        @Override
+                        protected Task createTask() {
+                            return new Task() {
+                                @Override
+                                protected Object call() {
+                                    Platform.runLater(() -> {
+                                        try {
+                                            switchToWait(event);
+                                        } catch (IOException e) {
+                                            System.out.println("Error");
+                                        }
+                                    });
+                                    return null;
+                                }
+                            };
+                        }
+                    };
+                    New_Service.start();
+                }
             }
         }
     }
-
-    Stage stage;
 
     /**
      * This method change the scene from login to waitingScreen
@@ -152,11 +157,15 @@ public class GUILoginController implements Initializable {
         stage.show();
     }
 
+    /**
+     * This method change the scene from waitingScreen to game screen
+     * @throws IOException
+     */
     public void switchToGame() throws IOException{
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            System.out.println("Error");
         }
         final int initWidth = 712;
         final int initHeight = 490;
@@ -173,10 +182,7 @@ public class GUILoginController implements Initializable {
         stage = guiClientSide.getStage();
         Scene scene = new Scene(root, initWidth, initHeight);
         stage.setScene(scene);
-
         stage.setResizable(true);
-        // stage.minWidthProperty().bind(scene.heightProperty().multiply(scene.getHeight() / initHeight));
-        // stage.minHeightProperty().bind(scene.widthProperty().multiply(scene.getWidth() / initWidth));
         stage.show();
     }
 
@@ -194,6 +200,8 @@ public class GUILoginController implements Initializable {
             numPlayers = 3;
         else if (numberOfPlayer.getSelectionModel().getSelectedIndex() == 2)
             numPlayers = 4;
+        else
+            return false;
         //nickname uniqueness
         if(guiClientSide.isOkNickname())
             switch (guiClientSide.getConnectionMode()) {
@@ -241,15 +249,12 @@ public class GUILoginController implements Initializable {
                             return false;
                         }
                     } catch (RemoteException e) {
-                        throw new RuntimeException(e);
+                        System.out.println("Error");
                     }
                 }
             }
         return true;
     }
-
-    @FXML
-    ImageView loadingIcon;
 
     public void initialize(URL location, ResourceBundle resources) {
         guiClientSide = GUIRegistry.guiList.get(0);
@@ -266,8 +271,9 @@ public class GUILoginController implements Initializable {
         rotate.play();
     }
 
-    @FXML
-    CheckBox localCheckBox;
+    /**
+     * When the client wants to connect to local rmi, this method make the serverIP and serverPort not editable
+     */
     @FXML
     protected void local(){
         if(localCheckBox.isSelected()){
@@ -276,8 +282,9 @@ public class GUILoginController implements Initializable {
             serverIP.setText("");
             serverIP.setEditable(false);
         }
-        if(!localCheckBox.isSelected())
+        if(!localCheckBox.isSelected()){
             serverPort.setEditable(true);
-        serverIP.setEditable(true);
+            serverIP.setEditable(true);
+        }
     }
 }

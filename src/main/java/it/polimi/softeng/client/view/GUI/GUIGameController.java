@@ -33,18 +33,15 @@ import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObjec
  * Manage game screen for GUI
  */
 public class GUIGameController implements Initializable{
-    //TODO: remove cbadgecommoncard in comments
 
     boolean moveError = false;
     boolean moveConfirmed = false;
 
-    int pointsCommonCard1;
-
-    int pointsCommonCard2;
-
-
     GUIClientSide guiClientSide;
 
+    /**
+     * This is used to have a cell associated with a boolean to know if it has already been inserted in the shelfie or not
+     */
     public class Moves{
         Cell cell;
         boolean toInsert;
@@ -54,9 +51,14 @@ public class GUIGameController implements Initializable{
             this.toInsert = toInsert;
         }
     }
+
+    //ArrayList with every cell that has been selected from the board
     ArrayList<Moves> boardMoves = new ArrayList<>();
+
+    //The shelfie column chosen by the user
     int columnShelfie = -1;
 
+    //First row of the chosen column which is free before adding the new tiles
     int firstFreeRowBeforeMoves = -1;
 
     @FXML GridPane shelfieGridPane;
@@ -70,14 +72,8 @@ public class GUIGameController implements Initializable{
     @FXML
     ImageView commoncard1;
 
- /*   @FXML
-    ImageView badgeCommonCard1;*/
-
     @FXML
     ImageView commoncard2;
-
-   /* @FXML
-    ImageView badgeCommonCard2;*/
 
     @FXML
     Pane panePlayer3;
@@ -109,7 +105,28 @@ public class GUIGameController implements Initializable{
     @FXML
     Button resetButton;
 
-    int scoreBadgeCommonCard1 = 8, scoreBadgeCommonCard2 = 8;
+    @FXML
+    GridPane shelfie1;
+
+    @FXML
+    GridPane shelfie2;
+
+    @FXML
+    GridPane shelfie3;
+
+    @FXML
+    GridPane shelfie4;
+
+    @FXML
+    TextField chatMessage;
+
+    @FXML
+    TextField receiver;
+    @FXML
+    Button sendMessage;
+
+    @FXML
+    Label receivedMessage;
 
     public GUIGameController (GUIClientSide guiClientSide) {
         this.guiClientSide = guiClientSide;
@@ -123,14 +140,20 @@ public class GUIGameController implements Initializable{
         player1badge1.setImage(new Image("/images/firstplayertoken.png"));
     }
 
+    /**
+     * It sets every item of the game screen
+     * @param url
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param rb
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("GuiRegistry size" + GUIRegistry.guiList.size());
-
         guiClientSide = GUIRegistry.guiList.get(0);
         guiClientSide.setGameController(this);
         GUIRegistry.numberOfGUI++;
-
-        System.out.println("number of gui after guigamecontroller added"+ GUIRegistry.numberOfGUI);
 
         if(guiClientSide.isFirst)
             player1badge1.setImage(new Image("/images/firstplayertoken.png"));
@@ -142,19 +165,12 @@ public class GUIGameController implements Initializable{
         updateBoard();
         if(guiClientSide.getCommonCard1() != null){
             commoncard1.setImage(new Image("/images/CommonCard_" + guiClientSide.getCommonCard1() + ".jpg"));
-            pointsCommonCard1 = 8;
             if(guiClientSide.getCommonCard2()!=null) {
-                pointsCommonCard2 = 8;
                 commoncard2.setVisible(true);
-               // badgeCommonCard2.setVisible(true);
                 commoncard2.setImage(new Image("/images/CommonCard_" + guiClientSide.getCommonCard2() + ".jpg"));
             }
         }
-        if(getNumberPersonalCard() == -1){
-            //TODO: send error
-        }else{
-            personalCard.setImage(new Image("/images/PC" + getNumberPersonalCard() + ".jpg"));
-        }
+        personalCard.setImage(new Image("/images/PC" + getNumberPersonalCard() + ".jpg"));
         initializeShelfies();
         updatePersonalShelfie();
         updateShelfies();
@@ -162,9 +178,7 @@ public class GUIGameController implements Initializable{
 
     protected void initializeShelfies(){
         int i = 0;
-        System.out.println("Current player " + guiClientSide.getNickname());
         for (String p : guiClientSide.nicknameShelfie.keySet()) {
-            System.out.println(p);
             if(!p.equals(guiClientSide.getNickname())){
                 switch (i){
                     case 0 -> nickname2.setText(p);
@@ -182,12 +196,16 @@ public class GUIGameController implements Initializable{
         }
     }
 
+    /**
+     *
+     * @return the number of the personal card
+     */
     protected int getNumberPersonalCard(){
         int i = 0;
         PersonalCards pc = guiClientSide.getPersonalCard();
         for(PersonalCards pctemp : PersonalCards.FillPersonalCardsBag()){
             if(pc==null)
-                return -1;
+                return 1;
             PersonalCards.ObjectiveCell[] pcCell = pc.getObjective();
             int j=0;
             boolean equal = true;
@@ -200,11 +218,11 @@ public class GUIGameController implements Initializable{
                 return i+1;
             i++;
         }
-        return -1;
+        return 1;
     }
 
     /**
-     * this method saves the clicked tile in boardMoves and set the opacity of that tile at 0.3 to make visible that it's selected
+     * This method saves the clicked tile in boardMoves and set the opacity of that tile at 0.3 to make visible that it's selected
      * @param event which is when the user select a tile from the board
      */
     @FXML
@@ -235,7 +253,7 @@ public class GUIGameController implements Initializable{
     }
 
     /**
-     * this method sends the message with the chosen tiles and column to the ClientSide
+     * This method sends the message with the chosen tiles and column to the ClientSide
      */
     @FXML
     protected void sendBoardMoves() {
@@ -250,7 +268,7 @@ public class GUIGameController implements Initializable{
             try {
                 toBeSent = guiClientSide.actionToJSON("@GAME", action);
             } catch (IllegalInsertException e) {
-                System.out.println("Errore");
+                System.out.println("Error");
             }
 
             //Send message to server
@@ -261,9 +279,6 @@ public class GUIGameController implements Initializable{
             guiClientSide.RMIInvoker("@GAME",action);
         }
     }
-
-    @FXML
-    GridPane shelfie1;
 
     /**
      *
@@ -278,7 +293,7 @@ public class GUIGameController implements Initializable{
     }
 
     /**
-     * this method insert the last selected tile from the board in the shelfie
+     * This method insert the last selected tile from the board in the shelfie
      * @param event which is when the user select a column of the shelfie
      */
     @FXML
@@ -286,7 +301,6 @@ public class GUIGameController implements Initializable{
         Node clickedNode = event.getPickResult().getIntersectedNode();
         int row = firstFree(clickedNode);
         Image img;
-        //TODO: insert all the selected tiles (more than 1)?
         if(boardMovesToInsert()){
             for (Node node : shelfie1.getChildren()) {
                 if ((GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode)) && row==GridPane.getRowIndex(node)) {
@@ -357,7 +371,7 @@ public class GUIGameController implements Initializable{
     }
 
     /**
-     * this method is called by sendBoardMoves when the user press the Send Your Moves button. It checks the move and if it is it removes the tile from the board
+     * This method is called by sendBoardMoves when the user press the Send Your Moves button. It checks the move and if it is it removes the tile from the board
      */
     protected void resetAfterMove() {
         ImageView imageView;
@@ -405,7 +419,7 @@ public class GUIGameController implements Initializable{
     }
 
     /**
-     * this method is called by the CLI when it's the turn of this player
+     * This method is called by the CLI when it's the turn of this player
      */
     public void startTurn(){
         boardMoves.clear();
@@ -422,7 +436,7 @@ public class GUIGameController implements Initializable{
      * @return the first row of the shelfie which isn't full
      */
     private int firstFree(Node clickedNode){
-        int row =0;
+        int row;
         for (int i=shelfieRows-1; i>=0; i--){
             for(Node node: shelfie1.getChildren()){
                 if(GridPane.getColumnIndex(node) == GridPane.getColumnIndex(clickedNode) && i==GridPane.getRowIndex(node)){
@@ -438,7 +452,7 @@ public class GUIGameController implements Initializable{
     }
 
     /**
-     * this method is called at the beginning of the game and at the beginning of every turn, to update the gui board according to the game board
+     * This method is called at the beginning of the game and at the beginning of every turn, to update the gui board according to the game board
      */
     public void updateBoard(){
         GameBoard gameBoard = guiClientSide.getUserGameBoard();
@@ -472,39 +486,9 @@ public class GUIGameController implements Initializable{
         }
     }
 
-    @FXML
-    public void updateCommonCardBadges(int i){//TODO: correct this
-        System.out.println("Update common card badges");
-       /* switch (i){
-            case 1 -> {
-                System.out.println(badgeCommonCard1.getImage().getUrl());
-                if(scoreBadgeCommonCard1==8) {
-                    System.out.println("Entra in if badgescore8 commoncard1");
-                    badgeCommonCard1.setImage(new Image("/images/BadgeScore6.jpg"));
-                }if(scoreBadgeCommonCard1==6)
-                    badgeCommonCard1.setImage(new Image("/images/BadgeScore4.jpg"));
-                if(scoreBadgeCommonCard1==4)
-                    badgeCommonCard1.setImage(new Image("/images/BadgeScore2.jpg"));
-                if(scoreBadgeCommonCard1==2)
-                    badgeCommonCard1.setVisible(false);
-                scoreBadgeCommonCard1 = scoreBadgeCommonCard1-2;
-            }
-            case 2 -> {
-                if (scoreBadgeCommonCard2==8){
-                    System.out.println("Entra in if badgescore8 commoncard2");
-                    badgeCommonCard2.setImage(new Image("/images/BadgeScore6.jpg"));
-                }if(scoreBadgeCommonCard2==6)
-                    badgeCommonCard2.setImage(new Image("/images/BadgeScore4.jpg"));
-                if(scoreBadgeCommonCard2==4)
-                    badgeCommonCard2.setImage(new Image("/images/BadgeScore2.jpg"));
-                if(scoreBadgeCommonCard2==2)
-                    badgeCommonCard2.setVisible(false);
-                scoreBadgeCommonCard2 = scoreBadgeCommonCard2-2;
-
-            }
-        }*/
-    }
-
+    /**
+     * It updates the shelfie of the user
+     */
     @FXML
     protected void updatePersonalShelfie(){
         Tile[][] s;
@@ -522,23 +506,14 @@ public class GUIGameController implements Initializable{
                         n = ((s[i][j].getId() / picturesForEachTile) % picturesForEachTile) + 1;
                         imageView.setImage(new Image("/images/Tile_" + s[i][j].getColor().colorLetter() + n + ".png"));
                     }
-                }else{
-                    //TODO: send error
                 }
             }
         }
     }
 
-    @FXML
-    GridPane shelfie2;
-
-    @FXML
-    GridPane shelfie3;
-
-    @FXML
-    GridPane shelfie4;
-
-
+    /**
+     * It updates the shelfies of the other players
+     */
     @FXML
     public void updateShelfies(){
         ImageView imageView;
@@ -561,6 +536,13 @@ public class GUIGameController implements Initializable{
         }
     }
 
+    /**
+     *
+     * @param nickname of the player
+     * @param row of the shelfie
+     * @param column of the shelfie
+     * @return the image view of the tile at position (row, column) of the shelfie of the player specified in nickname
+     */
     public ImageView getImageViewInShelfie(String nickname, int row, int column){
         if(Objects.equals(nickname, Integer.toString(1))){
             for (Node node : shelfie1.getChildren()) {
@@ -590,54 +572,20 @@ public class GUIGameController implements Initializable{
                 }
             }
         }
-
         return null;
     }
 
-  /*  public int updateCardPoints(int card){
-        int s=0;
-        if(card==1){
-            s = pointsCommonCard1 - 2;
-            System.out.println("In updateCardPoints, pointscommoncard1 " + pointsCommonCard1 + " s " + s);
-            pointsCommonCard1 = s;
-            badgeCommonCard1.setImage(new Image("/images/BadgeScore" + s + ".jpg"));
-
-        }
-        if(card==2){
-            s = pointsCommonCard2 - 2;
-            System.out.println("In updateCardPoints, pointscommoncard2 " + pointsCommonCard2 + " s " + s);
-            pointsCommonCard2 = s;
-            badgeCommonCard2.setImage(new Image("/images/BadgeScore" + s + ".jpg"));
-        }
-        return s;
-    }*/
-
-   /* @FXML
-    public void giveBadge(int card){
-        int s;
-        s = updateCardPoints(card);
-
-        if(player1badge1.getImage() == null){
-            player1badge1.setImage(new Image("/images/BadgeScore" + s + ".jpg"));
-        }else if(player1badge2.getImage() == null) {
-            player1badge2.setImage(new Image("/images/BadgeScore" + s + ".jpg"));
-
-        } else if (player1badge3.getImage() == null) {
-            player1badge3.setImage(new Image("/images/BadgeScore" + s + ".jpg"));
-        }
-    }*/
-
+    /**
+     * It sets the stage to the End game screen
+     */
     public void switchToEndGame(){
         try {
-            System.out.println("switch to end game");
             Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/endGame.fxml"));
-            System.out.println("after load");
             Scene scene = new Scene(root);
             guiClientSide.getStage().setScene(scene);
             guiClientSide.getStage().show();
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            System.out.println("Error");
         }
     }
 
@@ -650,17 +598,6 @@ public class GUIGameController implements Initializable{
         this.moveConfirmed = moveConfirmed;
     }
 
-
-    @FXML
-    TextField chatMessage;
-
-    @FXML
-    TextField receiver;
-    @FXML
-    Button sendMessage;
-
-    @FXML
-    Label receivedMessage;
 
     @FXML
     public void onSendMessage() throws IllegalInsertException {

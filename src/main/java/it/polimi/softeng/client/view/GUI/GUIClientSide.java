@@ -57,9 +57,10 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     protected String ServerAddress;
     protected int Port;
 
+    /**
+     * Map with player's nickname associated with his shelfie
+     */
     protected Map <String, Shelfie> nicknameShelfie = new HashMap<>();
-
-    protected int StartGame;
 
     /**
      * NumOfPlayer for current game
@@ -100,7 +101,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     public GUIClientSide() {
     }
 
-    public void setupGUI(int connectionMode, String serverAddress, int port, int numPlayers) {
+    public void setupGUI(int connectionMode, String serverAddress, int port) {
         setConnectionMode(connectionMode);
         setServerAddress(serverAddress);
         setPort(port);
@@ -122,39 +123,11 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     }
 
 
-    ///////////
-    //SETTERS//
-    ///////////
 
+    ///////////////
+    //VISUALIZERS//
+    ///////////////
 
-
-    public void setUserGameBoard(GameBoard userGameBoard) {
-        UserGameBoard = userGameBoard;
-    }
-
-    public void setUserShelfie(Shelfie userShelfie) {
-        UserShelfie = userShelfie;
-    }
-
-    public void setUserScore(int userScore) {
-        UserScore = userScore;
-    }
-
-    public void setPersonalCard(PersonalCards personalCard) {
-        PersonalCard = personalCard;
-    }
-
-    public void setNickname(String nickname) {
-        Nickname = nickname;
-    }
-
-    public void setCommonCard1(String commonCard1) {
-        CommonCard1 = commonCard1;
-    }
-
-    public void setCommonCard2(String commonCard2) {
-        CommonCard2 = commonCard2;
-    }
 
     @Override
     public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable) {
@@ -163,7 +136,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public void shelfieVisualizer(Tile[][] shelfie) {
-
     }
 
 
@@ -175,7 +147,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     @Override
     public void commonCardsVisualizer(CommonCards commonCard) {
-//TODO:remove
     }
 
     @Override
@@ -202,8 +173,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                 if(gameController!=null)
                     gameController.setFirstPlayer();
             }
-
-            //todo:add first player token to other players
         }
         if(endGameController!=null){
             Service New_Service = new Service() {
@@ -224,6 +193,11 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         }
     }
 
+    /**
+     * Called by messageHandler or actionToJSON with various event
+     *
+     * @param event is received event fired by MessageHandler
+     */
     @Override
     public void eventManager(String event) {
         switch (event) {
@@ -320,7 +294,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
             case (NICKNAME_NOT_UNIQUE) -> {
                 System.out.println(NICKNAME_NOT_UNIQUE);
                 okNickname = false;
-                System.out.println("nickname not unique in guiclientside");
                 switchToLogin();
             }
             case (PLAYER_DISCONNECTED) -> {
@@ -402,6 +375,11 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     }
 
+
+    ////////////
+    //UPDATERS//
+    ////////////
+
     @Override
     public void boardUpdater(GameBoard b) {
         UserGameBoard = b;
@@ -442,23 +420,15 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         }
     }
 
-    @Override
-    public void setServerAddress(String serverAddress) {
-        ServerAddress = serverAddress;
-    }
 
-    @Override
-    public void setPort(int port) {
-        Port = port;
-    }
-
+    /**
+     * It's called when the game is ended and it calls the method to switch to last scene
+     * @param winner
+     */
     @Override
     public void endGame(boolean winner){
-        System.out.println("In endGame");
         if(gameController!=null){
-            System.out.println("gameController is not null");
             if(isYourTurn && gameController!=null){
-                System.out.println("isYourTurn");
                 gameController.resetAfterMove();
             }
             Service New_Service = new Service() {
@@ -468,7 +438,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                         @Override
                         protected Object call() {
                             Platform.runLater(() -> {
-                                System.out.println("runLater");
                                 gameController.switchToEndGame();
                                 if(winner){
                                     endGameController.setWinner("YOU WON");
@@ -486,14 +455,16 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         }
     }
 
+    /**
+     *
+     * @param isOn which is 1 if the game is started, 0 otherwise
+     */
     @Override
-    public void beginGame(boolean b){
+    public void beginGame(boolean isOn){
         boolean switchScene = !GameIsOn;
-        this.GameIsOn = b;
-        if(switchScene && b){
-            if(loginController == null)
-                System.out.println("loginController is null");
-            else{
+        this.GameIsOn = isOn;
+        if(switchScene && isOn){
+            if(loginController != null){
                 Service New_Service = new Service() {
                     @Override
                     protected Task createTask() {
@@ -504,7 +475,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
                                     try {
                                         loginController.switchToGame();
                                     } catch (IOException e) {
-                                        throw new RuntimeException(e);
+                                        System.out.println("Error");
                                     }
                                 });
                                 return null;
@@ -517,8 +488,185 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         }
     }
 
-    public void setStartGame(int startGame) {
-        StartGame = startGame;
+    /**
+     * @param op     is command
+     * @param action is command text sent by UI
+     * @return a JSONObject containing encoded action
+     */
+    @Override
+    public JSONObject actionToJSON(String op, String action) throws IllegalInsertException {
+        switch (op) {
+            case ("@CHAT") -> {
+                if (!ChatWriter.chatMessageRegex(action) || ChatWriter.writeChatMessage(action) == null) {
+                    eventManager("chatError");
+                    return null;
+                } else
+                    return ChatWriter.writeChatMessage(action);
+            }
+            case ("@GAME") -> {
+                System.out.println(GameMoveWriter.writeGameMove(action));
+                if (!GameMoveWriter.gameMoveRegex(action) || GameMoveWriter.writeGameMove(action) == null) {
+                    eventManager("gameMoveError");
+                    return null;
+                } else
+                    return GameMoveWriter.writeGameMove(action);
+            }
+
+            default -> System.out.println("Unrecognized operation!");
+        }
+        return null;
+    }
+
+    /**
+     * @param op     is command
+     * @param action is command text sent by UI
+     * @return true if action is correctly executed
+     */
+    @Override
+    public boolean RMIInvoker(String op, String action) {
+        switch (op) {
+            case ("@CHAT") -> {
+                if (!ChatWriter.chatMessageRegex(action)) {
+                    System.out.println("Error in Chat message syntax, try again!");
+                    if(gameController!=null){
+                        gameController.chatMessage.setText("Error in chat message, try again!");
+                    }
+                    return false;
+                }
+
+                JSONObject obj;
+                obj = ChatWriter.writeChatMessage(action);
+
+                if (obj != null) {
+                    if (obj.get("receiver").toString().equals("all")) {
+                        try {
+                            RemoteMethods.getStub().sendMessageToAll(obj.toJSONString(), Nickname);
+                        } catch (RemoteException e) {
+                            System.out.println("Please, reinsert your message!");
+                            if(gameController!=null) {
+                                gameController.chatMessage.setText("Error in chat message, try again!");
+                            }
+                        }
+                    } else {
+                        try {
+                            RemoteMethods.getStub().sendMessage(obj.toJSONString(), (String) obj.get("receiver"), Nickname);
+                        } catch (RemoteException e) {
+                            System.out.println("Please, reinsert your message!");
+                            if(gameController!=null) {
+                                gameController.chatMessage.setText("Error in chat message, try again!");
+                            }                        }
+                    }
+                }
+            }
+            case ("@GAME") -> {
+                if (!GameMoveWriter.gameMoveRegex(action)) {
+                    System.out.println("Error in Game Move syntax, try again!");
+                    return false;
+                }
+                GameMoveParser gmp = new GameMoveParser();
+                gmp.gameMoveParser(GameMoveWriter.writeGameMove(action).toJSONString());
+
+                ArrayList<Cell> cells = gmp.getTilesToBeRemoved();
+                int column = gmp.getColumn();
+                try {
+                    RemoteMethods.getStub().sendMove(cells, column, Nickname);
+                } catch (RemoteException e) {
+                    System.out.println("Error in Game move, try again!");
+                }
+            }
+
+            case ("@LOGN") -> {
+                try {
+                    boolean successfulLogin = RemoteMethods.getStub().login(Nickname, NumOfPlayer, action,RemoteMethods.getPort());
+                    if(!successfulLogin){
+                        try {
+                            Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/login.fxml"));
+                            Scene scene = new Scene(root);
+                            getStage().setScene(scene);
+                            getStage().show();
+                        } catch (IOException e) {
+                            System.out.println("Error");
+                        }
+                    }
+                } catch (RemoteException e) {
+                    System.out.println("Error");
+                }
+            }
+            default -> System.out.println("Unrecognized operation!");
+        }
+        return true;
+    }
+
+    /**
+     * It switches the scene to login. It's called when a user inserts a nickname which is already used
+     */
+    public void switchToLogin(){
+        Service New_Service = new Service() {
+            @Override
+            protected Task createTask() {
+                return new Task() {
+                    @Override
+                    protected Object call() {
+                        Platform.runLater(() -> {
+                            try {
+                                Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/login.fxml"));
+                                Scene scene = new Scene(root);
+                                getStage().setScene(scene);
+                                getStage().show();
+                            } catch (IOException e) {
+                                System.out.println("Error");
+                            }
+
+                        });
+                        return null;
+                    }
+                };
+            }
+        };
+        New_Service.start();
+    }
+
+
+    ///////////
+    //SETTERS//
+    ///////////
+
+    @Override
+    public void setServerAddress(String serverAddress) {
+        ServerAddress = serverAddress;
+    }
+
+    @Override
+    public void setPort(int port) {
+        Port = port;
+    }
+
+    public void setUserGameBoard(GameBoard userGameBoard) {
+        UserGameBoard = userGameBoard;
+    }
+
+    public void setUserShelfie(Shelfie userShelfie) {
+        UserShelfie = userShelfie;
+    }
+
+    public void setUserScore(int userScore) {
+        UserScore = userScore;
+    }
+
+    public void setPersonalCard(PersonalCards personalCard) {
+        PersonalCard = personalCard;
+    }
+
+    public void setNickname(String nickname) {
+        Nickname = nickname;
+    }
+
+    public void setCommonCard1(String commonCard1) {
+        CommonCard1 = commonCard1;
+    }
+
+    public void setCommonCard2(String commonCard2) {
+        CommonCard2 = commonCard2;
     }
 
     public void setNumOfPlayer(int numOfPlayer) {
@@ -610,10 +758,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         return Port;
     }
 
-    public int getStartGame() {
-        return StartGame;
-    }
-
     public int getNumOfPlayer() {
         return NumOfPlayer;
     }
@@ -651,133 +795,5 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     public boolean isYourTurn() {
         return isYourTurn;
-    }
-
-    @Override
-    public JSONObject actionToJSON(String op, String action) throws IllegalInsertException {
-        switch (op) {
-            case ("@CHAT") -> {
-                if (!ChatWriter.chatMessageRegex(action) || ChatWriter.writeChatMessage(action) == null) {
-                    eventManager("chatError");
-                    return null;
-                } else
-                    return ChatWriter.writeChatMessage(action);
-            }
-            case ("@GAME") -> {
-                System.out.println(GameMoveWriter.writeGameMove(action));
-                if (!GameMoveWriter.gameMoveRegex(action) || GameMoveWriter.writeGameMove(action) == null) {
-                    eventManager("gameMoveError");
-                    return null;
-                } else
-                    return GameMoveWriter.writeGameMove(action);
-            }
-
-            default -> System.out.println("Unrecognized operation!");
-        }
-        return null;
-    }
-
-    @Override
-    public boolean RMIInvoker(String op, String action) {
-        switch (op) {
-            case ("@CHAT") -> {
-                if (!ChatWriter.chatMessageRegex(action)) {
-                    System.out.println("Error in Chat message syntax, try again!");
-                    if(gameController!=null){
-                        gameController.chatMessage.setText("Error in chat message, try again!");
-                    }
-                    return false;
-                }
-
-                JSONObject obj;
-                obj = ChatWriter.writeChatMessage(action);
-
-                if (obj != null) {
-                    if (obj.get("receiver").toString().equals("all")) {
-                        try {
-                            RemoteMethods.getStub().sendMessageToAll(obj.toJSONString(), Nickname);
-                        } catch (RemoteException e) {
-                            System.out.println("Please, reinsert your message!");
-                            if(gameController!=null) {
-                                gameController.chatMessage.setText("Error in chat message, try again!");
-                            }
-                        }
-                    } else {
-                        try {
-                            RemoteMethods.getStub().sendMessage(obj.toJSONString(), (String) obj.get("receiver"), Nickname);
-                        } catch (RemoteException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            }
-            case ("@GAME") -> {
-                if (!GameMoveWriter.gameMoveRegex(action)) {
-                    System.out.println("Error in Game Move syntax, try again!");
-                    return false;
-                }
-                GameMoveParser gmp = new GameMoveParser();
-                gmp.gameMoveParser(GameMoveWriter.writeGameMove(action).toJSONString());
-
-                ArrayList<Cell> cells = gmp.getTilesToBeRemoved();
-                int column = gmp.getColumn();
-                try {
-                    RemoteMethods.getStub().sendMove(cells, column, Nickname);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            case ("@LOGN") -> {
-                //TODO Right now we don't receive GameMode, StartGame, NumOfPlayer...
-                try {
-                    boolean successfulLogin = RemoteMethods.getStub().login(Nickname, NumOfPlayer, action,RemoteMethods.getPort());   //dan: modified this as I changed some rmi methods, should work still
-                    System.out.println("Successful login is " + successfulLogin);
-                    if(!successfulLogin){
-                        System.out.println("Not successful login");
-                        try {
-                            Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/login.fxml"));
-                            Scene scene = new Scene(root);
-                            getStage().setScene(scene);
-                            getStage().show();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            throw new RuntimeException(e);
-                        }
-                    }
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            default -> System.out.println("Unrecognized operation!");
-        }
-        return true;
-    }
-
-    public void switchToLogin(){
-        Service New_Service = new Service() {
-            @Override
-            protected Task createTask() {
-                return new Task() {
-                    @Override
-                    protected Object call() {
-                        Platform.runLater(() -> {
-                            try {
-                                Parent root = FXMLLoader.load(getClass().getResource("/it.polimi.softeng.client.view.GUI/login.fxml"));
-                                Scene scene = new Scene(root);
-                                getStage().setScene(scene);
-                                getStage().show();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                throw new RuntimeException(e);
-                            }
-
-                        });
-                        return null;
-                    }
-                };
-            }
-        };
-        New_Service.start();
     }
 }

@@ -4,7 +4,6 @@ import it.polimi.softeng.model.Player;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 import org.json.simple.JSONObject;
 
 import java.net.URL;
@@ -48,6 +47,16 @@ public class EndGameController implements Initializable {
         winner.setText(nickname);
     }
 
+    /**
+     * This method retriev
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         for(GUIClientSide guiClientSide:  GUIRegistry.guiList){
@@ -66,7 +75,7 @@ public class EndGameController implements Initializable {
                     try {
                         scoreVisualizer(guiClientSide.getRemoteMethods().getStub().getPlayersAndScore());
                     } catch (RemoteException e) {
-                        System.out.println("");
+                        System.out.println("Error");
                     }
                 }
             }

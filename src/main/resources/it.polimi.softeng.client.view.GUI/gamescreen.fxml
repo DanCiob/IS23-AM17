@@ -349,7 +349,6 @@
             </AnchorPane>
             <AnchorPane>
                <children>
-                <!--  <TextArea layoutY="3.0" prefHeight="91.0" prefWidth="342.0"/>-->
                   <VBox layoutY="5.0" prefHeight="89.0" prefWidth="340.0">
                      <Label text="Chat:">
                         <font>
