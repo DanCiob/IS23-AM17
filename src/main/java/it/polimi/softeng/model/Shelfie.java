@@ -7,28 +7,28 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Representation of shelfie
+ * This class is the representation of shelfie.
  */
 public class Shelfie implements Serializable {
     /**
-     * matrix that represent the shelfie;
-     * column numbering : goes from sx to dx (ie 0-->the furthest left)
-     * row numbering : goes from bottom to top (ie 0 --> the lowest)
+     * This is the matrix that represent the shelfie.
+     * Column numbering: goes from sx to dx (ie 0 --> the furthest left).
+     * Row numbering: goes from bottom to top (ie 0 --> the lowest).
      */
     private final Tile [][] grid;
 
     /**
-     * creates the grid object used to represent shelfie
+     * It creates the grid object used to represent shelfie.
      */
     public Shelfie() {
         grid = new Tile[shelfieRows][shelfieColumns];
     }
 
     /**
-     * insertTile takes an arrayList of tiles and, if legal, inserts them into the shelfie
-     * @param tilesToBeInserted  arraylist of tiles ; the tile in position 0 in the arrayList goes first, so on for the following
-     * @param column  int that indicates the selected shelfie column; the numbering goes from sx to dx (ie 0-->the furthest left)
-     * @throws IllegalInsertException exception thrown when there is not enough space in the selected column of the shelfie
+     * This method takes an arrayList of tiles and, if legal, inserts them into the shelfie.
+     * @param tilesToBeInserted arraylist of tiles; the tile in position 0 in the arrayList goes first, so on for the following.
+     * @param column int that indicates the selected shelfie column; the numbering goes from left to right (ie 0-->the furthest left).
+     * @throws IllegalInsertException exception thrown when there is not enough space in the selected column of the shelfie.
      */
     public void insertTile(ArrayList<Tile> tilesToBeInserted, int column) throws IllegalInsertException {
         if(checkLegalInsert(tilesToBeInserted, column)){
@@ -61,26 +61,26 @@ public class Shelfie implements Serializable {
     }
 
     /**
-     * getter method for the shelfie
-     * @param row row numbering : goes from bottom to top (ie 0 --> the lowest)
-     * @param column column numbering : goes from sx to dx (ie 0-->the furthest left)
-     * @return Tile from the desired position
+     * Getter method for the shelfie.
+     * @param row row numbering: goes from bottom to top (ie 0 --> the lowest).
+     * @param column column numbering: goes from sx to dx (ie 0-->the furthest left).
+     * @return Tile from the desired position.
      */
     public Tile getTile(int row, int column){
         return grid[row][column];
     }
 
     /**
-     * getter method for when you need the whole grid
-     * @return the Tile matrix representing the shelfie grid
+     * Getter method for when you need the whole grid.
+     * @return the Tile matrix representing the shelfie grid.
      */
     public Tile[][] getGrid(){
         return grid;
     }
 
     /**
-     * checks whether the shelfie is full or not by controlling the last row
-     * @return a boolean value
+     * This method checks whether the shelfie is full or not by controlling the last row.
+     * @return a boolean value.
      */
     public boolean checkFull(){
         int count = 0;
@@ -95,13 +95,12 @@ public class Shelfie implements Serializable {
     }
 
     /**
-     * checks whether the requested insert is allowed by checking if there are too many tiles for the selected column
-     * @param tilesToBeInserted arraylist of tiles
-     * @param column int that indicates the selected shelfie column; the numbering goes from sx to dx (ie 0-->the furthest left)
-     * @return boolean value
+     * This method checks whether the requested insert is allowed by checking if there are too many tiles for the selected column.
+     * @param tilesToBeInserted arraylist of tiles.
+     * @param column int that indicates the selected shelfie column; the numbering goes from sx to dx (ie 0-->the furthest left).
+     * @return boolean value.
      */
     public boolean checkLegalInsert(ArrayList<Tile> tilesToBeInserted, int column){
-        //WHAT IF COLUMN > SHELFIECOLUMN ?
         //controls of correctness of the given array (just to be safe)
         if(tilesToBeInserted.size() > maxTilesForMove) return false;
         if(tilesToBeInserted.isEmpty()) return false;
@@ -116,9 +115,9 @@ public class Shelfie implements Serializable {
     }
 
     /**
-     * testing method for tile insertion
-     * @param tilesToBeInserted arrayList of tiles to be inserted
-     * @param column chosen column for the insertion
+     * Testing method for tile insertion.
+     * @param tilesToBeInserted arrayList of tiles to be inserted.
+     * @param column chosen column for the insertion.
      */
     public void insertTileForTesting(ArrayList<Tile> tilesToBeInserted, int column){
             int i = 0;
@@ -135,20 +134,20 @@ public class Shelfie implements Serializable {
     }
 
     /**
-     * method used to set a grid in a fast way; it creates a new tile with the desired id and color
-     * @param row selected row
-     * @param column selected column
-     * @param id id of selected tile
-     * @param color color of chosen tile
+     * This method is used to set a grid in a fast way; it creates a new tile with the desired id and color.
+     * @param row selected row.
+     * @param column selected column.
+     * @param id id of selected tile.
+     * @param color color of chosen tile.
      */
     public void setGrid(int row, int column, int id, Tile.TileColor color){
         grid[row][column] = new Tile(id, color);
     }
 
     /**
-     * sets desired cell of shelfie to null
-     * @param row selected row
-     * @param column selected column
+     * This method sets desired cell of shelfie to null.
+     * @param row selected row.
+     * @param column selected column.
      */
     public void setGridAtNull(int row, int column){
         grid[row][column] = null;

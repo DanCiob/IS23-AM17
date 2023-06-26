@@ -8,14 +8,14 @@ import static it.polimi.softeng.model.scoreCount.Score.PersonalCardsScore;
 
 
 /**
- * Class that represents Personal Achievement of the cards
+ * This class represents Personal Achievement of the cards.
  */
 public class PersonalCards implements Serializable {
     ObjectiveCell[] objective = new ObjectiveCell[6];
 
 
     /**
-     * This class represents a specific colored cell (row, column) of the shelfie, that composes the PersonalCard
+     * This class represents a specific colored cell (row, column) of the shelfie, that composes the PersonalCard.
      */
     public static class ObjectiveCell implements Serializable{
         int row;
@@ -79,8 +79,8 @@ public class PersonalCards implements Serializable {
     }
 
     /**
-     * This method inizializes the ArrayList of Personal Cards with its JSON file
-     * @return list of all PersonalCards
+     * This method initializes the ArrayList of Personal Cards with its JSON file.
+     * @return list of all PersonalCards.
      */
     public static ArrayList<PersonalCards> FillPersonalCardsBag ()
     {
@@ -88,10 +88,10 @@ public class PersonalCards implements Serializable {
     }
 
     /**
-     *
-     * @param s is player's shelfie
-     * @param p is player's personal card
-     * @return score
+     * This method calculates the score of a shelfie for a specific personal card.
+     * @param s is player's shelfie.
+     * @param p is player's personal card.
+     * @return score.
      */
     public static int getCurrentScore (Shelfie s, PersonalCards p)
     {

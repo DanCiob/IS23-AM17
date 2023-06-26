@@ -3,12 +3,9 @@ package it.polimi.softeng.model;
 import java.io.Serializable;
 
 /**
- * Model representation of player
+ * This class is the model representation of player.
  */
 public class Player implements Serializable {
-    /**
-     *
-     */
     private final String Nickname;
     private int CurrentScore;
     private boolean isFirst;
@@ -31,7 +28,7 @@ public class Player implements Serializable {
     }
 
     /**
-     * Update Player score
+     * This method adds points to current player score.
      */
     public int updateScore(int pointsToAdd) {
         this.CurrentScore += pointsToAdd;
@@ -58,6 +55,4 @@ public class Player implements Serializable {
     public void setShelfie(Shelfie shelfie){
         this.shelfie = shelfie;
     }
-
-    //public String playerChangeNotifier(){}
 }

@@ -3,7 +3,7 @@ package it.polimi.softeng.model;
 import java.io.Serializable;
 
 /**
- * Represent cell in Shelfie
+ * This class represents the cell in the Shelfie.
  */
 public class Cell implements Serializable { private int row;
     private int column;

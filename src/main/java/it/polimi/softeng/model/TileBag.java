@@ -7,24 +7,24 @@ import java.util.Random;
 import static it.polimi.softeng.Constants.*;
 
 /**
- * This class contains a "bag" with every tile available in the game
+ * This class contains a "bag" with every tile available in the game.
  */
 public class TileBag {
     /**
-     * arrayList containing the tiles for the game
+     * ArrayList containing the tiles for the game.
      */
     private final static ArrayList<Tile> tileBag = new ArrayList<>();
 
     /**
-     * getter method for the tile bag
-     * @return arraylist of tiles
+     * Getter method for the tile bag.
+     * @return arraylist of tiles.
      */
     public ArrayList<Tile> getTileBag() {
         return tileBag;
     }
 
     /**
-     * method used to fill the tilebag with the right amount and type of tiles
+     * This method is used to fill the tilebag with the right amount and type of tiles.
      */
     public void initializeTile(){
         tileBag.clear();
@@ -39,8 +39,8 @@ public class TileBag {
     }
 
     /**
-     * picks a random tile from tile bag
-     * @return tile
+     * This method picks a random tile from tile bag.
+     * @return tile.
      */
     public Tile drawTile(){
         Random random = new Random();

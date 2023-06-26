@@ -8,7 +8,7 @@ import java.io.*;
 
 /**
  * This class with its main method, is used to run MyShelfie Application.
- * It allows to select among operating modes of server, client GUI and CLI
+ * It allows to select among operating modes of server, client GUI and CLI.
  */
 
 public class MyShelfie {
@@ -43,14 +43,6 @@ public class MyShelfie {
                 //Creates controller
                 Controller controller = new Controller();
 
-                //creates the server
-                //ServerSide serverSide = new ServerSide();
-
-                /*
-                String userInput;
-                while ((userInput = stdIn.readLine()) != null) {
-                    serverSide.sendMessageToAll(userInput);
-                }*/
             }
 
             case 1 ->{ //CLIENT CLI MODE
@@ -59,11 +51,6 @@ public class MyShelfie {
                 //creates the client CLI
                 CLI cli = new CLI();
                 cli.run();
-                //ClientSide clientSide = new ClientSide();
-                /*String userInput;
-                while ((userInput = stdIn.readLine()) != null) {
-                    cli.getClientSide().sendMessage(userInput);
-                }*/
 
             }
             case 2 ->{ //CLIENT GUI MODE

@@ -9,7 +9,7 @@ import static it.polimi.softeng.Constants.*;
 import static it.polimi.softeng.model.PersonalCards.FillPersonalCardsBag;
 
 /**
- * main class of the model representing the game and connection all the subclasses
+ * This is the main class of the model, it represents the game and connects all the subclasses.
  */
 public class Game{
     //board section
@@ -26,18 +26,18 @@ public class Game{
      */
     private BadgeEndGame endGameBadge;
     /**
-     * boolean value indicating wheter simple rules are used or not
+     * Boolean value indicating whether simple rules are used or not.
      */
     private final boolean simpleRules = false;
 
     //player section
     /**
-     * this arrayList contains the references to the players; the order of the elements in the array refers to the order of
-     * entry in the game lobby (ie player 0 is who created the game). the game turns go from player in position 0 to position player.size()
+     * This arrayList contains the references to the players; the order of the elements in the array refers to the order of
+     * entry in the game lobby (ie player 0 is who created the game). The game turns go from player in position 0 to position player.size().
      */
     private final ArrayList<Player> players = new ArrayList<>();
     /**
-     * reference to the current player
+     * current player reference
      */
     private Player currentPlayer;
     /**
@@ -53,13 +53,13 @@ public class Game{
      */
     private Player firstPlayer;
     /**
-     * boolean attribute indicating wheter a shelfie is full or not
+     * Boolean attribute indicating whether a shelfie is full or not.
      */
     private Boolean fullShelfie = false;
 
     /**
-     *this method initializes all the necessary components of a game
-     * @param nameList list of players of the match (after this such list cannot be chanced)
+     *This method initializes all the necessary components of a game.
+     * @param nameList list of players of the match (after this such list cannot be chanced).
      */
     public void beginGame(ArrayList<String> nameList){
         for(String name : nameList){
@@ -75,9 +75,8 @@ public class Game{
     }
 
     /**
-     * testing version of the method beginGame
+     * Testing version of the method beginGame.
      */
-    //here for testing purpose
     public void beginGame(){
         //vedi cosa serve
         initializeTile();
@@ -90,7 +89,7 @@ public class Game{
     }
 
     /**
-     * this method creates all the tiles and places them in the tileBag
+     * This method creates all the tiles and places them in the tileBag.
      */
     public void initializeTile(){
         for(int i = 0; i < totalTiles; i=i+typesOfTiles){
@@ -104,7 +103,7 @@ public class Game{
     }
 
     /**
-     * method used to place the tiles on the board
+     * This method used to place the tiles on the board.
      */
     public void initializeBoard(){
         gameBoard.resetBoard(players.size());
@@ -113,14 +112,14 @@ public class Game{
 
 
     /**
-     * this method gets the reference to the singleton object BadgeEndGame
+     * This method gets the reference to the singleton object BadgeEndGame.
      */
     public void initializeBadgeEndGame(){
         endGameBadge = BadgeEndGame.getInstance();
     }
 
     /**
-     * this method creates all the score badges and places them inside the commonCards objects
+     * This method creates all the score badges and places them inside the commonCards objects.
      */
     public void initializebadgeScore(){
         switch(players.size()){
@@ -152,7 +151,7 @@ public class Game{
     }
 
     /**
-     * method that randomly chooses 2 common objective cards
+     * This method randomly chooses 2 common objective cards.
      */
     public void chooseCommonCards(){
         Random random = new Random();
@@ -208,7 +207,7 @@ public class Game{
     }
 
     /**
-     * Set a different personal card for each player
+     * This method set a different personal card for each player.
      */
     public void choosePersonalCards(){
 
@@ -229,7 +228,7 @@ public class Game{
     }
 
     /**
-     * this method chooses the first player of the game
+     * This method chooses the first player of the game.
      */
     public void chooseFirstPlayer(){
         Random random = new Random();
@@ -245,12 +244,12 @@ public class Game{
     }
 
     /**
-     * It's turn version used in controller: it receives the move of the current player, updating board and shelfie.
+     * This method is the turn version used in controller: it receives the move of the current player updating board and shelfie.
      * It also checks if the move is legal, if there are only islands, if a CommonCard is completed, if the
-     *  shelfie is full and it's necessary to call last turn routine
-     * @param positionsToBeRemoved contains coordinates of tiles to be removed from the board
-     * @param column is column of insertion in shelfie, in which the player wants to insert the tiles in
-     * @return 1 the game is ended, 0 if not, -1 if there's an error
+     *  shelfie is full and it's necessary to call last turn routine.
+     * @param positionsToBeRemoved contains coordinates of tiles to be removed from the board.
+     * @param column is column of insertion in shelfie, in which the player wants to insert the tiles in.
+     * @return 1 the game is ended, 0 if not, -1 if there's an error.
      */
     public int turn(ArrayList<Cell> positionsToBeRemoved, int column){
         //find the first available row of the @param column
@@ -333,7 +332,7 @@ public class Game{
 
 
     /**
-     * this method is used by MatchTest
+     * This method is used by MatchTest.
      */
     public void turn(){
 
@@ -354,7 +353,7 @@ public class Game{
     }
 
     /**
-     * it calculates and updates the score of personal card and set of equals tiles for every player, at the end of the game
+     * This method calculates and updates the score of personal card and set of equals tiles for every player, at the end of the game.
      */
     public void calculateScore(){
         int pointsToAdd;
@@ -369,8 +368,7 @@ public class Game{
     }
 
     /**
-     * it checks the score of every player and select the winner
-     * if two players have the same score, the winner is the last one of the two
+     * This method checks the score of every player and select the winner; if two players have the same score, the winner is the last one of the two.
      */
     public void selectWinner(){
         int maxScore = 0;
@@ -383,8 +381,8 @@ public class Game{
     }
 
     /**
-     * method used to create a new player object for a game; such object is then placed in the players list in last place
-     * @param nickName nickname of the player to be created
+     * This method is used to create a new player object for a game; such object is then placed in the players list in last position.
+     * @param nickName nickname of the player to be created.
      */
     public void createNewPlayer(String nickName){
         players.add(new Player(nickName, 0));
@@ -392,8 +390,8 @@ public class Game{
     }
 
     /**
-     * method used to remove a player from the player list Players;
-     * @param player reference to the player to be removed
+     * This method used to remove a player from the player list Players.
+     * @param player reference to the player to be removed.
      */
     public void removePlayer(Player player){
         int i = 0;
@@ -404,24 +402,24 @@ public class Game{
     }
 
     /**
-     * getter method for the currentPlayer attribute
-     * @return Player object referencing the current player
+     * Getter method for the currentPlayer attribute.
+     * @return Player object referencing the current player.
      */
     public Player getCurrentPlayer(){
         return currentPlayer;
     }
 
     /**
-     * setter method used to set the current player
-     * @param player player set to become currentPlayer
+     * Setter method used to set the current player.
+     * @param player player set to become currentPlayer.
      */
     public void setCurrentPlayer(Player player){
         currentPlayer = player;
     }
 
     /**
-     * method used to see who is the next player in the game
-     * @return player object referencing the next player in the game
+     * Method used to see who is the next player in the game.
+     * @return player object referencing the next player in the game.
      */
     public Player getNextPlayer(){
         int i = 0;
@@ -435,7 +433,7 @@ public class Game{
     }
 
     /**
-     * method used to update the value of the attribute currentPlayer
+     * This method is used to update the value of the attribute currentPlayer.
      */
     public void setNextPlayer() {
         setCurrentPlayer(getNextPlayer());

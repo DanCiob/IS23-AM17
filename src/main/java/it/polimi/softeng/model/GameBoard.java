@@ -11,22 +11,24 @@ import static it.polimi.softeng.Constants.*;
  */
 public class GameBoard implements Serializable {
     /**
-     * matrix that represents the board;
-     * column numbering : goes from left to right
-     * row numbering : goes from top to bottom
+     * Matrix representing the board.
+     * Column numbering: goes from left to right.
+     * Row numbering: goes from top to bottom.
      */
     private Tile[][] board = new Tile[boardRows][boardColumns];
-    private ArrayList<Cell> notAvailable = new ArrayList<>(); /**arrayList with the cells that can't be used**/
+    /**
+     * ArrayList with the cells that can't be used.
+     */
+    private ArrayList<Cell> notAvailable = new ArrayList<>();
 
     public Tile[][] getBoard() {
         return board;
     }
 
     /**
-     * This method define the notAvailable cells that are in the matrix but not in the board depending on the number of players
-     * @param numberOfPlayers indicates how many player are partecipating to the current game
+     * This method define the notAvailable cells that are in the matrix but not in the board depending on the number of players.
+     * @param numberOfPlayers indicates how many player are partecipating to the current game.
      */
-
     public void setNotAvailable(int numberOfPlayers) {
         Cell temp;
 
@@ -157,8 +159,8 @@ public class GameBoard implements Serializable {
     }
 
     /**
-     * This method calls {@link #setNotAvailable(int)} method and initializes every tile of the board with null
-     * @param numberOfPlayers number of players in the current game
+     * This method calls {@link #setNotAvailable(int)} method and initializes every tile of the board with null.
+     * @param numberOfPlayers number of players in the current game.
      */
     public void resetBoard(int numberOfPlayers){
         setNotAvailable(numberOfPlayers);
@@ -171,9 +173,9 @@ public class GameBoard implements Serializable {
 
 
     /**
-     * This method update board after gamemove
-     * @param positionsToBeRemoved contains coordinates of tiles to be removed
-     * @return true if removal is succesfull
+     * This method update board after gamemove.
+     * @param positionsToBeRemoved contains coordinates of tiles to be removed.
+     * @return true if removal is successful.
      */
     public boolean updateBoard(ArrayList<Cell> positionsToBeRemoved){
         /*
@@ -197,10 +199,9 @@ public class GameBoard implements Serializable {
     }
 
     /**
-     * This method positions the tiles contained in the bag, in the available cells of the board
-     * @param bag contains the tiles of the game
+     * This method positions the tiles contained in the bag, in the available cells of the board.
+     * @param bag contains the tiles of the game.
      */
-
     public void positionTiles(ArrayList<Tile> bag){
         Random random = new Random();
         boolean posNotUsable; //position in which we cannot position Tiles
@@ -220,6 +221,11 @@ public class GameBoard implements Serializable {
         }
     }
 
+    /**
+     * This method checks if the tiles that the player want to pick up, can be removed or not.
+     * @param positionsToBeRemoved ArrayList of cells of positions to be removed
+     * @return true if the choice is legal, false if not.
+     */
     public boolean checkLegalChoice(ArrayList<Cell> positionsToBeRemoved){
         int i, j;
         boolean posNotUsable;
@@ -310,8 +316,8 @@ public class GameBoard implements Serializable {
     }
 
     /**
-     * This method checks if there are only islands on the board
-     * @return true if there are only island Tiles, false if not
+     * This method checks if there are only islands on the board.
+     * @return true if there are only island Tiles, false if not.
      */
 
     public boolean checkIslands(){
@@ -326,7 +332,7 @@ public class GameBoard implements Serializable {
     }
 
     /*
-    This method is  only for testing, to quickly insert a tile in a specific position
+    This method is only for testing, to quickly insert a tile in a specific position.
     */
     public void setBoardforTest(int  i, int j) {
         board[i][j] = new Tile(0, Tile.TileColor.BLUE);
@@ -337,7 +343,7 @@ public class GameBoard implements Serializable {
     }
 
     /**
-     * this method is used when a player try to insert more tiles than the free places of a row, so we need to reinsert the tiles in the board
+     * This method is used when a player try to insert more tiles than the free places of a row, so we need to reinsert the tiles in the board.
      */
     public void reinsertTiles(ArrayList<Tile> tiles, ArrayList<Cell> cells){
         for(int i=0;i< cells.size();i++){
