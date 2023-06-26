@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObject;
@@ -229,7 +230,7 @@ class ControllerTest {
         ByteArrayInputStream input1 = new ByteArrayInputStream((3 + enter + "" + enter + 4 + enter + "Player_1" + enter).getBytes());
         ByteArrayInputStream input2 = new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 4 + enter + "Player_2" + enter).getBytes());
         ByteArrayInputStream input3 = new ByteArrayInputStream((3 + enter + "" + enter + 1 + enter + 4 + enter + "Player_3" + enter).getBytes());
-        ByteArrayInputStream input4 = new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 4 + enter  + "Player_4" + enter).getBytes());
+        ByteArrayInputStream input4 = new ByteArrayInputStream((1 + enter + "" + enter + "" + enter + 4 + enter + "Player_4" + enter).getBytes());
         CLIWithInputString cli1 = new CLIWithInputString(input1);
         CLIWithInputString cli2 = new CLIWithInputString(input2);
         CLIWithInputString cli3 = new CLIWithInputString(input3);
@@ -361,10 +362,8 @@ class ControllerTest {
             //Simulate end game
             Shelfie fullShelfie = new Shelfie();
             int counter = 0;
-            for (int i = 0; i < Constants.shelfieColumns; i++)
-            {
-                for (int j = 0; j < Constants.shelfieRows; j++)
-                {
+            for (int i = 0; i < Constants.shelfieColumns; i++) {
+                for (int j = 0; j < Constants.shelfieRows; j++) {
                     fullShelfie.setGrid(j, i, counter, Tile.TileColor.WHITE);
                     counter++;
                 }

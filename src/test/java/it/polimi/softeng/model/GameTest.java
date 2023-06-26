@@ -1,7 +1,6 @@
 package it.polimi.softeng.model;
 
 import org.junit.jupiter.api.Test;
-import it.polimi.softeng.model.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
@@ -276,5 +275,16 @@ class GameTest {
         i++;
         game.setNextPlayer();
         assertEquals(game.getPlayers().get(0), game.getNextPlayer());
+    }
+
+    @Test
+    public void removeTest() {
+        Game game = new Game();
+        game.createNewPlayer("player1");
+        game.createNewPlayer("player2");
+        game.createNewPlayer("player3");
+        game.createNewPlayer("player4");
+        game.removePlayer(game.getPlayers().get(0));
+        assertEquals(3, game.getPlayers().size());
     }
 }

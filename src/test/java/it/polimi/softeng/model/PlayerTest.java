@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Check player main functionalities
+ */
 class PlayerTest {
 
     /**
@@ -17,4 +20,6 @@ class PlayerTest {
         correctScore = player.updateScore(2);
         assertEquals(6, correctScore);
     }
+
+
 }

@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Testing tile bag functionalities
+ */
 class TileBagTest {
 
     @Test
@@ -14,5 +17,7 @@ class TileBagTest {
 
         Tile newTile = tilebag.drawTile();
         assertNotNull(newTile);
+        assertNotNull(tilebag.getTileBag());
+        assertNotNull(newTile.getColor().colorLetter());
     }
 }

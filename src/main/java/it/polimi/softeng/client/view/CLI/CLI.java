@@ -45,20 +45,42 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      * Player information
      */
     protected int UserScore;
-    protected PersonalCards PersonalCard;
-    protected String Nickname;
-    protected String CommonCard1 = null;
-    protected String CommonCard2 = null;
-    protected String ServerAddress;
-    protected int Port;
-
-    protected int StartGame;
 
     /**
-     * 1 -> Easy Mode (only one Common Card is used the game)
-     * 2 -> Normal Mode (two Common Cards are used during the game)
+     * It's personal card of user
      */
-    protected int GameMode;
+    protected PersonalCards PersonalCard;
+
+    /**
+     * It's nickname of user
+     */
+    protected String Nickname;
+
+    /**
+     * It's first common card of user
+     */
+    protected String CommonCard1 = null;
+
+    /**
+     * It's second common card of user
+     */
+    protected String CommonCard2 = null;
+
+    /**
+     * Server address for current game
+     */
+    protected String ServerAddress;
+
+    /**
+     * Server port for current game
+     */
+    protected int Port;
+
+    /**
+     * Confirm of message to start the game
+     */
+
+    protected int StartGame;
 
     /**
      * NumOfPlayer for current game
@@ -81,6 +103,10 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
      * Used in login procedure to avoid duplicate nickname
      */
     private boolean okNickname = true;
+
+    /**
+     * CLI input
+     */
     protected final Scanner input;
 
     /**
@@ -136,7 +162,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             }
 
             switch (ConnectionMode) {
-                case 1 -> { //socket
+                //Socket
+                case 1 -> {
                     System.out.println("Connection with Socket...");
                     System.out.println("Digit server IP");
                     System.out.println(">");
@@ -170,7 +197,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                             Nickname = input.nextLine();
                         } while (!isOkNickname() || Nickname.equalsIgnoreCase("system"));
                         okNickname = true;
-                        String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(Nickname, GameMode, StartGame, NumOfPlayer), "@LOGN", Nickname).toJSONString();
+                        String login = ClientSignatureWriter.clientSignObject(LoginWriter.writeLogin(Nickname, 2, StartGame, NumOfPlayer), "@LOGN", Nickname).toJSONString();
                         clientSide.sendMessage(login);
 
                         try {
@@ -182,7 +209,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     } while (!okNickname);
                 }
 
-                case 2 -> {//RMI
+                //RMI
+                case 2 -> {
                     System.out.println("Connection with RMI...");
                     System.out.println("Digit server IP");
                     System.out.println(">");
@@ -210,12 +238,12 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                             } else this.RemoteMethods = new ClientSideRMI(this);
 
                         } while (!isOkNickname() || Nickname.equalsIgnoreCase("system"));
-                        String GameModeStringifed = GameMode == 1 ? "e" : "n";
-                        okNickname = RMIInvoker("@LOGN", GameModeStringifed);
+                        okNickname = RMIInvoker("@LOGN", "n");
                     } while (!okNickname);
                 }
 
-                case 3 -> { //case of local use of RMI
+                //Local RMI
+                case 3 -> {
                     System.out.println("If you want to reconnect to a previous game choose the same nickname and same number of players of old match");
                     System.out.println(ANSI_YELLOW + "WARNING:" + ANSI_RESET + "If there's already an active lobby you'll join the lobby");
                     System.out.println(">");
@@ -233,18 +261,18 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         Nickname = input.nextLine();
 
                         if (isOkNickname()) {
-                            String GameModeStringifed = GameMode == 1 ? "e" : "n";
                             //in case of malfunction check the json client file to see if the server address is "127.0.0.1"
                             this.RemoteMethods = new ClientSideRMI(this);
                             //does the login here as it's basically just for testing
                             try {
-                                okNickname = RemoteMethods.getStub().localLogin(Nickname, NumOfPlayer, GameModeStringifed, RemoteMethods.getPort());
+                                okNickname = RemoteMethods.getStub().localLogin(Nickname, NumOfPlayer, "n", RemoteMethods.getPort());
                             } catch (RemoteException e) {
                                 throw new RuntimeException(e);
                             }
                         }
                     } while (!okNickname);
-                    //this way I'm routing the commands as a non-local rmi cli (the cli sends the messages based on the value of the attribute Connection mode (see game method to get it))
+
+                    //This attribute identifies connection mode (it's RMI)
                     ConnectionMode = 2;
 
                 }
@@ -258,7 +286,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     ////////////////
 
     /**
-     * Notify CLI when game begins
+     * Notify CLI when game begins, toggle game start
      *
      * @param value is boolean
      */
@@ -275,6 +303,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         setupCLI();
 
         System.out.println("Waiting for other players to join...");
+
         //Waiting for beginning of game
         while (!GameIsOn) {
             try {
@@ -285,9 +314,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             }
         }
 
+        //Game phase
         while (GameIsOn) {
             try {
-                //Wait for errors
                 TimeUnit.SECONDS.sleep(1);
                 game(firstRun);
             } catch (InterruptedException | RemoteException e) {
@@ -295,7 +324,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             }
             firstRun = false;
         }
-
         input.close();
     }
 
@@ -322,6 +350,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             return;
         }
 
+        //These commands do not need server, except for @VPLA
         if (command.equalsIgnoreCase("@CMND") || command.equalsIgnoreCase("@VBOR") || command.equalsIgnoreCase("@VSHE") || command.equalsIgnoreCase("@VPCA") || command.equalsIgnoreCase("@VPLA") || command.equalsIgnoreCase("@VCCA") || command.equalsIgnoreCase("@HELP")) {
             switch (command.toUpperCase()) {
                 case ("@HELP") -> {
@@ -329,6 +358,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     return;
                 }
                 case ("@CMND") -> {
+                    commands(true);
                     return;
                 }
                 case ("@VBOR") -> {
@@ -352,8 +382,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     switch (ConnectionMode) {
                         //Socket
                         case 1 -> {
-                            JSONObject dummy = new JSONObject();
-                            clientSide.sendMessage(clientSignObject(dummy, "@VPLA", Nickname).toJSONString());
+                            JSONObject VPLA = new JSONObject();
+                            clientSide.sendMessage(clientSignObject(VPLA, "@VPLA", Nickname).toJSONString());
                             return;
                         }
                         //RMI
@@ -367,6 +397,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
             }
         }
 
+        //Check if it's a chat or game request
         if (!isOkCommand(command, 2) && !isOkCommand(command, 3)) {
             System.out.println("Please write a command that you can see in the table");
             return;
@@ -376,7 +407,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         String op = command.substring(0, 5).toUpperCase();
         String action = command.substring(6);
 
-        if (!op.equals("@GAME") && !op.equals("@CHAT") && !op.equals("@VPLA")) {
+        if (!op.equals("@GAME") && !op.equals("@CHAT")) {
             System.out.println("Please write a command that you can see in the table");
             return;
         }
@@ -384,7 +415,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         switch (ConnectionMode) {
             //Socket
             case 1 -> {
-                //Block illegal move
+                //Block badly formatted game move
                 if (op.equals("@GAME")) {
                     if (!isOkCommand(command, 3)) {
                         System.out.println("Please, check gameMove syntax");
@@ -407,7 +438,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     clientSide.sendMessage(clientSignObject(toBeSent, op, Nickname).toJSONString());
             }
 
-
+            //RMI
             case 2 -> {
                 if (op.equals("@GAME")) {
                     if (!isOkCommand(command, 3)) {
@@ -422,6 +453,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                         return;
                     }
                 }
+
+                //Invoke methods
                 RMIInvoker(op, action);
             }
         }
@@ -527,7 +560,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     try {
                         RemoteMethods.getStub().sendMessage(obj.toJSONString(), (String) obj.get("receiver"), Nickname);
                     } catch (RemoteException e) {
-                        throw new RuntimeException(e);
+                        System.out.println("Please, reinsert your message!");
                     }
                 }
             }
@@ -546,7 +579,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                     if (!confirm)
                         System.out.println("Error: Either it's not your turn or gameMove syntax is wrong");
                 } catch (RemoteException e) {
-                    throw new RuntimeException(e);
+                    System.out.println("Please, reinsert your message!");
                 }
             }
 
@@ -554,7 +587,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
                 try {
                     return RemoteMethods.getStub().login(Nickname, NumOfPlayer, action, RemoteMethods.getPort());
                 } catch (RemoteException e) {
-                    throw new RuntimeException(e);
+                    System.out.println("Please, retry login!");
                 }
             }
             default -> System.out.println("Unrecognized operation!");
@@ -567,7 +600,7 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     ////////////
 
     /**
-     * Print all possible commands doable by user, eventually with MyShelfie logo only at CLI if param is true
+     * Print all possible commands doable by user, eventually with MyShelfie logo only if it's first run
      *
      * @param firstRun if it is true, it means it's the first run
      */
@@ -707,8 +740,9 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     }
 
     /**
+     * Visual representation of shelfie
+     *
      * @param shelfie is userShelfie
-     *                Visual representation of shelfie
      */
     @Override
     public void shelfieVisualizer(Tile[][] shelfie) {
@@ -735,6 +769,8 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     }
 
     /**
+     * Visual representation of common card
+     *
      * @param commonCard is commonCards used during match
      */
     @Override
@@ -892,6 +928,11 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
     public void commonCardsVisualizer(CommonCards commonCard) {
     }
 
+    /**
+     * Visual representation of personal card
+     *
+     * @param personalCard it's user personal card
+     */
     @Override
     public void personalCardVisualizer(PersonalCards personalCard) {
         boolean tile;
@@ -916,6 +957,11 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         System.out.println(ANSI_GREY + "     0  1  2  3  4" + Tile.TileColor.WHITE.coloredText());
     }
 
+    /**
+     * Chat visualizer
+     *
+     * @param jsonMessage is received message
+     */
     @Override
     public void chatVisualizer(JSONObject jsonMessage) {
         ChatParser chatParser = new ChatParser();

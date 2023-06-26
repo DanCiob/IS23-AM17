@@ -3,9 +3,11 @@ package it.polimi.softeng.model;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
-import static it.polimi.softeng.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Check gameboard main functionalities
+ */
 class GameBoardTest {
 
     @Test

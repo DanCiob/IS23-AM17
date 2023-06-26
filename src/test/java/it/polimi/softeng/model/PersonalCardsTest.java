@@ -6,8 +6,12 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static it.polimi.softeng.model.PersonalCards.FillPersonalCardsBag;
+import static it.polimi.softeng.model.PersonalCards.PersonalCardToString;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Check personal card main functionalities
+ */
 class PersonalCardsTest {
 
     ArrayList<Tile> tiles = new ArrayList<>();
@@ -378,9 +382,8 @@ class PersonalCardsTest {
         PersonalCards p = personalCardsBag.get(10);
 
         int score = PersonalCards.getCurrentScore(shelfie, p);
+        PersonalCardToString(p);
 
         assertEquals(0, score);
     }
-
-
 }
