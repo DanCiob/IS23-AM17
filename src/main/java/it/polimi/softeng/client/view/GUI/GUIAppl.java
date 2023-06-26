@@ -35,14 +35,6 @@ public class GUIAppl extends Application {
 
     @Override
     public void stop(){
-        if(guiClientSide!=null && guiClientSide.getConnectionMode()==1){
-            try {
-                guiClientSide.getClientSide().getSocket().close();
-                System.out.println(" socket " + guiClientSide.getClientSide().getSocket().isClosed());
-            } catch (IOException e) {
-                System.out.println("Error closing socket");
-            }
-        }
         System.exit(0);
     }
 }
