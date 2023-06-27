@@ -213,7 +213,7 @@ public class LoginManagerV2 {
      * @param playerNumber number of players desired
      */
     public void setPlayerNumber(int playerNumber) {
-        if (numberOfPlayersNotConfirmed) {
+        if (numberOfPlayersNotConfirmed && playerNumber != 0) {
             this.playerNumber = playerNumber;
             System.out.println("number of players is: " + this.playerNumber + " from command:" + playerNumber);
             numberOfPlayersNotConfirmed = false;
