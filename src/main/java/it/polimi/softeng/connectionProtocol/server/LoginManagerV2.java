@@ -230,7 +230,6 @@ public class LoginManagerV2 {
         nameToStub.put(nickName, stub);
     }
 
-
     /////////getter methods
 
     /**
