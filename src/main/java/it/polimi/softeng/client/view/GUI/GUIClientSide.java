@@ -202,9 +202,7 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     public void eventManager(String event) {
         switch (event) {
             //Client-side errors
-            case ("chatError") -> {
-                System.out.println("Error in chat message syntax, try again!");
-            }
+            case ("chatError") -> System.out.println("Error in chat message syntax, try again!");
             case ("gameMoveError") -> {
                 System.out.println("Error in game move syntax, try again!");
                 if(gameController != null){
@@ -423,12 +421,12 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     /**
      * It's called when the game is ended and it calls the method to switch to last scene
-     * @param winner
+     * @param winner which is 1 if this player is the winner
      */
     @Override
     public void endGame(boolean winner){
         if(gameController!=null){
-            if(isYourTurn && gameController!=null){
+            if(isYourTurn){
                 gameController.resetAfterMove();
             }
             Service New_Service = new Service() {
@@ -642,32 +640,8 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         Port = port;
     }
 
-    public void setUserGameBoard(GameBoard userGameBoard) {
-        UserGameBoard = userGameBoard;
-    }
-
-    public void setUserShelfie(Shelfie userShelfie) {
-        UserShelfie = userShelfie;
-    }
-
-    public void setUserScore(int userScore) {
-        UserScore = userScore;
-    }
-
-    public void setPersonalCard(PersonalCards personalCard) {
-        PersonalCard = personalCard;
-    }
-
     public void setNickname(String nickname) {
         Nickname = nickname;
-    }
-
-    public void setCommonCard1(String commonCard1) {
-        CommonCard1 = commonCard1;
-    }
-
-    public void setCommonCard2(String commonCard2) {
-        CommonCard2 = commonCard2;
     }
 
     public void setNumOfPlayer(int numOfPlayer) {
@@ -678,20 +652,8 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         ConnectionMode = connectionMode;
     }
 
-    public void setGameIsOn(boolean gameIsOn) {
-        GameIsOn = gameIsOn;
-    }
-
     public void setOkNickname(boolean okNickname) {
         this.okNickname = okNickname;
-    }
-
-    public void setClientSide(ClientSide clientSide) {
-        this.clientSide = clientSide;
-    }
-
-    public void setRemoteMethods(ClientSideRMI remoteMethods) {
-        RemoteMethods = remoteMethods;
     }
 
     public void setGameController(GUIGameController gameController) {
@@ -714,9 +676,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         this.stage = stage;
     }
 
-    public void setMessageHandler(MessageHandler messageHandler) {
-        this.messageHandler = messageHandler;
-    }
 
     ///////////
     //GETTERS//
@@ -729,10 +688,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
 
     public Shelfie getUserShelfie() {
         return UserShelfie;
-    }
-
-    public int getUserScore() {
-        return UserScore;
     }
 
     public PersonalCards getPersonalCard() {
@@ -751,16 +706,8 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         return CommonCard2;
     }
 
-    public String getServerAddress() {
-        return ServerAddress;
-    }
-
     public int getPort() {
         return Port;
-    }
-
-    public int getNumOfPlayer() {
-        return NumOfPlayer;
     }
 
     public int getConnectionMode() {
@@ -774,27 +721,9 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
             return new Stage();
     }
 
-    public boolean isGameIsOn() {
-        return GameIsOn;
-    }
-
-    public MessageHandler getMessageHandler() {
-        return messageHandler;
-    }
 
     public ClientSideRMI getRemoteMethods() {
         return RemoteMethods;
     }
 
-    public GUIGameController getGameController() {
-        return gameController;
-    }
-
-    public GUILoginController getLoginController() {
-        return loginController;
-    }
-
-    public boolean isYourTurn() {
-        return isYourTurn;
-    }
 }

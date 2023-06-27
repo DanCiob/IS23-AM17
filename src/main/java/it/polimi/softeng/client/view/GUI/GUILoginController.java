@@ -66,9 +66,6 @@ public class GUILoginController implements Initializable {
     HBox hboxNumPlayers;
 
     @FXML
-    HBox hboxMode;
-
-    @FXML
     Button loginButton;
 
     @FXML
@@ -159,7 +156,7 @@ public class GUILoginController implements Initializable {
 
     /**
      * This method change the scene from waitingScreen to game screen
-     * @throws IOException
+     * @throws IOException exception
      */
     public void switchToGame() throws IOException{
         try {
@@ -192,7 +189,7 @@ public class GUILoginController implements Initializable {
      */
     public boolean loginNotifier() {
         int gamemode = 2;
-        int numPlayers = 0;
+        int numPlayers;
 
         if (numberOfPlayer.getSelectionModel().getSelectedIndex() == 0)
             numPlayers = 2;

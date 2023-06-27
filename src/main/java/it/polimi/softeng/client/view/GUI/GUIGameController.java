@@ -61,8 +61,6 @@ public class GUIGameController implements Initializable{
     //First row of the chosen column which is free before adding the new tiles
     int firstFreeRowBeforeMoves = -1;
 
-    @FXML GridPane shelfieGridPane;
-
     @FXML
     GridPane boardGrid;
 
@@ -626,7 +624,7 @@ public class GUIGameController implements Initializable{
             protected Task createTask() {
                 return new Task() {
                     @Override
-                    protected Object call() throws Exception {
+                    protected Object call() {
                         Platform.runLater(() -> {
                             receivedMessage.setText(message);
                         });
