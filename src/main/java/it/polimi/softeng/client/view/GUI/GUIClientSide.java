@@ -46,15 +46,38 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     protected Shelfie UserShelfie;
 
     /**
-     * Player information
+     * It's personal card of user
      */
-    protected int UserScore;
     protected PersonalCards PersonalCard;
+
+    /**
+     * It's nickname of user
+     */
     protected String Nickname;
+
+    /**
+     * It's true if this player is the first
+     */
     protected Boolean isFirst = false;
+
+    /**
+     * It's first common card of user
+     */
     protected String CommonCard1 = null;
+
+    /**
+     * It's second common card of user
+     */
     protected String CommonCard2 = null;
+
+    /**
+     * Server address for current game
+     */
     protected String ServerAddress;
+
+    /**
+     * Server port for current game
+     */
     protected int Port;
 
     /**
@@ -73,10 +96,19 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
      */
     protected int ConnectionMode = 0;
 
+    /**
+     * Trigger to activate game phase
+     */
     protected boolean GameIsOn = false;
 
+    /**
+     * Used in login procedure to avoid duplicate nickname
+     */
     private boolean okNickname;
 
+    /**
+     * Manage reception of message -> Socket
+     */
     protected MessageHandler messageHandler;
 
     /**
@@ -89,13 +121,29 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
      */
     protected ClientSideRMI RemoteMethods;
 
+    /**
+     * It's 1 when it's this player's turn
+     */
     protected boolean isYourTurn;
 
+    /**
+     * The gamescreen controller
+     */
     GUIGameController gameController;
+
+    /**
+     * The login controller
+     */
     GUILoginController loginController;
 
+    /**
+     * The endGame controller
+     */
     EndGameController endGameController;
 
+    /**
+     * This is the stage in which every scene is set during the game
+     */
     Stage stage;
 
     public GUIClientSide() {
@@ -105,92 +153,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         setConnectionMode(connectionMode);
         setServerAddress(serverAddress);
         setPort(port);
-    }
-
-    public ClientSide getClientSide() {
-        return clientSide;
-    }
-
-
-    //////////////////
-    //REGEX CHECKERS//
-    //////////////////
-
-    public boolean isOkNickname() {
-        Pattern pattern = Pattern.compile(nicknameREGEX);
-        Matcher matcher = pattern.matcher(this.Nickname);
-        return matcher.matches();
-    }
-
-
-
-    ///////////////
-    //VISUALIZERS//
-    ///////////////
-
-
-    @Override
-    public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable) {
-
-    }
-
-    @Override
-    public void shelfieVisualizer(Tile[][] shelfie) {
-    }
-
-
-
-    @Override
-    public void commonCardsVisualizer(String commonCard) {
-
-    }
-
-    @Override
-    public void commonCardsVisualizer(CommonCards commonCard) {
-    }
-
-    @Override
-    public void personalCardVisualizer(PersonalCards personalCard) {
-
-    }
-
-    @Override
-    public void chatVisualizer(JSONObject jsonMessage) {
-        ChatParser chatParser = new ChatParser();
-        chatParser.chatParser(jsonMessage.toJSONString());
-        if(!(chatParser.getRequester().equals("System")) && gameController!=null)
-            gameController.setChatMessage(chatParser.getRequester() + ": " + chatParser.getMessage());
-    }
-
-    @Override
-    public void scoreVisualizer(ArrayList<Player> players) {
-        setNumOfPlayer(players.size());
-        for (Player p: players) {
-            nicknameShelfie.put(p.getNickname(), new Shelfie());
-
-            if (p.isFirst() && p.getNickname().equals(Nickname)) {
-                isFirst = true;
-                if(gameController!=null)
-                    gameController.setFirstPlayer();
-            }
-        }
-        if(endGameController!=null){
-            Service New_Service = new Service() {
-                @Override
-                protected Task createTask() {
-                    return new Task() {
-                        @Override
-                        protected Object call() {
-                            Platform.runLater(() -> {
-                                endGameController.scoreVisualizer(players);
-                            });
-                            return null;
-                        }
-                    };
-                }
-            };
-            New_Service.start();
-        }
     }
 
     /**
@@ -371,6 +333,89 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
             default -> System.out.println("Unrecognized event!");
         }
 
+    }
+
+
+
+    //////////////////
+    //REGEX CHECKERS//
+    //////////////////
+
+    public boolean isOkNickname() {
+        Pattern pattern = Pattern.compile(nicknameREGEX);
+        Matcher matcher = pattern.matcher(this.Nickname);
+        return matcher.matches();
+    }
+
+
+
+    ///////////////
+    //VISUALIZERS//
+    ///////////////
+
+
+    @Override
+    public void boardVisualizer(Tile[][] board, ArrayList<Cell> notAvailable) {
+
+    }
+
+    @Override
+    public void shelfieVisualizer(Tile[][] shelfie) {
+    }
+
+
+
+    @Override
+    public void commonCardsVisualizer(String commonCard) {
+
+    }
+
+    @Override
+    public void commonCardsVisualizer(CommonCards commonCard) {
+    }
+
+    @Override
+    public void personalCardVisualizer(PersonalCards personalCard) {
+
+    }
+
+    @Override
+    public void chatVisualizer(JSONObject jsonMessage) {
+        ChatParser chatParser = new ChatParser();
+        chatParser.chatParser(jsonMessage.toJSONString());
+        if(!(chatParser.getRequester().equals("System")) && gameController!=null)
+            gameController.setChatMessage(chatParser.getRequester() + ": " + chatParser.getMessage());
+    }
+
+    @Override
+    public void scoreVisualizer(ArrayList<Player> players) {
+        setNumOfPlayer(players.size());
+        for (Player p: players) {
+            nicknameShelfie.put(p.getNickname(), new Shelfie());
+
+            if (p.isFirst() && p.getNickname().equals(Nickname)) {
+                isFirst = true;
+                if(gameController!=null)
+                    gameController.setFirstPlayer();
+            }
+        }
+        if(endGameController!=null){
+            Service New_Service = new Service() {
+                @Override
+                protected Task createTask() {
+                    return new Task() {
+                        @Override
+                        protected Object call() {
+                            Platform.runLater(() -> {
+                                endGameController.scoreVisualizer(players);
+                            });
+                            return null;
+                        }
+                    };
+                }
+            };
+            New_Service.start();
+        }
     }
 
 
@@ -681,6 +726,9 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
     //GETTERS//
     ///////////
 
+    public ClientSide getClientSide() {
+        return clientSide;
+    }
 
     public GameBoard getUserGameBoard() {
         return UserGameBoard;
@@ -720,7 +768,6 @@ public class GUIClientSide extends CommonOperationsFramework implements UI {
         else
             return new Stage();
     }
-
 
     public ClientSideRMI getRemoteMethods() {
         return RemoteMethods;

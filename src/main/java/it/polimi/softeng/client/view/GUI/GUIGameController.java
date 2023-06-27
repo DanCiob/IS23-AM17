@@ -34,7 +34,14 @@ import static it.polimi.softeng.JSONWriter.ClientSignatureWriter.clientSignObjec
  */
 public class GUIGameController implements Initializable{
 
+    /**
+     * Boolean which is set to true when the user's move is not legal
+     */
     boolean moveError = false;
+
+    /**
+     * Boolean which is set to true when the move is confirmed (which is when boardEvent arrives)
+     */
     boolean moveConfirmed = false;
 
     GUIClientSide guiClientSide;
@@ -52,13 +59,19 @@ public class GUIGameController implements Initializable{
         }
     }
 
-    //ArrayList with every cell that has been selected from the board
+    /**
+     * ArrayList with every cell that has been selected from the board
+     */
     ArrayList<Moves> boardMoves = new ArrayList<>();
 
-    //The shelfie column chosen by the user
+    /**
+     * The shelfie column chosen by the user
+     */
     int columnShelfie = -1;
 
-    //First row of the chosen column which is free before adding the new tiles
+    /**
+     * First row of the chosen column which is free before adding the new tiles
+     */
     int firstFreeRowBeforeMoves = -1;
 
     @FXML

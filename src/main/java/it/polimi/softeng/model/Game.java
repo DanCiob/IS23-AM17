@@ -311,13 +311,13 @@ public class Game{
                 fullShelfie = true;
         }
         if(fullShelfie){
-            getCurrentPlayer().updateScore(getEndGameBadge().getScore()); //TODO:Check if it doesn't give a badge at every player after the one that has a full shelfie
+            getCurrentPlayer().updateScore(getEndGameBadge().getScore());
             // if(!(getNextPlayer().isFirst())){//current player is the one that has a full shelfie
                // setCurrentPlayer(getNextPlayer());
             //}else{
             System.out.println("Checkendgame");
             if((getNextPlayer().isFirst())){//current player is the one that has a full shelfie
-                calculateScore(); //it checks personal cards score: TODO: testing
+                calculateScore(); //it checks personal cards score
                 selectWinner();
                 System.out.println("Turn - return 1");
                 return 1;
