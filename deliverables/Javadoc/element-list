@@ -1,0 +1,14 @@
+it.polimi.softeng
+it.polimi.softeng.client.view
+it.polimi.softeng.client.view.CLI
+it.polimi.softeng.client.view.GUI
+it.polimi.softeng.connectionProtocol
+it.polimi.softeng.connectionProtocol.client
+it.polimi.softeng.connectionProtocol.server
+it.polimi.softeng.controller
+it.polimi.softeng.customExceptions
+it.polimi.softeng.JSONParser
+it.polimi.softeng.JSONWriter
+it.polimi.softeng.model
+it.polimi.softeng.model.commonCards
+it.polimi.softeng.model.scoreCount

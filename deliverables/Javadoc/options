@@ -1,0 +1,24 @@
+-classpath
+'C:/Users/acave/.m2/repository/org/openjfx/javafx/19/javafx-19.pom;C:/Users/acave/.m2/repository/org/openjfx/javafx-controls/19/javafx-controls-19.jar;C:/Users/acave/.m2/repository/org/openjfx/javafx-controls/19/javafx-controls-19-win.jar;C:/Users/acave/.m2/repository/org/openjfx/javafx-graphics/19/javafx-graphics-19.jar;C:/Users/acave/.m2/repository/org/openjfx/javafx-graphics/19/javafx-graphics-19-win.jar;C:/Users/acave/.m2/repository/org/openjfx/javafx-base/19/javafx-base-19.jar;C:/Users/acave/.m2/repository/org/openjfx/javafx-base/19/javafx-base-19-win.jar;C:/Users/acave/.m2/repository/org/openjfx/javafx-fxml/19/javafx-fxml-19.jar;C:/Users/acave/.m2/repository/org/openjfx/javafx-fxml/19/javafx-fxml-19-win.jar;C:/Users/acave/.m2/repository/org/controlsfx/controlsfx/11.1.2/controlsfx-11.1.2.jar;C:/Users/acave/.m2/repository/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar;C:/Users/acave/.m2/repository/junit/junit/4.10/junit-4.10.jar;C:/Users/acave/.m2/repository/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar'
+-encoding
+'UTF-8'
+-protected
+-source
+'19'
+-sourcepath
+'C:/Users/acave/Desktop/SoftEng/IS23-AM17/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2023. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'C:/Users/acave/Desktop/SoftEng/IS23-AM17/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Project 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'Project 1.0-SNAPSHOT API'
