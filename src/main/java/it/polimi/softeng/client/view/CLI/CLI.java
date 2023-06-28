@@ -608,10 +608,6 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
         if (firstRun)
             logo();
 
-        CommandLineTable scoreTable = new CommandLineTable();
-        scoreTable.setShowVerticalLines(true);
-        scoreTable.setHeaders("Command", "Effect", "Example of command");
-
         System.out.println(ANSI_RESET);
         System.out.println("+--------------------------------+");
         System.out.println("| Command                        |");
@@ -971,16 +967,10 @@ public class CLI extends CommonOperationsFramework implements UI, Runnable {
 
     @Override
     public void scoreVisualizer(ArrayList<Player> players) { //player and score
-        CommandLineTable scoreTable = new CommandLineTable();
-        //st.setRightAlign(true);//if true then cell text is right aligned
-        scoreTable.setShowVerticalLines(true);//if false (default) then no vertical lines are shown
-        scoreTable.setHeaders("Player", "Score");//optional - if not used then there will be no header and horizontal lines
         for (Player player : players) {
-            scoreTable.addRow(player.getNickname(), Integer.toString(player.getCurrentScore()));
+            System.out.println(player.getNickname() + ": " + player.getCurrentScore());
         }
-        scoreTable.print();
     }
-
 
     /**
      * Called by messageHandler or actionToJSON with various event
