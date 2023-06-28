@@ -199,9 +199,6 @@ public class GUILoginController implements Initializable {
             numPlayers = 4;
         else
             return false;
-
-        guiClientSide.setNumOfPlayer(numPlayers);
-
         //nickname uniqueness
         if(guiClientSide.isOkNickname())
             switch (guiClientSide.getConnectionMode()) {
