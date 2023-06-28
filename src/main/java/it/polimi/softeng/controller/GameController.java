@@ -20,7 +20,7 @@ public class GameController {
     private Game game;
     private final Controller controller;
 
-    private ArrayList <String> reconnectedPlayer = new ArrayList<>();
+    private final ArrayList <String> reconnectedPlayer = new ArrayList<>();
 
     public GameController(Controller controller) {
         this.controller = controller;
@@ -133,19 +133,7 @@ public class GameController {
             //here goes the code to skip players in case of disconnection (in this point is managed the disconnection of a player that isn't the current one)
             selectNextPlayer();
 
-            /*
-            //Is an RMI user
-            if (controller.getServerSide().getServerSideRMI().getNameToStub().containsKey(game.getCurrentPlayer().getNickname())) {
-                ClientRemoteInterface temp = controller.getServerSide().getServerSideRMI().getNameToStub().get(game.getCurrentPlayer().getNickname());
-                try {
-                    temp.notifyTurn();
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            //Is TCP user
-            else
-                controller.getServerSide().sendMessage(ServerSignatureWriter.serverSignObject(ConfirmWriter.writeConfirm(), "@CONF", game.getCurrentPlayer().getNickname()).toJSONString(), game.getCurrentPlayer().getNickname());*/
+
             notifyTurn();
 
             return true;
@@ -471,7 +459,4 @@ public class GameController {
         return game;
     }
 
-    public void addReconnectedPlayer (String player) {
-        reconnectedPlayer.add(player);
-    }
 }

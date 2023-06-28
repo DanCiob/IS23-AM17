@@ -1,8 +1,6 @@
 package it.polimi.softeng.connectionProtocol.server;
 
-import it.polimi.softeng.JSONParser.RequestParser;
 import it.polimi.softeng.connectionProtocol.client.ClientRemoteInterface;
-import it.polimi.softeng.connectionProtocol.client.ClientSideMethods;
 import it.polimi.softeng.controller.Controller;
 import it.polimi.softeng.controller.ServerMessageHandler;
 import org.json.simple.JSONObject;
@@ -20,19 +18,19 @@ public class ServerSide {
     /**
      * login manager used to manage logins
      */
-    private LoginManagerV2 loginManager;
+    private final LoginManagerV2 loginManager;
     /**
      * serverside tcp reference
      */
-    private ServerSideTCP serverSideTCP;
+    private final ServerSideTCP serverSideTCP;
     /**
      * serverside rmi reference
      */
-    private ServerSideRMI serverSideRMI;
+    private final ServerSideRMI serverSideRMI;
     /**
      * server message handler reference
      */
-    private ServerMessageHandler serverMessageHandler;
+    private final ServerMessageHandler serverMessageHandler;
 
     /**
      * constructor method for serverside
@@ -126,26 +124,23 @@ public class ServerSide {
         String receiver = (String) jsonObject.get("receiver");
         String message = (String) jsonObject.get("message");
 
-        switch (receiver){
-            case("all") -> {
-                for(String player : loginManager.getNickNameList()){
-                    if(serverSideRMI.getNameToStub().containsKey(player) && !requester.equals(player)){
-                        try {
-                            serverSideRMI.getNameToStub().get(player).displayChatMessage(message,requester);
-                        } catch (RemoteException e) {
-                            System.out.println("cant send chat message");
-                        }
+        if ("all".equals(receiver)) {
+            for (String player : loginManager.getNickNameList()) {
+                if (serverSideRMI.getNameToStub().containsKey(player) && !requester.equals(player)) {
+                    try {
+                        serverSideRMI.getNameToStub().get(player).displayChatMessage(message, requester);
+                    } catch (RemoteException e) {
+                        System.out.println("cant send chat message");
                     }
                 }
             }
-            default -> {
-                for(String player : loginManager.getNickNameList()){
-                    if(serverSideRMI.getNameToStub().containsKey(player) && receiver.equals(player)){
-                        try {
-                            serverSideRMI.getNameToStub().get(player).displayChatMessage(message,requester);
-                        } catch (RemoteException e) {
-                            System.out.println("cant send chat message");
-                        }
+        } else {
+            for (String player : loginManager.getNickNameList()) {
+                if (serverSideRMI.getNameToStub().containsKey(player) && receiver.equals(player)) {
+                    try {
+                        serverSideRMI.getNameToStub().get(player).displayChatMessage(message, requester);
+                    } catch (RemoteException e) {
+                        System.out.println("cant send chat message");
                     }
                 }
             }

@@ -27,7 +27,6 @@ public class CommunicationProtocolParser{
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = null;
 
-        //to be refactored with the usage of "resources" folder
         //sets up the file to be picked up for setup
         switch (mode){
             case "server" ->{

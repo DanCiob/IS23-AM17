@@ -29,7 +29,7 @@ public class ServerSideTCP {
     /**
      * port on which the server is opened; it's set to the value from the json file
      */
-    private int portNumber;
+    private final int portNumber;
     /**
      * serverside reference
      */
@@ -37,11 +37,11 @@ public class ServerSideTCP {
     /**
      * list of current clientHandlers available
      */
-    private ArrayList<ClientHandler> clientList = new ArrayList<>();
+    private final ArrayList<ClientHandler> clientList = new ArrayList<>();
     /**
      * map connecting a player's identity to its client handler
      */
-    private Map<String,ClientHandler> nickNameToClientHandler = new HashMap<>();
+    private final Map<String,ClientHandler> nickNameToClientHandler = new HashMap<>();
     /**
      * message handler reference
      */
@@ -49,7 +49,7 @@ public class ServerSideTCP {
     /**
      * reference to login manager to manage logins
      */
-    private LoginManagerV2 loginManager;
+    private final LoginManagerV2 loginManager;
 
     /**
      * constructor method for the class
@@ -80,10 +80,6 @@ public class ServerSideTCP {
         t.start();
     }
 
-    //????????????????????????????
-    public void restartAccepting(){
-        accept(loginManager.getStatus());
-    }
 
     /**
      * This method process the acceptance of a player, invoking two possible different methods depending on @param mode

@@ -17,11 +17,11 @@ public class ClientSide {
     /**
      * server ip
      */
-    private String hostName;
+    private final String hostName;
     /**
      * server port
      */
-    private int portNumber;
+    private final int portNumber;
     /**
      * client's socket
      */
@@ -42,7 +42,7 @@ public class ClientSide {
     /**
      * message handler for received messages
      */
-    private MessageHandler messageHandler;
+    private final MessageHandler messageHandler;
 
     /**
      * constructor used when you want to connect to the default server (ie the one specified in the json files)
@@ -105,7 +105,7 @@ public class ClientSide {
         String s = "";
         try {
             while ((s = in.readLine()) != null) {
-                //part responsible for answering a ping from the server
+                //part responsible for catching a ping from the server
                 if(s.equals("ping")){
 
                 }

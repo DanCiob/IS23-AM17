@@ -25,23 +25,23 @@ public class ServerSideMethods implements ServerRemoteInterface {
     /**
      * login manager needed to manage the game
      */
-    private LoginManagerV2 loginManager;
+    private final LoginManagerV2 loginManager;
     /**
      * needed to add the clients
      */
-    private ServerSideRMI serverSideRMI;
+    private final ServerSideRMI serverSideRMI;
     /**
      * needed to send the chat messages from rmi to tcp users
      */
-    private ServerSide serverSide;
+    private final ServerSide serverSide;
     /**
      * needed to prepare chat messages for tcp users
      */
-    private ChatController chatController = new ChatController();
+    private final ChatController chatController = new ChatController();
     /**
      * needed to change the model with the moves received
      */
-    private Controller controller;
+    private final Controller controller;
 
     /**
      * constructor method for serverSideMethods
@@ -90,7 +90,6 @@ public class ServerSideMethods implements ServerRemoteInterface {
                     loginManager.addStub(name,stub);
                     serverSideRMI.addRMIClient(name,stub);
                     loginManager.addNickName(name);
-                    //TODO add gestione modalità semplificata
                     return true;
                 }
                 case ("gameStarted") -> {
@@ -105,7 +104,6 @@ public class ServerSideMethods implements ServerRemoteInterface {
                         serverSideRMI.addRMIClient(name,stub);
                         loginManager.addNickName(name);
                         System.out.println(name + " reconnected !");
-                        //stub.startGame();
                         return true;
                     } else {
                         System.out.println("name not present in disconnected names list");
@@ -259,7 +257,6 @@ public class ServerSideMethods implements ServerRemoteInterface {
                     serverSideRMI.addRMIClient(name,stub);
                     loginManager.setPlayerNumber(playerNumber);
                     loginManager.addNickName(name);
-                    //TODO add gestione modalità semplificata
                     return true;
                 }
                 case ("gameStarted") -> {
@@ -318,10 +315,11 @@ public class ServerSideMethods implements ServerRemoteInterface {
      */
     @Override
     public void sendMessageToAll(String message, String sender) throws RemoteException {
+        //i create the json message for tcp users and send it through serversideTCP
         String messageOut = addInfo(message,sender);
-        //chatController.sendChatMessage("all", messageOut, serverSide,sender);
         serverSide.getServerSideTCP().sendMessageExcept(messageOut,sender);
 
+        //sending message to other rmi users
         for(String player : loginManager.getNickNameList()){
             if(serverSideRMI.getNameToStub().containsKey(player) && !sender.equals(player)){
                 serverSideRMI.getNameToStub().get(player).displayChatMessage(getMessage(message),sender);
@@ -349,9 +347,11 @@ public class ServerSideMethods implements ServerRemoteInterface {
             }
         }
 
+        //i create the json message for tcp users and send it through serversideTCP
         String messageOut = addInfo(message,sender);
-        //chatController.sendChatMessage(nickName, messageOut, serverSide, sender);
         serverSide.getServerSideTCP().sendMessage(messageOut,nickName);
+
+        //sending message to other rmi users
         for(String player : loginManager.getNickNameList()){
             if(serverSideRMI.getNameToStub().containsKey(player) && nickName.equals(player)){
                 serverSideRMI.getNameToStub().get(player).displayChatMessage(getMessage(message),sender);

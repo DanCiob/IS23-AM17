@@ -85,8 +85,6 @@ public class ServerMessageHandler {
                 LoginParser lp = new LoginParser();
                 lp.loginParser(message);
                 boolean confirm = controller.SocketLoginRequest(lp.getNickname(), lp.getGameMode(), lp.getStartGame(), lp.getNumOfPlayer());
-                //TODO Multiple games -> startGame
-
                 //Descriptive output
                 System.out.println("Received login request from " + requester);
             }

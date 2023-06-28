@@ -1,21 +1,12 @@
 package it.polimi.softeng.connectionProtocol.server;
-
-import it.polimi.softeng.JSONWriter.ChatWriter;
-import it.polimi.softeng.client.view.CLI.CLI;
 import it.polimi.softeng.connectionProtocol.client.ClientRemoteInterface;
-import it.polimi.softeng.connectionProtocol.client.ClientSideRMI;
 import it.polimi.softeng.controller.ServerMessageHandler;
-import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 import org.json.simple.JSONObject;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static it.polimi.softeng.Constants.ALL_PLAYERS_DISCONNECTED;
-import static it.polimi.softeng.Constants.chatREGEX;
-import static it.polimi.softeng.JSONWriter.ErrorWriter.writeError;
 import static it.polimi.softeng.JSONWriter.ServerSignatureWriter.serverSignObject;
 
 /**
@@ -25,11 +16,11 @@ public class LoginManagerV2 {
     /**
      * list of nicknames in this match
      */
-    private ArrayList<String> nickNameList = new ArrayList<>();
+    private final ArrayList<String> nickNameList = new ArrayList<>();
     /**
      * name of players who disconnected mid game from this match
      */
-    private ArrayList<String> disconnectedPlayerList = new ArrayList<>();
+    private final ArrayList<String> disconnectedPlayerList = new ArrayList<>();
     /**
      * default number of players, if chosen otherwise this value changes
      */
@@ -45,7 +36,7 @@ public class LoginManagerV2 {
     /**
      * map that connects the identity of a player to it's stub
      */
-    private Map<String, ClientRemoteInterface> nameToStub = new HashMap<>();
+    private final Map<String, ClientRemoteInterface> nameToStub = new HashMap<>();
     /**
      * string representing the status of the game; it can be "gameLobby" or "gameStarted"
      */
@@ -53,11 +44,11 @@ public class LoginManagerV2 {
     /**
      * string stating that the game hasn't started yet
      */
-    private String gameLobby = "gameLobby";
+    private final String gameLobby = "gameLobby";
     /**
      * string stating that the game has started
      */
-    private String gameStarted = "gameStarted";
+    private final String gameStarted = "gameStarted";
     /**
      * this variable represents whether the countdown for the disconnection of all the client except one has begun
      */
@@ -65,11 +56,11 @@ public class LoginManagerV2 {
     /**
      * this value is the number of seconds the server is going to wait for reconnection of a player to a match that remained with only one player
      */
-    int timerValue = 30;  //TODO this variable should be in a json file
+    int timerValue = 30;
     /**
      * value in seconds of time after win message (in case of disconnection of all players) before closing the game app
      */
-    int endTimerValue = 10; //TODO this variable should be in a json file
+    int endTimerValue = 10;
 
     /**
      * constructor method for this class; sets the status to gamelobby
@@ -124,7 +115,7 @@ public class LoginManagerV2 {
         }
 
         //removing from name to stub map if the player used rmi
-        if (nameToStub.containsKey(player)) nameToStub.remove(player);
+        nameToStub.remove(player);
 
         //inserting the nickName in the list of nicknames that left the game
         if (status.equals("gameStarted")) {
@@ -187,7 +178,7 @@ public class LoginManagerV2 {
                             flag = true;
                         }
                     }
-                    serverMessageHandler.getController().getGameController().disconnectionRoutine(nickName); //todo this becomes call of controller to start game again
+                    serverMessageHandler.getController().getGameController().disconnectionRoutine(nickName);
 
                     //removing reconnected player from disconnected player list
                     if (flag) {
@@ -292,12 +283,11 @@ public class LoginManagerV2 {
         while (countdownStarted) {
             if (secondsElapsed == timerValue) {
                 //set winner and kill game
-
                 msg = writeWinMessage();
                 serverMessageHandler.getController().getChatController().sendChatMessage(lastPlayer,msg,serverMessageHandler.getController().getServerSide(), "system");
 
                 try {
-                    Thread.sleep(endTimerValue * 1000);
+                    Thread.sleep(endTimerValue * 1000L);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

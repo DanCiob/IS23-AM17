@@ -16,7 +16,7 @@ public class Game{
     /**
      * gameboard reference
      */
-    private GameBoard gameBoard = new GameBoard();
+    private final GameBoard gameBoard = new GameBoard();
     /**
      * tilebag reference
      */
@@ -312,9 +312,6 @@ public class Game{
         }
         if(fullShelfie){
             getCurrentPlayer().updateScore(getEndGameBadge().getScore());
-            // if(!(getNextPlayer().isFirst())){//current player is the one that has a full shelfie
-               // setCurrentPlayer(getNextPlayer());
-            //}else{
             System.out.println("Checkendgame");
             if((getNextPlayer().isFirst())){//current player is the one that has a full shelfie
                 calculateScore(); //it checks personal cards score
@@ -359,10 +356,7 @@ public class Game{
         int pointsToAdd;
         for(Player p : players){
             pointsToAdd = PersonalCards.getCurrentScore(p.getShelfie(), p.getPersonalCard());
-            //System.out.println("Points from personal cards of " + p.getNickname() + " : " + pointsToAdd);
             pointsToAdd = pointsToAdd + Score.ScoreForGroups(p.getShelfie());
-            //System.out.println("Points from personal cards and score for groups of " + p.getNickname() + " : " + pointsToAdd);
-
             p.updateScore(pointsToAdd);
         }
     }
@@ -453,9 +447,6 @@ public class Game{
         return endGameBadge;
     }
 
-    public boolean isSimpleRules() {
-        return simpleRules;
-    }
 
     public ArrayList<Player> getPlayers() {
         return players;

@@ -150,7 +150,6 @@ public class ClientHandler implements Runnable{
      * @param message
      */
     public void scanForNickName(String message){
-        Boolean flag = false;
         JSONParser parser = new JSONParser();
         JSONObject obj = null;
         if(message != null){
@@ -163,7 +162,7 @@ public class ClientHandler implements Runnable{
         if(obj != null && Objects.equals(obj.get("request"), "@LOGN")){
 
             playerNumber = (int)(long) obj.get("numOfPlayer");
-            loginManager.setPlayerNumber(playerNumber);   //TODO questo può essere fatto direttamente da loginManager
+            loginManager.setPlayerNumber(playerNumber);
             nickname = (String) obj.get("nickname");
             if(!loginManager.getNickNameList().contains(nickname) && loginManager.getStatus().equals("gameLobby")){
                 System.out.println(nickname);
@@ -189,14 +188,6 @@ public class ClientHandler implements Runnable{
     }
 
     /**
-     * getter method to get player number
-     * @return int player number
-     */
-    public int getPlayerNumber() {
-        return playerNumber;
-    }
-
-    /**
      * method running on its own thread pinging the user related to this clienthandler
      */
     public void pingUsers(){
@@ -205,7 +196,7 @@ public class ClientHandler implements Runnable{
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException(e); 
             }
             out.println("ping");
         }

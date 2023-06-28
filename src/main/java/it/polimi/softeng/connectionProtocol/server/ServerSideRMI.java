@@ -1,20 +1,15 @@
 package it.polimi.softeng.connectionProtocol.server;
 
 import it.polimi.softeng.connectionProtocol.client.ClientRemoteInterface;
-import it.polimi.softeng.connectionProtocol.server.LoginManagerV2;
-import it.polimi.softeng.connectionProtocol.server.ServerRemoteInterface;
-import it.polimi.softeng.connectionProtocol.server.ServerSide;
-import it.polimi.softeng.connectionProtocol.server.ServerSideMethods;
+
 import it.polimi.softeng.controller.Controller;
 
 import java.rmi.AlreadyBoundException;
-import java.rmi.ConnectException;
-import java.rmi.ConnectIOException;
+
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,15 +20,15 @@ public class ServerSideRMI extends ServerSideMethods {
     /**
      * needed to manage logins and disconnection
      */
-    private LoginManagerV2 loginManager;
+    private final LoginManagerV2 loginManager;
     /**
      * map that connects the identity of a player to it's method stub
      */
-    private Map<String, ClientRemoteInterface> nameToStub = new HashMap<>();
+    private final Map<String, ClientRemoteInterface> nameToStub = new HashMap<>();
     /**
      * server's methods object that will be exposed to clients on the registry
      */
-    private ServerSideMethods obj;
+    private final ServerSideMethods obj;
 
     /**
      * constructor method for serverSideRMI that creates the registry and starts the ping function to assert player's connection
@@ -45,7 +40,6 @@ public class ServerSideRMI extends ServerSideMethods {
 
         super(loginManager,null,null, controller);
         this.loginManager = loginManager;
-        //System.setProperty("sun.rmi.transport.tcp.responseTimeout", String.valueOf(1000));
         obj = new ServerSideMethods(loginManager,this,serverSide,controller);
         ServerRemoteInterface stub  = null;
         try {
@@ -54,7 +48,7 @@ public class ServerSideRMI extends ServerSideMethods {
             throw new RuntimeException(e);
         }
         try {
-            LocateRegistry.createRegistry(1099); //TODO make this parametric
+            LocateRegistry.createRegistry(1099);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -110,11 +104,10 @@ public class ServerSideRMI extends ServerSideMethods {
             synchronized (loginManager.getNickNameList()){
                 for(String player : loginManager.getNickNameList()){
                     try {
-                        if(nameToStub.containsKey(player)) { //todo this should be a list of players to be removed
+                        if(nameToStub.containsKey(player)) {
                             nameToStub.get(player).ping();
                         }
                     } catch (RemoteException e ) {
-                        //e.printStackTrace();
                         playerToBeDeleted = player;
                         flag = true;
                     }

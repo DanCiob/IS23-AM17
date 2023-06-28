@@ -15,7 +15,7 @@ public class ClientSideMethods implements ClientRemoteInterface {
     /**
      * reference to the ui object of which methods will be called
      */
-    private UI ui;
+    private final UI ui;
 
     /**
      * constructor method for client's methods
@@ -126,8 +126,6 @@ public class ClientSideMethods implements ClientRemoteInterface {
      */
     @Override
     public void displayChatMessage(String message, String sender) throws RemoteException {
-
-        String receiver = null;
 
         JSONObject obj = new JSONObject();
         obj.put("requester", sender);

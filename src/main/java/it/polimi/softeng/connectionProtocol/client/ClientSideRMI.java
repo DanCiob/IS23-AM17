@@ -125,16 +125,7 @@ public class ClientSideRMI {
      */
     private void getServerStub(String serverIP){
         System.out.println(serverIP);
-        Registry registry = null;
         System.setProperty("java.rmi.server.hostname",serverIP);
-        /*try {
-            //needs changing
-            System.out.println("trying to connect to server");
-            registry = LocateRegistry.getRegistry(serverIP,1099);
-
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }*/
 
         try {
             System.out.println("getting stub");
