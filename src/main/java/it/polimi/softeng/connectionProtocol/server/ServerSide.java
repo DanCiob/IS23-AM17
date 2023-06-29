@@ -50,7 +50,7 @@ public class ServerSide {
      *  N.B. Chat messages are not processed by this method.
      * @param message move to do
      */
-    //this doesn't need rmi because this should never be used for chat messages
+    //this doesn't need rmi because this should never be used for chat messages; this is for system messages, other messages must use the other message methods
     public void sendMessageToAll(String message){
         serverSideTCP.sendMessageToAll(message);
     }
@@ -125,7 +125,7 @@ public class ServerSide {
         String message = (String) jsonObject.get("message");
 
         if ("all".equals(receiver)) {
-            for (String player : loginManager.getNickNameList()) {
+                for (String player : loginManager.getNickNameList()) {
                 if (serverSideRMI.getNameToStub().containsKey(player) && !requester.equals(player)) {
                     try {
                         serverSideRMI.getNameToStub().get(player).displayChatMessage(message, requester);

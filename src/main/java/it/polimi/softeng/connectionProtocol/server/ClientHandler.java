@@ -59,10 +59,6 @@ public class ClientHandler implements Runnable{
      */
     private final LoginManagerV2 loginManager;
     /**
-     * flag used to say that the clientHandler got the pong from client
-     */
-    Boolean pong = false;
-    /**
      * player's nickname
      */
     String nickname;
