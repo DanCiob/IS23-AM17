@@ -51,3 +51,4 @@ Follow these steps to correctly run MyShelfie:
 
 ## Troubleshooting
 * If you have trouble connecting with RMI, disable network interfaces not used during connection (I.E. turn off WiFi if connected via ethernet) in server and client.
+* If you have issues connecting with RMI using MacOS, run server with following command: java -Djava.rmi.server.hostname=serverIP -jar MyShelfie.jar
